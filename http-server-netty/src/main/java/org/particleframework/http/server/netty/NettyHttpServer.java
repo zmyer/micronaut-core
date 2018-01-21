@@ -23,7 +23,6 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.multipart.DiskFileUpload;
 import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import org.particleframework.context.ApplicationContext;
 import org.particleframework.context.BeanLocator;
 import org.particleframework.context.LifeCycle;
@@ -38,6 +37,7 @@ import org.particleframework.http.codec.MediaTypeCodecRegistry;
 import org.particleframework.http.server.binding.RequestBinderRegistry;
 import org.particleframework.http.server.netty.configuration.NettyHttpServerConfiguration;
 import org.particleframework.http.server.netty.decoders.HttpRequestDecoder;
+import org.particleframework.http.server.netty.types.NettySpecialTypeHandlerRegistry;
 import org.particleframework.inject.qualifiers.Qualifiers;
 import org.particleframework.runtime.executor.ExecutorSelector;
 import org.particleframework.runtime.executor.IOExecutorServiceConfig;
@@ -78,12 +78,14 @@ public class NettyHttpServer implements EmbeddedServer {
     private final ExecutorSelector executorSelector;
     private final ChannelOutboundHandler[] outboundHandlers;
     private final MediaTypeCodecRegistry mediaTypeCodecRegistry;
+    private final NettySpecialTypeHandlerRegistry specialTypeHandlerRegistry;
     private final NettyHttpServerConfiguration serverConfiguration;
     private final Environment environment;
     private final Router router;
     private final RequestBinderRegistry binderRegistry;
     private final BeanLocator beanLocator;
     private final int serverPort;
+    private final ApplicationContext applicationContext;
     private NioEventLoopGroup workerGroup;
     private NioEventLoopGroup parentGroup;
 
@@ -94,6 +96,7 @@ public class NettyHttpServer implements EmbeddedServer {
             Router router,
             RequestBinderRegistry binderRegistry,
             MediaTypeCodecRegistry mediaTypeCodecRegistry,
+            NettySpecialTypeHandlerRegistry specialTypeHandlerRegistry,
             @javax.inject.Named(IOExecutorServiceConfig.NAME) ExecutorService ioExecutor,
             ExecutorSelector executorSelector,
             ChannelOutboundHandler... outboundHandlers
@@ -102,7 +105,9 @@ public class NettyHttpServer implements EmbeddedServer {
         location.ifPresent(dir ->
                 DiskFileUpload.baseDirectory = dir.getAbsolutePath()
         );
+        this.applicationContext = applicationContext;
         this.mediaTypeCodecRegistry = mediaTypeCodecRegistry;
+        this.specialTypeHandlerRegistry = specialTypeHandlerRegistry;
         this.beanLocator = applicationContext;
         this.environment = applicationContext.getEnvironment();
         this.serverConfiguration = serverConfiguration;
@@ -149,6 +154,7 @@ public class NettyHttpServer implements EmbeddedServer {
                                     beanLocator,
                                     router,
                                     mediaTypeCodecRegistry,
+                                    specialTypeHandlerRegistry,
                                     serverConfiguration,
                                     binderRegistry,
                                     executorSelector,
@@ -189,11 +195,8 @@ public class NettyHttpServer implements EmbeddedServer {
                            .addListener(this::logShutdownErrorIfNecessary);
                 parentGroup.shutdownGracefully()
                            .addListener(this::logShutdownErrorIfNecessary);
-                if(beanLocator instanceof LifeCycle) {
-                    LifeCycle lifeCycle = (LifeCycle) beanLocator;
-                    if(lifeCycle.isRunning()) {
-                        lifeCycle.stop();
-                    }
+                if(applicationContext.isRunning()) {
+                    applicationContext.stop();
                 }
             } catch (Throwable e) {
                 if (LOG.isErrorEnabled()) {
@@ -241,6 +244,11 @@ public class NettyHttpServer implements EmbeddedServer {
         } catch (URISyntaxException e) {
             throw new ConfigurationException("Invalid server URL: " + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
     }
 
     protected NioEventLoopGroup createParentEventLoopGroup() {

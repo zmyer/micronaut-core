@@ -16,14 +16,18 @@
 package org.particleframework.configuration.hibernate.gorm
 
 import grails.gorm.annotation.Entity
+import grails.gorm.services.Service
 import grails.gorm.transactions.TransactionService
 import org.grails.orm.hibernate.cfg.Settings
 import org.particleframework.context.ApplicationContext
 import org.particleframework.context.DefaultApplicationContext
+import org.particleframework.context.annotation.Value
 import org.particleframework.context.env.MapPropertySource
 import org.springframework.transaction.PlatformTransactionManager
+import spock.lang.Ignore
 import spock.lang.Specification
 
+import javax.inject.Singleton
 import javax.sql.DataSource
 
 /**
@@ -50,6 +54,13 @@ class GormConfigSpec extends Specification {
         applicationContext.containsBean(PlatformTransactionManager)
         applicationContext.containsBean(DataSource)
         count == 0
+
+        when:
+        BookService bookService = applicationContext.getBean(BookService)
+
+        then:
+        bookService.dbCreate
+        bookService.list().size() == 0
 
         cleanup:
         applicationContext.stop()
@@ -82,4 +93,14 @@ class GormConfigSpec extends Specification {
 @Entity
 class Book {
     String title
+}
+
+@Service(Book)
+@Singleton
+abstract class BookService {
+
+    @Value('dataSource.dbCreate')
+    String dbCreate
+
+    abstract List<Book> list()
 }

@@ -5,7 +5,7 @@ import groovy.transform.ToString
 
 @ToString
 @CompileStatic
-class Offering {
+class OfferingImpl implements Offering {
     Long id
     String course
     String dates

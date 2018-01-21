@@ -1,14 +1,32 @@
 package com.objectcomputing.training.geb
 
+import com.objectcomputing.training.model.Event
+import com.objectcomputing.training.model.EventOfferingAdapter
 import com.objectcomputing.training.model.Offering
 import com.objectcomputing.training.model.Track
 import geb.Browser
 
 class TrainingScheduleBrowser {
 
-    static Set<Offering> offerings(Long trackId = null) {
-        Browser browser = new Browser()
+    Browser browser
+
+    TrainingScheduleBrowser() {
+        browser =  new Browser()
         browser.baseUrl = 'https://objectcomputing.com'
+    }
+
+    List<Event> eventList(List<String> keywords) {
+        browser.to EventsPage
+        EventsPage eventsPage = browser.page
+        List<Event> eventList = eventsPage.eventList()
+        eventList.findAll { Event event ->
+            keywords.any { String keyword ->
+                event.name.contains(keyword)
+            }
+        }
+    }
+
+    Set<Offering> offerings(Long trackId = null) {
 
         TrackSelectorPage selectorPage = browser.to TrackSelectorPage
         Set<Track> tracks = selectorPage.tracks().findAll { it.name != 'All Tracks' }
@@ -24,17 +42,18 @@ class TrainingScheduleBrowser {
             }
             offerings += trackOfferings
         }
+
         offerings
     }
 
-    static Set<Offering> fetchTrackOfferings(Browser browser, Track track) {
+    Set<Offering> fetchTrackOfferings(Browser browser, Track track) {
         TrainingSchedulePage page = browser.to TrainingSchedulePage, track.id
         Set<Offering> offerings = page.offerings()
         offerings.each { it.track = track }
         offerings
     }
 
-    static void populateOfferingSoldout(Browser browser, Track track, Offering offering) {
+    void populateOfferingSoldout(Browser browser, Track track, Offering offering) {
         TrainingScheduleModalPage page = browser.to TrainingScheduleModalPage, track.id, offering.id
         offering.soldOut = page.isSoldOut()
         offering.enrollmentLink = page.enrollmentUrl()

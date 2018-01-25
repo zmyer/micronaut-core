@@ -1,7 +1,6 @@
 package com.objectcomputing.training.geb
 
 import com.objectcomputing.training.model.Offering
-import com.objectcomputing.training.model.OfferingImpl
 import geb.Page
 
 class TrainingSchedulePage extends Page {
@@ -29,7 +28,7 @@ class TrainingSchedulePage extends Page {
                     .replaceAll(WINDOW_LOCATION, '')
                     .replaceAll('\';', '') as Long
 
-            OfferingImpl offering = new OfferingImpl()
+            Offering offering = new Offering()
             offering.with {
                 id = offeringId
                 course = offeringRow.$('td', 0).text()

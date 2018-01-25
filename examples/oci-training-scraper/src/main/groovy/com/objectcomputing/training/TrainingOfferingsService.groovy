@@ -2,7 +2,7 @@ package com.objectcomputing.training
 
 import com.objectcomputing.training.geb.TrainingScheduleBrowser
 import com.objectcomputing.training.model.Event
-import com.objectcomputing.training.model.EventOfferingAdapter
+
 import com.objectcomputing.training.model.Offering
 import groovy.transform.CompileStatic
 import org.particleframework.runtime.context.scope.Refreshable
@@ -10,13 +10,16 @@ import javax.annotation.PostConstruct
 import org.particleframework.context.annotation.Value
 
 @CompileStatic
-@Refresable
-class TrainingOfferingsService {
+@Refreshable
+class TrainingOfferingsService implements TrainingUseCase {
 
     Set<Offering> offerings = new HashSet<Offering>()
 
     @Value('oci.grails.keywords')
-    List<String> keywords
+    String keywords
+
+    @Value('oci.training.track')
+    Long trackId
 
     @PostConstruct
     void setup() {
@@ -25,34 +28,35 @@ class TrainingOfferingsService {
 
     void refresh() {
         TrainingScheduleBrowser browser = new TrainingScheduleBrowser()
-        offerings = browser.offerings(11l)
-        List<Event> eventList = browser.eventList(keywords)
+        offerings = browser.offerings(trackId)
+        List<Event> eventList = browser.eventList(keywords.split(',') as List<String>)
         addEventsNotAlreadyInOffering(eventList)
     }
 
     void addEventsNotAlreadyInOffering(List<Event> eventList) {
-        eventList.each { Event event ->
-            boolean present = offerings.find { Offering offering -> offering.enrollmentLink == event.link }
-            if ( !present ) {
-                offerings << new EventOfferingAdapter(event)
+        for ( Event event : eventList ) {
+            boolean existsOfferingWithSameLink = offerings.find { Offering offering -> offering.enrollmentLink == event.link }
+            boolean existsOfferingWithSameName = offerings.find { Offering offering ->
+                cleanup(event.name).contains(cleanup(offering.course))
             }
+
+            if ( existsOfferingWithSameLink || existsOfferingWithSameName ) {
+                continue
+            }
+            offerings << Offering.of(event)
         }
     }
 
-    Set<Offering> getOfferings() {
-        return offerings
+    String cleanup(String name) {
+        name.toLowerCase()
+                .trim()
+                .replaceAll(' and ', '')
+                .replaceAll(' & ', '')
     }
 
-    void set(Set<Offering> offerings) {
-        this.offerings = offerings
-    }
 
-    Set<Offering> findAllByTrack(Long trackId) {
-        offerings.findAll { Offering offering -> offering.track.id == trackId } as Set<Offering>
+    @Override
+    Set<Offering> findAllOfferings() {
+        offerings
     }
-
-    Set<String> findAllTracks() {
-        offerings.collect { Offering offering -> offering.track.name }
-    }
-
 }

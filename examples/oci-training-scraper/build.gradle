@@ -2,7 +2,10 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '2.0.1'
     id 'groovy'
     id "application"
+    id "com.github.pivotalservices.cf-app" version '2.1.0'
 }
+apply from: "${rootProject.projectDir}/gradle/cloudfoundry.gradle"
+
 mainClassName = "com.objectcomputing.training.Application"
 jar {
     manifest {

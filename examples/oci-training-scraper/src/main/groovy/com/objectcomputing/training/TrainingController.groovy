@@ -1,11 +1,14 @@
 package com.objectcomputing.training
 
 import com.objectcomputing.training.model.Offering
+import org.particleframework.context.ApplicationContext
 import org.particleframework.context.annotation.Value
 import org.particleframework.http.HttpResponse
 import org.particleframework.http.annotation.Controller
-import org.particleframework.web.router.annotation.Get
-import org.particleframework.web.router.annotation.Post
+import org.particleframework.http.annotation.Get
+import org.particleframework.http.annotation.Post
+import org.particleframework.management.endpoint.refresh.RefreshEndpoint
+import org.particleframework.runtime.context.scope.refresh.RefreshEvent
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,29 +18,20 @@ import static org.particleframework.http.HttpResponse.ok
 
 @Controller
 @Singleton
-public class TrainingController {
+class TrainingController {
 
-    @Value("com.objectcomputing.training.refresh.enabled")
+    @Value("oci.training.refresh.enabled")
     Boolean refreshEnabled
 
     @Inject
-    TrainingOfferingsService trainingOfferingsService
+    ApplicationContext applicationContext
+
+    @Inject
+    TrainingUseCase trainingUseCase
 
     @Get("/")
-    HttpResponse<Set<Offering>> index(Optional<Long> trackId) {
-        if (!refreshEnabled) {
-            return notFound()
-        }
-        return ok(trackId.isPresent() ? trainingOfferingsService.findAllByTrack(trackId.get()) : trainingOfferingsService.getOfferings())
-    }
-
-    @Get("/tracks")
-    HttpResponse<Map<String, Set<String>>> tracks() {
-        if (!refreshEnabled) {
-            return notFound()
-        }
-
-        return ok([tracks: trainingOfferingsService.findAllTracks()])
+    HttpResponse<Set<Offering>> index() {
+        ok(trainingUseCase.findAllOfferings())
     }
 
     @Post("/evict")
@@ -46,7 +40,7 @@ public class TrainingController {
             return notFound()
         }
 
-        trainingOfferingsService.refresh()
+        applicationContext.publishEvent(new RefreshEvent())
 
         return ok([msg: 'OK'])
     }

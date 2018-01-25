@@ -1,0 +1,21 @@
+apply plugin: 'cf-app'
+
+cfConfig {
+    //CF Details
+    ccHost = 'api.run.pivotal.io'
+    ccUser = System.getenv('CLOUDFOUNDRY_USER')
+    ccPassword = System.getenv('CLOUDFOUNDRY_PASSWORD')
+    org = "grails-org"
+    space = "staging"
+
+    //App Details
+    name = "oci-training"
+    host = "oci-training"
+    filePath = "${rootProject.projectDir}/build/libs/oci-training-scraper-all.jar"
+    instances = 1
+    memory = 700
+
+    //Env and services
+    buildpack = "https://github.com/cloudfoundry/java-buildpack.git"
+    environment = [:]
+}

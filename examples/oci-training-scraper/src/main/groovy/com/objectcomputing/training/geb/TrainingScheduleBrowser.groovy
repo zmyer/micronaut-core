@@ -1,7 +1,7 @@
 package com.objectcomputing.training.geb
 
 import com.objectcomputing.training.model.Event
-import com.objectcomputing.training.model.EventOfferingAdapter
+
 import com.objectcomputing.training.model.Offering
 import com.objectcomputing.training.model.Track
 import geb.Browser
@@ -21,7 +21,7 @@ class TrainingScheduleBrowser {
         List<Event> eventList = eventsPage.eventList()
         eventList.findAll { Event event ->
             keywords.any { String keyword ->
-                event.name.contains(keyword)
+                event.name.toLowerCase().contains(keyword.toLowerCase())
             }
         }
     }

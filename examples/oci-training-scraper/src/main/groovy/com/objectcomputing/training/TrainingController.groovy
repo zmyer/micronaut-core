@@ -34,7 +34,7 @@ class TrainingController {
         ok(trainingUseCase.findAllOfferings())
     }
 
-    @Post("/evict")
+    @Get("/evict")
     HttpResponse<Map<String, String>> evict() {
         if (!refreshEnabled) {
             return notFound()

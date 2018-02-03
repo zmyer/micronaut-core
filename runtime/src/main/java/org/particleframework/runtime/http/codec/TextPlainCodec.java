@@ -16,6 +16,7 @@
 package org.particleframework.runtime.http.codec;
 
 import org.particleframework.context.annotation.Value;
+import org.particleframework.core.convert.ConversionService;
 import org.particleframework.core.io.IOUtils;
 import org.particleframework.core.io.buffer.ByteBuffer;
 import org.particleframework.core.io.buffer.ByteBufferFactory;
@@ -57,6 +58,15 @@ public class TextPlainCodec implements MediaTypeCodec {
     }
 
     @Override
+    public <T> T decode(Argument<T> type, ByteBuffer<?> buffer) throws CodecException {
+        String text = buffer.toString(defaultCharset);
+        return ConversionService.SHARED.convert(
+                text,
+                type
+        ).orElseThrow(()-> new CodecException("Cannot decode byte buffer with value ["+text+"] to type: " + type));
+    }
+
+    @Override
     public <T> T decode(Argument<T> type, InputStream inputStream) throws CodecException {
         if(CharSequence.class.isAssignableFrom(type.getType())) {
             try {
@@ -85,9 +95,9 @@ public class TextPlainCodec implements MediaTypeCodec {
 
     @Override
     public <T> ByteBuffer encode(T object, ByteBufferFactory allocator) throws CodecException {
-        String string = object.toString();
-        int len = string.length();
+        byte[] bytes = encode(object);
+        int len = bytes.length;
         return allocator.buffer(len, len)
-                        .write(string.getBytes(defaultCharset));
+                        .write(bytes);
     }
 }

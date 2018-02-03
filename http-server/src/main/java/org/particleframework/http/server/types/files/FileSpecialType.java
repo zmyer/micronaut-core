@@ -17,8 +17,6 @@ package org.particleframework.http.server.types.files;
 
 import org.particleframework.http.server.types.SpecialType;
 
-import java.io.File;
-
 /**
  * A special type for file handling.
  *
@@ -27,5 +25,9 @@ import java.io.File;
  */
 public interface FileSpecialType extends SpecialType {
 
-    File getFile();
+    long getLastModified();
+
+    long getLength();
+
+    String getName();
 }

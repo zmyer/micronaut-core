@@ -1,6 +1,22 @@
+/*
+ * Copyright 2017 original authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.particleframework.context.env;
 
 import org.particleframework.core.util.CollectionUtils;
+import org.particleframework.core.util.StringUtils;
 import org.particleframework.core.value.PropertyResolver;
 import org.particleframework.context.LifeCycle;
 import org.particleframework.core.convert.ConversionService;
@@ -44,10 +60,27 @@ public interface Environment extends PropertyResolver, LifeCycle<Environment>, C
      */
     String CLOUD = "cloud";
     /**
+     * The default bootstrap name
+     */
+    String BOOTSTRAP_NAME_PROPERTY = "particle.bootstrap.name";
+    /**
+     * The default bootstrap config name
+     */
+    String BOOTSTRAP_NAME = "bootstrap";
+    /**
+     * The default application name
+     */
+    String DEFAULT_NAME = "application";
+
+    /**
      * @return The active environment names
      */
     Set<String> getActiveNames();
 
+    /**
+     * @return The active property sources
+     */
+    Collection<PropertySource> getPropertySources();
     /**
      * Adds a property source to this environment
      *
@@ -97,9 +130,9 @@ public interface Environment extends PropertyResolver, LifeCycle<Environment>, C
      * @param values The values
      * @return This environment
      */
-    default Environment addPropertySource(@Nullable Map<String, ? super Object> values) {
-        if(CollectionUtils.isNotEmpty(values)) {
-            return addPropertySource(PropertySource.of(values));
+    default Environment addPropertySource(String name, @Nullable Map<String, ? super Object> values) {
+        if(StringUtils.isNotEmpty(name) && CollectionUtils.isNotEmpty(values)) {
+            return addPropertySource(PropertySource.of(name, values));
         }
         return this;
     }
@@ -144,15 +177,6 @@ public interface Environment extends PropertyResolver, LifeCycle<Environment>, C
         return ClassUtils.isPresent(className, getClassLoader());
     }
 
-    @Override
-    default Optional<InputStream> getResourceAsStream(String path) {
-InputStream inputStream = getClassLoader().getResourceAsStream(path);
-        if(inputStream != null) {
-            return Optional.of(inputStream);
-        }
-        return Optional.empty();
-    }
-
     /**
      * Whether the current environment includes the given configuration
      *
@@ -161,26 +185,5 @@ InputStream inputStream = getClassLoader().getResourceAsStream(path);
      */
     boolean isActive(BeanConfiguration configuration);
 
-    default Optional<URL> getResource(String path) {
-        URL resource = getClassLoader().getResource(path);
-        if(resource != null) {
-            return Optional.of(resource);
-        }
-        return Optional.empty();
-    }
 
-    default Stream<URL> getResources(String fileName) {
-        Enumeration<URL> all;
-        try {
-            all = getClassLoader().getResources(fileName);
-        } catch (IOException e) {
-            return Stream.empty();
-        }
-        Stream.Builder<URL> builder = Stream.<URL>builder();
-        while (all.hasMoreElements()) {
-            URL url = all.nextElement();
-            builder.accept(url);
-        }
-        return builder.build();
-    };
 }

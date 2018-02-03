@@ -2,8 +2,6 @@ package org.particleframework.context;
 
 import org.particleframework.context.annotation.*;
 import org.particleframework.context.annotation.Type;
-import org.particleframework.context.condition.Condition;
-import org.particleframework.context.condition.RequiresCondition;
 import org.particleframework.core.annotation.AnnotationMetadata;
 import org.particleframework.core.convert.ArgumentConversionContext;
 import org.particleframework.core.naming.NameUtils;
@@ -52,7 +50,7 @@ import java.util.stream.Stream;
  * @since 1.0
  */
 @Internal
-public class AbstractBeanDefinition<T> implements BeanDefinition<T> {
+public class AbstractBeanDefinition<T> extends AbstractBeanContextConditional implements BeanDefinition<T> {
 
     private final Class<T> type;
     private final boolean isAbstract;
@@ -70,7 +68,6 @@ public class AbstractBeanDefinition<T> implements BeanDefinition<T> {
     protected final List<MethodInjectionPoint> preDestroyMethods = new ArrayList<>(1);
     protected final Map<MethodKey, ExecutableMethod<T, ?>> executableMethodMap = new LinkedHashMap<>(3);
     private Map<Class, String> valuePrefixes;
-    private Boolean enabled = null;
 
     /**
      * Constructs a bean definition that is produced from a method call on another type
@@ -120,14 +117,6 @@ public class AbstractBeanDefinition<T> implements BeanDefinition<T> {
         return this.isAbstract;
     }
 
-    @Override
-    public boolean isEnabled(BeanContext beanContext) {
-        if(enabled == null) {
-            AnnotationMetadata annotationMetadata = getAnnotationMetadata();
-            enabled = new RequiresCondition(annotationMetadata).matches(new DefaultConditionContext<>(beanContext, this));
-        }
-        return enabled;
-    }
 
     @Override
     public boolean isIterable() {
@@ -1242,6 +1231,9 @@ public class AbstractBeanDefinition<T> implements BeanDefinition<T> {
         String valString;
         if (val == null) {
             if (isConfigurationProperties()) {
+                if(Modifier.isAbstract(declaringClass.getModifiers())) {
+                    declaringClass = getBeanType();
+                }
                 String prefix = resolvePrefix(resolutionContext, beanContext, declaringClass, beanType);
                 valString = prefix + "." + name;
             } else {
@@ -1335,7 +1327,7 @@ public class AbstractBeanDefinition<T> implements BeanDefinition<T> {
         String configurationPropertiesPrefix;
         String nestedConfigurationPropertiesPrefix = resolveConfigPropertiesValue(nestedType, beanContext);
         Class<?> supertype = nestedType.getSuperclass();
-        while (supertype != null && supertype != Object.class) {
+        while (supertype != null && supertype != Object.class && !(Modifier.isAbstract(supertype.getModifiers()))) {
             configurationPropertiesPrefix = resolveConfigPropertiesValue(supertype, beanContext);
             if (configurationPropertiesPrefix != null) {
                 if (nestedConfigurationPropertiesPrefix == null || !nestedConfigurationPropertiesPrefix.equals(configurationPropertiesPrefix)) {
@@ -1348,7 +1340,7 @@ public class AbstractBeanDefinition<T> implements BeanDefinition<T> {
 
     private String resolveConfigPropertiesValue(Class<?> supertype, BeanContext beanContext) {
         BeanDefinition<?> definition;
-        if (supertype.equals(getBeanType())) {
+        if (supertype.equals(getBeanType()) || Modifier.isAbstract(supertype.getModifiers())) {
             definition = this;
         } else {
             definition = beanContext.findBeanDefinition(supertype).orElse(null);

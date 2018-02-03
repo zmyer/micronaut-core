@@ -23,13 +23,14 @@ package org.particleframework.context.env;
  */
 public class SystemPropertiesPropertySource extends MapPropertySource {
 
+    public static final String NAME = "system";
     /**
      * The position of the loader
      */
     public static final int POSITION = -100;
 
     public SystemPropertiesPropertySource() {
-        super(System.getProperties());
+        super(NAME, System.getProperties());
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.particleframework.context.annotation.Type;
 import org.particleframework.core.reflect.GenericTypeUtils;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -46,8 +47,9 @@ public class ObjectMapperFactory {
      * @return The {@link ObjectMapper}
      */
     @Bean
+    @Singleton
     public ObjectMapper objectMapper(Optional<JacksonConfiguration> jacksonConfiguration,
-                              Optional<JsonFactory> jsonFactory) {
+                                     Optional<JsonFactory> jsonFactory) {
 
         ObjectMapper objectMapper = jsonFactory.map(ObjectMapper::new)
                                                .orElseGet(ObjectMapper::new);
@@ -100,8 +102,8 @@ public class ObjectMapperFactory {
 
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         jacksonConfiguration.ifPresent((configuration)->{
-            Set<JsonInclude.Include> serializationInclusion = configuration.getSerializationInclusion();
-            for (JsonInclude.Include include : serializationInclusion) {
+            JsonInclude.Include include = configuration.getSerializationInclusion();
+            if (include != null) {
                 objectMapper.setSerializationInclusion(include);
             }
             String dateFormat = configuration.getDateFormat();

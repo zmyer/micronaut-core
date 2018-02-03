@@ -1,23 +1,24 @@
 /*
  * Copyright 2017 original authors
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.particleframework.http.server.netty;
 
 import com.typesafe.netty.http.StreamedHttpRequest;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufHolder;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.HttpHeaders;
@@ -43,6 +44,9 @@ import org.particleframework.http.hateos.Link;
 import org.particleframework.http.hateos.VndError;
 import org.particleframework.http.netty.buffer.NettyByteBufferFactory;
 import org.particleframework.http.server.binding.RequestBinderRegistry;
+import org.particleframework.http.server.netty.types.files.NettyStreamedFileSpecialType;
+import org.particleframework.http.server.netty.types.files.NettySystemFileSpecialType;
+import org.particleframework.http.server.types.files.FileSpecialType;
 import org.particleframework.runtime.http.codec.TextPlainCodec;
 import org.particleframework.http.server.exceptions.ExceptionHandler;
 import org.particleframework.http.server.netty.async.ContextCompletionAwareSubscriber;
@@ -53,19 +57,19 @@ import org.particleframework.http.server.netty.types.NettySpecialTypeHandler;
 import org.particleframework.http.server.netty.types.NettySpecialTypeHandlerRegistry;
 import org.particleframework.inject.qualifiers.Qualifiers;
 import org.particleframework.runtime.executor.ExecutorSelector;
-import org.particleframework.web.router.MethodBasedRouteMatch;
-import org.particleframework.web.router.RouteMatch;
-import org.particleframework.web.router.Router;
-import org.particleframework.web.router.UriRouteMatch;
+import org.particleframework.web.router.*;
 import org.particleframework.web.router.exceptions.UnsatisfiedRouteException;
 import org.particleframework.web.router.qualifier.ConsumesMediaTypeQualifier;
+import org.particleframework.web.router.resource.StaticResourceResolver;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.net.URI;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -86,6 +90,7 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
 
     private final Router router;
     private final ExecutorSelector executorSelector;
+    private final StaticResourceResolver staticResourceResolver;
     private final ExecutorService ioExecutor;
     private final BeanLocator beanLocator;
     private final NettyHttpServerConfiguration serverConfiguration;
@@ -98,6 +103,7 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
             Router router,
             MediaTypeCodecRegistry mediaTypeCodecRegistry,
             NettySpecialTypeHandlerRegistry specialTypeHandlerRegistry,
+            StaticResourceResolver staticResourceResolver,
             NettyHttpServerConfiguration serverConfiguration,
             RequestBinderRegistry binderRegistry,
             ExecutorSelector executorSelector,
@@ -105,6 +111,7 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
         this.mediaTypeCodecRegistry = mediaTypeCodecRegistry;
         this.specialTypeHandlerRegistry = specialTypeHandlerRegistry;
         this.beanLocator = beanLocator;
+        this.staticResourceResolver = staticResourceResolver;
         this.ioExecutor = ioExecutor;
         this.executorSelector = executorSelector;
         this.router = router;
@@ -146,7 +153,7 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
                 .filter((match) -> match.test(request))
                 .findFirst();
 
-        RouteMatch<Object> route;
+        RouteMatch<?> route;
 
         if (!routeMatch.isPresent()) {
             if (LOG.isDebugEnabled()) {
@@ -169,20 +176,41 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
                 } else {
                     VndError error = newError(request, "Method [" + httpMethod + "] not allowed. Allowed methods: " + existingRoutes);
 
-                    MutableHttpResponse<Object> defaultResponse = HttpResponse.notAllowed(existingRoutes)
-                                                                              .body(error);
+                    MutableHttpResponse<Object> defaultResponse = HttpResponse.notAllowed(existingRoutes);
+
+                    if(HttpMethod.permitsRequestBody(request.getMethod())) {
+                        defaultResponse.body(error);
+                    }
                     emitDefaultErrorResponse(ctx, request, defaultResponse);
                     return;
                 }
 
             } else {
-                Optional<RouteMatch<Object>> statusRoute = router.route(HttpStatus.NOT_FOUND);
-                if (statusRoute.isPresent()) {
-                    route = statusRoute.get();
-                } else {
-                    emitDefaultNotFoundResponse(ctx, request);
-                    return;
+
+                Optional<? extends FileSpecialType> optionalFile = Optional.empty();
+                Optional<URL> optionalUrl = staticResourceResolver.resolve(requestPath);
+                if (optionalUrl.isPresent()) {
+                    URL url = optionalUrl.get();
+                    File file = new File(url.getPath());
+                    if (file.exists() && !file.isDirectory() && file.canRead()) {
+                        optionalFile = Optional.of(new NettySystemFileSpecialType(file));
+                    } else {
+                        optionalFile = Optional.of(new NettyStreamedFileSpecialType(url));
+                    }
                 }
+
+                if (optionalFile.isPresent()) {
+                    route = new BasicObjectRouteMatch(optionalFile.get());
+                } else {
+                    Optional<RouteMatch<Object>> statusRoute = router.route(HttpStatus.NOT_FOUND);
+                    if (statusRoute.isPresent()) {
+                        route = statusRoute.get();
+                    } else {
+                        emitDefaultNotFoundResponse(ctx, request);
+                        return;
+                    }
+                }
+
             }
         } else {
             route = routeMatch.get();
@@ -199,7 +227,7 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
             } else {
                 VndError error = newError(request, "Unsupported Media Type: " + contentType);
                 MutableHttpResponse<Object> res = HttpResponse.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-                                                              .body(error);
+                        .body(error);
                 emitDefaultErrorResponse(ctx, request, res);
                 return;
             }
@@ -220,21 +248,21 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
     private void emitDefaultNotFoundResponse(ChannelHandlerContext ctx, HttpRequest<?> request) {
         VndError error = newError(request, "Page Not Found");
         MutableHttpResponse<Object> res = HttpResponse.notFound()
-                                                      .body(error);
+                .body(error);
         emitDefaultErrorResponse(ctx, request, res);
     }
 
     private VndError newError(HttpRequest<?> request, String message) {
         URI uri = request.getUri();
         return new VndError(message)
-                     .link(Link.SELF, Link.of(uri));
+                .link(Link.SELF, Link.of(uri));
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         NettyHttpRequest nettyHttpRequest = NettyHttpRequest.get(ctx);
-        RouteMatch<Object> errorRoute = null;
-        if(nettyHttpRequest == null) {
+        RouteMatch<?> errorRoute = null;
+        if (nettyHttpRequest == null) {
             if (LOG.isErrorEnabled()) {
                 LOG.error("Particle Server Error - No request state present. Cause: " + cause.getMessage(), cause);
             }
@@ -259,10 +287,10 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
         }
 
         if (errorRoute != null) {
-            if(LOG.isErrorEnabled()) {
+            if (LOG.isErrorEnabled()) {
                 LOG.error("Unexpected error occurred: " + cause.getMessage(), cause);
             }
-            if(LOG.isDebugEnabled()) {
+            if (LOG.isDebugEnabled()) {
                 LOG.debug("Found matching exception handler for exception [{}]: {}", cause.getMessage(), errorRoute);
             }
             errorRoute = requestArgumentSatisfier.fulfillArgumentRequirements(errorRoute, nettyHttpRequest, false);
@@ -318,7 +346,7 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
     }
 
     private void handleRouteMatch(
-            RouteMatch<Object> route,
+            RouteMatch<?> route,
             NettyHttpRequest<?> request,
             ChannelHandlerContext context) {
         // Set the matched route on the request
@@ -335,7 +363,7 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
 
         // The request body is required, so at this point we must have a StreamedHttpRequest
         io.netty.handler.codec.http.HttpRequest nativeRequest = request.getNativeRequest();
-        if(!route.isExecutable() && HttpMethod.permitsRequestBody(request.getMethod()) && nativeRequest instanceof StreamedHttpRequest) {
+        if (!route.isExecutable() && HttpMethod.permitsRequestBody(request.getMethod()) && nativeRequest instanceof StreamedHttpRequest) {
             Optional<MediaType> contentType = request.getContentType();
             HttpContentProcessor<?> processor = contentType.flatMap(type ->
                     beanLocator.findBean(HttpContentSubscriberFactory.class,
@@ -353,10 +381,10 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
     }
 
 
-    private Subscriber<Object> buildSubscriber(NettyHttpRequest request, ChannelHandlerContext context, RouteMatch<Object> finalRoute) {
+    private Subscriber<Object> buildSubscriber(NettyHttpRequest request, ChannelHandlerContext context, RouteMatch<?> finalRoute) {
         return new CompletionAwareSubscriber<Object>() {
             NettyPart currentPart;
-            RouteMatch<Object> routeMatch = finalRoute;
+            RouteMatch<?> routeMatch = finalRoute;
             AtomicBoolean executed = new AtomicBoolean(false);
 
             @Override
@@ -475,7 +503,7 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
     }
 
 
-    private RouteMatch<Object> prepareRouteForExecution(RouteMatch<Object> route, NettyHttpRequest<?> request) {
+    private RouteMatch<?> prepareRouteForExecution(RouteMatch<?> route, NettyHttpRequest<?> request) {
         ChannelHandlerContext context = request.getChannelHandlerContext();
         // Select the most appropriate Executor
         ExecutorService executor;
@@ -500,7 +528,7 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
                     MutableHttpResponse<?> response;
 
                     try {
-                        RouteMatch<Object> routeMatch = finalRoute;
+                        RouteMatch<?> routeMatch = finalRoute;
                         if (!routeMatch.isExecutable()) {
                             routeMatch = requestArgumentSatisfier.fulfillArgumentRequirements(routeMatch, request, true);
                         }
@@ -514,6 +542,7 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
                                         .map((match) -> requestArgumentSatisfier.fulfillArgumentRequirements(match, request, true))
                                         .filter(RouteMatch::isExecutable)
                                         .map(RouteMatch::execute)
+                                        .map(Object.class::cast)
                                         .orElse(NettyHttpResponse.getOr(request, HttpResponse.notFound()));
                                 if (result instanceof MutableHttpResponse) {
                                     response = (MutableHttpResponse<?>) result;
@@ -521,8 +550,7 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
                                     response = HttpResponse.status(HttpStatus.NOT_FOUND)
                                             .body(result);
                                 }
-                            }
-                            else {
+                            } else {
                                 response = NettyHttpResponse.getOr(request, HttpResponse.ok());
                             }
                         } else if (result instanceof HttpResponse) {
@@ -533,13 +561,14 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
                                         .map((match) -> requestArgumentSatisfier.fulfillArgumentRequirements(match, request, true))
                                         .filter(RouteMatch::isExecutable)
                                         .map(RouteMatch::execute)
+                                        .map(Object.class::cast)
                                         .orElse(result);
                             }
                             if (result instanceof MutableHttpResponse) {
                                 response = (MutableHttpResponse<?>) result;
                             } else {
                                 response = HttpResponse.status(status)
-                                                       .body(result);
+                                        .body(result);
                             }
                         } else {
                             response = HttpResponse.ok(result);
@@ -585,8 +614,8 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
 
     private Publisher<? extends HttpResponse<?>> filterPublisher(HttpRequest<?> request, Publisher<MutableHttpResponse<?>> routePublisher) {
         Publisher<? extends HttpResponse<?>> finalPublisher;
-        List<HttpFilter> filters = new ArrayList<>( router.findFilters(request) );
-        if(!filters.isEmpty()) {
+        List<HttpFilter> filters = new ArrayList<>(router.findFilters(request));
+        if (!filters.isEmpty()) {
             // make the action executor the last filter in the chain
             filters.add((HttpServerFilter) (req, chain) -> routePublisher);
 
@@ -597,7 +626,7 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
                 @Override
                 public Publisher<MutableHttpResponse<?>> proceed(HttpRequest<?> request) {
                     int pos = integer.incrementAndGet();
-                    if(pos > len) {
+                    if (pos > len) {
                         throw new IllegalStateException("The FilterChain.proceed(..) method should be invoked exactly once per filter execution. The method has instead been invoked multiple times by an erroneous filter definition.");
                     }
                     HttpFilter httpFilter = filters.get(pos);
@@ -606,8 +635,7 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
             };
             HttpFilter httpFilter = filters.get(0);
             finalPublisher = httpFilter.doFilter(request, filterChain);
-        }
-        else {
+        } else {
             finalPublisher = routePublisher;
         }
         return finalPublisher;
@@ -618,7 +646,7 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
             NettyHttpRequest<?> request,
             HttpResponse<?> defaultResponse,
             MediaType defaultResponseMediaType,
-            RouteMatch<Object> route) {
+            RouteMatch<?> route) {
         Optional<?> optionalBody = defaultResponse.getBody();
         FullHttpResponse nativeResponse = ((NettyHttpResponse) defaultResponse).getNativeResponse();
         boolean isChunked = HttpUtil.isTransferEncodingChunked(nativeResponse);
@@ -749,10 +777,10 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
         }
 
         NettyHttpResponse error = (NettyHttpResponse) HttpResponse.serverError()
-                                                        .body(new VndError("Internal Server Error: " + cause.getMessage()));
+                .body(new VndError("Internal Server Error: " + cause.getMessage()));
         writeHttpResponse(
-            ctx,
-            nettyHttpRequest,
+                ctx,
+                nettyHttpRequest,
                 error,
                 error.getNativeResponse(),
                 null,
@@ -760,7 +788,7 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
         );
     }
 
-    private Class<?> resolveBodyType(RouteMatch<Object> route, Class<?> bodyType) {
+    private Class<?> resolveBodyType(RouteMatch<?> route, Class<?> bodyType) {
         if (route != null) {
             bodyType = route.getReturnType().getFirstTypeVariable().map(Argument::getType).orElse(null);
         }
@@ -772,7 +800,7 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
 
     private void emitDefaultErrorResponse(ChannelHandlerContext ctx, HttpRequest<?> request, MutableHttpResponse<Object> defaultResponse) {
         Publisher<MutableHttpResponse<?>> notAllowedResponse = Publishers.just(defaultResponse);
-        notAllowedResponse  = (Publisher<MutableHttpResponse<?>>) filterPublisher(request, notAllowedResponse);
+        notAllowedResponse = (Publisher<MutableHttpResponse<?>>) filterPublisher(request, notAllowedResponse);
         notAllowedResponse.subscribe(new CompletionAwareSubscriber<MutableHttpResponse<?>>() {
             @Override
             protected void doOnSubscribe(Subscription subscription) {
@@ -784,15 +812,14 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
                 writeHttpResponse(ctx,
                         request,
                         message,
-                        ((NettyHttpResponse)message).getNativeResponse(),
+                        ((NettyHttpResponse) message).getNativeResponse(),
                         null,
                         MediaType.APPLICATION_VND_ERROR_TYPE);
-                writeNettyResponse(ctx, request, ((NettyHttpResponse) message).getNativeResponse());
             }
 
             @Override
             protected void doOnError(Throwable t) {
-                if(LOG.isErrorEnabled()) {
+                if (LOG.isErrorEnabled()) {
                     LOG.error("Unexpected error occurred: " + t.getMessage(), t);
                 }
                 writeDefaultErrorResponse(ctx, (NettyHttpRequest) request, t);
@@ -818,6 +845,16 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
         Publisher<HttpContent> httpContentPublisher = Publishers.map(publisher, message -> {
             if (message instanceof ByteBuf) {
                 return new DefaultHttpContent((ByteBuf) message);
+            } else if (message instanceof ByteBuffer) {
+                ByteBuffer byteBuffer = (ByteBuffer) message;
+                Object nativeBuffer = byteBuffer.asNativeBuffer();
+                if (nativeBuffer instanceof ByteBuf) {
+                    return new DefaultHttpContent((ByteBuf) nativeBuffer);
+                } else {
+                    return new DefaultHttpContent(Unpooled.copiedBuffer(byteBuffer.asNioBuffer()));
+                }
+            } else if (message instanceof byte[]) {
+                return new DefaultHttpContent(Unpooled.copiedBuffer((byte[]) message));
             } else if (message instanceof HttpContent) {
                 return (HttpContent) message;
             } else {
@@ -838,12 +875,11 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
                     context.pipeline()
                             .writeAndFlush(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.NO_CONTENT))
                             .addListener(f -> {
-                                if(f.isSuccess()) {
-                                    future.complete(null);
-                                }
-                                else {
-                                    future.completeExceptionally(f.cause());
-                                }
+                                        if (f.isSuccess()) {
+                                            future.complete(null);
+                                        } else {
+                                            future.completeExceptionally(f.cause());
+                                        }
                                     }
                             );
                 }
@@ -867,11 +903,21 @@ class RoutingInBoundHandler extends SimpleChannelInboundHandler<HttpRequest<?>> 
             Object message,
             MediaTypeCodec codec,
             MediaType mediaType) {
-        if (message != null) {
-            ByteBuf byteBuf;
+        ByteBuf byteBuf;
 
+        if (message != null) {
             if (message instanceof ByteBuf) {
                 byteBuf = (ByteBuf) message;
+            } else if (message instanceof ByteBuffer) {
+                ByteBuffer byteBuffer = (ByteBuffer) message;
+                Object nativeBuffer = byteBuffer.asNativeBuffer();
+                if (nativeBuffer instanceof ByteBuf) {
+                    byteBuf = (ByteBuf) nativeBuffer;
+                } else {
+                    byteBuf = Unpooled.copiedBuffer(byteBuffer.asNioBuffer());
+                }
+            } else if (message instanceof byte[]) {
+                byteBuf = Unpooled.copiedBuffer((byte[]) message);
             } else {
                 byteBuf = (ByteBuf) codec.encode(message, new NettyByteBufferFactory(context.alloc())).asNativeBuffer();
             }

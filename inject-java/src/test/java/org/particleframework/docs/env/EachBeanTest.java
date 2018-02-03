@@ -18,11 +18,11 @@ package org.particleframework.docs.env;
 import org.junit.Test;
 import org.particleframework.context.ApplicationContext;
 import org.particleframework.context.env.PropertySource;
+import org.particleframework.core.util.CollectionUtils;
 import org.particleframework.inject.qualifiers.Qualifiers;
 
 import static org.junit.Assert.assertNotNull;
 import static org.particleframework.docs.env.DataSourceFactory.*;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
@@ -38,8 +38,10 @@ public class EachBeanTest {
     public void testEachBean() throws URISyntaxException {
         // tag::config[]
         ApplicationContext applicationContext = ApplicationContext.run(PropertySource.of(
+                "test",
+                CollectionUtils.mapOf(
                 "test.datasource.one.url", "jdbc:mysql://localhost/one",
-                "test.datasource.two.url", "jdbc:mysql://localhost/two"
+                "test.datasource.two.url", "jdbc:mysql://localhost/two")
         ));
         // end::config[]
 

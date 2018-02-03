@@ -222,7 +222,7 @@ public class BeanDefinitionInjectProcessor extends AbstractInjectAnnotationProce
             if (annotationUtils.hasStereotype(classElement, INTRODUCTION_TYPE) && modelUtils.isAbstract(classElement)) {
 
                 AnnotationMetadata typeAnnotationMetadata = annotationUtils.getAnnotationMetadata(classElement);
-                AopProxyWriter aopProxyWriter = createAopWriterFor(classElement);
+                AopProxyWriter aopProxyWriter = createIntroductionAdviceWriter(classElement);
                 ExecutableElement constructor = classElement.getKind() == ElementKind.CLASS ? modelUtils.concreteConstructorFor(classElement) : null;
                 ExecutableElementParamInfo constructorData = constructor != null ? populateParameterData(constructor) : null;
                 if (constructorData != null) {
@@ -235,8 +235,7 @@ public class BeanDefinitionInjectProcessor extends AbstractInjectAnnotationProce
                     aopProxyWriter.visitBeanDefinitionConstructor();
                 }
                 beanDefinitionWriters.put(classElement.getQualifiedName(), aopProxyWriter);
-                classElement.asType().accept(new PublicMethodVisitor<Object, AopProxyWriter>() {
-
+                classElement.asType().accept(new PublicAbstractMethodVisitor<Object, AopProxyWriter>(classElement, modelUtils, elementUtils) {
                     @Override
                     protected void accept(ExecutableElement method, AopProxyWriter aopProxyWriter) {
                         ExecutableElementParamInfo params = populateParameterData(method);
@@ -275,13 +274,20 @@ public class BeanDefinitionInjectProcessor extends AbstractInjectAnnotationProce
                         );
                     }
 
-                    @Override
-                    protected boolean isAcceptable(ExecutableElement executableElement) {
-                        Set<Modifier> modifiers = executableElement.getModifiers();
-                        return modelUtils.isAbstract(executableElement) && !modifiers.contains(Modifier.FINAL) && !modifiers.contains(Modifier.STATIC);
-                    }
                 }, aopProxyWriter);
-                return null;
+                boolean isInterface = classElement.getKind() == ElementKind.INTERFACE;
+                if(!isInterface) {
+
+                    List<? extends Element> elements = classElement.getEnclosedElements().stream()
+                            // already handled the public ctor
+                            .filter(element -> element.getKind() != CONSTRUCTOR)
+                            .collect(Collectors.toList());
+                    return scan(elements, o);
+                }
+                else {
+                    return null;
+                }
+
             } else {
                 assert (classElement.getKind() == CLASS) : "classElement must be a class";
 
@@ -571,7 +577,6 @@ public class BeanDefinitionInjectProcessor extends AbstractInjectAnnotationProce
 
             BeanDefinitionVisitor beanWriter = beanDefinitionWriters.get(this.concreteClass.getQualifiedName());
 
-
             Object typeRef = modelUtils.resolveTypeReference(method.getEnclosingElement());
             if (typeRef == null) typeRef = modelUtils.resolveTypeReference(concreteClass);
 
@@ -584,40 +589,43 @@ public class BeanDefinitionInjectProcessor extends AbstractInjectAnnotationProce
                     params.getQualifierTypes(),
                     params.getGenericTypes(), methodAnnotationMetadata);
 
-            boolean hasExplicitAround = methodAnnotationMetadata.hasStereotype(AROUND_TYPE);
-            if (isAopProxyType || hasExplicitAround) {
-                if (isAopProxyType && !hasExplicitAround && !method.getModifiers().contains(Modifier.PUBLIC)) {
-                    // ignore methods that are not public and have no explicit advise
-                    return;
+            // shouldn't visit around advice on an introduction advice instance
+            if(!(beanWriter instanceof AopProxyWriter)) {
+                boolean hasExplicitAround = methodAnnotationMetadata.hasStereotype(AROUND_TYPE);
+                if (isAopProxyType || hasExplicitAround) {
+                    if (isAopProxyType && !hasExplicitAround && !method.getModifiers().contains(Modifier.PUBLIC)) {
+                        // ignore methods that are not public and have no explicit advise
+                        return;
+                    }
+
+                    Object[] interceptorTypes = methodAnnotationMetadata
+                            .getAnnotationNamesByStereotype(AROUND_TYPE)
+                            .toArray();
+
+                    OptionalValues<Boolean> settings = methodAnnotationMetadata.getValues(AROUND_TYPE, Boolean.class);
+                    AopProxyWriter aopProxyWriter = resolveAopProxyWriter(
+                            beanWriter,
+                            settings,
+                            false,
+                            this.constructorParamterInfo,
+                            interceptorTypes
+                    );
+
+                    aopProxyWriter.visitInterceptorTypes(interceptorTypes);
+
+                    boolean isAnnotationReference = methodAnnotationMetadata instanceof AnnotationMetadataReference;
+
+                    aopProxyWriter.visitAroundMethod(
+                            typeRef,
+                            modelUtils.resolveTypeReference(returnType),
+                            returnTypeGenerics,
+                            method.getSimpleName().toString(),
+                            params.getParameters(),
+                            params.getQualifierTypes(),
+                            params.getGenericTypes(), !isAnnotationReference && executableMethodWriter != null ? new AnnotationMetadataReference(executableMethodWriter.getClassName(),methodAnnotationMetadata): methodAnnotationMetadata);
+
+
                 }
-
-                Object[] interceptorTypes = methodAnnotationMetadata
-                        .getAnnotationNamesByStereotype(AROUND_TYPE)
-                        .toArray();
-
-                OptionalValues<Boolean> settings = methodAnnotationMetadata.getValues(AROUND_TYPE, Boolean.class);
-                AopProxyWriter aopProxyWriter = resolveAopProxyWriter(
-                        beanWriter,
-                        settings,
-                        false,
-                        this.constructorParamterInfo,
-                        interceptorTypes
-                );
-
-                aopProxyWriter.visitInterceptorTypes(interceptorTypes);
-
-                boolean isAnnotationReference = methodAnnotationMetadata instanceof AnnotationMetadataReference;
-
-                aopProxyWriter.visitAroundMethod(
-                        typeRef,
-                        modelUtils.resolveTypeReference(returnType),
-                        returnTypeGenerics,
-                        method.getSimpleName().toString(),
-                        params.getParameters(),
-                        params.getQualifierTypes(),
-                        params.getGenericTypes(), !isAnnotationReference ? new AnnotationMetadataReference(executableMethodWriter.getClassName(),methodAnnotationMetadata): methodAnnotationMetadata);
-
-
             }
         }
 
@@ -628,7 +636,7 @@ public class BeanDefinitionInjectProcessor extends AbstractInjectAnnotationProce
                                                      Object... interceptorTypes) {
             String beanName = beanWriter.getBeanDefinitionName();
             Name proxyKey = createProxyKey(beanName);
-            BeanDefinitionVisitor aopWriter = beanDefinitionWriters.get(proxyKey);
+            BeanDefinitionVisitor aopWriter = beanWriter instanceof AopProxyWriter ? beanWriter : beanDefinitionWriters.get(proxyKey);
 
             AopProxyWriter aopProxyWriter;
             if (aopWriter == null) {
@@ -976,7 +984,7 @@ public class BeanDefinitionInjectProcessor extends AbstractInjectAnnotationProce
             return new DynamicName(beanName + "$Proxy");
         }
 
-        private AopProxyWriter createAopWriterFor(TypeElement typeElement) {
+        private AopProxyWriter createIntroductionAdviceWriter(TypeElement typeElement) {
             AnnotationMetadata annotationMetadata = annotationUtils.getAnnotationMetadata(typeElement);
 
             PackageElement packageElement = elementUtils.getPackageOf(typeElement);

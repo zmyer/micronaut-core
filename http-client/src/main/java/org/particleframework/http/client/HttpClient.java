@@ -21,9 +21,11 @@ import org.particleframework.core.io.buffer.ByteBuffer;
 import org.particleframework.core.type.Argument;
 import org.particleframework.http.HttpRequest;
 import org.particleframework.http.HttpResponse;
+import org.particleframework.http.HttpStatus;
 import org.particleframework.http.MutableHttpRequest;
 import org.particleframework.http.client.exceptions.HttpClientException;
 import org.particleframework.http.client.exceptions.HttpClientResponseException;
+import org.particleframework.http.filter.HttpClientFilter;
 import org.particleframework.http.sse.Event;
 import org.reactivestreams.Publisher;
 
@@ -33,6 +35,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -42,6 +46,7 @@ import java.util.function.Function;
  * @since 1.0
  */
 public interface HttpClient extends Closeable, LifeCycle<HttpClient> {
+
 
     /**
      * @return A blocking HTTP client suitable for testing and non-production scenarios.
@@ -121,12 +126,19 @@ public interface HttpClient extends Closeable, LifeCycle<HttpClient> {
      * @return A {@link Publisher} that emits a result of the given type
      */
     default <I, O> Publisher<O> retrieve(HttpRequest<I> request, Argument<O> bodyType) {
-        return Publishers.map(exchange(request, bodyType), response ->
-                response.getBody()
+        return Publishers.map(exchange(request, bodyType), response -> {
+            if(bodyType.getType() == HttpStatus.class) {
+                return (O) response.getStatus();
+            }
+            else {
+                Optional<O> body = response.getBody();
+                return body
                         .orElseThrow(() -> new HttpClientResponseException(
                                 "Empty body",
                                 response
-                        )));
+                        ));
+            }
+        });
     }
 
 
@@ -161,10 +173,9 @@ public interface HttpClient extends Closeable, LifeCycle<HttpClient> {
      * the response body to the specified type
      *
      * @param uri The URI
-     * @param <I> The request body type
      * @return A {@link Publisher} that emits String result
      */
-    default <I> Publisher<String> retrieve(String uri) {
+    default Publisher<String> retrieve(String uri) {
         return retrieve(HttpRequest.GET(uri), String.class);
     }
 
@@ -173,6 +184,19 @@ public interface HttpClient extends Closeable, LifeCycle<HttpClient> {
         stop();
         return start();
     }
+
+    /**
+     * Sets the client identifiers that this client applies to. Used to select a subset of {@link HttpClientFilter}.
+     * The client identifiers are equivalents to the value of {@link Client#id()}
+     * @param clientIdentifiers The client identifiers
+     */
+    void setClientIdentifiers(Set<String> clientIdentifiers);
+
+    /**
+     * @see #setClientIdentifiers(Set)
+     * @param clientIdentifiers The client identifiers
+     */
+    void setClientIdentifiers(String... clientIdentifiers);
 
     /**
      * Create a new {@link HttpClient}. Note that this method should only be used outside of the context of a Particle application. Within particle use
@@ -185,35 +209,5 @@ public interface HttpClient extends Closeable, LifeCycle<HttpClient> {
         return new DefaultHttpClient(url);
     }
 
-    //  The following methods to be added in future streaming support
-
-//    /**
-//     * Perform a request a listen for a stream of Server Sent events. Expects a response of type {@link org.particleframework.http.MediaType#TEXT_EVENT_STREAM}
-//     *
-//     * @param request The {@link HttpRequest} to execute
-//     * @param <I>     The request body type
-//     * @return A {@link Publisher} that emits a stream of response objects with the body of each response object containing a {@link Event}
-//     */
-//    <I> Publisher<HttpResponse<Event<ByteBuffer<?>>>> eventStream(HttpRequest<I> request);
-//
-//    /**
-//     * Perform a request a listen for a stream of Server Sent events. Expects a response of type {@link org.particleframework.http.MediaType#TEXT_EVENT_STREAM}
-//     *
-//     * @param request The {@link HttpRequest} to execute
-//     * @param <I>     The request body type
-//     * @param <O>     The event type
-//     * @return A {@link Publisher} that emits a stream of response objects with the body of each response object containing a {@link Event}
-//     */
-//    <I, O> Publisher<HttpResponse<Event<O>>> eventStream(HttpRequest<I> request, Argument<O> bodyType);
-//
-//    /**
-//     * Perform an HTTP request and receive data chunk by chunk as it becomes available
-//     *
-//     * @param request The {@link HttpRequest} to execute
-//     * @param <I>     The request body type
-//     * @return A {@link Publisher} that emits the full {@link HttpResponse} object
-//     */
-//    <I> Publisher<HttpResponse<ByteBuffer<?>>> dataStream(HttpRequest<I> request);
-//
 
 }

@@ -24,6 +24,7 @@ import org.particleframework.core.value.PropertyResolver;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -34,7 +35,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class PropertySourcePropertyResolver implements PropertyResolver {
     protected final ConversionService<?> conversionService;
-    protected final Collection<PropertySource> propertySources = new ConcurrentLinkedQueue<>();
+    protected final Map<String,PropertySource> propertySources = new ConcurrentHashMap<>(10);
     // properties are stored in an array of maps organized by character in the alphabet
     // this allows optimization of searches by prefix
     protected final Map<String,Object>[] catalog = new Map[57];
@@ -77,8 +78,8 @@ public class PropertySourcePropertyResolver implements PropertyResolver {
      */
     public PropertySourcePropertyResolver addPropertySource(@Nullable PropertySource propertySource) {
         if(propertySource != null) {
-            propertySources.add(propertySource);
-            processPropertySource(propertySource, false);
+            propertySources.put(propertySource.getName(), propertySource);
+            processPropertySource(propertySource, PropertySource.PropertyConvention.LOWER_CASE_DOT_SEPARATED);
         }
         return this;
     }
@@ -88,9 +89,9 @@ public class PropertySourcePropertyResolver implements PropertyResolver {
      * @param values The values
      * @return This environment
      */
-    public PropertySourcePropertyResolver addPropertySource(@Nullable Map<String, ? super Object> values) {
+    public PropertySourcePropertyResolver addPropertySource(String name, @Nullable Map<String, ? super Object> values) {
         if(CollectionUtils.isNotEmpty(values)) {
-            return addPropertySource(PropertySource.of(values));
+            return addPropertySource(PropertySource.of(name, values));
         }
         return this;
     }
@@ -128,7 +129,7 @@ public class PropertySourcePropertyResolver implements PropertyResolver {
                     return true;
                 }
                 else {
-                    String finalName = name;
+                    String finalName = name + ".";
                     return entries.keySet().stream().anyMatch(key -> key.startsWith(finalName));
                 }
             }
@@ -240,11 +241,12 @@ public class PropertySourcePropertyResolver implements PropertyResolver {
         return subMap;
     }
 
-    protected void processPropertySource(PropertySource properties, boolean upperCaseUnderscoreSeperated) {
+    protected void processPropertySource(PropertySource properties, PropertySource.PropertyConvention convention) {
+        this.propertySources.put(properties.getName(), properties);
         synchronized (catalog) {
             for (String property : properties) {
                 Object value = properties.get(property);
-                if(upperCaseUnderscoreSeperated) {
+                if(convention == PropertySource.PropertyConvention.UPPER_CASE_UNDER_SCORE_SEPARATED) {
                     property = property.toLowerCase(Locale.ENGLISH).replace('_', '.');
                 }
                 int i = property.indexOf('[');

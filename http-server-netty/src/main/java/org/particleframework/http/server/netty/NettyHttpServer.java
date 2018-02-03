@@ -25,24 +25,31 @@ import io.netty.handler.codec.http.multipart.DiskFileUpload;
 import io.netty.util.concurrent.Future;
 import org.particleframework.context.ApplicationContext;
 import org.particleframework.context.BeanLocator;
-import org.particleframework.context.LifeCycle;
 import org.particleframework.context.env.Environment;
 import org.particleframework.context.exceptions.ConfigurationException;
+import org.particleframework.core.convert.value.ConvertibleValues;
 import org.particleframework.core.io.socket.SocketUtils;
 import org.particleframework.core.naming.Named;
 import org.particleframework.core.order.OrderUtil;
 import org.particleframework.core.reflect.GenericTypeUtils;
 import org.particleframework.core.reflect.ReflectionUtils;
+import org.particleframework.discovery.event.ServiceDegistrationEvent;
+import org.particleframework.discovery.event.ServiceRegistrationEvent;
 import org.particleframework.http.codec.MediaTypeCodecRegistry;
 import org.particleframework.http.server.binding.RequestBinderRegistry;
 import org.particleframework.http.server.netty.configuration.NettyHttpServerConfiguration;
 import org.particleframework.http.server.netty.decoders.HttpRequestDecoder;
 import org.particleframework.http.server.netty.types.NettySpecialTypeHandlerRegistry;
 import org.particleframework.inject.qualifiers.Qualifiers;
+import org.particleframework.runtime.ApplicationConfiguration;
 import org.particleframework.runtime.executor.ExecutorSelector;
 import org.particleframework.runtime.executor.IOExecutorServiceConfig;
 import org.particleframework.runtime.server.EmbeddedServer;
+import org.particleframework.runtime.server.EmbeddedServerInstance;
+import org.particleframework.runtime.server.event.ServerShutdownEvent;
+import org.particleframework.runtime.server.event.ServerStartupEvent;
 import org.particleframework.web.router.Router;
+import org.particleframework.web.router.resource.StaticResourceResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,6 +87,7 @@ public class NettyHttpServer implements EmbeddedServer {
     private final MediaTypeCodecRegistry mediaTypeCodecRegistry;
     private final NettySpecialTypeHandlerRegistry specialTypeHandlerRegistry;
     private final NettyHttpServerConfiguration serverConfiguration;
+    private final StaticResourceResolver staticResourceResolver;
     private final Environment environment;
     private final Router router;
     private final RequestBinderRegistry binderRegistry;
@@ -88,6 +96,7 @@ public class NettyHttpServer implements EmbeddedServer {
     private final ApplicationContext applicationContext;
     private NioEventLoopGroup workerGroup;
     private NioEventLoopGroup parentGroup;
+    private EmbeddedServerInstance serviceInstance;
 
     @Inject
     public NettyHttpServer(
@@ -97,6 +106,7 @@ public class NettyHttpServer implements EmbeddedServer {
             RequestBinderRegistry binderRegistry,
             MediaTypeCodecRegistry mediaTypeCodecRegistry,
             NettySpecialTypeHandlerRegistry specialTypeHandlerRegistry,
+            StaticResourceResolver resourceResolver,
             @javax.inject.Named(IOExecutorServiceConfig.NAME) ExecutorService ioExecutor,
             ExecutorSelector executorSelector,
             ChannelOutboundHandler... outboundHandlers
@@ -119,6 +129,7 @@ public class NettyHttpServer implements EmbeddedServer {
         OrderUtil.sort(outboundHandlers);
         this.outboundHandlers = outboundHandlers;
         this.binderRegistry = binderRegistry;
+        this.staticResourceResolver = resourceResolver;
     }
 
     @Override
@@ -149,12 +160,13 @@ public class NettyHttpServer implements EmbeddedServer {
 
                             pipeline.addLast(HTTP_CODEC, new HttpServerCodec());
                             pipeline.addLast(HTTP_STREAMS_CODEC, new HttpStreamsServerHandler());
-                            pipeline.addLast(HttpRequestDecoder.ID, new HttpRequestDecoder(environment, serverConfiguration));
+                            pipeline.addLast(HttpRequestDecoder.ID, new HttpRequestDecoder(NettyHttpServer.this, environment, serverConfiguration));
                             pipeline.addLast(PARTICLE_HANDLER, new RoutingInBoundHandler(
                                     beanLocator,
                                     router,
                                     mediaTypeCodecRegistry,
                                     specialTypeHandlerRegistry,
+                                    staticResourceResolver,
                                     serverConfiguration,
                                     binderRegistry,
                                     executorSelector,
@@ -168,6 +180,9 @@ public class NettyHttpServer implements EmbeddedServer {
 
             ChannelFuture future;
 
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("Binding server to port: {}", serverPort);
+            }
             if(host.isPresent()) {
                 future = serverBootstrap.bind(host.get(), serverPort);
             }
@@ -183,7 +198,38 @@ public class NettyHttpServer implements EmbeddedServer {
                     }
                 }
             });
+            applicationContext.publishEvent(new ServerStartupEvent(this));
+            Optional<String> applicationName = serverConfiguration.getApplicationConfiguration().getName();
+            applicationName.ifPresent(id -> {
+                this.serviceInstance = new EmbeddedServerInstance() {
+                    @Override
+                    public EmbeddedServer getEmbeddedServer() {
+                        return NettyHttpServer.this;
+                    }
+
+                    @Override
+                    public String getId() {
+                        return id;
+                    }
+
+                    @Override
+                    public URI getURI() {
+                        return NettyHttpServer.this.getURI();
+                    }
+
+                    @Override
+                    public ConvertibleValues<String> getMetadata() {
+                        Map<CharSequence, String> metadata = serverConfiguration
+                                .getApplicationConfiguration()
+                                .getInstance()
+                                .getMetadata();
+                        return ConvertibleValues.of(metadata);
+                    }
+                };
+                applicationContext.publishEvent(new ServiceRegistrationEvent(serviceInstance));
+            });
         }
+
         return this;
     }
 
@@ -195,6 +241,10 @@ public class NettyHttpServer implements EmbeddedServer {
                            .addListener(this::logShutdownErrorIfNecessary);
                 parentGroup.shutdownGracefully()
                            .addListener(this::logShutdownErrorIfNecessary);
+                applicationContext.publishEvent(new ServerShutdownEvent(this));
+                if(serviceInstance != null) {
+                    applicationContext.publishEvent(new ServiceDegistrationEvent(serviceInstance));
+                }
                 if(applicationContext.isRunning()) {
                     applicationContext.stop();
                 }
@@ -249,6 +299,11 @@ public class NettyHttpServer implements EmbeddedServer {
     @Override
     public ApplicationContext getApplicationContext() {
         return applicationContext;
+    }
+
+    @Override
+    public ApplicationConfiguration getApplicationConfiguration() {
+        return serverConfiguration.getApplicationConfiguration();
     }
 
     protected NioEventLoopGroup createParentEventLoopGroup() {

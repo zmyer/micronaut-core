@@ -3,6 +3,7 @@ package org.particleframework.http;
 
 import org.particleframework.http.exceptions.UriSyntaxException;
 
+import javax.annotation.Nullable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Set;
@@ -20,6 +21,36 @@ public interface HttpResponse<B> extends HttpMessage<B> {
      */
     HttpStatus getStatus();
 
+    /**
+     * Return the first value for the given header or null
+     * @param name The name
+     * @return The header value
+     */
+    default @Nullable String header(@Nullable CharSequence name) {
+        if(name == null) return null;
+        return getHeaders().get(name);
+    }
+
+    /**
+     * @return The body or null
+     */
+    default @Nullable B body() {
+        return getBody().orElse(null);
+    }
+
+    /**
+     * @return The response status code
+     */
+    default int code() {
+        return getStatus().getCode();
+    }
+
+    /**
+     * @return The HTTP status reason phrase
+     */
+    default String reason() {
+        return getStatus().getReason();
+    }
     /**
      * Return an {@link HttpStatus#OK} response with an empty body
      *

@@ -15,16 +15,12 @@
  */
 package org.particleframework.http.server.netty
 
-import okhttp3.OkHttpClient
 import org.particleframework.context.ApplicationContext
-import org.particleframework.core.io.socket.SocketUtils
-import org.particleframework.runtime.ParticleApplication
+import org.particleframework.http.client.rxjava2.RxHttpClient
 import org.particleframework.runtime.server.EmbeddedServer
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
-
-import java.util.concurrent.TimeUnit
 
 /**
  * @author Graeme Rocher
@@ -41,10 +37,7 @@ abstract class AbstractParticleSpec extends Specification {
     )
     @Shared int serverPort = embeddedServer.getPort()
     @Shared URL server = embeddedServer.getURL()
-    @Shared OkHttpClient client = new OkHttpClient()
-                                            .newBuilder()
-                                            .readTimeout(1, TimeUnit.MINUTES)
-                                            .build()
+    @Shared RxHttpClient rxClient = embeddedServer.applicationContext.createBean(RxHttpClient, server)
 
     Collection<String> configurationNames() {
         ['org.particleframework.configuration.jackson','org.particleframework.web.router']
@@ -55,7 +48,7 @@ abstract class AbstractParticleSpec extends Specification {
     }
 
 
-    def cleanupSpec()  {
+    void cleanupSpec()  {
         uploadDir.delete()
     }
 }

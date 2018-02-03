@@ -15,6 +15,7 @@
  */
 package org.particleframework.http.client;
 
+import org.particleframework.core.io.buffer.ByteBuffer;
 import org.particleframework.core.type.Argument;
 import org.particleframework.http.HttpRequest;
 import org.particleframework.http.HttpResponse;
@@ -26,8 +27,29 @@ import java.util.Map;
  * Extended version of the {@link HttpClient} that supports streaming responses
  *
  * @author Graeme Rocher
+ * @since 1.0
  */
 public interface StreamingHttpClient extends HttpClient {
+
+
+    /**
+     * Request a stream of data where each emitted item is a {@link ByteBuffer} instance
+     *
+     * @param request The request
+     * @param <I> The request body type
+     * @return A {@link Publisher} that emits a stream of {@link ByteBuffer} instances
+     */
+    <I> Publisher<ByteBuffer<?>> dataStream(HttpRequest<I> request);
+
+    /**
+     * Requests a stream data where each emitted item is a {@link ByteBuffer} wrapped in the {@link HttpResponse} object (which remains the same for each
+     * emitted item).
+     *
+     * @param request The {@link HttpRequest}
+     * @param <I> The request body type
+     * @return A {@link Publisher} that emits a stream of {@link ByteBuffer} instances wrapped by a {@link HttpResponse}
+     */
+    <I> Publisher<HttpResponse<ByteBuffer<?>>> exchangeStream(HttpRequest<I> request);
 
     /**
      * <p>Perform an HTTP request and receive data as a stream of JSON objects as they become available without blocking.</p>
@@ -43,7 +65,7 @@ public interface StreamingHttpClient extends HttpClient {
     /**
      * <p>Perform an HTTP request and receive data as a stream of JSON objects as they become available without blocking.</p>
      *
-     * <p>The downstream {@link org.reactivestreams.Subscriber} can regulate demand via the subscription</p>
+     * <p>The downstream {@link org.reactivestreams.Subscriber} can regulate demand via the subscription. Incoming data is buffered.</p>
      *
      * @param request The {@link HttpRequest} to execute
      * @param type The type of object to convert the JSON into

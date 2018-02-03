@@ -32,9 +32,15 @@ public interface ParametrizedProvider<T> extends Provider<T> {
      */
     T get(Map<String, Object> argumentValues);
 
+    /**
+     * @param argumentValues The argument values to use
+     * @return The bean
+     */
+    T get(Object...argumentValues);
+
     @Override
     default T get() {
-        return get(null);
+        return get((Map<String, Object>) null);
     }
 
 }

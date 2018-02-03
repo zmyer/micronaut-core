@@ -2,13 +2,7 @@ package org.particleframework.context;
 
 import org.particleframework.context.annotation.Context;
 import org.particleframework.context.annotation.Primary;
-import org.particleframework.context.annotation.Requirements;
-import org.particleframework.context.annotation.Requires;
-import org.particleframework.context.condition.Condition;
-import org.particleframework.context.condition.RequiresCondition;
-import org.particleframework.context.exceptions.BeanContextException;
 import org.particleframework.context.exceptions.BeanInstantiationException;
-import org.particleframework.core.annotation.AnnotationMetadata;
 import org.particleframework.core.annotation.Internal;
 import org.particleframework.core.reflect.GenericTypeUtils;
 import org.particleframework.inject.BeanDefinition;
@@ -17,6 +11,9 @@ import org.particleframework.inject.BeanFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * An uninitialized and unloaded component definition with basic information available regarding its requirements
  *
@@ -24,14 +21,14 @@ import org.slf4j.LoggerFactory;
  * @since 1.0
  */
 @Internal
-public abstract class AbstractBeanDefinitionReference implements BeanDefinitionReference {
+public abstract class AbstractBeanDefinitionReference extends AbstractBeanContextConditional implements BeanDefinitionReference {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractBeanDefinitionReference.class);
     private final String beanTypeName;
     private final String beanDefinitionTypeName;
     private Class beanDefinition;
     private Boolean present;
-    private Boolean enabled;
+    private Map<Integer,Boolean> enabled = new ConcurrentHashMap<>(2);
 
     public AbstractBeanDefinitionReference(String beanTypeName, String beanDefinitionTypeName) {
         this.beanTypeName = beanTypeName;
@@ -106,15 +103,7 @@ public abstract class AbstractBeanDefinitionReference implements BeanDefinitionR
 
     @Override
     public boolean isEnabled(BeanContext beanContext) {
-        if (isPresent()) {
-            if(enabled == null) {
-                AnnotationMetadata annotationMetadata = getAnnotationMetadata();
-                Condition condition = annotationMetadata.hasStereotype(Requirements.class) || annotationMetadata.hasStereotype(Requires.class)? new RequiresCondition(annotationMetadata) : null;
-                enabled = condition == null || condition.matches(new DefaultConditionContext<>(beanContext, this));
-            }
-            return enabled;
-        }
-        return false;
+        return isPresent() && super.isEnabled(beanContext);
     }
 
     @Override

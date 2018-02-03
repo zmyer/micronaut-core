@@ -24,9 +24,12 @@ import org.particleframework.context.annotation.ConfigurationProperties;
 import org.particleframework.core.convert.format.ReadableBytes;
 import org.particleframework.runtime.ApplicationConfiguration;
 
+import javax.inject.Inject;
 import javax.net.ssl.TrustManagerFactory;
 import java.net.Proxy;
 import java.net.SocketAddress;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ThreadFactory;
@@ -37,8 +40,9 @@ import java.util.concurrent.ThreadFactory;
  * @author Graeme Rocher
  * @since 1.0
  */
-@ConfigurationProperties("http.client")
-public class HttpClientConfiguration extends ApplicationConfiguration {
+public abstract class HttpClientConfiguration {
+
+    public static final String LOCALHOST = "localhost";
 
     private Map<ChannelOption, Object> channelOptions = Collections.emptyMap();
 
@@ -80,6 +84,28 @@ public class HttpClientConfiguration extends ApplicationConfiguration {
     private String proxyUsername;
 
     private String proxyPassword;
+
+    private Charset defaultCharset = StandardCharsets.UTF_8;
+
+
+    public HttpClientConfiguration() {
+    }
+
+    public HttpClientConfiguration(ApplicationConfiguration applicationConfiguration) {
+        if(applicationConfiguration != null)
+            this.defaultCharset = applicationConfiguration.getDefaultCharset();
+    }
+
+    /**
+     * @return The default charset to use
+     */
+    public Charset getDefaultCharset() {
+        return defaultCharset;
+    }
+
+    public void setDefaultCharset(Charset defaultCharset) {
+        this.defaultCharset = defaultCharset;
+    }
 
     /**
      * @return The Netty channel options.

@@ -1,0 +1,51 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '2.0.1'
+    id 'groovy'
+    id "application"
+}
+group 'com.groovycalamari'
+mainClassName = "com.groovycalamari.Application"
+jar {
+    manifest {
+        attributes 'Main-Class': "example.Application"
+    }
+}
+repositories {
+    mavenLocal()
+    jcenter()
+}
+dependencies {
+    Properties props = new Properties()
+    new File("../../gradle.properties").withReader { props.load(it) }
+    compileOnly "org.particleframework:inject-groovy:${props.projectVersion}"
+    compile "org.particleframework:runtime-groovy:${props.projectVersion}"
+
+    compile "org.particleframework:http-server-netty:${props.projectVersion}"
+    compile "org.particleframework:http-client:${props.projectVersion}"
+
+    compile "org.codehaus.groovy:groovy-xml:$props.groovyVersion"
+
+    runtime "ch.qos.logback:logback-classic:1.2.3"
+
+    compile "com.github.mpkorstanje:simmetrics-core:$simmetricsCoreVersion"
+    compile "com.vladsch.flexmark:flexmark:$flexmarkVersion"
+    testCompile "org.spockframework:spock-core:$spockVersion"
+    runtime "ch.qos.logback:logback-classic:1.2.3"
+}
+
+shadowJar {
+    mergeServiceFiles()
+}
+
+runShadow {
+    systemProperties System.properties
+}
+
+test {
+    systemProperties System.properties
+}
+
+shadowJar {
+    baseName = 'groovy-calamari-search'
+    version = projectVersion
+}

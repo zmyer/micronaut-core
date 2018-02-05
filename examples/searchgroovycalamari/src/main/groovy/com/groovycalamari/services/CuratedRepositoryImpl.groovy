@@ -57,7 +57,9 @@ class CuratedRepositoryImpl implements CuratedRepository {
                                     Observable.create(new CuratedItemObservableOnSubscribe(curatedIssueResponse)).subscribe(new Consumer<CuratedItem>() {
                                         @Override
                                         void accept(CuratedItem curatedItem) throws Exception {
-                                            items << curatedItem
+                                            if ( curatedItem != null ) {
+                                                items << curatedItem
+                                            }
                                         }
                                     })
                                 }

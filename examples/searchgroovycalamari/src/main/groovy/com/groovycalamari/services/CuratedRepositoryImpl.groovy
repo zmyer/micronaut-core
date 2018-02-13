@@ -33,6 +33,15 @@ class CuratedRepositoryImpl implements CuratedRepository {
     }
 
     @Override
+    Integer findLatest() {
+        Set<Integer> keys = curatedIssues.keySet()
+        if ( !keys ) {
+            return null
+        }
+        keys.sort().last()
+    }
+
+    @Override
     CuratedIssueResponse findIssue(Integer number) {
         curatedIssues[number]
     }

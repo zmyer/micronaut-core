@@ -32,14 +32,16 @@ class TtlHeartbeatSpec extends Specification {
     void "test that the server reports a TTL heartbeat when configured to do so"() {
 
         given:
-        EmbeddedServer consulServer = ApplicationContext.run(EmbeddedServer)
+        EmbeddedServer consulServer = ApplicationContext.run(EmbeddedServer,
+                [(MockConsulServer.ENABLED):true]
+        )
 
         when:"An application is started that sends a heart beat to consul"
         String serviceId = 'myService'
         EmbeddedServer application = ApplicationContext.run(
                 EmbeddedServer,
-                ['consul.host': consulServer.getHost(),
-                 'consul.port': consulServer.getPort(),
+                ['consul.client.host': consulServer.getHost(),
+                 'consul.client.port': consulServer.getPort(),
                  'particle.application.name': serviceId,
                  'particle.heartbeat.interval':'1s'] // short heart beat interval
         )

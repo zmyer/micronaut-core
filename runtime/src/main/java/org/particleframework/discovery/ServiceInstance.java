@@ -16,10 +16,14 @@
 package org.particleframework.discovery;
 
 import org.particleframework.core.convert.value.ConvertibleValues;
+import org.particleframework.core.util.StringUtils;
+import org.particleframework.health.HealthStatus;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * <p>Represents a remote service discovered by the underlying discovery implementation</p>
@@ -39,7 +43,11 @@ public interface ServiceInstance {
     String ZONE = "zone";
 
     /**
-     * @return The identifier of the service
+     * Constant to represent the region of the service contained with {@link #getMetadata()}
+     */
+    String REGION = "region";
+    /**
+     * @return The identifier of the service used for purposes of service discovery
      */
     String getId();
 
@@ -48,6 +56,44 @@ public interface ServiceInstance {
      */
     URI getURI();
 
+    /**
+     * @return The {@link HealthStatus} of the instance
+     */
+    default HealthStatus getHealthStatus() {
+        return HealthStatus.UP;
+    }
+    /**
+     * @return The ID of the instance
+     */
+    default Optional<String> getInstanceId() {
+        return Optional.empty();
+    }
+
+    /**
+     * Returns the availability zone to use. A zone is, for example, the AWS availability zone
+     *
+     * @return The zone to use
+     */
+    default Optional<String> getZone() {
+        return getMetadata().get(ZONE, String.class);
+    }
+
+    /**
+     * Returns the region to use. A region is, for example, the AWS region
+     *
+     * @return The region
+     */
+    default Optional<String> getRegion() {
+        return getMetadata().get(REGION, String.class);
+    }
+    /**
+     * Returns the application group. For example, the AWS auto-scaling group
+     *
+     * @return The group to use
+     */
+    default Optional<String> getGroup() {
+        return getMetadata().get(GROUP, String.class);
+    }
     /**
      * @return The service metadata
      */
@@ -75,6 +121,30 @@ public interface ServiceInstance {
      */
     default int getPort() {
         return getURI().getPort();
+    }
+
+    /**
+     * Resolve a URI relative to this service instance
+     * @param relativeURI The relative URI
+     * @return The relative URI
+     */
+    default URI resolve(URI relativeURI) {
+        URI thisUri = getURI();
+        // if the URI features credentials strip this out
+        if(StringUtils.isNotEmpty(thisUri.getUserInfo())) {
+            try {
+                thisUri = new URI(thisUri.getScheme(), null, thisUri.getHost(), thisUri.getPort(), thisUri.getPath(), thisUri.getQuery(), thisUri.getFragment());
+            } catch (URISyntaxException e) {
+                throw new IllegalStateException("ServiceInstance URI is invalid: " + e.getMessage(), e);
+            }
+        }
+        String rawQuery = thisUri.getRawQuery();
+        if(StringUtils.isNotEmpty(rawQuery)) {
+            return thisUri.resolve(relativeURI + "?" + rawQuery);
+        }
+        else {
+            return thisUri.resolve(relativeURI);
+        }
     }
 
     /**
@@ -131,5 +201,68 @@ public interface ServiceInstance {
                 return URI.create("http://" + host + ":" + port);
             }
         };
+    }
+
+    /**
+     * A builder to builder a {@link ServiceInstance}
+     * @param id The id
+     * @param uri The URI
+     * @return The builder
+     */
+    static Builder builder(String id, URI uri) {
+        return new DefaultServiceInstance(id, uri);
+    }
+
+    /**
+     * A builder for building {@link ServiceInstance} references
+     */
+    interface Builder {
+        /**
+         * Sets the instance id
+         * @param id The instance id
+         * @return This builder
+         */
+        Builder instanceId(String id);
+
+        /**
+         * Sets the zone
+         * @param zone The zone
+         * @return This builder
+         */
+        Builder zone(String zone);
+
+        /**
+         * Sets the region
+         * @param region The region
+         * @return This builder
+         */
+        Builder region(String region);
+
+        /**
+         * Sets the application group
+         * @param group The group
+         * @return This builder
+         */
+        Builder group(String group);
+
+        /**
+         * Sets the application status
+         * @param status The status
+         * @return This builder
+         */
+        Builder status(HealthStatus status);
+
+
+        /**
+         * Sets the application metadata
+         * @param metadata The metadata
+         * @return This builder
+         */
+        Builder metadata(Map<String, String> metadata);
+
+        /**
+         * @return The instance
+         */
+        ServiceInstance build();
     }
 }

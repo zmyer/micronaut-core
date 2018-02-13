@@ -16,21 +16,23 @@
 package org.particleframework.discovery.consul;
 
 import org.particleframework.core.convert.value.ConvertibleValues;
+import org.particleframework.core.util.CollectionUtils;
+import org.particleframework.core.util.StringUtils;
 import org.particleframework.discovery.ServiceInstance;
+import org.particleframework.discovery.consul.client.v1.Check;
 import org.particleframework.discovery.consul.client.v1.HealthEntry;
 import org.particleframework.discovery.consul.client.v1.NodeEntry;
 import org.particleframework.discovery.consul.client.v1.ServiceEntry;
 import org.particleframework.discovery.exceptions.DiscoveryException;
+import org.particleframework.health.HealthStatus;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * A {@link ServiceInstance} for Consul
@@ -68,6 +70,26 @@ public class ConsulServiceInstance implements ServiceInstance {
         }
     }
 
+    @Override
+    public HealthStatus getHealthStatus() {
+        List<Check> checks = healthEntry.getChecks();
+        if(CollectionUtils.isNotEmpty(checks)) {
+            Stream<Check> criticalStream = checks.stream().filter(c -> c.status() == Check.Status.CRITICAL);
+            Optional<Check> first = criticalStream.findFirst();
+            if(first.isPresent()) {
+                Check check = first.get();
+                String notes = check.getNotes();
+                if(StringUtils.isNotEmpty(notes)) {
+                    return HealthStatus.DOWN.describe(notes);
+                }
+                else {
+                    return HealthStatus.DOWN;
+                }
+            }
+        }
+        return HealthStatus.UP;
+    }
+
     /**
      * @return The {@link HealthEntry}
      */
@@ -75,15 +97,22 @@ public class ConsulServiceInstance implements ServiceInstance {
         return healthEntry;
     }
 
+
     @Override
     public String getId() {
         return healthEntry.getService().getName();
     }
 
     @Override
+    public Optional<String> getInstanceId() {
+        return healthEntry.getService().getID();
+    }
+
+    @Override
     public URI getURI() {
         return uri;
     }
+
 
     @Override
     public ConvertibleValues<String> getMetadata() {

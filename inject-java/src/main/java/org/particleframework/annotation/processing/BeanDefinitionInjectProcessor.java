@@ -173,6 +173,8 @@ public class BeanDefinitionInjectProcessor extends AbstractInjectAnnotationProce
             AnnotationMetadata annotationMetadata = beanDefinitionWriter.getAnnotationMetadata();
             BeanDefinitionReferenceWriter beanDefinitionReferenceWriter =
                     new BeanDefinitionReferenceWriter(beanTypeName, beanDefinitionName, annotationMetadata);
+            beanDefinitionReferenceWriter.setRequiresMethodProcessing(beanDefinitionWriter.requiresMethodProcessing());
+
             String className = beanDefinitionReferenceWriter.getBeanDefinitionQualifiedClassName();
             processed.add(className);
             beanDefinitionReferenceWriter.setContextScope(
@@ -350,6 +352,7 @@ public class BeanDefinitionInjectProcessor extends AbstractInjectAnnotationProce
                             boolean isCandidateMethod = !modelUtils.isStatic(method) &&
                                                             !modelUtils.isPrivate(method) &&
                                                             !modelUtils.isAbstract(method) &&
+                                                            method.getParameters().size() == 1 &&
                                                             NameUtils.isSetterName(method.getSimpleName().toString());
                             if(isCandidateMethod) {
                                 Element e = method.getEnclosingElement();
@@ -572,10 +575,18 @@ public class BeanDefinitionInjectProcessor extends AbstractInjectAnnotationProce
 
         void visitExecutableMethod(ExecutableElement method, AnnotationMetadata methodAnnotationMetadata) {
             TypeMirror returnType = method.getReturnType();
+
             Map<String, Object> returnTypeGenerics = genericUtils.resolveGenericTypes(returnType);
             ExecutableElementParamInfo params = populateParameterData(method);
 
             BeanDefinitionVisitor beanWriter = beanDefinitionWriters.get(this.concreteClass.getQualifiedName());
+
+            // This method requires pre-processing. See Executable#preprocess()
+            boolean preprocess = methodAnnotationMetadata.getValue(Executable.class, "preprocess", Boolean.class).orElse(false);
+            if(preprocess) {
+                beanWriter.setRequiresMethodProcessing(true);
+            }
+
 
             Object typeRef = modelUtils.resolveTypeReference(method.getEnclosingElement());
             if (typeRef == null) typeRef = modelUtils.resolveTypeReference(concreteClass);
@@ -962,7 +973,6 @@ public class BeanDefinitionInjectProcessor extends AbstractInjectAnnotationProce
             PackageElement packageElement = elementUtils.getPackageOf(typeElement);
             String beanClassName = modelUtils.simpleBinaryNameFor(typeElement);
 
-            boolean isSingleton = annotationMetadata.hasDeclaredStereotype(Singleton.class);
             boolean isInterface = typeElement.getKind() == ElementKind.INTERFACE;
             BeanDefinitionWriter beanDefinitionWriter = new BeanDefinitionWriter(
                     packageElement.getQualifiedName().toString(),
@@ -971,7 +981,7 @@ public class BeanDefinitionInjectProcessor extends AbstractInjectAnnotationProce
                             ? elementUtils.getBinaryName(typeElement).toString()
                             : providerTypeParam.toString(),
                     isInterface,
-                    isSingleton, annotationMetadata);
+                    annotationMetadata);
             return beanDefinitionWriter;
         }
 
@@ -1032,7 +1042,6 @@ public class BeanDefinitionInjectProcessor extends AbstractInjectAnnotationProce
                     factoryMethodBeanDefinitionName,
                     modelUtils.resolveTypeReference(producedElement).toString(),
                     isInterface,
-                    annotationMetadata.hasDeclaredStereotype(Singleton.class),
                     annotationMetadata);
             return beanDefinitionWriter;
         }

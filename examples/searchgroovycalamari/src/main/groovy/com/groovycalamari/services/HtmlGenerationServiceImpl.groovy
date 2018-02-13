@@ -7,6 +7,7 @@ import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import groovy.xml.MarkupBuilder
 import javax.inject.Singleton
+import java.text.SimpleDateFormat
 
 @Singleton
 @CompileStatic
@@ -42,6 +43,43 @@ class HtmlGenerationServiceImpl implements HtmlGenerator {
                 a(href: searchResult.url, searchResult.title)
             }
             mkp.yieldUnescaped MarkdownUtil.htmlFromMarkdown(searchResult.description)
+        }
+        writer.toString()
+    }
+
+    static String[] suffixes = ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th',
+                //    10    11    12    13    14    15    16    17    18    19
+                'th', 'th', 'th', 'th', 'th', 'th', 'th', 'th', 'th', 'th',
+                //    20    21    22    23    24    25    26    27    28    29
+                'th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th',
+                //    30    31
+                'th', 'st' ] as String[]
+
+
+
+
+    @CompileDynamic
+    String curatedIssueAsHtml(CuratedIssueResponse curatedIssue) {
+        StringWriter writer = new StringWriter()
+        MarkupBuilder html = new MarkupBuilder(writer)
+
+        html.li(class: 'item') {
+            a(href: "/issues/${curatedIssue.number}#start") {
+                div(class: 'item__body') {
+                    h2(class: 'item__heading', "Issue ${curatedIssue.number}")
+                    p(class: 'item__title',curatedIssue.summary)
+                    h4(class: 'item__footer') {
+                        time(class: 'published', datetime: new SimpleDateFormat('yyyy-MM-dd').format(curatedIssue.published_at)) {
+                            span {
+                                mkp.yield new SimpleDateFormat('dd').format(curatedIssue.published_at)
+                                mkp.yield suffixes[Integer.parseInt(new SimpleDateFormat("d").format(curatedIssue.published_at))]
+                                mkp.yield " ${new SimpleDateFormat('MMM').format(curatedIssue.published_at)}".toString()
+                            }
+                            mkp.yield " ${new SimpleDateFormat('yyyy').format(curatedIssue.published_at)}".toString()
+                        }
+                    }
+                }
+            }
         }
         writer.toString()
     }

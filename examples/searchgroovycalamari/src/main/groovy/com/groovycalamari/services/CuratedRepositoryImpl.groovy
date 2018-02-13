@@ -34,11 +34,28 @@ class CuratedRepositoryImpl implements CuratedRepository {
 
     @Override
     Integer findLatest() {
+        List<Integer> keys = orderedKeys()
+        if ( !keys ) {
+            return null
+        }
+        keys.first()
+    }
+
+    List<Integer> orderedKeys() {
         Set<Integer> keys = curatedIssues.keySet()
         if ( !keys ) {
             return null
         }
-        keys.sort().last()
+        keys.sort().reverse()
+    }
+
+    @Override
+    List<CuratedIssueResponse> findAll(Integer offset, Integer max) {
+        List<Integer> keys = orderedKeys()
+        List<Integer> keysSubList = keys.subList(Math.max(offset, 0), Math.min(max, keys.size()))
+        keysSubList.collect { Integer number ->
+            curatedIssues[number]
+        }
     }
 
     @Override

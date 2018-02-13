@@ -56,10 +56,14 @@ class HomeController {
 
     @Produces(MediaType.TEXT_HTML)
     @Get("/issues/{number}")
-    String issues(Integer number) {
-        CuratedIssueResponse rsp = curatedRepository.findIssue(number)
+    String issues(Optional<Integer> number, Optional<Integer> offset, Optional<Integer> max) {
         String html = "hello world"
 
+        if ( number.isPresent() ) {
+            CuratedIssueResponse rsp = curatedRepository.findIssue(number.get())
+        } else {
+            List<CuratedIssueResponse> issuesList = curatedRepository.findAll(offset.isPresent() ? offset.get() : 0, max.isPresent() ? max.get() : 10)
+        }
         html
     }
 

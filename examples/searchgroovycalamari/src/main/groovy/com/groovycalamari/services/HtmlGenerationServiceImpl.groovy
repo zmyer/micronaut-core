@@ -26,10 +26,9 @@ class HtmlGenerationServiceImpl implements HtmlGenerator {
         } else {
             htmlItemBlock  = noResultsHTML(query ? 'No results found' : '')
         }
-
-        text = text.replace('###query###', query)
-        text = text.replace('###items###', htmlItemBlock)
         text = text.replace('{latest}', "$latest".toString())
+        text = text.replace('{query}', query)
+        text = text.replace('{items}', htmlItemBlock)
         text
     }
 

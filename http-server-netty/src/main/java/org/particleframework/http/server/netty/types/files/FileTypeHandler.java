@@ -111,7 +111,7 @@ public class FileTypeHandler implements NettySpecialTypeHandler<Object> {
 
     @Override
     public boolean supports(Class<?> type) {
-        return File.class.isAssignableFrom(type) || SystemFileSpecialType.class.isAssignableFrom(type);
+        return File.class.isAssignableFrom(type) || SystemFileSpecialType.class.isAssignableFrom(type) || NettyFileSpecialType.class.isAssignableFrom(type);
     }
 
     protected MediaType getMediaType(String filename) {

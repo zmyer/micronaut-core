@@ -12,4 +12,6 @@ interface CuratedRepository {
     List<CuratedItem> findAll()
 
     CuratedIssueResponse findIssue(Integer number)
+
+    List<CuratedIssueResponse> findAll(Integer offset, Integer max)
 }

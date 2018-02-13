@@ -1,5 +1,6 @@
 package com.groovycalamari.services
 
+import co.curated.CuratedCategoryResponse
 import co.curated.CuratedIssueResponse
 import co.curated.CuratedIssuesResponse
 import co.curated.CuratedItem
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @Slf4j
 @CompileStatic
 class CuratedRepositoryImpl implements CuratedRepository {
-    List<CuratedItem> items = []
+
+    Map<Integer, CuratedIssueResponse> curatedIssues = [:]
 
     @Inject
     CuratedApiClient curatedApiClient
@@ -31,13 +33,58 @@ class CuratedRepositoryImpl implements CuratedRepository {
     }
 
     @Override
+    Integer findLatest() {
+        List<Integer> keys = orderedKeys()
+        if ( !keys ) {
+            return null
+        }
+        keys.first()
+    }
+
+    List<Integer> orderedKeys() {
+        Set<Integer> keys = curatedIssues.keySet()
+        if ( !keys ) {
+            return null
+        }
+        keys.sort().reverse()
+    }
+
+    @Override
+    List<CuratedIssueResponse> findAll(Integer offset, Integer max) {
+        List<Integer> keys = orderedKeys()
+        List<Integer> keysSubList = keys.subList(Math.max(offset, 0), Math.min(max, keys.size()))
+        keysSubList.collect { Integer number ->
+            curatedIssues[number]
+        }
+    }
+
+    @Override
+    CuratedIssueResponse findIssue(Integer number) {
+        curatedIssues[number]
+    }
+
+    @Override
     List<CuratedItem> findAll() {
-        new ArrayList<>(items)
+
+        List<CuratedItem> result = []
+        for ( CuratedIssueResponse rsp : curatedIssues.values() ) {
+            for (CuratedCategoryResponse categoryRsp : rsp.categories) {
+                if (CuratedItemObservableOnSubscribe.SPONOSORED_CATEGORIES.contains(categoryRsp.code)) {
+                    continue
+                }
+                for (CuratedItem item : categoryRsp.items) {
+                    if (item.type == 'Text') {
+                        continue
+                    }
+                    result << item
+                }
+            }
+        }
+        result
     }
 
     void fetchIssues() {
-
-        items.clear()
+        curatedIssues.clear()
         log.info('fetching issues')
 
         Flowable<HttpResponse<CuratedIssuesResponse>> issuesHttpResponseFlowable = curatedApiClient.issues()
@@ -54,14 +101,9 @@ class CuratedRepositoryImpl implements CuratedRepository {
                                 if (curatedIssueResponseHttpResponse.status == HttpStatus.OK) {
                                     CuratedIssueResponse curatedIssueResponse = curatedIssueResponseHttpResponse.body()
                                     log.info 'fetched issue #{}', curatedIssueResponse.number
-                                    Observable.create(new CuratedItemObservableOnSubscribe(curatedIssueResponse)).subscribe(new Consumer<CuratedItem>() {
-                                        @Override
-                                        void accept(CuratedItem curatedItem) throws Exception {
-                                            if ( curatedItem != null ) {
-                                                items << curatedItem
-                                            }
-                                        }
-                                    })
+                                    if ( curatedIssueResponse != null) {
+                                        curatedIssues[curatedIssueResponse.number] = curatedIssueResponse
+                                    }
                                 }
                             }
                         })

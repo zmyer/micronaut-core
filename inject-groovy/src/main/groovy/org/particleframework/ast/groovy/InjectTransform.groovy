@@ -99,6 +99,8 @@ class InjectTransform implements ASTTransformation, CompilationUnitAware {
             try {
                 String beanDefinitionName = beanDefWriter.beanDefinitionName
                 BeanDefinitionReferenceWriter beanReferenceWriter = new BeanDefinitionReferenceWriter(beanTypeName, beanDefinitionName, beanDefWriter.annotationMetadata)
+
+                beanReferenceWriter.setRequiresMethodProcessing(beanDefWriter.requiresMethodProcessing());
                 beanReferenceWriter.setContextScope(AstAnnotationUtils.hasStereotype(beanClassNode, Context))
 
                 Optional<String> replacesOpt = AstAnnotationUtils
@@ -334,7 +336,6 @@ class InjectTransform implements ASTTransformation, CompilationUnitAware {
                         factoryMethodBeanDefinitionName,
                         producedType.name,
                         producedType.isInterface(),
-                        methodAnnotationMetadata.hasDeclaredStereotype(Singleton),
                         methodAnnotationMetadata
                 )
 
@@ -513,6 +514,10 @@ class InjectTransform implements ASTTransformation, CompilationUnitAware {
                         Map<String, Map<String, Object>> genericTypeMap = [:]
                         populateParameterData(methodNode.parameters, paramsToType, qualifierTypes, genericTypeMap)
 
+                        boolean preprocess = methodAnnotationMetadata.getValue(Executable.class, "preprocess", Boolean.class).orElse(false);
+                        if(preprocess) {
+                            getBeanWriter().setRequiresMethodProcessing(true)
+                        }
                         ExecutableMethodWriter executableMethodWriter = getBeanWriter().visitExecutableMethod(
                                 AstGenericUtils.resolveTypeReference(methodNode.declaringClass),
                                 AstGenericUtils.resolveTypeReference(methodNode.returnType),
@@ -834,7 +839,7 @@ class InjectTransform implements ASTTransformation, CompilationUnitAware {
                             classNode.nameWithoutPackage,
                             providerGenericType.name,
                             classNode.isInterface(),
-                            annotationMetadata.hasDeclaredStereotype(Singleton), annotationMetadata)
+                            annotationMetadata)
                 } else {
 
                     beanWriter = new BeanDefinitionWriter(

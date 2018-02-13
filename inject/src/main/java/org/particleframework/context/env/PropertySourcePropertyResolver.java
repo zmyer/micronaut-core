@@ -25,7 +25,6 @@ import org.particleframework.core.value.PropertyResolver;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * <p>A {@link PropertyResolver} that resolves from one or many {@link PropertySource} instances</p>
@@ -35,6 +34,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class PropertySourcePropertyResolver implements PropertyResolver {
     protected final ConversionService<?> conversionService;
+    protected final PropertyPlaceholderResolver propertyPlaceholderResolver;
     protected final Map<String,PropertySource> propertySources = new ConcurrentHashMap<>(10);
     // properties are stored in an array of maps organized by character in the alphabet
     // this allows optimization of searches by prefix
@@ -47,6 +47,7 @@ public class PropertySourcePropertyResolver implements PropertyResolver {
      */
     public PropertySourcePropertyResolver(ConversionService<?> conversionService) {
         this.conversionService = conversionService;
+        this.propertyPlaceholderResolver = new DefaultPropertyPlaceholderResolver(this);
     }
 
     /**
@@ -182,15 +183,16 @@ public class PropertySourcePropertyResolver implements PropertyResolver {
                 }
                 Class<T> requiredType = conversionContext.getArgument().getType();
                 if(value != null) {
+                    value = resolvePlaceHoldersIfNecessary(value);
                     return conversionService.convert(value, conversionContext);
-                }
-                else if(Map.class.isAssignableFrom(requiredType)) {
-                    Map<String, Object> subMap = resolveSubMap(name, entries);
-                    return conversionService.convert(subMap, requiredType, conversionContext);
                 }
                 else if(Properties.class.isAssignableFrom(requiredType)) {
                     Properties properties = resolveSubProperties(name, entries);
                     return Optional.of((T) properties);
+                }
+                else if(Map.class.isAssignableFrom(requiredType)) {
+                    Map<String, Object> subMap = resolveSubMap(name, entries);
+                    return conversionService.convert(subMap, requiredType, conversionContext);
                 }
                 else if(PropertyResolver.class.isAssignableFrom(requiredType)) {
                     Map<String, Object> subMap = resolveSubMap(name, entries);
@@ -200,6 +202,15 @@ public class PropertySourcePropertyResolver implements PropertyResolver {
         }
         return Optional.empty();
     }
+
+    private Object resolvePlaceHoldersIfNecessary(Object value) {
+        if(value instanceof CharSequence) {
+            return propertyPlaceholderResolver.resolveRequiredPlaceholder(value.toString());
+        }
+        return value;
+    }
+
+
 
     protected Properties resolveSubProperties(String name, Map<String, Object> entries) {
         // special handling for maps for resolving sub keys
@@ -211,7 +222,7 @@ public class PropertySourcePropertyResolver implements PropertyResolver {
                     Object value = entry.getValue();
                     if(value != null) {
                         String key = entry.getKey().substring(prefix.length());
-                        properties.put(key, value.toString());
+                        properties.put(key, resolvePlaceHoldersIfNecessary(value.toString()));
                     }
                 });
 
@@ -226,15 +237,16 @@ public class PropertySourcePropertyResolver implements PropertyResolver {
             if (map.getKey().startsWith(prefix)) {
                 String subMapKey = map.getKey().substring(prefix.length());
                 int index = subMapKey.indexOf('.');
+                Object value =  resolvePlaceHoldersIfNecessary(map.getValue());
                 if (index == -1) {
-                    subMap.put(subMapKey, map.getValue());
+                    subMap.put(subMapKey, value);
                 } else {
                     String mapKey = subMapKey.substring(0, index);
                     if (!subMap.containsKey(mapKey)) {
                         subMap.put(mapKey, new LinkedHashMap<>());
                     }
                     Map<String, Object> nestedMap = (Map<String, Object>) subMap.get(mapKey);
-                    nestedMap.put(subMapKey.substring(index + 1), map.getValue());
+                    nestedMap.put(subMapKey.substring(index + 1), value);
                 }
             }
         }

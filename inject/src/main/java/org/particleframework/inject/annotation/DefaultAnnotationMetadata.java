@@ -15,6 +15,9 @@
  */
 package org.particleframework.inject.annotation;
 
+import org.particleframework.context.ApplicationContext;
+import org.particleframework.context.BeanContext;
+import org.particleframework.context.env.Environment;
 import org.particleframework.core.annotation.AnnotationMetadata;
 import org.particleframework.core.annotation.AnnotationUtil;
 import org.particleframework.core.annotation.Internal;
@@ -31,6 +34,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Default implementation of {@link AnnotationMetadata}
@@ -57,8 +62,7 @@ public class DefaultAnnotationMetadata implements AnnotationMetadata, AnnotatedE
                     annotationClass = aClass.get();
                 }
                 Annotation annotation = AnnotationMetadataSupport.buildAnnotation(annotationClass, ConvertibleValues.of(annotationValue.getValues()));
-                if(annotation != null)
-                    result.add(annotation);
+                result.add(annotation);
             }
             if(!result.isEmpty()) {
                 return Optional.of(result.toArray((Object[]) Array.newInstance(annotationClass, result.size())));
@@ -77,6 +81,7 @@ public class DefaultAnnotationMetadata implements AnnotationMetadata, AnnotatedE
     private Annotation[] declaredAnnotationArray;
     private final Map<String, Annotation> annotationMap;
     private final Map<String, Annotation> declaredAnnotationMap;
+    private Environment environment;
 
 
     @Internal
@@ -109,6 +114,20 @@ public class DefaultAnnotationMetadata implements AnnotationMetadata, AnnotatedE
         this.annotationMap = allAnnotations != null ? new ConcurrentHashMap<>(allAnnotations.size()) : null;
         this.annotationsByStereotype = annotationsByStereotype;
     }
+
+    /**
+     * Configures annotation metadata for the environment. This is an internal method and should not be called directly
+     *
+     * @param context The context
+     */
+    @Internal
+    public void configure(BeanContext context) {
+        if(context instanceof ApplicationContext) {
+            ApplicationContext applicationContext = (ApplicationContext) context;
+            this.environment = applicationContext.getEnvironment();
+        }
+    }
+
 
     @Override
     public <T> Optional<T> getDefaultValue(String annotation, String member, Class<T> requiredType) {
@@ -165,16 +184,37 @@ public class DefaultAnnotationMetadata implements AnnotationMetadata, AnnotatedE
         return Collections.emptySet();
     }
 
+    @Override
+    public Set<String> getDeclaredAnnotationNamesTypeByStereotype(String stereotype) {
+        if(annotationsByStereotype != null) {
+            Set<String> annotations = annotationsByStereotype.get(stereotype);
+            if(annotations != null) {
+                if(declaredAnnotations != null) {
+                    annotations.removeIf(s -> !declaredAnnotations.containsKey(s));
+                    return Collections.unmodifiableSet(annotations);
+                }
+                else {
+                    // no declared
+                    return Collections.emptySet();
+                }
+            }
+        }
+        if(declaredAnnotations != null && declaredAnnotations.containsKey(stereotype)) {
+            return CollectionUtils.setOf(stereotype);
+        }
+        return Collections.emptySet();
+    }
+
     @SuppressWarnings("Duplicates")
     @Override
     public ConvertibleValues<Object> getValues(String annotation) {
         if(allAnnotations != null && StringUtils.isNotEmpty(annotation)) {
             Map<CharSequence, Object> values = allAnnotations.get(annotation);
             if(values != null) {
-                return ConvertibleValues.of(values);
+                return convertibleValuesOf(values);
             }
             else if(allStereotypes != null) {
-                return ConvertibleValues.of( allStereotypes.get(annotation) );
+                return convertibleValuesOf(allStereotypes.get(annotation));
             }
         }
         return ConvertibleValuesMap.empty();
@@ -186,10 +226,10 @@ public class DefaultAnnotationMetadata implements AnnotationMetadata, AnnotatedE
         if(declaredAnnotations != null && StringUtils.isNotEmpty(annotation)) {
             Map<CharSequence, Object> values = declaredAnnotations.get(annotation);
             if(values != null) {
-                return ConvertibleValues.of(values);
+                return convertibleValuesOf(values);
             }
             else if(declaredStereotypes != null) {
-                return ConvertibleValues.of( declaredStereotypes.get(annotation) );
+                return convertibleValuesOf( declaredStereotypes.get(annotation) );
             }
         }
         return ConvertibleValuesMap.empty();
@@ -200,10 +240,23 @@ public class DefaultAnnotationMetadata implements AnnotationMetadata, AnnotatedE
         if(allAnnotations != null && StringUtils.isNotEmpty(annotation)) {
             Map<CharSequence, Object> values = allAnnotations.get(annotation);
             if(values != null) {
-                return OptionalValues.of(valueType, values);
+                if(environment != null) {
+                    return new EnvironmentOptionalValuesMap<>(valueType, values, environment);
+                }
+                else {
+                    return OptionalValues.of(valueType, values);
+                }
             }
             else {
-                return OptionalValues.of( valueType, allStereotypes.get(annotation) );
+                values = allStereotypes.get(annotation);
+                if(values != null) {
+                    if(environment != null) {
+                        return new EnvironmentOptionalValuesMap<>(valueType, values, environment);
+                    }
+                    else {
+                        return OptionalValues.of( valueType, values);
+                    }
+                }
             }
         }
         return OptionalValues.empty();
@@ -214,14 +267,12 @@ public class DefaultAnnotationMetadata implements AnnotationMetadata, AnnotatedE
      *
      * @param annotation The annotation
      * @param values The values
-     * @return This {@link DefaultAnnotationMetadata}
      */
-    DefaultAnnotationMetadata addAnnotation(String annotation, Map<CharSequence, Object> values) {
+    void addAnnotation(String annotation, Map<CharSequence, Object> values) {
         if(annotation != null) {
             Map<String, Map<CharSequence, Object>> allAnnotations = getAllAnnotations();
             addAnnotation(annotation, values, null, allAnnotations, false);
         }
-        return this;
     }
 
     /**
@@ -229,15 +280,13 @@ public class DefaultAnnotationMetadata implements AnnotationMetadata, AnnotatedE
      *
      * @param stereotype The annotation
      * @param values The values
-     * @return This {@link DefaultAnnotationMetadata}
      */
-    DefaultAnnotationMetadata addStereotype(String annotation, String stereotype, Map<CharSequence, Object> values) {
+    void addStereotype(String annotation, String stereotype, Map<CharSequence, Object> values) {
         if(stereotype != null) {
             Map<String, Map<CharSequence, Object>> allStereotypes = getAllStereotypes();
             getAnnotationsByStereotypeInternal(stereotype).add(annotation);
             addAnnotation(stereotype, values, null, allStereotypes, false);
         }
-        return this;
     }
 
     /**
@@ -245,16 +294,14 @@ public class DefaultAnnotationMetadata implements AnnotationMetadata, AnnotatedE
      *
      * @param stereotype The annotation
      * @param values The values
-     * @return This {@link DefaultAnnotationMetadata}
      */
-    DefaultAnnotationMetadata addDeclaredStereotype(String annotation, String stereotype, Map<CharSequence, Object> values) {
+    void addDeclaredStereotype(String annotation, String stereotype, Map<CharSequence, Object> values) {
         if(stereotype != null) {
             Map<String, Map<CharSequence, Object>> declaredStereotypes = getDeclaredStereotypesInternal();
             Map<String, Map<CharSequence, Object>> allStereotypes = getAllStereotypes();
             getAnnotationsByStereotypeInternal(stereotype).add(annotation);
             addAnnotation(stereotype, values, declaredStereotypes, allStereotypes, true);
         }
-        return this;
     }
 
     /**
@@ -262,15 +309,13 @@ public class DefaultAnnotationMetadata implements AnnotationMetadata, AnnotatedE
      *
      * @param annotation The annotation
      * @param values The values
-     * @return This {@link DefaultAnnotationMetadata}
      */
-    DefaultAnnotationMetadata addDeclaredAnnotation(String annotation, Map<CharSequence, Object> values) {
+    void addDeclaredAnnotation(String annotation, Map<CharSequence, Object> values) {
         if(annotation != null) {
             Map<String, Map<CharSequence, Object>> declaredAnnotations = getDeclaredAnnotationsInternal();
             Map<String, Map<CharSequence, Object>> allAnnotations = getAllAnnotations();
             addAnnotation(annotation, values, declaredAnnotations, allAnnotations, true);
         }
-        return this;
     }
 
 
@@ -304,6 +349,15 @@ public class DefaultAnnotationMetadata implements AnnotationMetadata, AnnotatedE
                 existing.putAll(values);
             }
             currentAnnotationValues.put(annotation, existing);
+        }
+    }
+
+    private ConvertibleValues<Object> convertibleValuesOf(Map<CharSequence, Object> values) {
+        if(environment != null) {
+            return EnvironmentConvertibleValuesMap.of(environment, values);
+        }
+        else {
+            return ConvertibleValues.of(values);
         }
     }
 

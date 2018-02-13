@@ -18,6 +18,7 @@ dependencies {
     Properties props = new Properties()
     new File("../../gradle.properties").withReader { props.load(it) }
     compileOnly "org.particleframework:inject-groovy:${props.projectVersion}"
+    runtime "org.yaml:snakeyaml:$yamlVersion"
     compile "org.particleframework:runtime-groovy:${props.projectVersion}"
 
     compile "org.particleframework:http-server-netty:${props.projectVersion}"

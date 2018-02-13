@@ -1,6 +1,8 @@
 package com.groovycalamari.controllers
 
+import co.curated.CuratedIssueResponse
 import com.groovycalamari.entities.SearchResult
+import com.groovycalamari.services.CuratedRepository
 import com.groovycalamari.services.HtmlGenerator
 import com.groovycalamari.services.SearchService
 import groovy.transform.CompileStatic
@@ -31,21 +33,41 @@ class HomeController {
     SearchService searchService
 
     @Inject
+    CuratedRepository curatedRepository
+
+    @Inject
     ApplicationContext applicationContext
 
     @Produces(MediaType.TEXT_HTML)
     @Get('/')
     String index(Optional<String> query) {
+
+        Integer latest = curatedRepository.findLatest()
         String html
         if ( query.isPresent() ) {
             List<SearchResult> searchResultList = searchService.search(query.get())
-            html = htmlGenerator.renderHTML(query.get(), searchResultList)
+            html = htmlGenerator.renderHTML(latest, query.get(), searchResultList)
         } else {
-            html = htmlGenerator.renderHTML('', [])
+            html = htmlGenerator.renderHTML(latest,'', [])
 
         }
         html
     }
+
+    @Produces(MediaType.TEXT_HTML)
+    @Get("/issues/{number}")
+    String issues(Optional<Integer> number, Optional<Integer> offset, Optional<Integer> max) {
+        String html = "hello world"
+
+        if ( number.isPresent() ) {
+            CuratedIssueResponse rsp = curatedRepository.findIssue(number.get())
+        } else {
+            List<CuratedIssueResponse> issuesList = curatedRepository.findAll(offset.isPresent() ? offset.get() : 0, max.isPresent() ? max.get() : 10)
+        }
+        html
+    }
+
+
 
     @Post("/evict")
     HttpResponse<Map<String, String>> evict() {

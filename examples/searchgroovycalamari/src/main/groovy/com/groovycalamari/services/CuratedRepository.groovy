@@ -7,6 +7,8 @@ import groovy.transform.CompileStatic
 @CompileStatic
 interface CuratedRepository {
 
+    Integer findLatest()
+    
     List<CuratedItem> findAll()
 
     CuratedIssueResponse findIssue(Integer number)

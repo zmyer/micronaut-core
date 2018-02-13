@@ -41,12 +41,14 @@ class HomeController {
     @Produces(MediaType.TEXT_HTML)
     @Get('/')
     String index(Optional<String> query) {
+
+        Integer latest = curatedRepository.findLatest()
         String html
         if ( query.isPresent() ) {
             List<SearchResult> searchResultList = searchService.search(query.get())
-            html = htmlGenerator.renderHTML(query.get(), searchResultList)
+            html = htmlGenerator.renderHTML(latest, query.get(), searchResultList)
         } else {
-            html = htmlGenerator.renderHTML('', [])
+            html = htmlGenerator.renderHTML(latest,'', [])
 
         }
         html

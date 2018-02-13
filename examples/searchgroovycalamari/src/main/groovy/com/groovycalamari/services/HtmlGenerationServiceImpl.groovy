@@ -14,7 +14,7 @@ class HtmlGenerationServiceImpl implements HtmlGenerator {
     String filename = '/search.html'
 
     @Override
-    String renderHTML(String query, List<SearchResult> searchResultList) {
+    String renderHTML(Integer latest, String query, List<SearchResult> searchResultList) {
         String text = getClass().getResource(filename).text
 
         String htmlItemBlock
@@ -29,6 +29,7 @@ class HtmlGenerationServiceImpl implements HtmlGenerator {
 
         text = text.replace('###query###', query)
         text = text.replace('###items###', htmlItemBlock)
+        text = text.replace('{latest}', "$latest".toString())
         text
     }
 

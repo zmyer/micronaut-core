@@ -9,7 +9,7 @@ import org.particleframework.context.annotation.Value
 import org.particleframework.http.HttpRequest
 import org.particleframework.http.HttpResponse
 import org.particleframework.http.client.Client
-import org.particleframework.http.client.rxjava2.RxHttpClient
+import org.particleframework.http.client.RxHttpClient
 
 import javax.inject.Inject
 import javax.inject.Singleton

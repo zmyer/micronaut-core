@@ -1,5 +1,6 @@
 package com.groovycalamari.services
 
+import co.curated.CuratedIssueResponse
 import com.groovycalamari.entities.SearchResult
 import com.groovycalamari.utils.MarkdownUtil
 import groovy.transform.CompileDynamic
@@ -43,6 +44,11 @@ class HtmlGenerationServiceImpl implements HtmlGenerator {
             mkp.yieldUnescaped MarkdownUtil.htmlFromMarkdown(searchResult.description)
         }
         writer.toString()
+    }
+
+    @Override
+    String renderHtml(CuratedIssueResponse rsp) {
+        return null
     }
 
     @CompileDynamic

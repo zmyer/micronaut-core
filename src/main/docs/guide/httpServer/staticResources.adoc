@@ -1,0 +1,64 @@
+You may want to sever static resources (e.g., images, CSS files, etc.) from your particle application.
+
+Static resources are disabled by default in Particle. You need to enable them:
+
+[source, bash]
+.src/main/resources/application.properties
+----
+router.static.resources.enabled=true
+----
+
+Additionally, you need to configure the `mapping` and `path`.
+
+Imagine your project includes a logo and a CSS file:
+
+[source, bash]
+----
+src/main/resources/static/images/logo.png
+src/main/resources/static/stylesheets/main.css
+----
+
+Additionally you have a folder in the server with several images:
+
+[source, bash]
+----
+/home/ftpuser/products/productA.png
+/home/ftpuser/products/productB.png
+----
+
+You want to serve any static resource in `src/main/resources/static` and `/home/ftpuser/` folder.
+
+You want your resources accessible at `/assets/*`. For example:
+
+`http://localhost:8080/assets/images/logo.png`
+
+`http://localhost:8080/assets/products/productA.png`
+
+`http://localhost:8080/assets/stylesheets/main.css`
+
+You will need to configure:
+
+[source, bash]
+.src/main/resources/application.properties
+----
+router.static.resources.enabled=true
+router.static.resources.mapping=/assets/*
+router.static.resources.paths=classpath:static,file:/home/ftpuser
+----
+
+The above configuration equivalent in yaml format is:
+
+[source, yaml]
+.src/main/resources/application.yml
+----
+router:
+    static:
+        resources:
+            enabled: true
+            mapping: /assets/**
+            paths:
+                - classpath:static
+                - file:/home/ftpuser
+----
+
+Please note property `router.static.resources.paths` accepts a list of paths.

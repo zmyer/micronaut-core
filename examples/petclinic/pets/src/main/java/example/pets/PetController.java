@@ -17,16 +17,13 @@ package example.pets;
 
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoCollection;
-import com.mongodb.reactivestreams.client.Success;
 import example.api.v1.Pet;
 import example.api.v1.PetOperations;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
-import io.reactivex.functions.Function;
-import org.bson.Document;
 import org.particleframework.context.annotation.Value;
 import org.particleframework.http.annotation.Controller;
-import org.reactivestreams.Publisher;
+import org.particleframework.validation.Validated;
 
 import javax.inject.Singleton;
 import javax.validation.Valid;
@@ -38,6 +35,7 @@ import java.util.List;
  */
 @Controller("/${pets.api.version}/pets")
 @Singleton
+@Validated
 public class PetController implements PetOperations {
 
     private final String databaseName;

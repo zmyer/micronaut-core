@@ -17,10 +17,10 @@ import javax.inject.Singleton
 @Singleton
 class CuratedApiClientParticle implements CuratedApiUris, CuratedApiClient  {
 
-    @Value('curated.apiVersion')
+    @Value('${curated.apiVersion}')
     String apiVersion
 
-    @Value('curated.publicationKey')
+    @Value('${curated.publicationKey}')
     String publicationKey
 
     @Inject

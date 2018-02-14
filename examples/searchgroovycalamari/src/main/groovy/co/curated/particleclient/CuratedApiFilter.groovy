@@ -16,7 +16,7 @@ import org.reactivestreams.Publisher
 @Filter("/*/api/v1/**")
 class CuratedApiFilter implements HttpClientFilter, CuratedApiHeaders {
 
-    @Value('curated.apiKey')
+    @Value('${curated.apiKey}')
     String apiKey
 
     @Override

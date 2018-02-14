@@ -15,8 +15,6 @@
  */
 package org.particleframework.configuration.mongo.reactive;
 
-import com.mongodb.reactivestreams.client.MongoClient;
-
 /**
  * @author graemerocher
  * @since 1.0

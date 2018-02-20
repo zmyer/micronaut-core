@@ -6,6 +6,8 @@ import org.particleframework.core.type.Argument
 import spock.lang.Specification
 import spock.lang.Unroll
 import java.lang.reflect.Field
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 import java.time.DayOfWeek
 
 /**
@@ -89,5 +91,23 @@ class DefaultConversionServiceSpec extends Specification {
         where:
         sourceObject | targetType | result
         "1MB"        | Integer    | 1048576
+    }
+    
+    void "convert a JSON Payload to an object containing a subset of the data"() {
+        given:
+        String object = '{"status":"UP","details":{"compositeDiscoveryClient(consul)":{"status":"UP","details":{"services":{"mail":["http://localhost:8090"],"consul":["http://localhost:8500"],"storefronthtml":["http://localhost:8080"]}}},"diskSpace":{"status":"UP","details":{"total":2000796545024,"free":1636196691968,"threshold":10485760}},"consul":{"status":"UP","details":{"leader":"\"127.0.0.1:8300\"\n"}}}}'
+        Class targetType = HealthStatus.class
+        DefaultArgumentConversionContext context = new DefaultArgumentConversionContext(Argument.of(HealthStatus), Locale.getDefault(), StandardCharsets.UTF_8)
+        ConversionService conversionService = new DefaultConversionService()
+
+        when:
+        Optional<HealthStatus> healthStatusOptional = conversionService.convert(object, targetType, context)
+
+        then:
+        healthStatusOptional.isPresent()
+    }
+
+    static class HealthStatus {
+        String status
     }
 }

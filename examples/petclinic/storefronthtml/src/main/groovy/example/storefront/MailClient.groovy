@@ -7,6 +7,8 @@ import groovy.transform.CompileStatic
 import io.reactivex.Single
 import org.particleframework.http.HttpRequest
 import org.particleframework.http.HttpResponse
+import org.particleframework.http.HttpStatus
+import org.particleframework.http.MediaType
 import org.particleframework.http.client.Client
 import org.particleframework.http.client.RxHttpClient
 
@@ -23,23 +25,33 @@ class MailClient {
     RxHttpClient client
 
     Single<HealthStatus> health() {
-        client.exchange(
-                HttpRequest.GET("/health"),
-                String
-        ).singleOrError().map { HttpResponse<String> rsp ->
-
-            if ( rsp.status.code == 200 ) {
-                String status = parseStatus(rsp.body())
-                if ( !status ) {
-                    return new HealthStatus('DOWN')
-                }
-                return new HealthStatus(status)
+        client.exchange(HttpRequest.GET("/health")
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                , HealthStatus).singleOrError().map { HttpResponse<HttpStatus> rsp ->
+            if (rsp.status.code == 200 && rsp.body.isPresent()) {
+                return rsp.body() as HealthStatus
             } else {
                 return new HealthStatus('DOWN')
             }
         }
-
     }
+// Single<HealthStatus> health() {
+//        client.exchange(
+//                HttpRequest.GET("/health"),
+//                String
+//        ).singleOrError().map { HttpResponse<String> rsp ->
+//
+//            if ( rsp.status.code == 200 ) {
+//                String status = parseStatus(rsp.body())
+//                if ( !status ) {
+//                    return new HealthStatus('DOWN')
+//                }
+//                return new HealthStatus(status)
+//            } else {
+//                return new HealthStatus('DOWN')
+//            }
+//        }
+// }
 
     static String parseStatus(String body) {
         Object obj = new JsonSlurper().parseText(body)

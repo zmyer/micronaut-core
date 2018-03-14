@@ -5,14 +5,10 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
-import io.micronaut.context.annotation.Bean;
-import io.micronaut.context.annotation.Factory;
-import io.micronaut.context.annotation.Type;
 import io.micronaut.core.reflect.GenericTypeUtils;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Type;
-import io.micronaut.core.reflect.GenericTypeUtils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -138,7 +134,6 @@ public class ObjectMapperFactory {
             configuration.getGeneratorSettings()
                          .forEach(objectMapper::configure);
         });
-
 
         return objectMapper;
     }

@@ -46,7 +46,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * An {@link ArgumentBinder} capable of binding from an object from a map
+ * An {@link ArgumentBinder} capable of binding to an object from a map
  *
  * @author Graeme Rocher
  * @since 1.0

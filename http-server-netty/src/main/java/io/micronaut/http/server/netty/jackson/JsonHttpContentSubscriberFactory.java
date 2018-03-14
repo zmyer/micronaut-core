@@ -16,6 +16,7 @@
 package io.micronaut.http.server.netty.jackson;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.server.HttpServerConfiguration;
@@ -41,15 +42,15 @@ import java.util.Optional;
 public class JsonHttpContentSubscriberFactory implements HttpContentSubscriberFactory {
 
     private final HttpServerConfiguration httpServerConfiguration;
-    private final Optional<JsonFactory> jsonFactory;
+    private final ObjectMapper objectMapper;
 
-    public JsonHttpContentSubscriberFactory(HttpServerConfiguration httpServerConfiguration, Optional<JsonFactory> jsonFactory) {
+    public JsonHttpContentSubscriberFactory(HttpServerConfiguration httpServerConfiguration, ObjectMapper objectMapper) {
         this.httpServerConfiguration = httpServerConfiguration;
-        this.jsonFactory = jsonFactory;
+        this.objectMapper = objectMapper;
     }
 
     @Override
     public HttpContentProcessor build(NettyHttpRequest request) {
-        return new JsonContentProcessor(request, httpServerConfiguration, jsonFactory);
+        return new JsonContentProcessor(request, httpServerConfiguration, Optional.of(objectMapper.getFactory()));
     }
 }

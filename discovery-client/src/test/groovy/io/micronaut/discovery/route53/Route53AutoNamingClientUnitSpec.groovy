@@ -15,8 +15,6 @@
  */
 package io.micronaut.discovery.route53
 
-import com.amazonaws.services.ec2.AmazonEC2Client
-import com.amazonaws.services.ec2.model.*
 import com.amazonaws.services.servicediscovery.AWSServiceDiscovery
 import com.amazonaws.services.servicediscovery.model.DeregisterInstanceRequest
 import com.amazonaws.services.servicediscovery.model.DeregisterInstanceResult
@@ -52,7 +50,7 @@ import spock.util.concurrent.PollingConditions
  */
 
 @Stepwise
-@Ignore
+//@Ignore
 class Route53AutoNamingClientUnitSpec extends Specification {
 
 

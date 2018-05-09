@@ -25,20 +25,24 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 /**
+ * Represents EC2 service instance metadata
+ *
  * @author Rvanderwerf
+ * @author Graeme Rocher
  * @since 1.0
  */
 public class EC2ServiceInstance implements ServiceInstance, ServiceInstance.Builder {
-    String id;
-    URI uri;
-    HealthStatus healthStatus;
-    String instanceId;
-    String group;
-    String zone;
-    String region;
-    ConvertibleValues<String> metadata;
+    private String id;
+    private URI uri;
+    private HealthStatus healthStatus;
+    private String instanceId;
+    private String group;
+    private String zone;
+    private String region;
+    private ConvertibleValues<String> metadata;
 
     public EC2ServiceInstance(String id, URI uri) {
         this.id = id;
@@ -56,6 +60,36 @@ public class EC2ServiceInstance implements ServiceInstance, ServiceInstance.Buil
         } else {
             this.uri = uri;
         }
+    }
+
+    @Override
+    public ConvertibleValues<String> getMetadata() {
+        return metadata;
+    }
+
+    @Override
+    public HealthStatus getHealthStatus() {
+        return healthStatus;
+    }
+
+    @Override
+    public Optional<String> getInstanceId() {
+        return Optional.ofNullable(instanceId);
+    }
+
+    @Override
+    public Optional<String> getZone() {
+        return Optional.ofNullable(zone);
+    }
+
+    @Override
+    public Optional<String> getRegion() {
+        return Optional.ofNullable(region);
+    }
+
+    @Override
+    public Optional<String> getGroup() {
+        return Optional.ofNullable(group);
     }
 
     @Override
@@ -106,7 +140,9 @@ public class EC2ServiceInstance implements ServiceInstance, ServiceInstance.Buil
 
     @Override
     public Builder metadata(Map<String, String> metadata) {
-        metadata = metadata;
+        if(metadata != null) {
+            this.metadata = ConvertibleValues.of( metadata );
+        }
         return this;
     }
 

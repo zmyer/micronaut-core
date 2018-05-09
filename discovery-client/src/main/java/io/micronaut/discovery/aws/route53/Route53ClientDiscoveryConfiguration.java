@@ -36,9 +36,9 @@ import javax.annotation.Nullable;
 public class Route53ClientDiscoveryConfiguration extends DiscoveryClientConfiguration {
 
     public static final String SERVICE_ID = "route53";
-    @Value("${aws.route53.discovery.client.aws-service-id}")
-    String awsServiceId; //ID of the service - required to find it
-    String namespaceId; // used to filter a list of available services attached to a namespace
+
+    private String awsServiceId; //ID of the service - required to find it
+    private String namespaceId; // used to filter a list of available services attached to a namespace
 
     public String getNamespaceId() {
         return namespaceId;

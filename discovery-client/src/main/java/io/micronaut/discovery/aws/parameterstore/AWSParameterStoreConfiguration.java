@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.micronaut.discovery.aws.parameterStore;
+package io.micronaut.discovery.aws.parameterstore;
 
 import io.micronaut.configurations.aws.AWSClientConfiguration;
 import io.micronaut.context.annotation.ConfigurationProperties;

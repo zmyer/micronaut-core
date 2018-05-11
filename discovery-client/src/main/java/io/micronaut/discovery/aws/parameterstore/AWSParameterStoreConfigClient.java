@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.micronaut.discovery.aws.parameterStore;
+package io.micronaut.discovery.aws.parameterstore;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementAsync;

@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 /**
- * This package contains client APIs, service discovery and distributed configuration integration between Micronaut and Consul (https://www.consul.io)
+ * This package contains client APIs, service discovery and distributed configuration integration between Micronaut and AWS Service Registory (https://docs.aws.amazon.com/Route53/latest/APIReference/overview-service-discovery.html).
  *
- * @author graemerocher
+ * @author ryan vanderwerf
  * @since 1.0
  */
 @Configuration
 @Requires(classes = {AWSClientConfiguration.class, AWSServiceDiscovery.class})
+
 package io.micronaut.discovery.aws;
 
 import com.amazonaws.services.servicediscovery.AWSServiceDiscovery;

@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.018s</div>
+<div class="counter">0.021s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,7 +79,7 @@
 </thead>
 <tr>
 <td class="success">test bean initializing event listener</td>
-<td>0.018s</td>
+<td>0.021s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -87,78 +87,78 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>19:53:56.733 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
-19:53:56.736 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.inject.configurations.NotABean
-19:53:56.736 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for type: class io.micronaut.inject.configurations.NotABean
-19:53:56.736 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresbean will not be loaded due to failing conditions:
-19:53:56.736 [Test worker] DEBUG io.micronaut.context.condition.Condition - * No bean of type [class io.micronaut.inject.configurations.NotABean] present within context
-19:53:56.736 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresbean.RequiresBean] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresbean]] is not enabled
-19:53:56.736 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresconfig will not be loaded due to failing conditions:
-19:53:56.736 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Required configuration [test] is not active
-19:53:56.736 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresconfig.RequiresConfig] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresconfig]] is not enabled
-19:53:56.737 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiressdk will not be loaded due to failing conditions:
-19:53:56.737 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiressdk.RequiresJava9] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiressdk]] is not enabled
-19:53:56.737 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresproperty will not be loaded due to failing conditions:
-19:53:56.737 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
-19:53:56.737 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresproperty.RequiresProperty] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresproperty]] is not enabled
-19:53:56.738 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.reactor.converters.$PublisherToMonoConverterDefinition] will not be loaded due to failing conditions:
-19:53:56.738 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [reactor.core.publisher.Mono] is not present
-19:53:56.738 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.reactor.converters.$PublisherToFluxConverterDefinition] will not be loaded due to failing conditions:
-19:53:56.738 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [reactor.core.publisher.Flux] is not present
-19:53:56.739 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.rxjava1.converters.$RxJava1ConverterRegistrarDefinition] will not be loaded due to failing conditions:
-19:53:56.739 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [hu.akarnokd.rxjava.interop.RxJavaInterop] is not present
-19:53:56.739 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;A&gt; io.micronaut.context.event.BeanCreatedEventListener 
-19:53:56.739 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.BeanCreatedEventListener
-19:53:56.740 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.inject.lifecycle.beancreationeventlistener.BCreationListener] for type: interface io.micronaut.context.event.BeanCreatedEventListener
-19:53:56.740 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;A&gt; 
-19:53:56.740 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;A&gt; 
-19:53:56.740 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.scope.A@3a855533] from definition [Definition: io.micronaut.inject.scope.A] with qualifier [null]
-19:53:56.740 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.scope.A]: io.micronaut.inject.scope.A@3a855533 
-19:53:56.740 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [Definition: io.micronaut.health.HeartbeatTask] will not be loaded due to failing conditions:
-19:53:56.740 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
-19:53:56.740 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.jackson,io.micronaut.inject.configurations.requiresconditionfalse,io.micronaut.inject.configurations.requiresconditiontrue
-19:53:56.740 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
-19:53:56.740 [Test worker] DEBUG io.micronaut.context.event.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultBeanContext@3816909]
-19:53:56.740 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
-19:53:56.740 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
-19:53:56.740 [ForkJoinPool.commonPool-worker-1] DEBUG io.micronaut.context.condition.Condition - Bean [Definition: io.micronaut.health.HeartbeatTask] will not be loaded due to failing conditions:
-19:53:56.740 [ForkJoinPool.commonPool-worker-1] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
-19:53:56.740 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.runtime.context.scope.refresh.RefreshScope] for type: interface io.micronaut.context.event.ApplicationEventListener
-19:53:56.740 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-19:53:56.741 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-19:53:56.741 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.inject.lifecycle.beaninitializingeventlistener.B
-19:53:56.741 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.inject.lifecycle.beaninitializingeventlistener.BFactory] for type: class io.micronaut.inject.lifecycle.beaninitializingeventlistener.B
-19:53:56.741 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.inject.lifecycle.beaninitializingeventlistener.BFactory] for type: io.micronaut.inject.lifecycle.beaninitializingeventlistener.B 
-19:53:56.742 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.inject.lifecycle.beaninitializingeventlistener.A
-19:53:56.742 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.inject.lifecycle.beaninitializingeventlistener.A] for type: class io.micronaut.inject.lifecycle.beaninitializingeventlistener.A
-19:53:56.742 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.inject.lifecycle.beaninitializingeventlistener.A] for type: io.micronaut.inject.lifecycle.beaninitializingeventlistener.A 
-19:53:56.743 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;A&gt; io.micronaut.context.event.BeanCreatedEventListener 
-19:53:56.743 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;A&gt; 
-19:53:56.743 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;A&gt; 
-19:53:56.743 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.lifecycle.beaninitializingeventlistener.A@2316d4a] from definition [Definition: io.micronaut.inject.lifecycle.beaninitializingeventlistener.A] with qualifier [null]
-19:53:56.743 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.lifecycle.beaninitializingeventlistener.A]: io.micronaut.inject.lifecycle.beaninitializingeventlistener.A@2316d4a 
-19:53:56.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.lifecycle.beaninitializingeventlistener.A@2316d4a] for type [class io.micronaut.inject.lifecycle.beaninitializingeventlistener.A] and qualifier [null]
-19:53:56.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.lifecycle.beaninitializingeventlistener.A@2316d4a] for type [class io.micronaut.inject.lifecycle.beaninitializingeventlistener.A] and qualifier [null]
-19:53:56.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.lifecycle.beaninitializingeventlistener.A@2316d4a] for type [class io.micronaut.inject.lifecycle.beaninitializingeventlistener.A] and qualifier [null]
-19:53:56.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: io.micronaut.context.event.BeanInitializedEventListener
-19:53:56.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.BeanInitializedEventListener
-19:53:56.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.inject.lifecycle.beaninitializingeventlistener.MyListener, Definition: io.micronaut.inject.factory.beanwithfactory.MyListener] for type: interface io.micronaut.context.event.BeanInitializedEventListener
-19:53:56.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;MyListener&gt; io.micronaut.context.event.BeanCreatedEventListener 
-19:53:56.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;MyListener&gt; 
-19:53:56.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;MyListener&gt; 
-19:53:56.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.lifecycle.beaninitializingeventlistener.MyListener@128d8cf2] from definition [Definition: io.micronaut.inject.lifecycle.beaninitializingeventlistener.MyListener] with qualifier [null]
-19:53:56.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.context.event.BeanInitializedEventListener]: io.micronaut.inject.lifecycle.beaninitializingeventlistener.MyListener@128d8cf2 
-19:53:56.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;MyListener&gt; io.micronaut.context.event.BeanCreatedEventListener 
-19:53:56.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;MyListener&gt; 
-19:53:56.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;MyListener&gt; 
-19:53:56.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.factory.beanwithfactory.MyListener@60176561] from definition [Definition: io.micronaut.inject.factory.beanwithfactory.MyListener] with qualifier [null]
-19:53:56.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.context.event.BeanInitializedEventListener]: io.micronaut.inject.factory.beanwithfactory.MyListener@60176561 
-19:53:56.745 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found 2 beans for type [io.micronaut.context.event.BeanInitializedEventListener]: [io.micronaut.inject.factory.beanwithfactory.MyListener@60176561, io.micronaut.inject.lifecycle.beaninitializingeventlistener.MyListener@128d8cf2] 
-19:53:56.745 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;BFactory&gt; io.micronaut.context.event.BeanCreatedEventListener 
-19:53:56.745 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;BFactory&gt; 
-19:53:56.745 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;BFactory&gt; 
-19:53:56.745 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.lifecycle.beaninitializingeventlistener.B@198e5d98] from definition [Definition: io.micronaut.inject.lifecycle.beaninitializingeventlistener.BFactory] with qualifier [null]
-19:53:56.745 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.lifecycle.beaninitializingeventlistener.B]: io.micronaut.inject.lifecycle.beaninitializingeventlistener.B@198e5d98 
+<pre>20:15:30.744 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
+20:15:30.747 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.inject.configurations.NotABean
+20:15:30.747 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for type: class io.micronaut.inject.configurations.NotABean
+20:15:30.747 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresbean will not be loaded due to failing conditions:
+20:15:30.748 [Test worker] DEBUG io.micronaut.context.condition.Condition - * No bean of type [class io.micronaut.inject.configurations.NotABean] present within context
+20:15:30.748 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresbean.RequiresBean] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresbean]] is not enabled
+20:15:30.748 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresconfig will not be loaded due to failing conditions:
+20:15:30.748 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Required configuration [test] is not active
+20:15:30.748 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresconfig.RequiresConfig] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresconfig]] is not enabled
+20:15:30.749 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiressdk will not be loaded due to failing conditions:
+20:15:30.749 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiressdk.RequiresJava9] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiressdk]] is not enabled
+20:15:30.750 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresproperty will not be loaded due to failing conditions:
+20:15:30.750 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
+20:15:30.750 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresproperty.RequiresProperty] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresproperty]] is not enabled
+20:15:30.751 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.reactor.converters.$PublisherToMonoConverterDefinition] will not be loaded due to failing conditions:
+20:15:30.751 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [reactor.core.publisher.Mono] is not present
+20:15:30.751 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.reactor.converters.$PublisherToFluxConverterDefinition] will not be loaded due to failing conditions:
+20:15:30.751 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [reactor.core.publisher.Flux] is not present
+20:15:30.751 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.rxjava1.converters.$RxJava1ConverterRegistrarDefinition] will not be loaded due to failing conditions:
+20:15:30.752 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [hu.akarnokd.rxjava.interop.RxJavaInterop] is not present
+20:15:30.752 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;A&gt; io.micronaut.context.event.BeanCreatedEventListener 
+20:15:30.752 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.BeanCreatedEventListener
+20:15:30.753 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.inject.lifecycle.beancreationeventlistener.BCreationListener] for type: interface io.micronaut.context.event.BeanCreatedEventListener
+20:15:30.753 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;A&gt; 
+20:15:30.753 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;A&gt; 
+20:15:30.753 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.scope.A@429720c] from definition [Definition: io.micronaut.inject.scope.A] with qualifier [null]
+20:15:30.753 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.scope.A]: io.micronaut.inject.scope.A@429720c 
+20:15:30.753 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [Definition: io.micronaut.health.HeartbeatTask] will not be loaded due to failing conditions:
+20:15:30.753 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
+20:15:30.753 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.jackson,io.micronaut.inject.configurations.requiresconditionfalse,io.micronaut.inject.configurations.requiresconditiontrue
+20:15:30.754 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
+20:15:30.754 [Test worker] DEBUG io.micronaut.context.event.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultBeanContext@2422181d]
+20:15:30.754 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
+20:15:30.754 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
+20:15:30.754 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [Definition: io.micronaut.health.HeartbeatTask] will not be loaded due to failing conditions:
+20:15:30.754 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
+20:15:30.754 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.runtime.context.scope.refresh.RefreshScope] for type: interface io.micronaut.context.event.ApplicationEventListener
+20:15:30.754 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+20:15:30.754 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+20:15:30.755 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.inject.lifecycle.beaninitializingeventlistener.B
+20:15:30.755 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.inject.lifecycle.beaninitializingeventlistener.BFactory] for type: class io.micronaut.inject.lifecycle.beaninitializingeventlistener.B
+20:15:30.755 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.inject.lifecycle.beaninitializingeventlistener.BFactory] for type: io.micronaut.inject.lifecycle.beaninitializingeventlistener.B 
+20:15:30.756 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.inject.lifecycle.beaninitializingeventlistener.A
+20:15:30.756 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.inject.lifecycle.beaninitializingeventlistener.A] for type: class io.micronaut.inject.lifecycle.beaninitializingeventlistener.A
+20:15:30.756 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.inject.lifecycle.beaninitializingeventlistener.A] for type: io.micronaut.inject.lifecycle.beaninitializingeventlistener.A 
+20:15:30.756 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;A&gt; io.micronaut.context.event.BeanCreatedEventListener 
+20:15:30.756 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;A&gt; 
+20:15:30.756 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;A&gt; 
+20:15:30.757 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.lifecycle.beaninitializingeventlistener.A@414c48e1] from definition [Definition: io.micronaut.inject.lifecycle.beaninitializingeventlistener.A] with qualifier [null]
+20:15:30.757 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.lifecycle.beaninitializingeventlistener.A]: io.micronaut.inject.lifecycle.beaninitializingeventlistener.A@414c48e1 
+20:15:30.757 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.lifecycle.beaninitializingeventlistener.A@414c48e1] for type [class io.micronaut.inject.lifecycle.beaninitializingeventlistener.A] and qualifier [null]
+20:15:30.757 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.lifecycle.beaninitializingeventlistener.A@414c48e1] for type [class io.micronaut.inject.lifecycle.beaninitializingeventlistener.A] and qualifier [null]
+20:15:30.757 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.lifecycle.beaninitializingeventlistener.A@414c48e1] for type [class io.micronaut.inject.lifecycle.beaninitializingeventlistener.A] and qualifier [null]
+20:15:30.757 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: io.micronaut.context.event.BeanInitializedEventListener
+20:15:30.758 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.BeanInitializedEventListener
+20:15:30.758 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.inject.lifecycle.beaninitializingeventlistener.MyListener, Definition: io.micronaut.inject.factory.beanwithfactory.MyListener] for type: interface io.micronaut.context.event.BeanInitializedEventListener
+20:15:30.758 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;MyListener&gt; io.micronaut.context.event.BeanCreatedEventListener 
+20:15:30.758 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;MyListener&gt; 
+20:15:30.758 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;MyListener&gt; 
+20:15:30.758 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.lifecycle.beaninitializingeventlistener.MyListener@e3aebd6] from definition [Definition: io.micronaut.inject.lifecycle.beaninitializingeventlistener.MyListener] with qualifier [null]
+20:15:30.758 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.context.event.BeanInitializedEventListener]: io.micronaut.inject.lifecycle.beaninitializingeventlistener.MyListener@e3aebd6 
+20:15:30.758 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;MyListener&gt; io.micronaut.context.event.BeanCreatedEventListener 
+20:15:30.759 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;MyListener&gt; 
+20:15:30.759 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;MyListener&gt; 
+20:15:30.759 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.factory.beanwithfactory.MyListener@6bda55] from definition [Definition: io.micronaut.inject.factory.beanwithfactory.MyListener] with qualifier [null]
+20:15:30.759 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.context.event.BeanInitializedEventListener]: io.micronaut.inject.factory.beanwithfactory.MyListener@6bda55 
+20:15:30.759 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found 2 beans for type [io.micronaut.context.event.BeanInitializedEventListener]: [io.micronaut.inject.lifecycle.beaninitializingeventlistener.MyListener@e3aebd6, io.micronaut.inject.factory.beanwithfactory.MyListener@6bda55] 
+20:15:30.760 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;BFactory&gt; io.micronaut.context.event.BeanCreatedEventListener 
+20:15:30.760 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;BFactory&gt; 
+20:15:30.760 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;BFactory&gt; 
+20:15:30.760 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.lifecycle.beaninitializingeventlistener.B@5d66a982] from definition [Definition: io.micronaut.inject.lifecycle.beaninitializingeventlistener.BFactory] with qualifier [null]
+20:15:30.760 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.lifecycle.beaninitializingeventlistener.B]: io.micronaut.inject.lifecycle.beaninitializingeventlistener.B@5d66a982 
 </pre>
 </span>
 </div>
@@ -170,7 +170,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at May 31, 2018 7:54:06 PM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at May 31, 2018 8:15:41 PM</p>
 </div>
 </div>
 </body>

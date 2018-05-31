@@ -23,7 +23,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">6</div>
+<div class="counter">7</div>
 <p>tests</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.088s</div>
+<div class="counter">0.069s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,32 +79,37 @@
 </thead>
 <tr>
 <td class="success">test 304 is returned if the correct header is sent</td>
-<td>0.015s</td>
+<td>0.012s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test returning a file from a controller</td>
-<td>0.027s</td>
+<td>0.020s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test supports</td>
-<td>0.006s</td>
+<td>0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">test the content type is honored when an attached file response is returned</td>
+<td>0.014s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test what happens when a file isn't found</td>
-<td>0.022s</td>
+<td>0.008s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test when an attached file is returned</td>
-<td>0.013s</td>
+<td>0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test when an attached file is returned with a name</td>
-<td>0.005s</td>
+<td>0.004s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -112,17 +117,20 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>12:48:52.964 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:48:52.968 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:48:53.071 [nioEventLoopGroup-24-8] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: Could not find file
+<pre>18:58:01.318 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+18:58:01.321 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+18:58:01.328 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@1d22edf]
+18:58:01.339 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@6f69d019]
+18:58:01.361 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerStartupEvent[source=io.micronaut.http.server.netty.NettyHttpServer@733b3d7c]
+18:58:01.402 [nioEventLoopGroup-27-8] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: Could not find file
 io.micronaut.http.server.types.CustomizableResponseTypeException: Could not find file
 	at io.micronaut.http.server.netty.types.files.NettySystemFileCustomizableResponseType.&lt;init&gt;(NettySystemFileCustomizableResponseType.java:70)
 	at io.micronaut.http.server.netty.types.files.FileTypeHandler.handle(FileTypeHandler.java:69)
-	at io.micronaut.http.server.netty.RoutingInBoundHandler$NettyCustomizableResponseTypeHandlerInvoker.invoke(RoutingInBoundHandler.java:1328)
-	at io.micronaut.http.server.netty.RoutingInBoundHandler.writeFinalNettyResponse(RoutingInBoundHandler.java:1023)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler$NettyCustomizableResponseTypeHandlerInvoker.invoke(RoutingInBoundHandler.java:1329)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.writeFinalNettyResponse(RoutingInBoundHandler.java:1024)
 	at io.micronaut.http.server.netty.RoutingInBoundHandler.access$400(RoutingInBoundHandler.java:117)
-	at io.micronaut.http.server.netty.RoutingInBoundHandler$3.onComplete(RoutingInBoundHandler.java:1012)
-	at io.micronaut.http.server.netty.RoutingInBoundHandler$3.onComplete(RoutingInBoundHandler.java:1009)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler$3.onComplete(RoutingInBoundHandler.java:1013)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler$3.onComplete(RoutingInBoundHandler.java:1010)
 	at io.micronaut.http.server.netty.async.ContextCompletionAwareSubscriber.doOnComplete(ContextCompletionAwareSubscriber.java:72)
 	at io.micronaut.core.async.subscriber.CompletionAwareSubscriber.onComplete(CompletionAwareSubscriber.java:72)
 	at io.reactivex.internal.util.HalfSerializer.onComplete(HalfSerializer.java:91)
@@ -135,7 +143,7 @@ io.micronaut.http.server.types.CustomizableResponseTypeException: Could not find
 	at io.reactivex.internal.subscribers.BasicFuseableSubscriber.onComplete(BasicFuseableSubscriber.java:120)
 	at io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter.complete(FlowableCreate.java:267)
 	at io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter.onComplete(FlowableCreate.java:259)
-	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1137)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1138)
 	at io.reactivex.internal.operators.flowable.FlowableCreate.subscribeActual(FlowableCreate.java:72)
 	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
 	at io.reactivex.internal.operators.flowable.FlowableMap.subscribeActual(FlowableMap.java:38)
@@ -155,6 +163,8 @@ Caused by: java.io.FileNotFoundException: /xyzabc (No such file or directory)
 	at java.io.RandomAccessFile.&lt;init&gt;(RandomAccessFile.java:243)
 	at io.micronaut.http.server.netty.types.files.NettySystemFileCustomizableResponseType.&lt;init&gt;(NettySystemFileCustomizableResponseType.java:68)
 	... 32 common frames omitted
+18:58:01.538 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerShutdownEvent[source=io.micronaut.http.server.netty.NettyHttpServer@733b3d7c]
+18:58:01.538 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@6f69d019]
 </pre>
 </span>
 </div>
@@ -166,7 +176,7 @@ Caused by: java.io.FileNotFoundException: /xyzabc (No such file or directory)
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at May 24, 2018 12:48:56 PM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at May 31, 2018 6:58:05 PM</p>
 </div>
 </div>
 </body>

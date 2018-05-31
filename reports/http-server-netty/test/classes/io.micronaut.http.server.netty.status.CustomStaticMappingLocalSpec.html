@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.058s</div>
+<div class="counter">0.048s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,17 +79,17 @@
 </thead>
 <tr>
 <td class="success">test that a bad request is handled is handled by the locally marked controller</td>
-<td>0.031s</td>
+<td>0.020s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test that a bad request response for invalid request data can be redirected by the router to the local method</td>
-<td>0.019s</td>
+<td>0.018s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test that a not found response request data can be handled by a local method</td>
-<td>0.004s</td>
+<td>0.006s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -102,13 +102,16 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>12:47:52.267 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:47:52.270 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:47:52.365 [nioEventLoopGroup-21-8] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: Required argument [Integer age] not specified
+<pre>18:57:00.329 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+18:57:00.332 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+18:57:00.339 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@6ec370ec]
+18:57:00.359 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@47530841]
+18:57:00.384 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerStartupEvent[source=io.micronaut.http.server.netty.NettyHttpServer@38c8d4a6]
+18:57:00.417 [nioEventLoopGroup-22-8] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: Required argument [Integer age] not specified
 io.micronaut.web.router.exceptions.UnsatisfiedRouteException: Required argument [Integer age] not specified
-	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:277)
+	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:275)
 	at io.micronaut.web.router.RouteMatch.execute(RouteMatch.java:123)
-	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1125)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1126)
 	at io.reactivex.internal.operators.flowable.FlowableCreate.subscribeActual(FlowableCreate.java:72)
 	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
 	at io.reactivex.internal.operators.flowable.FlowableMap.subscribeActual(FlowableMap.java:38)
@@ -122,11 +125,11 @@ io.micronaut.web.router.exceptions.UnsatisfiedRouteException: Required argument 
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
 	at java.lang.Thread.run(Thread.java:748)
-12:47:52.372 [nioEventLoopGroup-21-9] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: Required argument [Integer age] not specified
+18:57:00.425 [nioEventLoopGroup-22-9] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: Required argument [Integer age] not specified
 io.micronaut.web.router.exceptions.UnsatisfiedRouteException: Required argument [Integer age] not specified
-	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:277)
+	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:275)
 	at io.micronaut.web.router.RouteMatch.execute(RouteMatch.java:123)
-	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1125)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1126)
 	at io.reactivex.internal.operators.flowable.FlowableCreate.subscribeActual(FlowableCreate.java:72)
 	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
 	at io.reactivex.internal.operators.flowable.FlowableMap.subscribeActual(FlowableMap.java:38)
@@ -140,6 +143,8 @@ io.micronaut.web.router.exceptions.UnsatisfiedRouteException: Required argument 
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
 	at java.lang.Thread.run(Thread.java:748)
+18:57:00.446 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerShutdownEvent[source=io.micronaut.http.server.netty.NettyHttpServer@38c8d4a6]
+18:57:00.447 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@47530841]
 </pre>
 </span>
 </div>
@@ -151,7 +156,7 @@ io.micronaut.web.router.exceptions.UnsatisfiedRouteException: Required argument 
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at May 24, 2018 12:48:56 PM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at May 31, 2018 6:58:05 PM</p>
 </div>
 </div>
 </body>

@@ -23,7 +23,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">5</div>
+<div class="counter">6</div>
 <p>tests</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.152s</div>
+<div class="counter">0.193s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,27 +79,32 @@
 </thead>
 <tr>
 <td class="success">test CRUD operations on generated client that returns blocking responses</td>
-<td>0.111s</td>
+<td>0.094s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test DELETE operation with null values</td>
-<td>0.015s</td>
+<td>0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test GET operation with null values</td>
-<td>0.008s</td>
+<td>0.013s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test POST operation with null values</td>
-<td>0.008s</td>
+<td>0.009s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test PUT operation with null values</td>
-<td>0.010s</td>
+<td>0.011s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">test configured client</td>
+<td>0.059s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -107,11 +112,13 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>12:47:29.744 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:47:29.747 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:47:29.913 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingCrudSpec$BookClient$Intercepted] executed with error: Null values are not allowed to be passed to client methods (public abstract void io.micronaut.http.client.aop.BlockingCrudSpec$BookApi.delete(java.lang.Long)). Add @javax.validation.Nullable if that is the desired behavior
+<pre>18:56:37.150 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+18:56:37.153 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+18:56:37.209 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+18:56:37.211 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+18:56:37.359 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingCrudSpec$BookClient$Intercepted] executed with error: Null values are not allowed to be passed to client methods (public abstract void io.micronaut.http.client.aop.BlockingCrudSpec$BookApi.delete(java.lang.Long)). Add @javax.validation.Nullable if that is the desired behavior
 java.lang.IllegalArgumentException: Null values are not allowed to be passed to client methods (public abstract void io.micronaut.http.client.aop.BlockingCrudSpec$BookApi.delete(java.lang.Long)). Add @javax.validation.Nullable if that is the desired behavior
-	at io.micronaut.http.client.interceptor.HttpClientIntroductionAdvice.intercept(HttpClientIntroductionAdvice.java:145)
+	at io.micronaut.http.client.interceptor.HttpClientIntroductionAdvice.intercept(HttpClientIntroductionAdvice.java:146)
 	at io.micronaut.aop.MethodInterceptor.intercept(MethodInterceptor.java:41)
 	at io.micronaut.aop.chain.InterceptorChain.proceed(InterceptorChain.java:155)
 	at io.micronaut.retry.intercept.RecoveryInterceptor.intercept(RecoveryInterceptor.java:74)
@@ -119,79 +126,6 @@ java.lang.IllegalArgumentException: Null values are not allowed to be passed to 
 	at io.micronaut.aop.chain.InterceptorChain.proceed(InterceptorChain.java:155)
 	at io.micronaut.http.client.aop.BlockingCrudSpec$BookClient$Intercepted.delete(Unknown Source)
 	at io.micronaut.http.client.aop.BlockingCrudSpec$BookApi$delete$4.call(Unknown Source)
-	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:47)
-	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:116)
-	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:128)
-	at io.micronaut.http.client.aop.BlockingCrudSpec.$spock_feature_0_1(BlockingCrudSpec.groovy:107)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.spockframework.util.ReflectionUtil.invokeMethod(ReflectionUtil.java:186)
-	at org.spockframework.runtime.model.MethodInfo.invoke(MethodInfo.java:113)
-	at org.spockframework.runtime.BaseSpecRunner.invokeRaw(BaseSpecRunner.java:484)
-	at org.spockframework.runtime.BaseSpecRunner.invoke(BaseSpecRunner.java:467)
-	at org.spockframework.runtime.BaseSpecRunner.runFeatureMethod(BaseSpecRunner.java:408)
-	at org.spockframework.runtime.BaseSpecRunner.doRunIteration(BaseSpecRunner.java:322)
-	at org.spockframework.runtime.BaseSpecRunner$6.invoke(BaseSpecRunner.java:306)
-	at org.spockframework.runtime.BaseSpecRunner.invokeRaw(BaseSpecRunner.java:484)
-	at org.spockframework.runtime.BaseSpecRunner.invoke(BaseSpecRunner.java:467)
-	at org.spockframework.runtime.BaseSpecRunner.runIteration(BaseSpecRunner.java:285)
-	at org.spockframework.runtime.BaseSpecRunner.initializeAndRunIteration(BaseSpecRunner.java:275)
-	at org.spockframework.runtime.BaseSpecRunner.runSimpleFeature(BaseSpecRunner.java:266)
-	at org.spockframework.runtime.BaseSpecRunner.doRunFeature(BaseSpecRunner.java:260)
-	at org.spockframework.runtime.BaseSpecRunner$5.invoke(BaseSpecRunner.java:243)
-	at org.spockframework.runtime.BaseSpecRunner.invokeRaw(BaseSpecRunner.java:484)
-	at org.spockframework.runtime.BaseSpecRunner.invoke(BaseSpecRunner.java:467)
-	at org.spockframework.runtime.BaseSpecRunner.runFeature(BaseSpecRunner.java:235)
-	at org.spockframework.runtime.BaseSpecRunner.runFeatures(BaseSpecRunner.java:185)
-	at org.spockframework.runtime.BaseSpecRunner.doRunSpec(BaseSpecRunner.java:95)
-	at org.spockframework.runtime.BaseSpecRunner$1.invoke(BaseSpecRunner.java:81)
-	at org.spockframework.runtime.BaseSpecRunner.invokeRaw(BaseSpecRunner.java:484)
-	at org.spockframework.runtime.BaseSpecRunner.invoke(BaseSpecRunner.java:467)
-	at org.spockframework.runtime.BaseSpecRunner.runSpec(BaseSpecRunner.java:73)
-	at org.spockframework.runtime.BaseSpecRunner.run(BaseSpecRunner.java:64)
-	at org.spockframework.runtime.Sputnik.run(Sputnik.java:63)
-	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.runTestClass(JUnitTestClassExecutor.java:116)
-	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.execute(JUnitTestClassExecutor.java:59)
-	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.execute(JUnitTestClassExecutor.java:39)
-	at org.gradle.api.internal.tasks.testing.junit.AbstractJUnitTestClassProcessor.processTestClass(AbstractJUnitTestClassProcessor.java:66)
-	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.processTestClass(SuiteTestClassProcessor.java:51)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:35)
-	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
-	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:32)
-	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:93)
-	at com.sun.proxy.$Proxy1.processTestClass(Unknown Source)
-	at org.gradle.api.internal.tasks.testing.worker.TestWorker.processTestClass(TestWorker.java:109)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:35)
-	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
-	at org.gradle.internal.remote.internal.hub.MessageHubBackedObjectConnection$DispatchWrapper.dispatch(MessageHubBackedObjectConnection.java:146)
-	at org.gradle.internal.remote.internal.hub.MessageHubBackedObjectConnection$DispatchWrapper.dispatch(MessageHubBackedObjectConnection.java:128)
-	at org.gradle.internal.remote.internal.hub.MessageHub$Handler.run(MessageHub.java:404)
-	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:63)
-	at org.gradle.internal.concurrent.ManagedExecutorImpl$1.run(ManagedExecutorImpl.java:46)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
-	at org.gradle.internal.concurrent.ThreadFactoryImpl$ManagedThreadRunnable.run(ThreadFactoryImpl.java:55)
-	at java.lang.Thread.run(Thread.java:748)
-12:47:29.928 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingCrudSpec$BookClient$Intercepted] executed with error: Null values are not allowed to be passed to client methods (public abstract io.micronaut.http.client.aop.BlockingCrudSpec$Book io.micronaut.http.client.aop.BlockingCrudSpec$BookApi.save(java.lang.String)). Add @javax.validation.Nullable if that is the desired behavior
-java.lang.IllegalArgumentException: Null values are not allowed to be passed to client methods (public abstract io.micronaut.http.client.aop.BlockingCrudSpec$Book io.micronaut.http.client.aop.BlockingCrudSpec$BookApi.save(java.lang.String)). Add @javax.validation.Nullable if that is the desired behavior
-	at io.micronaut.http.client.interceptor.HttpClientIntroductionAdvice.intercept(HttpClientIntroductionAdvice.java:145)
-	at io.micronaut.aop.MethodInterceptor.intercept(MethodInterceptor.java:41)
-	at io.micronaut.aop.chain.InterceptorChain.proceed(InterceptorChain.java:155)
-	at io.micronaut.retry.intercept.RecoveryInterceptor.intercept(RecoveryInterceptor.java:74)
-	at io.micronaut.aop.MethodInterceptor.intercept(MethodInterceptor.java:41)
-	at io.micronaut.aop.chain.InterceptorChain.proceed(InterceptorChain.java:155)
-	at io.micronaut.http.client.aop.BlockingCrudSpec$BookClient$Intercepted.save(Unknown Source)
-	at io.micronaut.http.client.aop.BlockingCrudSpec$BookApi$save$0.call(Unknown Source)
 	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:47)
 	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:116)
 	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:128)
@@ -255,25 +189,19 @@ java.lang.IllegalArgumentException: Null values are not allowed to be passed to 
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
 	at org.gradle.internal.concurrent.ThreadFactoryImpl$ManagedThreadRunnable.run(ThreadFactoryImpl.java:55)
 	at java.lang.Thread.run(Thread.java:748)
-12:47:29.937 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingCrudSpec$BookClient$Intercepted] executed with error: Null values are not allowed to be passed to client methods (public abstract io.micronaut.http.client.aop.BlockingCrudSpec$Book io.micronaut.http.client.aop.BlockingCrudSpec$BookApi.update(java.lang.Long,java.lang.String)). Add @javax.validation.Nullable if that is the desired behavior
-java.lang.IllegalArgumentException: Null values are not allowed to be passed to client methods (public abstract io.micronaut.http.client.aop.BlockingCrudSpec$Book io.micronaut.http.client.aop.BlockingCrudSpec$BookApi.update(java.lang.Long,java.lang.String)). Add @javax.validation.Nullable if that is the desired behavior
-	at io.micronaut.http.client.interceptor.HttpClientIntroductionAdvice.intercept(HttpClientIntroductionAdvice.java:145)
+18:56:37.366 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingCrudSpec$BookClient$Intercepted] executed with error: Null values are not allowed to be passed to client methods (public abstract io.micronaut.http.client.aop.BlockingCrudSpec$Book io.micronaut.http.client.aop.BlockingCrudSpec$BookApi.save(java.lang.String)). Add @javax.validation.Nullable if that is the desired behavior
+java.lang.IllegalArgumentException: Null values are not allowed to be passed to client methods (public abstract io.micronaut.http.client.aop.BlockingCrudSpec$Book io.micronaut.http.client.aop.BlockingCrudSpec$BookApi.save(java.lang.String)). Add @javax.validation.Nullable if that is the desired behavior
+	at io.micronaut.http.client.interceptor.HttpClientIntroductionAdvice.intercept(HttpClientIntroductionAdvice.java:146)
 	at io.micronaut.aop.MethodInterceptor.intercept(MethodInterceptor.java:41)
 	at io.micronaut.aop.chain.InterceptorChain.proceed(InterceptorChain.java:155)
 	at io.micronaut.retry.intercept.RecoveryInterceptor.intercept(RecoveryInterceptor.java:74)
 	at io.micronaut.aop.MethodInterceptor.intercept(MethodInterceptor.java:41)
 	at io.micronaut.aop.chain.InterceptorChain.proceed(InterceptorChain.java:155)
-	at io.micronaut.http.client.aop.BlockingCrudSpec$BookClient$Intercepted.update(Unknown Source)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.codehaus.groovy.runtime.callsite.PlainObjectMetaMethodSite.doInvoke(PlainObjectMetaMethodSite.java:43)
-	at org.codehaus.groovy.runtime.callsite.PojoMetaMethodSite$PojoCachedMethodSiteNoUnwrap.invoke(PojoMetaMethodSite.java:202)
-	at org.codehaus.groovy.runtime.callsite.PojoMetaMethodSite.call(PojoMetaMethodSite.java:55)
+	at io.micronaut.http.client.aop.BlockingCrudSpec$BookClient$Intercepted.save(Unknown Source)
+	at io.micronaut.http.client.aop.BlockingCrudSpec$BookApi$save$0.call(Unknown Source)
 	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:47)
 	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:116)
-	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:136)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:128)
 	at io.micronaut.http.client.aop.BlockingCrudSpec.$spock_feature_0_3(BlockingCrudSpec.groovy:129)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
@@ -334,9 +262,88 @@ java.lang.IllegalArgumentException: Null values are not allowed to be passed to 
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
 	at org.gradle.internal.concurrent.ThreadFactoryImpl$ManagedThreadRunnable.run(ThreadFactoryImpl.java:55)
 	at java.lang.Thread.run(Thread.java:748)
-12:47:29.947 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingCrudSpec$BookClient$Intercepted] executed with error: Null values are not allowed to be passed to client methods (public abstract io.micronaut.http.client.aop.BlockingCrudSpec$Book io.micronaut.http.client.aop.BlockingCrudSpec$BookApi.get(java.lang.Long)). Add @javax.validation.Nullable if that is the desired behavior
+18:56:37.382 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingCrudSpec$BookClient$Intercepted] executed with error: Null values are not allowed to be passed to client methods (public abstract io.micronaut.http.client.aop.BlockingCrudSpec$Book io.micronaut.http.client.aop.BlockingCrudSpec$BookApi.update(java.lang.Long,java.lang.String)). Add @javax.validation.Nullable if that is the desired behavior
+java.lang.IllegalArgumentException: Null values are not allowed to be passed to client methods (public abstract io.micronaut.http.client.aop.BlockingCrudSpec$Book io.micronaut.http.client.aop.BlockingCrudSpec$BookApi.update(java.lang.Long,java.lang.String)). Add @javax.validation.Nullable if that is the desired behavior
+	at io.micronaut.http.client.interceptor.HttpClientIntroductionAdvice.intercept(HttpClientIntroductionAdvice.java:146)
+	at io.micronaut.aop.MethodInterceptor.intercept(MethodInterceptor.java:41)
+	at io.micronaut.aop.chain.InterceptorChain.proceed(InterceptorChain.java:155)
+	at io.micronaut.retry.intercept.RecoveryInterceptor.intercept(RecoveryInterceptor.java:74)
+	at io.micronaut.aop.MethodInterceptor.intercept(MethodInterceptor.java:41)
+	at io.micronaut.aop.chain.InterceptorChain.proceed(InterceptorChain.java:155)
+	at io.micronaut.http.client.aop.BlockingCrudSpec$BookClient$Intercepted.update(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.codehaus.groovy.runtime.callsite.PlainObjectMetaMethodSite.doInvoke(PlainObjectMetaMethodSite.java:43)
+	at org.codehaus.groovy.runtime.callsite.PojoMetaMethodSite$PojoCachedMethodSiteNoUnwrap.invoke(PojoMetaMethodSite.java:202)
+	at org.codehaus.groovy.runtime.callsite.PojoMetaMethodSite.call(PojoMetaMethodSite.java:55)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:47)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:116)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:136)
+	at io.micronaut.http.client.aop.BlockingCrudSpec.$spock_feature_0_4(BlockingCrudSpec.groovy:140)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.spockframework.util.ReflectionUtil.invokeMethod(ReflectionUtil.java:186)
+	at org.spockframework.runtime.model.MethodInfo.invoke(MethodInfo.java:113)
+	at org.spockframework.runtime.BaseSpecRunner.invokeRaw(BaseSpecRunner.java:484)
+	at org.spockframework.runtime.BaseSpecRunner.invoke(BaseSpecRunner.java:467)
+	at org.spockframework.runtime.BaseSpecRunner.runFeatureMethod(BaseSpecRunner.java:408)
+	at org.spockframework.runtime.BaseSpecRunner.doRunIteration(BaseSpecRunner.java:322)
+	at org.spockframework.runtime.BaseSpecRunner$6.invoke(BaseSpecRunner.java:306)
+	at org.spockframework.runtime.BaseSpecRunner.invokeRaw(BaseSpecRunner.java:484)
+	at org.spockframework.runtime.BaseSpecRunner.invoke(BaseSpecRunner.java:467)
+	at org.spockframework.runtime.BaseSpecRunner.runIteration(BaseSpecRunner.java:285)
+	at org.spockframework.runtime.BaseSpecRunner.initializeAndRunIteration(BaseSpecRunner.java:275)
+	at org.spockframework.runtime.BaseSpecRunner.runSimpleFeature(BaseSpecRunner.java:266)
+	at org.spockframework.runtime.BaseSpecRunner.doRunFeature(BaseSpecRunner.java:260)
+	at org.spockframework.runtime.BaseSpecRunner$5.invoke(BaseSpecRunner.java:243)
+	at org.spockframework.runtime.BaseSpecRunner.invokeRaw(BaseSpecRunner.java:484)
+	at org.spockframework.runtime.BaseSpecRunner.invoke(BaseSpecRunner.java:467)
+	at org.spockframework.runtime.BaseSpecRunner.runFeature(BaseSpecRunner.java:235)
+	at org.spockframework.runtime.BaseSpecRunner.runFeatures(BaseSpecRunner.java:185)
+	at org.spockframework.runtime.BaseSpecRunner.doRunSpec(BaseSpecRunner.java:95)
+	at org.spockframework.runtime.BaseSpecRunner$1.invoke(BaseSpecRunner.java:81)
+	at org.spockframework.runtime.BaseSpecRunner.invokeRaw(BaseSpecRunner.java:484)
+	at org.spockframework.runtime.BaseSpecRunner.invoke(BaseSpecRunner.java:467)
+	at org.spockframework.runtime.BaseSpecRunner.runSpec(BaseSpecRunner.java:73)
+	at org.spockframework.runtime.BaseSpecRunner.run(BaseSpecRunner.java:64)
+	at org.spockframework.runtime.Sputnik.run(Sputnik.java:63)
+	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.runTestClass(JUnitTestClassExecutor.java:116)
+	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.execute(JUnitTestClassExecutor.java:59)
+	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.execute(JUnitTestClassExecutor.java:39)
+	at org.gradle.api.internal.tasks.testing.junit.AbstractJUnitTestClassProcessor.processTestClass(AbstractJUnitTestClassProcessor.java:66)
+	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.processTestClass(SuiteTestClassProcessor.java:51)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:35)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:32)
+	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:93)
+	at com.sun.proxy.$Proxy1.processTestClass(Unknown Source)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.processTestClass(TestWorker.java:109)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:35)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.internal.remote.internal.hub.MessageHubBackedObjectConnection$DispatchWrapper.dispatch(MessageHubBackedObjectConnection.java:146)
+	at org.gradle.internal.remote.internal.hub.MessageHubBackedObjectConnection$DispatchWrapper.dispatch(MessageHubBackedObjectConnection.java:128)
+	at org.gradle.internal.remote.internal.hub.MessageHub$Handler.run(MessageHub.java:404)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:63)
+	at org.gradle.internal.concurrent.ManagedExecutorImpl$1.run(ManagedExecutorImpl.java:46)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.gradle.internal.concurrent.ThreadFactoryImpl$ManagedThreadRunnable.run(ThreadFactoryImpl.java:55)
+	at java.lang.Thread.run(Thread.java:748)
+18:56:37.390 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingCrudSpec$BookClient$Intercepted] executed with error: Null values are not allowed to be passed to client methods (public abstract io.micronaut.http.client.aop.BlockingCrudSpec$Book io.micronaut.http.client.aop.BlockingCrudSpec$BookApi.get(java.lang.Long)). Add @javax.validation.Nullable if that is the desired behavior
 java.lang.IllegalArgumentException: Null values are not allowed to be passed to client methods (public abstract io.micronaut.http.client.aop.BlockingCrudSpec$Book io.micronaut.http.client.aop.BlockingCrudSpec$BookApi.get(java.lang.Long)). Add @javax.validation.Nullable if that is the desired behavior
-	at io.micronaut.http.client.interceptor.HttpClientIntroductionAdvice.intercept(HttpClientIntroductionAdvice.java:145)
+	at io.micronaut.http.client.interceptor.HttpClientIntroductionAdvice.intercept(HttpClientIntroductionAdvice.java:146)
 	at io.micronaut.aop.MethodInterceptor.intercept(MethodInterceptor.java:41)
 	at io.micronaut.aop.chain.InterceptorChain.proceed(InterceptorChain.java:155)
 	at io.micronaut.retry.intercept.RecoveryInterceptor.intercept(RecoveryInterceptor.java:74)
@@ -347,7 +354,7 @@ java.lang.IllegalArgumentException: Null values are not allowed to be passed to 
 	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:47)
 	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:116)
 	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:128)
-	at io.micronaut.http.client.aop.BlockingCrudSpec.$spock_feature_0_4(BlockingCrudSpec.groovy:140)
+	at io.micronaut.http.client.aop.BlockingCrudSpec.$spock_feature_0_5(BlockingCrudSpec.groovy:151)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -418,7 +425,7 @@ java.lang.IllegalArgumentException: Null values are not allowed to be passed to 
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at May 24, 2018 12:47:42 PM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at May 31, 2018 6:56:50 PM</p>
 </div>
 </div>
 </body>

@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.158s</div>
+<div class="counter">0.257s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,7 +79,7 @@
 </thead>
 <tr>
 <td class="success">test that fallback is called when an exception happens invoking the server</td>
-<td>0.158s</td>
+<td>0.257s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -87,9 +87,9 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>12:47:28.522 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:47:28.524 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:47:28.612 [nioEventLoopGroup-27-4] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: bad
+<pre>18:56:35.910 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+18:56:35.913 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+18:56:36.017 [nioEventLoopGroup-27-4] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: bad
 java.lang.RuntimeException: bad
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
@@ -103,10 +103,10 @@ java.lang.RuntimeException: bad
 	at io.micronaut.http.client.aop.BlockingFallbackSpec$BookController.get(BlockingFallbackSpec.groovy:122)
 	at io.micronaut.http.client.aop.$BlockingFallbackSpec$BookControllerDefinition$$exec1.invokeInternal(Unknown Source)
 	at io.micronaut.context.AbstractExecutableMethod.invoke(AbstractExecutableMethod.java:126)
-	at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:1951)
-	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:293)
+	at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:1958)
+	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:291)
 	at io.micronaut.web.router.RouteMatch.execute(RouteMatch.java:123)
-	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1125)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1126)
 	at io.reactivex.internal.operators.flowable.FlowableCreate.subscribeActual(FlowableCreate.java:72)
 	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
 	at io.reactivex.internal.operators.flowable.FlowableMap.subscribeActual(FlowableMap.java:38)
@@ -120,10 +120,10 @@ java.lang.RuntimeException: bad
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
 	at java.lang.Thread.run(Thread.java:748)
-12:47:28.624 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingFallbackSpec$BookClient$Intercepted] executed with error: Internal Server Error: bad
+18:56:36.033 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingFallbackSpec$BookClient$Intercepted] executed with error: Internal Server Error: bad
 io.micronaut.http.client.exceptions.HttpClientResponseException: Internal Server Error: bad
-	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1144)
-	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1083)
+	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1148)
+	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1087)
 	at io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)
 	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
 	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
@@ -164,7 +164,7 @@ io.micronaut.http.client.exceptions.HttpClientResponseException: Internal Server
 	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:858)
 	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:138)
 	at java.lang.Thread.run(Thread.java:748)
-12:47:28.664 [nioEventLoopGroup-27-7] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: bad
+18:56:36.138 [nioEventLoopGroup-27-7] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: bad
 java.lang.RuntimeException: bad
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
@@ -178,10 +178,10 @@ java.lang.RuntimeException: bad
 	at io.micronaut.http.client.aop.BlockingFallbackSpec$BookController.list(BlockingFallbackSpec.groovy:127)
 	at io.micronaut.http.client.aop.$BlockingFallbackSpec$BookControllerDefinition$$exec2.invokeInternal(Unknown Source)
 	at io.micronaut.context.AbstractExecutableMethod.invoke(AbstractExecutableMethod.java:126)
-	at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:1951)
-	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:234)
+	at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:1958)
+	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:232)
 	at io.micronaut.web.router.RouteMatch.execute(RouteMatch.java:123)
-	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1125)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1126)
 	at io.reactivex.internal.operators.flowable.FlowableCreate.subscribeActual(FlowableCreate.java:72)
 	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
 	at io.reactivex.internal.operators.flowable.FlowableMap.subscribeActual(FlowableMap.java:38)
@@ -195,10 +195,10 @@ java.lang.RuntimeException: bad
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
 	at java.lang.Thread.run(Thread.java:748)
-12:47:28.675 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingFallbackSpec$BookClient$Intercepted] executed with error: Internal Server Error: bad
+18:56:36.149 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingFallbackSpec$BookClient$Intercepted] executed with error: Internal Server Error: bad
 io.micronaut.http.client.exceptions.HttpClientResponseException: Internal Server Error: bad
-	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1144)
-	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1083)
+	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1148)
+	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1087)
 	at io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)
 	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
 	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
@@ -239,7 +239,7 @@ io.micronaut.http.client.exceptions.HttpClientResponseException: Internal Server
 	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:858)
 	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:138)
 	at java.lang.Thread.run(Thread.java:748)
-12:47:28.693 [nioEventLoopGroup-27-8] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: bad
+18:56:36.166 [nioEventLoopGroup-27-8] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: bad
 java.lang.RuntimeException: bad
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
@@ -253,10 +253,10 @@ java.lang.RuntimeException: bad
 	at io.micronaut.http.client.aop.BlockingFallbackSpec$BookController.save(BlockingFallbackSpec.groovy:137)
 	at io.micronaut.http.client.aop.$BlockingFallbackSpec$BookControllerDefinition$$exec4.invokeInternal(Unknown Source)
 	at io.micronaut.context.AbstractExecutableMethod.invoke(AbstractExecutableMethod.java:126)
-	at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:1951)
-	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:293)
+	at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:1958)
+	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:291)
 	at io.micronaut.web.router.RouteMatch.execute(RouteMatch.java:123)
-	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1125)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1126)
 	at io.reactivex.internal.operators.flowable.FlowableCreate.subscribeActual(FlowableCreate.java:72)
 	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
 	at io.reactivex.internal.operators.flowable.FlowableMap.subscribeActual(FlowableMap.java:38)
@@ -270,10 +270,10 @@ java.lang.RuntimeException: bad
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
 	at java.lang.Thread.run(Thread.java:748)
-12:47:28.699 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingFallbackSpec$BookClient$Intercepted] executed with error: Internal Server Error: bad
+18:56:36.172 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingFallbackSpec$BookClient$Intercepted] executed with error: Internal Server Error: bad
 io.micronaut.http.client.exceptions.HttpClientResponseException: Internal Server Error: bad
-	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1144)
-	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1083)
+	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1148)
+	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1087)
 	at io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)
 	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
 	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
@@ -314,7 +314,7 @@ io.micronaut.http.client.exceptions.HttpClientResponseException: Internal Server
 	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:858)
 	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:138)
 	at java.lang.Thread.run(Thread.java:748)
-12:47:28.716 [nioEventLoopGroup-27-9] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: bad
+18:56:36.191 [nioEventLoopGroup-27-9] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: bad
 java.lang.RuntimeException: bad
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
@@ -328,10 +328,10 @@ java.lang.RuntimeException: bad
 	at io.micronaut.http.client.aop.BlockingFallbackSpec$BookController.delete(BlockingFallbackSpec.groovy:132)
 	at io.micronaut.http.client.aop.$BlockingFallbackSpec$BookControllerDefinition$$exec3.invokeInternal(Unknown Source)
 	at io.micronaut.context.AbstractExecutableMethod.invoke(AbstractExecutableMethod.java:126)
-	at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:1951)
-	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:293)
+	at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:1958)
+	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:291)
 	at io.micronaut.web.router.RouteMatch.execute(RouteMatch.java:123)
-	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1125)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1126)
 	at io.reactivex.internal.operators.flowable.FlowableCreate.subscribeActual(FlowableCreate.java:72)
 	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
 	at io.reactivex.internal.operators.flowable.FlowableMap.subscribeActual(FlowableMap.java:38)
@@ -345,10 +345,10 @@ java.lang.RuntimeException: bad
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
 	at java.lang.Thread.run(Thread.java:748)
-12:47:28.724 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingFallbackSpec$BookClient$Intercepted] executed with error: Internal Server Error: bad
+18:56:36.198 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingFallbackSpec$BookClient$Intercepted] executed with error: Internal Server Error: bad
 io.micronaut.http.client.exceptions.HttpClientResponseException: Internal Server Error: bad
-	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1144)
-	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1083)
+	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1148)
+	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1087)
 	at io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)
 	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
 	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
@@ -389,7 +389,7 @@ io.micronaut.http.client.exceptions.HttpClientResponseException: Internal Server
 	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:858)
 	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:138)
 	at java.lang.Thread.run(Thread.java:748)
-12:47:28.730 [nioEventLoopGroup-27-4] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: bad
+18:56:36.210 [nioEventLoopGroup-27-4] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: bad
 java.lang.RuntimeException: bad
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
@@ -401,10 +401,10 @@ java.lang.RuntimeException: bad
 	at io.micronaut.http.client.aop.BlockingFallbackSpec$BookController.get(BlockingFallbackSpec.groovy:122)
 	at io.micronaut.http.client.aop.$BlockingFallbackSpec$BookControllerDefinition$$exec1.invokeInternal(Unknown Source)
 	at io.micronaut.context.AbstractExecutableMethod.invoke(AbstractExecutableMethod.java:126)
-	at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:1951)
-	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:293)
+	at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:1958)
+	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:291)
 	at io.micronaut.web.router.RouteMatch.execute(RouteMatch.java:123)
-	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1125)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1126)
 	at io.reactivex.internal.operators.flowable.FlowableCreate.subscribeActual(FlowableCreate.java:72)
 	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
 	at io.reactivex.internal.operators.flowable.FlowableMap.subscribeActual(FlowableMap.java:38)
@@ -418,10 +418,10 @@ java.lang.RuntimeException: bad
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
 	at java.lang.Thread.run(Thread.java:748)
-12:47:28.733 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingFallbackSpec$BookClient$Intercepted] executed with error: Internal Server Error: bad
+18:56:36.216 [Test worker] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.http.client.aop.BlockingFallbackSpec$BookClient$Intercepted] executed with error: Internal Server Error: bad
 io.micronaut.http.client.exceptions.HttpClientResponseException: Internal Server Error: bad
-	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1144)
-	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1083)
+	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1148)
+	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1087)
 	at io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)
 	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
 	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
@@ -473,7 +473,7 @@ io.micronaut.http.client.exceptions.HttpClientResponseException: Internal Server
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at May 24, 2018 12:47:42 PM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at May 31, 2018 6:56:50 PM</p>
 </div>
 </div>
 </body>

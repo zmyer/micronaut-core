@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.113s</div>
+<div class="counter">0.123s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,7 +79,7 @@
 </thead>
 <tr>
 <td class="success">test bind HTTP parameters for URI GET /parameter/all</td>
-<td>0.003s</td>
+<td>0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -89,12 +89,12 @@
 </tr>
 <tr>
 <td class="success">test bind HTTP parameters for URI GET /parameter/list?values=10&amp;values=20</td>
-<td>0.004s</td>
+<td>0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test bind HTTP parameters for URI GET /parameter/list?values=10,20</td>
-<td>0.006s</td>
+<td>0.008s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -104,7 +104,7 @@
 </tr>
 <tr>
 <td class="success">test bind HTTP parameters for URI GET /parameter/named</td>
-<td>0.004s</td>
+<td>0.009s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -114,17 +114,17 @@
 </tr>
 <tr>
 <td class="success">test bind HTTP parameters for URI GET /parameter/optional</td>
-<td>0.003s</td>
+<td>0.002s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test bind HTTP parameters for URI GET /parameter/optional-list?values=10&amp;values=20</td>
-<td>0.006s</td>
+<td>0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test bind HTTP parameters for URI GET /parameter/optional?max=20</td>
-<td>0.002s</td>
+<td>0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -134,17 +134,17 @@
 </tr>
 <tr>
 <td class="success">test bind HTTP parameters for URI GET /parameter/overlap/30?max=50</td>
-<td>0.003s</td>
+<td>0.002s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test bind HTTP parameters for URI GET /parameter/path/20</td>
-<td>0.003s</td>
+<td>0.002s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test bind HTTP parameters for URI GET /parameter/path/20/bar</td>
-<td>0.010s</td>
+<td>0.009s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -154,7 +154,7 @@
 </tr>
 <tr>
 <td class="success">test bind HTTP parameters for URI GET /parameter/path/20/foo/10</td>
-<td>0.010s</td>
+<td>0.013s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -164,7 +164,7 @@
 </tr>
 <tr>
 <td class="success">test bind HTTP parameters for URI GET /parameter/queryName/Fr%20ed</td>
-<td>0.003s</td>
+<td>0.002s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -174,17 +174,17 @@
 </tr>
 <tr>
 <td class="success">test bind HTTP parameters for URI GET /parameter/simple?max=20</td>
-<td>0.002s</td>
+<td>0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test bind HTTP parameters for URI GET /parameter?max=20</td>
-<td>0.002s</td>
+<td>0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test bind HTTP parameters for URI POST /parameter/query?name=Fr%20ed</td>
-<td>0.002s</td>
+<td>0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -194,7 +194,7 @@
 </tr>
 <tr>
 <td class="success">test bind HTTP parameters for URI POST /parameter/save?max=30</td>
-<td>0.022s</td>
+<td>0.024s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -202,16 +202,16 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>05:24:11.929 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-05:24:11.931 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-05:24:11.937 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@5f390099]
-05:24:11.947 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@59818ac6]
-05:24:11.968 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerStartupEvent[source=io.micronaut.http.server.netty.NettyHttpServer@2e20d4b]
-05:24:11.984 [nioEventLoopGroup-41-4] ERROR i.m.h.s.n.c.UnsatisfiedRouteHandler - POST /parameter/save?max=30 (Bad Request): Required argument [Integer max] not specified
-05:24:12.037 [nioEventLoopGroup-41-9] ERROR i.m.h.s.n.c.UnsatisfiedRouteHandler - GET /parameter/simple (Bad Request): Required argument [Integer max] not specified
-05:24:12.041 [nioEventLoopGroup-41-4] ERROR i.m.h.s.n.c.UnsatisfiedRouteHandler - GET /parameter/named (Bad Request): Required argument [Integer max] not specified
-05:24:12.192 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerShutdownEvent[source=io.micronaut.http.server.netty.NettyHttpServer@2e20d4b]
-05:24:12.192 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@59818ac6]
+<pre>07:18:04.579 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+07:18:04.580 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+07:18:04.588 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@72edcea9]
+07:18:04.603 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@615c6a8]
+07:18:04.627 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerStartupEvent[source=io.micronaut.http.server.netty.NettyHttpServer@3c83726e]
+07:18:04.640 [nioEventLoopGroup-41-4] ERROR i.m.h.s.n.c.UnsatisfiedRouteHandler - POST /parameter/save?max=30 (Bad Request): Required argument [Integer max] not specified
+07:18:04.698 [nioEventLoopGroup-41-9] ERROR i.m.h.s.n.c.UnsatisfiedRouteHandler - GET /parameter/simple (Bad Request): Required argument [Integer max] not specified
+07:18:04.706 [nioEventLoopGroup-41-4] ERROR i.m.h.s.n.c.UnsatisfiedRouteHandler - GET /parameter/named (Bad Request): Required argument [Integer max] not specified
+07:18:04.862 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerShutdownEvent[source=io.micronaut.http.server.netty.NettyHttpServer@3c83726e]
+07:18:04.862 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@615c6a8]
 </pre>
 </span>
 </div>
@@ -223,7 +223,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 5:24:13 AM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 7:18:05 AM</p>
 </div>
 </div>
 </body>

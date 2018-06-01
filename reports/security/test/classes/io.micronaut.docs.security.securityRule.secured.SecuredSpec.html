@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.350s</div>
+<div class="counter">0.232s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,17 +79,17 @@
 </thead>
 <tr>
 <td class="success">verify you can access an endpoint annotated with @Secured('isAnonymous()') without authentication</td>
-<td>0.098s</td>
+<td>0.070s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">verify you can access an endpoint annotated with @Secured('isAuthenticated()') with an authenticated user</td>
-<td>0.168s</td>
+<td>0.092s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">verify you can access an endpoint annotated with @Secured([&quot;ROLE_ADMIN&quot;, &quot;ROLE_X&quot;]) with an authenticated user with one of those roles</td>
-<td>0.084s</td>
+<td>0.070s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -97,148 +97,19 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>08:48:12.761 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-08:48:12.791 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-08:48:12.801 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.jackson.env.JsonPropertySourceLoader@95a192b
-08:48:12.811 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.jackson.env.EnvJsonPropertySourceLoader@4f5fd533
-08:48:12.811 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.yaml.YamlPropertySourceLoader@7e508d59
-08:48:12.861 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.PropertiesPropertySourceLoader@376ca925
-08:48:12.862 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Processing property source: env
-08:48:12.863 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Processing property source: system
-08:48:12.863 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Processing property source: context
-08:48:12.863 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Processing property source: context
-08:48:12.863 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Processing property source: context
-08:48:12.888 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:12.894 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:12.895 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: micronaut.heartbeat.enabled
-08:48:12.895 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:12.895 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:12.895 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:12.899 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.jackson.env.JsonPropertySourceLoader@1720fa79
-08:48:12.901 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.jackson.env.EnvJsonPropertySourceLoader@5bf9b0d2
-08:48:12.902 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.yaml.YamlPropertySourceLoader@1c03501c
-08:48:12.904 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.PropertiesPropertySourceLoader@82be6d6
-08:48:12.906 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Processing property source: env
-08:48:12.913 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Processing property source: env
-08:48:12.920 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Processing property source: env
-08:48:12.922 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Processing property source: system
-08:48:12.926 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Processing property source: system
-08:48:12.935 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Processing property source: system
-08:48:12.938 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Processing property source: context
-08:48:12.945 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Processing property source: context
-08:48:12.946 [Test worker] DEBUG i.m.context.env.DefaultEnvironment - Processing property source: context
-08:48:13.047 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: micronaut.application.default-charset
-08:48:13.063 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: micronaut.heartbeat.enabled
-08:48:13.066 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.067 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.072 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: micronaut.heartbeat.enabled
-08:48:13.075 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.076 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.076 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.100 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: micronaut.application.default-charset
-08:48:13.113 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.health.enabled
-08:48:13.113 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.113 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.114 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.routes.enabled
-08:48:13.114 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.116 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.beans.enabled
-08:48:13.117 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.117 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.refresh.enabled
-08:48:13.117 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.117 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.118 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.stop.enabled
-08:48:13.118 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.118 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.118 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.info.enabled
-08:48:13.118 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.118 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.122 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.refresh.enabled
-08:48:13.123 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.125 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: micronaut.application.default-charset
-08:48:13.132 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.health.enabled
-08:48:13.133 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.134 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.137 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.routes.enabled
-08:48:13.141 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.143 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.beans.enabled
-08:48:13.144 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.144 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.149 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.151 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.refresh.enabled
-08:48:13.163 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.164 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.info.enabled
-08:48:13.166 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.165 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.169 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.stop.enabled
-08:48:13.170 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.172 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: micronaut.application.default-charset
-08:48:13.181 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.181 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.182 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.183 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.184 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.184 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.184 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.195 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.209 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: micronaut.application.default-charset
-08:48:13.210 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.health.enabled
-08:48:13.210 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.210 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.210 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.211 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.routes.enabled
-08:48:13.211 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.211 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.234 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.beans.enabled
-08:48:13.234 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.234 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.refresh.enabled
-08:48:13.234 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.235 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.info.enabled
-08:48:13.235 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.239 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.stop.enabled
-08:48:13.239 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.241 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.245 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.info.enabled
-08:48:13.245 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.246 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.health.enabled
-08:48:13.246 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.247 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.routes.enabled
-08:48:13.247 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.248 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.beans.enabled
-08:48:13.248 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.249 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: micronaut.application.default-charset
-08:48:13.250 [Test worker] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [true] for property: micronaut.security.enabled
-08:48:13.398 [nioEventLoopGroup-4-4] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.398 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.health.enabled
-08:48:13.398 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.398 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.399 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.routes.enabled
-08:48:13.399 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.399 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.beans.enabled
-08:48:13.399 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.399 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.refresh.enabled
-08:48:13.399 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.400 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.400 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.stop.enabled
-08:48:13.400 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.398 [nioEventLoopGroup-4-4] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.400 [nioEventLoopGroup-4-4] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.info.enabled
-08:48:13.400 [nioEventLoopGroup-4-4] TRACE i.m.c.e.PropertySourcePropertyResolver - No value found for property: endpoints.all.enabled
-08:48:13.404 [nioEventLoopGroup-4-4] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [true] for property: micronaut.security.enabled
-08:48:13.407 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.407 [nioEventLoopGroup-4-4] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.408 [nioEventLoopGroup-4-4] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.408 [nioEventLoopGroup-4-4] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.408 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.408 [nioEventLoopGroup-4-4] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.408 [nioEventLoopGroup-4-4] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.408 [nioEventLoopGroup-4-4] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.408 [nioEventLoopGroup-4-4] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.408 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.409 [nioEventLoopGroup-4-4] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
-08:48:13.430 [ForkJoinPool.commonPool-worker-1] TRACE i.m.c.e.PropertySourcePropertyResolver - Resolved value [docsecured] for property: spec.name
+<pre>10:35:14.965 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+10:35:14.989 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+10:35:15.015 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@7cc8c881]
+10:35:15.101 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@1eea8d3]
+10:35:15.200 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerStartupEvent[source=io.micronaut.http.server.netty.NettyHttpServer@1d70c601]
 io.micronaut.docs.security.securityRule.secured.AuthenticationProviderUserPassword
+10:35:15.352 [pool-3-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dXNlcjpwYXNzd29yZA==]
 io.micronaut.docs.security.securityRule.secured.AuthenticationProviderUserPassword
+10:35:15.412 [pool-3-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dXNlcjpwYXNzd29yZA==]
 io.micronaut.docs.security.securityRule.secured.AuthenticationProviderUserPassword
+10:35:15.441 [pool-3-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=YWRtaW46cGFzc3dvcmQ=]
+10:35:15.548 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerShutdownEvent[source=io.micronaut.http.server.netty.NettyHttpServer@1d70c601]
+10:35:15.560 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@1eea8d3]
 </pre>
 </span>
 </div>
@@ -250,7 +121,7 @@ io.micronaut.docs.security.securityRule.secured.AuthenticationProviderUserPasswo
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 8:48:26 AM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 10:35:23 AM</p>
 </div>
 </div>
 </body>

@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.316s</div>
+<div class="counter">0.433s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,7 +79,7 @@
 </thead>
 <tr>
 <td class="success">test the consul service's health status is correct</td>
-<td>0.316s</td>
+<td>0.433s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -87,109 +87,127 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>07:16:33.708 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-07:16:33.710 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-07:16:33.813 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 17922
-07:16:33.817 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-07:16:33.819 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-07:16:33.874 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 39966
-07:16:33.911 [nioEventLoopGroup-20-4] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: PUT /v1/agent/service/register
-07:16:33.914 [nioEventLoopGroup-20-4] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(17922)
-07:16:33.914 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
-07:16:33.914 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
-07:16:33.914 [nioEventLoopGroup-20-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /v1/health/service/my-service?passing=false
-07:16:33.914 [nioEventLoopGroup-20-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(17922)
-07:16:33.914 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
-07:16:33.914 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
-07:16:33.914 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-07:16:33.914 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
-07:16:33.914 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-07:16:33.915 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
-07:16:33.915 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 124
-07:16:33.915 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - Body
-07:16:33.915 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - ----
-07:16:33.915 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - {&quot;Name&quot;:&quot;my-service&quot;,&quot;Address&quot;:&quot;localhost&quot;,&quot;Port&quot;:39966,&quot;Checks&quot;:[{&quot;Status&quot;:&quot;passing&quot;,&quot;TTL&quot;:&quot;25s&quot;}],&quot;ID&quot;:&quot;my-service:39966&quot;}
-07:16:33.915 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - ----
-07:16:33.918 [nioEventLoopGroup-19-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:17922 Received Request: PUT /v1/agent/service/register
-07:16:33.918 [nioEventLoopGroup-19-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route PUT - /v1/agent/service/register
-07:16:33.919 [nioEventLoopGroup-19-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route PUT - /v1/agent/service/register to controller class io.micronaut.discovery.consul.MockConsulServer
-07:16:33.934 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: PUT /v1/agent/service/register
-07:16:33.935 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-07:16:33.935 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-07:16:33.934 [nioEventLoopGroup-19-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:17922 Received Request: GET /v1/health/service/my-service?passing=false
-07:16:33.936 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
-07:16:33.936 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
-07:16:33.936 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - Body
-07:16:33.936 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - ----
-07:16:33.936 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - [OK]
-07:16:33.936 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - ----
-07:16:33.937 [nioEventLoopGroup-20-4] INFO  i.m.d.registration.AutoRegistration - Registered service [my-service] with Consul
-07:16:33.937 [nioEventLoopGroup-19-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /v1/health/service/my-service
-07:16:33.938 [nioEventLoopGroup-19-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /v1/health/service/my-service to controller class io.micronaut.discovery.consul.MockConsulServer
-07:16:33.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /v1/health/service/my-service?passing=false
-07:16:33.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-07:16:33.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-07:16:33.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 259
-07:16:33.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
-07:16:33.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Body
-07:16:33.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - ----
-07:16:33.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - [{&quot;Node&quot;:{&quot;Node&quot;:&quot;af02d1b4-64ae-4034-b84f-3b0bdb2dc8b5&quot;,&quot;Address&quot;:&quot;travis-job-02ccf979-1bb2-4a8f-8d26-76f4be8b4b3d&quot;},&quot;Service&quot;:{&quot;ID&quot;:&quot;my-service:39966&quot;,&quot;Name&quot;:&quot;my-service&quot;,&quot;Address&quot;:&quot;localhost&quot;,&quot;Port&quot;:39966},&quot;Checks&quot;:[{&quot;Id&quot;:&quot;my-service&quot;,&quot;Status&quot;:&quot;passing&quot;}]}]
-07:16:33.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - ----
-07:16:33.967 [nioEventLoopGroup-20-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: PUT /v1/agent/check/fail/service%3Amy-service%3A39966
-07:16:33.967 [nioEventLoopGroup-20-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(17922)
-07:16:33.967 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
-07:16:33.967 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
-07:16:33.967 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-07:16:33.967 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-07:16:33.971 [nioEventLoopGroup-19-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:17922 Received Request: PUT /v1/agent/check/fail/service%3Amy-service%3A39966
-07:16:33.971 [nioEventLoopGroup-19-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route PUT - /v1/agent/check/fail/service%3Amy-service%3A39966
-07:16:33.972 [nioEventLoopGroup-19-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route PUT - /v1/agent/check/fail/service%3Amy-service%3A39966 to controller class io.micronaut.discovery.consul.MockConsulServer
-07:16:33.985 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: PUT /v1/agent/check/fail/service%3Amy-service%3A39966
-07:16:33.985 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-07:16:33.985 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-07:16:33.986 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-07:16:33.986 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
-07:16:33.986 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Body
-07:16:33.986 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - ----
-07:16:33.986 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - [OK]
-07:16:33.986 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - ----
-07:16:33.988 [nioEventLoopGroup-20-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /v1/health/service/my-service?passing=false
-07:16:33.988 [nioEventLoopGroup-20-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(17922)
-07:16:33.988 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
-07:16:33.988 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
-07:16:33.988 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-07:16:33.988 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
-07:16:33.992 [nioEventLoopGroup-19-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:17922 Received Request: GET /v1/health/service/my-service?passing=false
-07:16:33.993 [nioEventLoopGroup-19-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /v1/health/service/my-service
-07:16:33.993 [nioEventLoopGroup-19-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /v1/health/service/my-service to controller class io.micronaut.discovery.consul.MockConsulServer
-07:16:33.996 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /v1/health/service/my-service?passing=false
-07:16:33.996 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-07:16:33.996 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-07:16:33.997 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 260
-07:16:33.997 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
-07:16:33.997 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Body
-07:16:33.997 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - ----
-07:16:33.997 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - [{&quot;Node&quot;:{&quot;Node&quot;:&quot;af02d1b4-64ae-4034-b84f-3b0bdb2dc8b5&quot;,&quot;Address&quot;:&quot;travis-job-02ccf979-1bb2-4a8f-8d26-76f4be8b4b3d&quot;},&quot;Service&quot;:{&quot;ID&quot;:&quot;my-service:39966&quot;,&quot;Name&quot;:&quot;my-service&quot;,&quot;Address&quot;:&quot;localhost&quot;,&quot;Port&quot;:39966},&quot;Checks&quot;:[{&quot;Id&quot;:&quot;my-service&quot;,&quot;Status&quot;:&quot;critical&quot;}]}]
-07:16:33.997 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - ----
-07:16:34.005 [nioEventLoopGroup-20-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: PUT /v1/agent/service/deregister/my-service%3A39966
-07:16:34.005 [nioEventLoopGroup-20-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(17922)
-07:16:34.005 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
-07:16:34.005 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
-07:16:34.005 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-07:16:34.005 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-07:16:34.006 [nioEventLoopGroup-19-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:17922 Received Request: PUT /v1/agent/service/deregister/my-service%3A39966
-07:16:34.006 [nioEventLoopGroup-19-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route PUT - /v1/agent/service/deregister/my-service%3A39966
-07:16:34.007 [nioEventLoopGroup-19-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route PUT - /v1/agent/service/deregister/my-service%3A39966 to controller class io.micronaut.discovery.consul.MockConsulServer
-07:16:34.010 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: PUT /v1/agent/service/deregister/my-service%3A39966
-07:16:34.010 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-07:16:34.010 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-07:16:34.010 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-07:16:34.010 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
-07:16:34.010 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Body
-07:16:34.010 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - ----
-07:16:34.010 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - [OK]
-07:16:34.010 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - ----
-07:16:34.010 [Test worker] INFO  i.m.d.registration.AutoRegistration - De-registered service [my-service] with Consul
+<pre>08:33:41.135 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+08:33:41.139 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+08:33:41.240 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 35158
+08:33:41.245 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+08:33:41.248 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+08:33:41.301 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 64820
+08:33:41.334 [nioEventLoopGroup-20-4] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: PUT /v1/agent/service/register
+08:33:41.337 [nioEventLoopGroup-20-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /v1/health/service/my-service?passing=false
+08:33:41.338 [nioEventLoopGroup-20-4] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(35158)
+08:33:41.343 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+08:33:41.344 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+08:33:41.344 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+08:33:41.344 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
+08:33:41.344 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 124
+08:33:41.344 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - Body
+08:33:41.344 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - ----
+08:33:41.344 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - {&quot;Name&quot;:&quot;my-service&quot;,&quot;Address&quot;:&quot;localhost&quot;,&quot;Port&quot;:64820,&quot;Checks&quot;:[{&quot;Status&quot;:&quot;passing&quot;,&quot;TTL&quot;:&quot;25s&quot;}],&quot;ID&quot;:&quot;my-service:64820&quot;}
+08:33:41.345 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - ----
+08:33:41.338 [nioEventLoopGroup-20-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(35158)
+08:33:41.346 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+08:33:41.351 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+08:33:41.351 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+08:33:41.351 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+08:33:41.346 [nioEventLoopGroup-19-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:35158 Received Request: PUT /v1/agent/service/register
+08:33:41.352 [nioEventLoopGroup-19-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route PUT - /v1/agent/service/register
+08:33:41.352 [nioEventLoopGroup-19-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:35158 Received Request: GET /v1/health/service/my-service?passing=false
+08:33:41.352 [nioEventLoopGroup-19-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /v1/health/service/my-service
+08:33:41.353 [nioEventLoopGroup-19-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /v1/health/service/my-service to controller class io.micronaut.discovery.consul.MockConsulServer
+08:33:41.353 [nioEventLoopGroup-19-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route PUT - /v1/agent/service/register to controller class io.micronaut.discovery.consul.MockConsulServer
+08:33:41.373 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /v1/health/service/my-service?passing=false
+08:33:41.373 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+08:33:41.373 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+08:33:41.373 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 2
+08:33:41.373 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+08:33:41.373 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Body
+08:33:41.373 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - ----
+08:33:41.373 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - []
+08:33:41.374 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - ----
+08:33:41.382 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: PUT /v1/agent/service/register
+08:33:41.382 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+08:33:41.382 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+08:33:41.382 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
+08:33:41.382 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+08:33:41.382 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - Body
+08:33:41.382 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - ----
+08:33:41.383 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - [OK]
+08:33:41.383 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - ----
+08:33:41.383 [nioEventLoopGroup-20-4] INFO  i.m.d.registration.AutoRegistration - Registered service [my-service] with Consul
+08:33:41.487 [nioEventLoopGroup-20-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /v1/health/service/my-service?passing=false
+08:33:41.487 [nioEventLoopGroup-20-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(35158)
+08:33:41.487 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+08:33:41.487 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+08:33:41.487 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+08:33:41.487 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+08:33:41.490 [nioEventLoopGroup-19-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:35158 Received Request: GET /v1/health/service/my-service?passing=false
+08:33:41.491 [nioEventLoopGroup-19-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /v1/health/service/my-service
+08:33:41.491 [nioEventLoopGroup-19-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /v1/health/service/my-service to controller class io.micronaut.discovery.consul.MockConsulServer
+08:33:41.508 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /v1/health/service/my-service?passing=false
+08:33:41.508 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+08:33:41.508 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+08:33:41.508 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 259
+08:33:41.508 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+08:33:41.508 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Body
+08:33:41.508 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - ----
+08:33:41.508 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - [{&quot;Node&quot;:{&quot;Node&quot;:&quot;f956f6e7-781a-4053-bb03-dcab88dd9521&quot;,&quot;Address&quot;:&quot;travis-job-1e468862-5031-4b43-b4cb-d66835863b92&quot;},&quot;Service&quot;:{&quot;ID&quot;:&quot;my-service:64820&quot;,&quot;Name&quot;:&quot;my-service&quot;,&quot;Address&quot;:&quot;localhost&quot;,&quot;Port&quot;:64820},&quot;Checks&quot;:[{&quot;Id&quot;:&quot;my-service&quot;,&quot;Status&quot;:&quot;passing&quot;}]}]
+08:33:41.508 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - ----
+08:33:41.511 [nioEventLoopGroup-20-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: PUT /v1/agent/check/fail/service%3Amy-service%3A64820
+08:33:41.511 [nioEventLoopGroup-20-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(35158)
+08:33:41.511 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+08:33:41.511 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+08:33:41.511 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+08:33:41.511 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+08:33:41.517 [nioEventLoopGroup-19-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:35158 Received Request: PUT /v1/agent/check/fail/service%3Amy-service%3A64820
+08:33:41.518 [nioEventLoopGroup-19-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route PUT - /v1/agent/check/fail/service%3Amy-service%3A64820
+08:33:41.518 [nioEventLoopGroup-19-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route PUT - /v1/agent/check/fail/service%3Amy-service%3A64820 to controller class io.micronaut.discovery.consul.MockConsulServer
+08:33:41.534 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: PUT /v1/agent/check/fail/service%3Amy-service%3A64820
+08:33:41.534 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+08:33:41.534 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+08:33:41.534 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+08:33:41.534 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+08:33:41.534 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Body
+08:33:41.534 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - ----
+08:33:41.534 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - [OK]
+08:33:41.534 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - ----
+08:33:41.537 [nioEventLoopGroup-20-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /v1/health/service/my-service?passing=false
+08:33:41.537 [nioEventLoopGroup-20-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(35158)
+08:33:41.537 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+08:33:41.537 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+08:33:41.537 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+08:33:41.537 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+08:33:41.538 [nioEventLoopGroup-19-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:35158 Received Request: GET /v1/health/service/my-service?passing=false
+08:33:41.538 [nioEventLoopGroup-19-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /v1/health/service/my-service
+08:33:41.538 [nioEventLoopGroup-19-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /v1/health/service/my-service to controller class io.micronaut.discovery.consul.MockConsulServer
+08:33:41.541 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /v1/health/service/my-service?passing=false
+08:33:41.541 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+08:33:41.541 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+08:33:41.541 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 260
+08:33:41.541 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+08:33:41.541 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Body
+08:33:41.541 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - ----
+08:33:41.541 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - [{&quot;Node&quot;:{&quot;Node&quot;:&quot;f956f6e7-781a-4053-bb03-dcab88dd9521&quot;,&quot;Address&quot;:&quot;travis-job-1e468862-5031-4b43-b4cb-d66835863b92&quot;},&quot;Service&quot;:{&quot;ID&quot;:&quot;my-service:64820&quot;,&quot;Name&quot;:&quot;my-service&quot;,&quot;Address&quot;:&quot;localhost&quot;,&quot;Port&quot;:64820},&quot;Checks&quot;:[{&quot;Id&quot;:&quot;my-service&quot;,&quot;Status&quot;:&quot;critical&quot;}]}]
+08:33:41.541 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - ----
+08:33:41.549 [nioEventLoopGroup-20-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: PUT /v1/agent/service/deregister/my-service%3A64820
+08:33:41.549 [nioEventLoopGroup-20-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(35158)
+08:33:41.549 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+08:33:41.549 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+08:33:41.549 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+08:33:41.549 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+08:33:41.550 [nioEventLoopGroup-19-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:35158 Received Request: PUT /v1/agent/service/deregister/my-service%3A64820
+08:33:41.550 [nioEventLoopGroup-19-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route PUT - /v1/agent/service/deregister/my-service%3A64820
+08:33:41.550 [nioEventLoopGroup-19-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route PUT - /v1/agent/service/deregister/my-service%3A64820 to controller class io.micronaut.discovery.consul.MockConsulServer
+08:33:41.553 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: PUT /v1/agent/service/deregister/my-service%3A64820
+08:33:41.554 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+08:33:41.554 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+08:33:41.554 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+08:33:41.554 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+08:33:41.554 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Body
+08:33:41.554 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - ----
+08:33:41.554 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - [OK]
+08:33:41.554 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - ----
+08:33:41.554 [Test worker] INFO  i.m.d.registration.AutoRegistration - De-registered service [my-service] with Consul
 </pre>
 </span>
 </div>
@@ -201,7 +219,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 7:16:52 AM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 8:34:01 AM</p>
 </div>
 </div>
 </body>

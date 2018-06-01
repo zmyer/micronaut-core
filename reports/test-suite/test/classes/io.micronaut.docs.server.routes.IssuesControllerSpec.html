@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.106s</div>
+<div class="counter">0.162s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,12 +79,12 @@
 </thead>
 <tr>
 <td class="success">/issues/show/{number} with an invalid Integer number responds 400</td>
-<td>0.081s</td>
+<td>0.103s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">/issues/show/{number} without number responds 404</td>
-<td>0.025s</td>
+<td>0.059s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -92,43 +92,43 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>12:53:52.072 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:53:52.075 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-Executing everyFiveMinutes()
+<pre>12:56:37.749 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:56:37.751 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
 Executing fiveMinutesAfterLastExecution()
-12:53:52.175 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 39096
-12:53:52.209 [multithreadEventLoopGroup-12-2] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /issues/hello
-12:53:52.210 [multithreadEventLoopGroup-12-2] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(39096)
-12:53:52.212 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:53:52.214 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:52.220 [nioEventLoopGroup-11-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:39096 Received Request: GET /issues/hello
-12:53:52.220 [nioEventLoopGroup-11-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /issues/hello
-12:53:52.220 [nioEventLoopGroup-11-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /issues/hello to controller class io.micronaut.docs.server.routes.IssuesController
-12:53:52.266 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /issues/hello
-12:53:52.266 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - Status Code: 400 Bad Request
-12:53:52.266 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:53:52.266 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - content-length: 181
-12:53:52.266 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:52.266 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - Body
-12:53:52.266 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:52.266 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - {&quot;_links&quot;:{&quot;self&quot;:{&quot;href&quot;:&quot;/issues/hello&quot;,&quot;templated&quot;:false}},&quot;message&quot;:&quot;Failed to convert argument [number] for value [hello] due to: For input string: \&quot;hello\&quot;&quot;,&quot;path&quot;:&quot;/number&quot;}
-12:53:52.266 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:52.283 [multithreadEventLoopGroup-12-4] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /issues/
-12:53:52.284 [multithreadEventLoopGroup-12-4] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(39096)
-12:53:52.284 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:53:52.284 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:52.286 [nioEventLoopGroup-11-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:39096 Received Request: GET /issues/
-12:53:52.286 [nioEventLoopGroup-11-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /issues/
-12:53:52.287 [nioEventLoopGroup-11-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - No matching route found for URI /issues/ and method GET
-12:53:52.294 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /issues/
-12:53:52.294 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - Status Code: 404 Not Found
-12:53:52.295 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:53:52.295 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 84
-12:53:52.295 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:52.296 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - Body
-12:53:52.296 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:52.296 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - {&quot;_links&quot;:{&quot;self&quot;:{&quot;href&quot;:&quot;/issues/&quot;,&quot;templated&quot;:false}},&quot;message&quot;:&quot;Page Not Found&quot;}
-12:53:52.296 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - ----
+Executing everyFiveMinutes()
+12:56:37.852 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 17520
+12:56:37.887 [multithreadEventLoopGroup-12-2] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /issues/hello
+12:56:37.889 [multithreadEventLoopGroup-12-2] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(17520)
+12:56:37.895 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:56:37.895 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:37.906 [nioEventLoopGroup-11-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:17520 Received Request: GET /issues/hello
+12:56:37.906 [nioEventLoopGroup-11-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /issues/hello
+12:56:37.914 [nioEventLoopGroup-11-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /issues/hello to controller class io.micronaut.docs.server.routes.IssuesController
+12:56:37.962 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /issues/hello
+12:56:37.962 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - Status Code: 400 Bad Request
+12:56:37.962 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:56:37.962 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - content-length: 181
+12:56:37.962 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:37.962 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - Body
+12:56:37.962 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:37.963 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - {&quot;_links&quot;:{&quot;self&quot;:{&quot;href&quot;:&quot;/issues/hello&quot;,&quot;templated&quot;:false}},&quot;message&quot;:&quot;Failed to convert argument [number] for value [hello] due to: For input string: \&quot;hello\&quot;&quot;,&quot;path&quot;:&quot;/number&quot;}
+12:56:37.963 [multithreadEventLoopGroup-12-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:38.004 [multithreadEventLoopGroup-12-4] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /issues/
+12:56:38.005 [multithreadEventLoopGroup-12-4] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(17520)
+12:56:38.006 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:56:38.007 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:38.028 [nioEventLoopGroup-11-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:17520 Received Request: GET /issues/
+12:56:38.028 [nioEventLoopGroup-11-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /issues/
+12:56:38.028 [nioEventLoopGroup-11-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - No matching route found for URI /issues/ and method GET
+12:56:38.031 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /issues/
+12:56:38.031 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - Status Code: 404 Not Found
+12:56:38.032 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:56:38.032 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 84
+12:56:38.032 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:38.032 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - Body
+12:56:38.032 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:38.032 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - {&quot;_links&quot;:{&quot;self&quot;:{&quot;href&quot;:&quot;/issues/&quot;,&quot;templated&quot;:false}},&quot;message&quot;:&quot;Page Not Found&quot;}
+12:56:38.032 [multithreadEventLoopGroup-12-4] TRACE i.m.http.client.DefaultHttpClient - ----
 </pre>
 </span>
 </div>
@@ -140,7 +140,7 @@ Executing fiveMinutesAfterLastExecution()
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at May 24, 2018 12:54:03 PM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:57:04 PM</p>
 </div>
 </div>
 </body>

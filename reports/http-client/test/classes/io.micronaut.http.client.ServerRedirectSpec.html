@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">3.788s</div>
+<div class="counter">3.982s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,47 +79,47 @@
 </thead>
 <tr>
 <td class="success">test http client follows moved redirects for regular exchange requests</td>
-<td>0.209s</td>
+<td>0.210s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test http client follows moved redirects for regular stream requests</td>
-<td>0.210s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">test http client follows permanent redirects for regular exchange requests</td>
-<td>0.215s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">test http client follows permanent redirects for regular stream requests</td>
-<td>0.232s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">test http client follows seeOther redirects for regular exchange requests</td>
 <td>0.212s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
+<td class="success">test http client follows permanent redirects for regular exchange requests</td>
+<td>0.219s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">test http client follows permanent redirects for regular stream requests</td>
+<td>0.221s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">test http client follows seeOther redirects for regular exchange requests</td>
+<td>0.211s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
 <td class="success">test http client follows seeOther redirects for regular stream requests</td>
-<td>0.208s</td>
+<td>0.212s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test http client follows temporary redirects for regular exchange requests</td>
-<td>0.213s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">test http client follows temporary redirects for regular stream requests</td>
 <td>0.210s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
+<td class="success">test http client follows temporary redirects for regular stream requests</td>
+<td>0.217s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
 <td class="success">test https redirect</td>
-<td>2.079s</td>
+<td>2.270s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -127,8 +127,93 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>11:32:19.541 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-11:32:19.543 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+<pre>12:50:16.774 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:50:16.776 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:50:20.660 [pool-48-thread-1] ERROR i.n.u.c.D.rejectedExecution - Failed to submit a listener notification task. Event loop shut down?
+java.util.concurrent.RejectedExecutionException: event executor terminated
+	at io.netty.util.concurrent.SingleThreadEventExecutor.reject(SingleThreadEventExecutor.java:821)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.offerTask(SingleThreadEventExecutor.java:327)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.addTask(SingleThreadEventExecutor.java:320)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.execute(SingleThreadEventExecutor.java:746)
+	at io.netty.util.concurrent.DefaultPromise.safeExecute(DefaultPromise.java:760)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:428)
+	at io.netty.util.concurrent.DefaultPromise.setFailure(DefaultPromise.java:113)
+	at io.netty.channel.DefaultChannelPromise.setFailure(DefaultChannelPromise.java:87)
+	at io.netty.channel.AbstractChannelHandlerContext.safeExecute(AbstractChannelHandlerContext.java:1010)
+	at io.netty.channel.AbstractChannelHandlerContext.write(AbstractChannelHandlerContext.java:825)
+	at io.netty.channel.AbstractChannelHandlerContext.writeAndFlush(AbstractChannelHandlerContext.java:794)
+	at io.netty.channel.AbstractChannelHandlerContext.writeAndFlush(AbstractChannelHandlerContext.java:831)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.writeFinalNettyResponse(RoutingInBoundHandler.java:1027)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.access$400(RoutingInBoundHandler.java:117)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler$3.onComplete(RoutingInBoundHandler.java:1013)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler$3.onComplete(RoutingInBoundHandler.java:1010)
+	at io.micronaut.http.server.netty.async.ContextCompletionAwareSubscriber.doOnComplete(ContextCompletionAwareSubscriber.java:72)
+	at io.micronaut.core.async.subscriber.CompletionAwareSubscriber.onComplete(CompletionAwareSubscriber.java:72)
+	at io.reactivex.internal.util.HalfSerializer.onComplete(HalfSerializer.java:91)
+	at io.reactivex.internal.subscribers.StrictSubscriber.onComplete(StrictSubscriber.java:109)
+	at io.reactivex.internal.subscribers.BasicFuseableSubscriber.onComplete(BasicFuseableSubscriber.java:120)
+	at io.reactivex.internal.operators.flowable.FlowableSwitchMap$SwitchMapSubscriber.drain(FlowableSwitchMap.java:226)
+	at io.reactivex.internal.operators.flowable.FlowableSwitchMap$SwitchMapSubscriber.onComplete(FlowableSwitchMap.java:155)
+	at io.reactivex.internal.operators.flowable.FlowableSubscribeOn$SubscribeOnSubscriber.onComplete(FlowableSubscribeOn.java:108)
+	at io.reactivex.internal.operators.flowable.FlowableSwitchIfEmpty$SwitchIfEmptySubscriber.onComplete(FlowableSwitchIfEmpty.java:73)
+	at io.reactivex.internal.subscribers.BasicFuseableSubscriber.onComplete(BasicFuseableSubscriber.java:120)
+	at io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter.complete(FlowableCreate.java:267)
+	at io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter.onComplete(FlowableCreate.java:259)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1138)
+	at io.reactivex.internal.operators.flowable.FlowableCreate.subscribeActual(FlowableCreate.java:72)
+	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
+	at io.reactivex.internal.operators.flowable.FlowableMap.subscribeActual(FlowableMap.java:38)
+	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
+	at io.reactivex.internal.operators.flowable.FlowableSwitchIfEmpty.subscribeActual(FlowableSwitchIfEmpty.java:32)
+	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
+	at io.reactivex.Flowable.subscribe(Flowable.java:14295)
+	at io.reactivex.internal.operators.flowable.FlowableSubscribeOn$SubscribeOnSubscriber.run(FlowableSubscribeOn.java:82)
+	at io.reactivex.internal.schedulers.ExecutorScheduler$ExecutorWorker$BooleanRunnable.run(ExecutorScheduler.java:261)
+	at io.reactivex.internal.schedulers.ExecutorScheduler$ExecutorWorker.run(ExecutorScheduler.java:226)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+12:50:20.660 [pool-48-thread-1] ERROR i.n.u.c.D.rejectedExecution - Failed to submit a listener notification task. Event loop shut down?
+java.util.concurrent.RejectedExecutionException: event executor terminated
+	at io.netty.util.concurrent.SingleThreadEventExecutor.reject(SingleThreadEventExecutor.java:821)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.offerTask(SingleThreadEventExecutor.java:327)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.addTask(SingleThreadEventExecutor.java:320)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.execute(SingleThreadEventExecutor.java:746)
+	at io.netty.util.concurrent.DefaultPromise.safeExecute(DefaultPromise.java:760)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:428)
+	at io.netty.util.concurrent.DefaultPromise.addListener(DefaultPromise.java:163)
+	at io.netty.channel.DefaultChannelPromise.addListener(DefaultChannelPromise.java:93)
+	at io.netty.channel.DefaultChannelPromise.addListener(DefaultChannelPromise.java:28)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.writeFinalNettyResponse(RoutingInBoundHandler.java:1029)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.access$400(RoutingInBoundHandler.java:117)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler$3.onComplete(RoutingInBoundHandler.java:1013)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler$3.onComplete(RoutingInBoundHandler.java:1010)
+	at io.micronaut.http.server.netty.async.ContextCompletionAwareSubscriber.doOnComplete(ContextCompletionAwareSubscriber.java:72)
+	at io.micronaut.core.async.subscriber.CompletionAwareSubscriber.onComplete(CompletionAwareSubscriber.java:72)
+	at io.reactivex.internal.util.HalfSerializer.onComplete(HalfSerializer.java:91)
+	at io.reactivex.internal.subscribers.StrictSubscriber.onComplete(StrictSubscriber.java:109)
+	at io.reactivex.internal.subscribers.BasicFuseableSubscriber.onComplete(BasicFuseableSubscriber.java:120)
+	at io.reactivex.internal.operators.flowable.FlowableSwitchMap$SwitchMapSubscriber.drain(FlowableSwitchMap.java:226)
+	at io.reactivex.internal.operators.flowable.FlowableSwitchMap$SwitchMapSubscriber.onComplete(FlowableSwitchMap.java:155)
+	at io.reactivex.internal.operators.flowable.FlowableSubscribeOn$SubscribeOnSubscriber.onComplete(FlowableSubscribeOn.java:108)
+	at io.reactivex.internal.operators.flowable.FlowableSwitchIfEmpty$SwitchIfEmptySubscriber.onComplete(FlowableSwitchIfEmpty.java:73)
+	at io.reactivex.internal.subscribers.BasicFuseableSubscriber.onComplete(BasicFuseableSubscriber.java:120)
+	at io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter.complete(FlowableCreate.java:267)
+	at io.reactivex.internal.operators.flowable.FlowableCreate$BaseEmitter.onComplete(FlowableCreate.java:259)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1138)
+	at io.reactivex.internal.operators.flowable.FlowableCreate.subscribeActual(FlowableCreate.java:72)
+	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
+	at io.reactivex.internal.operators.flowable.FlowableMap.subscribeActual(FlowableMap.java:38)
+	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
+	at io.reactivex.internal.operators.flowable.FlowableSwitchIfEmpty.subscribeActual(FlowableSwitchIfEmpty.java:32)
+	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
+	at io.reactivex.Flowable.subscribe(Flowable.java:14295)
+	at io.reactivex.internal.operators.flowable.FlowableSubscribeOn$SubscribeOnSubscriber.run(FlowableSubscribeOn.java:82)
+	at io.reactivex.internal.schedulers.ExecutorScheduler$ExecutorWorker$BooleanRunnable.run(ExecutorScheduler.java:261)
+	at io.reactivex.internal.schedulers.ExecutorScheduler$ExecutorWorker.run(ExecutorScheduler.java:226)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
 </pre>
 </span>
 </div>
@@ -140,7 +225,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 11:32:24 AM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:50:22 PM</p>
 </div>
 </div>
 </body>

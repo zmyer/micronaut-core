@@ -29,7 +29,7 @@
 </td>
 <td>
 <div class="infoBox" id="failures">
-<div class="counter">1</div>
+<div class="counter">0</div>
 <p>failures</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.008s</div>
+<div class="counter">0.039s</div>
 <p>duration</p>
 </div>
 </td>
@@ -50,8 +50,8 @@
 </div>
 </td>
 <td>
-<div class="infoBox failures" id="successRate">
-<div class="percent">0%</div>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
 <p>successful</p>
 </div>
 </td>
@@ -61,94 +61,13 @@
 <div id="tabs">
 <ul class="tabLinks">
 <li>
-<a href="#tab0">Failed tests</a>
+<a href="#tab0">Tests</a>
 </li>
 <li>
-<a href="#tab1">Tests</a>
-</li>
-<li>
-<a href="#tab2">Standard output</a>
+<a href="#tab1">Standard output</a>
 </li>
 </ul>
 <div id="tab0" class="tab">
-<h2>Failed tests</h2>
-<div class="test">
-<a name="classMethod"></a>
-<h3 class="failures">classMethod</h3>
-<span class="code">
-<pre>io.micronaut.context.exceptions.BeanContextException: Error loading bean [io.micronaut.discovery.consul.client.v1.AbstractConsulClient$Intercepted]: null
-	at io.micronaut.context.DefaultBeanContext.lambda$findBeanCandidates$28(DefaultBeanContext.java:1043)
-	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
-	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
-	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:948)
-	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
-	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
-	at java.util.stream.ReduceOps$ReduceTask.doLeaf(ReduceOps.java:747)
-	at java.util.stream.ReduceOps$ReduceTask.doLeaf(ReduceOps.java:721)
-	at java.util.stream.AbstractTask.compute(AbstractTask.java:316)
-	at java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:731)
-	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
-	at java.util.concurrent.ForkJoinPool.helpComplete(ForkJoinPool.java:1870)
-	at java.util.concurrent.ForkJoinPool.awaitJoin(ForkJoinPool.java:2045)
-	at java.util.concurrent.ForkJoinTask.doInvoke(ForkJoinTask.java:404)
-	at java.util.concurrent.ForkJoinTask.invoke(ForkJoinTask.java:734)
-	at java.util.stream.ReduceOps$ReduceOp.evaluateParallel(ReduceOps.java:714)
-	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:233)
-	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
-	at io.micronaut.context.DefaultBeanContext.findBeanCandidates(DefaultBeanContext.java:1053)
-	at io.micronaut.context.DefaultApplicationContext.findBeanCandidates(DefaultApplicationContext.java:194)
-	at io.micronaut.context.DefaultBeanContext.findConcreteCandidateNoCache(DefaultBeanContext.java:1449)
-	at io.micronaut.context.DefaultBeanContext.containsBean(DefaultBeanContext.java:464)
-	at io.micronaut.context.BeanDefinitionRegistry.containsBean(BeanDefinitionRegistry.java:290)
-	at io.micronaut.context.RequiresCondition.matchesPresenceOfBeans(RequiresCondition.java:429)
-	at io.micronaut.context.RequiresCondition.processRequires(RequiresCondition.java:183)
-	at io.micronaut.context.RequiresCondition.matches(RequiresCondition.java:108)
-	at io.micronaut.context.AbstractBeanContextConditional.isEnabled(AbstractBeanContextConditional.java:53)
-	at io.micronaut.context.AbstractBeanDefinition.isEnabled(AbstractBeanDefinition.java:112)
-	at io.micronaut.context.DefaultBeanContext.lambda$findBeanCandidates$30(DefaultBeanContext.java:1052)
-	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:174)
-	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
-	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
-	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:948)
-	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
-	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
-	at java.util.stream.ReduceOps$ReduceTask.doLeaf(ReduceOps.java:747)
-	at java.util.stream.ReduceOps$ReduceTask.doLeaf(ReduceOps.java:721)
-	at java.util.stream.AbstractTask.compute(AbstractTask.java:316)
-	at java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:731)
-	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
-	at java.util.concurrent.ForkJoinPool$WorkQueue.execLocalTasks(ForkJoinPool.java:1040)
-	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1058)
-	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
-	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
-Caused by: java.lang.NullPointerException
-	at io.micronaut.inject.annotation.DefaultAnnotationMetadata.flushCache(DefaultAnnotationMetadata.java:632)
-	at io.micronaut.inject.annotation.DefaultAnnotationMetadata.configure(DefaultAnnotationMetadata.java:142)
-	at io.micronaut.context.AbstractBeanDefinition.lambda$configure$4(AbstractBeanDefinition.java:389)
-	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
-	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:948)
-	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
-	at java.util.stream.ForEachOps$ForEachTask.compute(ForEachOps.java:291)
-	at java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:731)
-	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
-	at java.util.concurrent.ForkJoinPool.helpComplete(ForkJoinPool.java:1870)
-	at java.util.concurrent.ForkJoinPool.awaitJoin(ForkJoinPool.java:2045)
-	at java.util.concurrent.ForkJoinTask.doInvoke(ForkJoinTask.java:404)
-	at java.util.concurrent.ForkJoinTask.invoke(ForkJoinTask.java:734)
-	at java.util.stream.ForEachOps$ForEachOp.evaluateParallel(ForEachOps.java:160)
-	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateParallel(ForEachOps.java:174)
-	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:233)
-	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
-	at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:583)
-	at io.micronaut.context.AbstractBeanDefinition.configure(AbstractBeanDefinition.java:386)
-	at io.micronaut.context.AbstractBeanDefinitionReference.load(AbstractBeanDefinitionReference.java:101)
-	at io.micronaut.context.DefaultBeanContext.lambda$findBeanCandidates$28(DefaultBeanContext.java:1041)
-	... 43 more
-</pre>
-</span>
-</div>
-</div>
-<div id="tab1" class="tab">
 <h2>Tests</h2>
 <table>
 <thead>
@@ -159,17 +78,134 @@ Caused by: java.lang.NullPointerException
 </tr>
 </thead>
 <tr>
-<td class="failures">classMethod</td>
-<td>0.008s</td>
-<td class="failures">failed</td>
+<td class="success">test discovery property sources from Consul with Properties file handling</td>
+<td>0.039s</td>
+<td class="success">passed</td>
 </tr>
 </table>
 </div>
-<div id="tab2" class="tab">
+<div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>12:02:27.060 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:02:27.074 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+<pre>12:49:12.448 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:49:12.451 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:49:12.506 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 52142
+12:49:12.511 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:49:12.516 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:49:12.566 [nioEventLoopGroup-35-2] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /v1/kv/%2Fconfig%2Fapplication?recurse=true
+12:49:12.566 [nioEventLoopGroup-35-2] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(52142)
+12:49:12.566 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:12.566 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:12.566 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:12.567 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:12.569 [nioEventLoopGroup-34-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:52142 Received Request: GET /v1/kv/%2Fconfig%2Fapplication?recurse=true
+12:49:12.569 [nioEventLoopGroup-34-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /v1/kv/%2Fconfig%2Fapplication
+12:49:12.570 [nioEventLoopGroup-34-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /v1/kv/%2Fconfig%2Fapplication to controller class io.micronaut.discovery.consul.MockConsulServer
+12:49:12.578 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /v1/kv/%2Fconfig%2Fapplication?recurse=true
+12:49:12.578 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:12.578 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:12.578 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - content-length: 2
+12:49:12.578 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:12.578 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:12.578 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:12.578 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - []
+12:49:12.578 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:12.582 [Test worker] INFO  i.m.d.c.c.DistributedPropertySourceLocator - Resolved 0 configuration sources from client: compositeConfigurationClient(consul)
+12:49:12.618 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 65046
+12:49:12.629 [nioEventLoopGroup-35-4] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: PUT /v1/kv/%2Fconfig%2Fapplication
+12:49:12.629 [nioEventLoopGroup-35-4] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(52142)
+12:49:12.630 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - Content-Type: text/plain
+12:49:12.630 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - Accept: text/plain
+12:49:12.630 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:12.630 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:12.630 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 63
+12:49:12.630 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:12.630 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:12.630 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - 
+datasource.url=mysql://blah
+datasource.driver=java.SomeDriver
+
+12:49:12.630 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:12.631 [nioEventLoopGroup-34-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:52142 Received Request: PUT /v1/kv/%2Fconfig%2Fapplication
+12:49:12.632 [nioEventLoopGroup-34-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route PUT - /v1/kv/%2Fconfig%2Fapplication
+12:49:12.632 [nioEventLoopGroup-34-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route PUT - /v1/kv/%2Fconfig%2Fapplication to controller class io.micronaut.discovery.consul.MockConsulServer
+12:49:12.636 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: PUT /v1/kv/%2Fconfig%2Fapplication
+12:49:12.636 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:12.636 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - content-type: text/plain
+12:49:12.636 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+12:49:12.637 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:12.637 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:12.637 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:12.637 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - true
+12:49:12.637 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:12.638 [nioEventLoopGroup-35-2] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: PUT /v1/kv/%2Fconfig%2Fapplication%2Ctest
+12:49:12.639 [nioEventLoopGroup-35-2] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(52142)
+12:49:12.639 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - Content-Type: text/plain
+12:49:12.639 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - Accept: text/plain
+12:49:12.639 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:12.639 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:12.639 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - content-length: 9
+12:49:12.639 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:12.639 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:12.639 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - 
+foo=bar
+
+12:49:12.639 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:12.641 [nioEventLoopGroup-34-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:52142 Received Request: PUT /v1/kv/%2Fconfig%2Fapplication%2Ctest
+12:49:12.641 [nioEventLoopGroup-34-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route PUT - /v1/kv/%2Fconfig%2Fapplication%2Ctest
+12:49:12.641 [nioEventLoopGroup-34-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route PUT - /v1/kv/%2Fconfig%2Fapplication%2Ctest to controller class io.micronaut.discovery.consul.MockConsulServer
+12:49:12.644 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: PUT /v1/kv/%2Fconfig%2Fapplication%2Ctest
+12:49:12.645 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:12.645 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - content-type: text/plain
+12:49:12.645 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+12:49:12.645 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:12.645 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:12.645 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:12.645 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - true
+12:49:12.645 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:12.646 [nioEventLoopGroup-35-4] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: PUT /v1/kv/%2Fconfig%2Fapplication%2Cother
+12:49:12.646 [nioEventLoopGroup-35-4] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(52142)
+12:49:12.646 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - Content-Type: text/plain
+12:49:12.646 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - Accept: text/plain
+12:49:12.646 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:12.646 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:12.646 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 10
+12:49:12.646 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:12.646 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:12.646 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - 
+foo=baz 
+
+12:49:12.646 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:12.648 [nioEventLoopGroup-34-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:52142 Received Request: PUT /v1/kv/%2Fconfig%2Fapplication%2Cother
+12:49:12.649 [nioEventLoopGroup-34-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route PUT - /v1/kv/%2Fconfig%2Fapplication%2Cother
+12:49:12.649 [nioEventLoopGroup-34-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route PUT - /v1/kv/%2Fconfig%2Fapplication%2Cother to controller class io.micronaut.discovery.consul.MockConsulServer
+12:49:12.651 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: PUT /v1/kv/%2Fconfig%2Fapplication%2Cother
+12:49:12.651 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:12.651 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - content-type: text/plain
+12:49:12.651 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+12:49:12.651 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:12.651 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:12.651 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:12.651 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - true
+12:49:12.651 [nioEventLoopGroup-35-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:12.653 [nioEventLoopGroup-35-2] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /v1/kv/%2Fconfig%2Fapplication?recurse=true
+12:49:12.653 [nioEventLoopGroup-35-2] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(52142)
+12:49:12.653 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:12.653 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:12.653 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:12.653 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:12.654 [nioEventLoopGroup-34-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:52142 Received Request: GET /v1/kv/%2Fconfig%2Fapplication?recurse=true
+12:49:12.654 [nioEventLoopGroup-34-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /v1/kv/%2Fconfig%2Fapplication
+12:49:12.654 [nioEventLoopGroup-34-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /v1/kv/%2Fconfig%2Fapplication to controller class io.micronaut.discovery.consul.MockConsulServer
+12:49:12.657 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /v1/kv/%2Fconfig%2Fapplication?recurse=true
+12:49:12.657 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:12.657 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:12.657 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - content-length: 244
+12:49:12.657 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:12.657 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:12.657 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:12.657 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - [{&quot;Key&quot;:&quot;config/application&quot;,&quot;Value&quot;:&quot;CmRhdGFzb3VyY2UudXJsPW15c3FsOi8vYmxhaApkYXRhc291cmNlLmRyaXZlcj1qYXZhLlNvbWVEcml2ZXIK&quot;},{&quot;Key&quot;:&quot;config/application,test&quot;,&quot;Value&quot;:&quot;CmZvbz1iYXIK&quot;},{&quot;Key&quot;:&quot;config/application,other&quot;,&quot;Value&quot;:&quot;CmZvbz1iYXogCg==&quot;}]
+12:49:12.657 [nioEventLoopGroup-35-2] TRACE i.m.http.client.DefaultHttpClient - ----
 </pre>
 </span>
 </div>
@@ -181,7 +217,7 @@ Caused by: java.lang.NullPointerException
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:02:29 PM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:49:24 PM</p>
 </div>
 </div>
 </body>

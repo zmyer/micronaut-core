@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">1.605s</div>
+<div class="counter">1.856s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,7 +79,7 @@
 </thead>
 <tr>
 <td class="success">test http client sender receives spans</td>
-<td>1.605s</td>
+<td>1.856s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -87,76 +87,76 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>12:51:11.744 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:11.748 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:12.131 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 32750
-12:51:12.229 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:12.232 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:12.333 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 9411
-12:51:12.557 [nioEventLoopGroup-3-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/nested/John
-12:51:12.558 [nioEventLoopGroup-3-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(32750)
-12:51:12.560 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: dc47ab53f1008cf2
-12:51:12.560 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: dc47ab53f1008cf2
-12:51:12.561 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
-12:51:12.561 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:51:12.561 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:12.572 [nioEventLoopGroup-3-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:32750 Received Request: GET /traced/nested/John
-12:51:12.575 [nioEventLoopGroup-3-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/nested/John
-12:51:12.596 [nioEventLoopGroup-3-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/nested/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
-12:51:12.705 [nioEventLoopGroup-3-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/hello/John
-12:51:12.707 [nioEventLoopGroup-3-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(32750)
-12:51:12.709 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: dc47ab53f1008cf2
-12:51:12.709 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: 7e2aa31086c69ff1
-12:51:12.711 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-ParentSpanId: dc47ab53f1008cf2
-12:51:12.711 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
-12:51:12.713 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:51:12.713 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:12.715 [nioEventLoopGroup-3-7] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:32750 Received Request: GET /traced/hello/John
-12:51:12.715 [nioEventLoopGroup-3-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/hello/John
-12:51:12.716 [nioEventLoopGroup-3-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/hello/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
-12:51:12.751 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/hello/John
-12:51:12.752 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-12:51:12.752 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:51:12.752 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
-12:51:12.753 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:12.753 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - Body
-12:51:12.753 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:12.753 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - John
-12:51:12.754 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:12.762 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/nested/John
-12:51:12.762 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-12:51:12.762 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:51:12.763 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
-12:51:12.763 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:12.763 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - Body
-12:51:12.763 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:12.763 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - John
-12:51:12.763 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:12.966 [multithreadEventLoopGroup-1-2] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: POST /api/v2/spans
-12:51:12.967 [multithreadEventLoopGroup-1-2] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(9411)
-12:51:12.968 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:51:12.968 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:12.968 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:51:12.968 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - transfer-encoding: chunked
-12:51:12.984 [nioEventLoopGroup-4-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:9411 Received Request: POST /api/v2/spans
-12:51:12.985 [nioEventLoopGroup-4-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route POST - /api/v2/spans
-12:51:12.988 [nioEventLoopGroup-4-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route POST - /api/v2/spans to controller class io.micronaut.tracing.brave.HttpClientSenderSpec$SpanController
-12:51:12.993 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - Stream Bytes Chunk. Length: 371
-12:51:12.997 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - Stream Bytes Chunk. Length: 262
-12:51:12.999 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - Stream Bytes Chunk. Length: 333
-12:51:13.001 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - Stream Bytes Chunk. Length: 199
-SPANS [[traceId:dc47ab53f1008cf2, parentId:dc47ab53f1008cf2, id:7e2aa31086c69ff1, kind:SERVER, name:get /traced/hello/{name}, timestamp:1527166272719044, duration:6608, localEndpoint:[serviceName:application, ipv4:10.20.1.58], remoteEndpoint:[ipv4:127.0.0.1], tags:[foo:bar, http.method:GET, http.path:/traced/hello/John], shared:true], [traceId:dc47ab53f1008cf2, parentId:dc47ab53f1008cf2, id:7e2aa31086c69ff1, kind:CLIENT, name:get /traced/hello/{name}, localEndpoint:[serviceName:application, ipv4:10.20.1.58], tags:[http.method:GET, http.path:/traced/hello/John]], [traceId:dc47ab53f1008cf2, id:dc47ab53f1008cf2, kind:SERVER, name:get /traced/nested/{name}, timestamp:1527166272624712, duration:134452, localEndpoint:[serviceName:application, ipv4:10.20.1.58], remoteEndpoint:[ipv4:127.0.0.1], tags:[http.method:GET, http.path:/traced/nested/John], shared:true], [traceId:dc47ab53f1008cf2, id:dc47ab53f1008cf2, kind:CLIENT, localEndpoint:[serviceName:application, ipv4:10.20.1.58], tags:[http.method:GET, http.path:/traced/nested/John]]]
-12:51:13.160 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: POST /api/v2/spans
-12:51:13.161 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-12:51:13.161 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:13.161 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - Body
-12:51:13.161 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:13.161 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - 
-12:51:13.161 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:13.298 [Test worker] WARN  c.n.c.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
-12:51:13.298 [Test worker] INFO  c.n.c.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
-12:51:13.335 [Test worker] WARN  c.n.c.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
-12:51:13.336 [Test worker] INFO  c.n.c.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+<pre>12:53:55.983 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:53:55.986 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:53:56.561 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 39182
+12:53:56.667 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:53:56.671 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:53:56.784 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 9411
+12:53:57.055 [nioEventLoopGroup-3-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/nested/John
+12:53:57.056 [nioEventLoopGroup-3-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(39182)
+12:53:57.058 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: e8da4c66001bb664
+12:53:57.059 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: e8da4c66001bb664
+12:53:57.059 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
+12:53:57.059 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:53:57.059 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:57.071 [nioEventLoopGroup-3-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:39182 Received Request: GET /traced/nested/John
+12:53:57.074 [nioEventLoopGroup-3-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/nested/John
+12:53:57.090 [nioEventLoopGroup-3-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/nested/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
+12:53:57.191 [nioEventLoopGroup-3-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/hello/John
+12:53:57.192 [nioEventLoopGroup-3-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(39182)
+12:53:57.193 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: e8da4c66001bb664
+12:53:57.193 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: 37cd440161c4b98e
+12:53:57.194 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-ParentSpanId: e8da4c66001bb664
+12:53:57.194 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
+12:53:57.195 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:53:57.195 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:57.201 [nioEventLoopGroup-3-7] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:39182 Received Request: GET /traced/hello/John
+12:53:57.202 [nioEventLoopGroup-3-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/hello/John
+12:53:57.202 [nioEventLoopGroup-3-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/hello/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
+12:53:57.238 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/hello/John
+12:53:57.239 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:53:57.240 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:53:57.240 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+12:53:57.241 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:57.241 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - Body
+12:53:57.242 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:57.242 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - John
+12:53:57.243 [nioEventLoopGroup-3-6] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:57.251 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/nested/John
+12:53:57.251 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:53:57.252 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:53:57.252 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+12:53:57.252 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:57.252 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:53:57.252 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:57.252 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - John
+12:53:57.252 [nioEventLoopGroup-3-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:57.385 [multithreadEventLoopGroup-1-2] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: POST /api/v2/spans
+12:53:57.386 [multithreadEventLoopGroup-1-2] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(9411)
+12:53:57.387 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:53:57.387 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:57.387 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:53:57.388 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - transfer-encoding: chunked
+12:53:57.393 [nioEventLoopGroup-4-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:9411 Received Request: POST /api/v2/spans
+12:53:57.397 [nioEventLoopGroup-4-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route POST - /api/v2/spans
+12:53:57.400 [nioEventLoopGroup-4-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route POST - /api/v2/spans to controller class io.micronaut.tracing.brave.HttpClientSenderSpec$SpanController
+12:53:57.412 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - Stream Bytes Chunk. Length: 371
+12:53:57.419 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - Stream Bytes Chunk. Length: 262
+12:53:57.420 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - Stream Bytes Chunk. Length: 333
+12:53:57.421 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - Stream Bytes Chunk. Length: 199
+SPANS [[traceId:e8da4c66001bb664, parentId:e8da4c66001bb664, id:37cd440161c4b98e, kind:SERVER, name:get /traced/hello/{name}, timestamp:1527857637202930, duration:7842, localEndpoint:[serviceName:application, ipv4:10.20.0.62], remoteEndpoint:[ipv4:127.0.0.1], tags:[foo:bar, http.method:GET, http.path:/traced/hello/John], shared:true], [traceId:e8da4c66001bb664, parentId:e8da4c66001bb664, id:37cd440161c4b98e, kind:CLIENT, name:get /traced/hello/{name}, localEndpoint:[serviceName:application, ipv4:10.20.0.62], tags:[http.method:GET, http.path:/traced/hello/John]], [traceId:e8da4c66001bb664, id:e8da4c66001bb664, kind:SERVER, name:get /traced/nested/{name}, timestamp:1527857637116643, duration:130392, localEndpoint:[serviceName:application, ipv4:10.20.0.62], remoteEndpoint:[ipv4:127.0.0.1], tags:[http.method:GET, http.path:/traced/nested/John], shared:true], [traceId:e8da4c66001bb664, id:e8da4c66001bb664, kind:CLIENT, localEndpoint:[serviceName:application, ipv4:10.20.0.62], tags:[http.method:GET, http.path:/traced/nested/John]]]
+12:53:57.580 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: POST /api/v2/spans
+12:53:57.580 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:53:57.580 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:57.580 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - Body
+12:53:57.580 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:57.580 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - 
+12:53:57.580 [multithreadEventLoopGroup-1-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:57.601 [Test worker] WARN  c.n.c.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+12:53:57.602 [Test worker] INFO  c.n.c.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+12:53:57.827 [Test worker] WARN  c.n.c.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+12:53:57.830 [Test worker] INFO  c.n.c.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
 </pre>
 </span>
 </div>
@@ -168,7 +168,7 @@ SPANS [[traceId:dc47ab53f1008cf2, parentId:dc47ab53f1008cf2, id:7e2aa31086c69ff1
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at May 24, 2018 12:51:15 PM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:54:00 PM</p>
 </div>
 </div>
 </body>

@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.168s</div>
+<div class="counter">0.776s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,22 +79,22 @@
 </thead>
 <tr>
 <td class="success">test global error handler</td>
-<td>0.092s</td>
+<td>0.502s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test retrieve person</td>
-<td>0.027s</td>
+<td>0.106s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test save person</td>
-<td>0.037s</td>
+<td>0.134s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test save person with args</td>
-<td>0.012s</td>
+<td>0.034s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -102,27 +102,27 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>12:53:58.331 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:53:58.333 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+<pre>12:56:50.398 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:56:50.417 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
 Executing fiveMinutesAfterLastExecution()
 Executing everyFiveMinutes()
-12:53:58.421 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 47994
-12:53:58.444 [multithreadEventLoopGroup-23-2] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /people/error
-12:53:58.457 [multithreadEventLoopGroup-23-2] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(47994)
-12:53:58.458 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:53:58.458 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:58.459 [nioEventLoopGroup-22-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:47994 Received Request: GET /people/error
-12:53:58.460 [nioEventLoopGroup-22-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /people/error
-12:53:58.460 [nioEventLoopGroup-22-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /people/error to controller class io.micronaut.docs.server.json.PersonController
-12:53:58.478 [nioEventLoopGroup-22-2] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: Something went wrong
+12:56:50.622 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 21725
+12:56:50.857 [multithreadEventLoopGroup-5-2] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /people/error
+12:56:50.858 [multithreadEventLoopGroup-5-2] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(21725)
+12:56:50.884 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:56:50.884 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:50.907 [nioEventLoopGroup-4-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:21725 Received Request: GET /people/error
+12:56:50.907 [nioEventLoopGroup-4-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /people/error
+12:56:50.909 [nioEventLoopGroup-4-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /people/error to controller class io.micronaut.docs.server.json.PersonController
+12:56:50.949 [nioEventLoopGroup-4-2] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: Something went wrong
 java.lang.RuntimeException: Something went wrong
 	at io.micronaut.docs.server.json.PersonController.throwError(PersonController.java:111)
 	at io.micronaut.docs.server.json.$PersonControllerDefinition$$exec8.invokeInternal(Unknown Source)
 	at io.micronaut.context.AbstractExecutableMethod.invoke(AbstractExecutableMethod.java:126)
-	at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:1951)
-	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:234)
+	at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:1964)
+	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:232)
 	at io.micronaut.web.router.RouteMatch.execute(RouteMatch.java:123)
-	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1125)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1126)
 	at io.reactivex.internal.operators.flowable.FlowableCreate.subscribeActual(FlowableCreate.java:72)
 	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
 	at io.reactivex.internal.operators.flowable.FlowableMap.subscribeActual(FlowableMap.java:38)
@@ -133,113 +133,98 @@ java.lang.RuntimeException: Something went wrong
 	at io.reactivex.internal.operators.flowable.FlowableSubscribeOn$SubscribeOnSubscriber.run(FlowableSubscribeOn.java:82)
 	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
 	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
 	at io.reactivex.internal.schedulers.ExecutorScheduler$ExecutorWorker$BooleanRunnable.run(ExecutorScheduler.java:261)
 	at io.reactivex.internal.schedulers.ExecutorScheduler$ExecutorWorker.run(ExecutorScheduler.java:226)
+	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
 	at java.lang.Thread.run(Thread.java:748)
-12:53:58.479 [nioEventLoopGroup-22-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Found matching exception handler for exception [Something went wrong]:  java.lang.Throwable -&gt; PersonController#HttpResponse error(HttpRequest request,Throwable e)
-12:53:58.493 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /people/error
-12:53:58.493 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - Status Code: 500 Internal Server Error
-12:53:58.493 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:53:58.493 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - content-length: 116
-12:53:58.493 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:58.493 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - Body
-12:53:58.493 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:58.493 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - {&quot;_links&quot;:{&quot;self&quot;:{&quot;href&quot;:&quot;/people/error&quot;,&quot;templated&quot;:false}},&quot;message&quot;:&quot;Bad Things Happened: Something went wrong&quot;}
-12:53:58.493 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:58.542 [multithreadEventLoopGroup-23-4] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: POST /people
-12:53:58.542 [multithreadEventLoopGroup-23-4] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(47994)
-12:53:58.543 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:53:58.543 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:58.543 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:53:58.545 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 53
-12:53:58.547 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - Body
-12:53:58.549 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:58.549 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - {&quot;firstName&quot;:&quot;Fred&quot;,&quot;lastName&quot;:&quot;Flintstone&quot;,&quot;age&quot;:45}
-12:53:58.549 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:58.553 [nioEventLoopGroup-22-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:47994 Received Request: POST /people
-12:53:58.554 [nioEventLoopGroup-22-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route POST - /people
-12:53:58.554 [nioEventLoopGroup-22-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route POST - /people to controller class io.micronaut.docs.server.json.PersonController
-12:53:58.565 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: POST /people
-12:53:58.566 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - Status Code: 201 Created
-12:53:58.566 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:53:58.566 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 53
-12:53:58.566 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:58.566 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - Body
-12:53:58.566 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:58.566 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - {&quot;firstName&quot;:&quot;Fred&quot;,&quot;lastName&quot;:&quot;Flintstone&quot;,&quot;age&quot;:45}
-12:53:58.566 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:58.568 [multithreadEventLoopGroup-23-2] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /people/Fred
-12:53:58.569 [multithreadEventLoopGroup-23-2] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(47994)
-12:53:58.569 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:53:58.569 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:58.570 [nioEventLoopGroup-22-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:47994 Received Request: GET /people/Fred
-12:53:58.570 [nioEventLoopGroup-22-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /people/Fred
-12:53:58.571 [nioEventLoopGroup-22-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /people/Fred to controller class io.micronaut.docs.server.json.PersonController
-12:53:58.575 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /people/Fred
-12:53:58.575 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-12:53:58.575 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:53:58.575 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - content-length: 53
-12:53:58.575 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:58.575 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - Body
-12:53:58.575 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:58.575 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - {&quot;firstName&quot;:&quot;Fred&quot;,&quot;lastName&quot;:&quot;Flintstone&quot;,&quot;age&quot;:45}
-12:53:58.575 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:58.584 [multithreadEventLoopGroup-23-4] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /people/Barney
-12:53:58.584 [multithreadEventLoopGroup-23-4] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(47994)
-12:53:58.584 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:53:58.584 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:58.586 [nioEventLoopGroup-22-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:47994 Received Request: GET /people/Barney
-12:53:58.586 [nioEventLoopGroup-22-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /people/Barney
-12:53:58.586 [nioEventLoopGroup-22-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /people/Barney to controller class io.micronaut.docs.server.json.PersonController
-12:53:58.588 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /people/Barney
-12:53:58.588 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - Status Code: 404 Not Found
-12:53:58.588 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:53:58.588 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 90
-12:53:58.588 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:58.588 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - Body
-12:53:58.588 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:58.589 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - {&quot;_links&quot;:{&quot;self&quot;:{&quot;href&quot;:&quot;/people/Barney&quot;,&quot;templated&quot;:false}},&quot;message&quot;:&quot;Page Not Found&quot;}
-12:53:58.589 [multithreadEventLoopGroup-23-4] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:58.596 [multithreadEventLoopGroup-23-2] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: POST /people/saveWithArgs
-12:53:58.596 [multithreadEventLoopGroup-23-2] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(47994)
-12:53:58.596 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:53:58.596 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:58.596 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:53:58.596 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - content-length: 53
-12:53:58.596 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - Body
-12:53:58.596 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:58.596 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - {&quot;firstName&quot;:&quot;Fred&quot;,&quot;lastName&quot;:&quot;Flintstone&quot;,&quot;age&quot;:45}
-12:53:58.596 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:58.597 [nioEventLoopGroup-22-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:47994 Received Request: POST /people/saveWithArgs
-12:53:58.597 [nioEventLoopGroup-22-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route POST - /people/saveWithArgs
-12:53:58.598 [nioEventLoopGroup-22-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route POST - /people/saveWithArgs to controller class io.micronaut.docs.server.json.PersonController
-12:53:58.604 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: POST /people/saveWithArgs
-12:53:58.604 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - Status Code: 201 Created
-12:53:58.604 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:53:58.604 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - content-length: 53
-12:53:58.604 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:58.604 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - Body
-12:53:58.604 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:58.604 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - {&quot;firstName&quot;:&quot;Fred&quot;,&quot;lastName&quot;:&quot;Flintstone&quot;,&quot;age&quot;:45}
-12:53:58.604 [multithreadEventLoopGroup-23-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:50.979 [nioEventLoopGroup-4-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Found matching exception handler for exception [Something went wrong]:  java.lang.Throwable -&gt; PersonController#HttpResponse error(HttpRequest request,Throwable e)
+12:56:51.071 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /people/error
+12:56:51.071 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - Status Code: 500 Internal Server Error
+12:56:51.071 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:56:51.071 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - content-length: 116
+12:56:51.071 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:51.071 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - Body
+12:56:51.071 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:51.072 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - {&quot;_links&quot;:{&quot;self&quot;:{&quot;href&quot;:&quot;/people/error&quot;,&quot;templated&quot;:false}},&quot;message&quot;:&quot;Bad Things Happened: Something went wrong&quot;}
+12:56:51.089 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:51.222 [multithreadEventLoopGroup-5-4] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: POST /people
+12:56:51.222 [multithreadEventLoopGroup-5-4] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(21725)
+12:56:51.223 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:56:51.223 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:51.223 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:56:51.223 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 53
+12:56:51.223 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - Body
+12:56:51.231 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:51.232 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - {&quot;firstName&quot;:&quot;Fred&quot;,&quot;lastName&quot;:&quot;Flintstone&quot;,&quot;age&quot;:45}
+12:56:51.232 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:51.260 [nioEventLoopGroup-4-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:21725 Received Request: POST /people
+12:56:51.261 [nioEventLoopGroup-4-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route POST - /people
+12:56:51.265 [nioEventLoopGroup-4-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route POST - /people to controller class io.micronaut.docs.server.json.PersonController
+12:56:51.320 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: POST /people
+12:56:51.320 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - Status Code: 201 Created
+12:56:51.320 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:56:51.320 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 53
+12:56:51.320 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:51.320 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - Body
+12:56:51.320 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:51.320 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - {&quot;firstName&quot;:&quot;Fred&quot;,&quot;lastName&quot;:&quot;Flintstone&quot;,&quot;age&quot;:45}
+12:56:51.321 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:51.359 [multithreadEventLoopGroup-5-2] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /people/Fred
+12:56:51.360 [multithreadEventLoopGroup-5-2] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(21725)
+12:56:51.360 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:56:51.360 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:51.372 [nioEventLoopGroup-4-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:21725 Received Request: GET /people/Fred
+12:56:51.372 [nioEventLoopGroup-4-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /people/Fred
+12:56:51.373 [nioEventLoopGroup-4-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /people/Fred to controller class io.micronaut.docs.server.json.PersonController
+12:56:51.384 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /people/Fred
+12:56:51.384 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:56:51.384 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:56:51.384 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - content-length: 53
+12:56:51.384 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:51.384 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - Body
+12:56:51.384 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:51.384 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - {&quot;firstName&quot;:&quot;Fred&quot;,&quot;lastName&quot;:&quot;Flintstone&quot;,&quot;age&quot;:45}
+12:56:51.384 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:51.425 [multithreadEventLoopGroup-5-4] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /people/Barney
+12:56:51.425 [multithreadEventLoopGroup-5-4] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(21725)
+12:56:51.425 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:56:51.425 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:51.438 [nioEventLoopGroup-4-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:21725 Received Request: GET /people/Barney
+12:56:51.438 [nioEventLoopGroup-4-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /people/Barney
+12:56:51.438 [nioEventLoopGroup-4-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /people/Barney to controller class io.micronaut.docs.server.json.PersonController
+12:56:51.443 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /people/Barney
+12:56:51.443 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - Status Code: 404 Not Found
+12:56:51.443 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:56:51.443 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 90
+12:56:51.443 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:51.443 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - Body
+12:56:51.443 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:51.443 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - {&quot;_links&quot;:{&quot;self&quot;:{&quot;href&quot;:&quot;/people/Barney&quot;,&quot;templated&quot;:false}},&quot;message&quot;:&quot;Page Not Found&quot;}
+12:56:51.443 [multithreadEventLoopGroup-5-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:51.455 [multithreadEventLoopGroup-5-2] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: POST /people/saveWithArgs
+12:56:51.455 [multithreadEventLoopGroup-5-2] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(21725)
+12:56:51.456 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:56:51.456 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:51.456 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:56:51.456 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - content-length: 53
+12:56:51.456 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - Body
+12:56:51.456 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:51.456 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - {&quot;firstName&quot;:&quot;Fred&quot;,&quot;lastName&quot;:&quot;Flintstone&quot;,&quot;age&quot;:45}
+12:56:51.456 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:51.459 [nioEventLoopGroup-4-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:21725 Received Request: POST /people/saveWithArgs
+12:56:51.459 [nioEventLoopGroup-4-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route POST - /people/saveWithArgs
+12:56:51.460 [nioEventLoopGroup-4-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route POST - /people/saveWithArgs to controller class io.micronaut.docs.server.json.PersonController
+12:56:51.484 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: POST /people/saveWithArgs
+12:56:51.485 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - Status Code: 201 Created
+12:56:51.485 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:56:51.485 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - content-length: 53
+12:56:51.485 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:51.485 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - Body
+12:56:51.485 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:51.485 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - {&quot;firstName&quot;:&quot;Fred&quot;,&quot;lastName&quot;:&quot;Flintstone&quot;,&quot;age&quot;:45}
+12:56:51.485 [multithreadEventLoopGroup-5-2] TRACE i.m.http.client.DefaultHttpClient - ----
 </pre>
 </span>
 </div>
@@ -251,7 +236,7 @@ java.lang.RuntimeException: Something went wrong
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at May 24, 2018 12:54:03 PM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:57:04 PM</p>
 </div>
 </div>
 </body>

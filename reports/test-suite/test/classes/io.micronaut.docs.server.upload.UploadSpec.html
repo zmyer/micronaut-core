@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.171s</div>
+<div class="counter">0.744s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,17 +79,17 @@
 </thead>
 <tr>
 <td class="success">test completed file upload</td>
-<td>0.030s</td>
+<td>0.065s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test file bytes upload</td>
-<td>0.023s</td>
+<td>0.040s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test file upload</td>
-<td>0.118s</td>
+<td>0.639s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -97,81 +97,69 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>12:53:52.798 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:53:52.800 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:53:52.970 [Test worker] INFO  i.m.c.h.g.HibernateDatastoreFactory - Starting GORM for Hibernate
-12:53:54.043 [Test worker] INFO  org.hibernate.Version - HHH000412: Hibernate Core {5.1.9.Final}
-12:53:54.044 [Test worker] INFO  org.hibernate.cfg.Environment - HHH000206: hibernate.properties not found
-12:53:54.046 [Test worker] INFO  org.hibernate.cfg.Environment - HHH000021: Bytecode provider name : javassist
-12:53:54.116 [Test worker] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.0.2.Final
-12:53:54.153 [Test worker] INFO  o.h.v.i.engine.ConfigurationImpl - HV000002: Ignoring XML configuration.
-12:53:54.393 [Test worker] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
-12:53:54.515 [Test worker] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
-12:53:55.487 [Test worker] INFO  o.g.o.h.GrailsHibernateTransactionManager - Using DataSource [org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy@511b2210] of Hibernate SessionFactory for HibernateTransactionManager
-12:53:55.515 [Test worker] INFO  o.h.v.i.engine.ConfigurationImpl - HV000002: Ignoring XML configuration.
-12:53:56.138 [Test worker] INFO  o.s.b.f.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [org/springframework/jdbc/support/sql-error-codes.xml]
-12:53:56.243 [Test worker] INFO  o.s.j.support.SQLErrorCodesFactory - SQLErrorCodes loaded: [DB2, Derby, H2, HSQL, Informix, MS-SQL, MySQL, Oracle, PostgreSQL, Sybase, Hana]
+<pre>12:56:40.456 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:56:40.475 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
 Executing everyFiveMinutes()
 Executing fiveMinutesAfterLastExecution()
-12:53:56.335 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 47852
-12:53:56.392 [nioEventLoopGroup-14-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: POST /upload
-12:53:56.394 [nioEventLoopGroup-14-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(47852)
-12:53:56.402 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - Accept: text/plain
-12:53:56.403 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - content-type: multipart/form-data; boundary=e7a7fa7a4784c9da
-12:53:56.403 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:53:56.403 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:56.404 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - transfer-encoding: chunked
-12:53:56.410 [nioEventLoopGroup-14-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:47852 Received Request: POST /upload
-12:53:56.411 [nioEventLoopGroup-14-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route POST - /upload
-12:53:56.412 [nioEventLoopGroup-14-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route POST - /upload to controller class io.micronaut.docs.server.upload.UploadController
-12:53:56.447 [pool-13-thread-5] DEBUG i.m.h.s.n.m.NettyStreamingFileUpload - Transferring file file.json to location /tmp/file.json5129624639381849840temp
-12:53:56.456 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: POST /upload
-12:53:56.456 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-12:53:56.456 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:53:56.456 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 8
-12:53:56.456 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:56.456 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - Body
-12:53:56.456 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:56.456 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - Uploaded
-12:53:56.456 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:56.485 [nioEventLoopGroup-14-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: POST /upload/completed
-12:53:56.486 [nioEventLoopGroup-14-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(47852)
-12:53:56.487 [nioEventLoopGroup-14-6] TRACE i.m.http.client.DefaultHttpClient - Accept: text/plain
-12:53:56.487 [nioEventLoopGroup-14-6] TRACE i.m.http.client.DefaultHttpClient - content-type: multipart/form-data; boundary=ea5fb4f6c6471948
-12:53:56.487 [nioEventLoopGroup-14-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:53:56.487 [nioEventLoopGroup-14-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:56.487 [nioEventLoopGroup-14-6] TRACE i.m.http.client.DefaultHttpClient - transfer-encoding: chunked
-12:53:56.488 [nioEventLoopGroup-14-7] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:47852 Received Request: POST /upload/completed
-12:53:56.489 [nioEventLoopGroup-14-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route POST - /upload/completed
-12:53:56.489 [nioEventLoopGroup-14-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route POST - /upload/completed to controller class io.micronaut.docs.server.upload.UploadController
-12:53:56.495 [nioEventLoopGroup-14-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: POST /upload/completed
-12:53:56.496 [nioEventLoopGroup-14-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-12:53:56.496 [nioEventLoopGroup-14-6] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:53:56.496 [nioEventLoopGroup-14-6] TRACE i.m.http.client.DefaultHttpClient - content-length: 8
-12:53:56.496 [nioEventLoopGroup-14-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:56.496 [nioEventLoopGroup-14-6] TRACE i.m.http.client.DefaultHttpClient - Body
-12:53:56.496 [nioEventLoopGroup-14-6] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:56.496 [nioEventLoopGroup-14-6] TRACE i.m.http.client.DefaultHttpClient - Uploaded
-12:53:56.496 [nioEventLoopGroup-14-6] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:56.510 [nioEventLoopGroup-14-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: POST /upload/bytes
-12:53:56.511 [nioEventLoopGroup-14-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(47852)
-12:53:56.511 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - Accept: text/plain
-12:53:56.511 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - content-type: multipart/form-data; boundary=86dc2311ce0f0afb
-12:53:56.511 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:53:56.512 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:56.512 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - transfer-encoding: chunked
-12:53:56.513 [nioEventLoopGroup-14-8] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:47852 Received Request: POST /upload/bytes
-12:53:56.514 [nioEventLoopGroup-14-8] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route POST - /upload/bytes
-12:53:56.514 [nioEventLoopGroup-14-8] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route POST - /upload/bytes to controller class io.micronaut.docs.server.upload.UploadController
-12:53:56.518 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: POST /upload/bytes
-12:53:56.518 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-12:53:56.518 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:53:56.518 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 8
-12:53:56.518 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:53:56.518 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - Body
-12:53:56.518 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - ----
-12:53:56.519 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - Uploaded
-12:53:56.519 [nioEventLoopGroup-14-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:42.328 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 10115
+12:56:43.078 [nioEventLoopGroup-1-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: POST /upload
+12:56:43.079 [nioEventLoopGroup-1-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(10115)
+12:56:43.099 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - Accept: text/plain
+12:56:43.104 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - content-type: multipart/form-data; boundary=ea864e692ac38b9f
+12:56:43.104 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:56:43.105 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:43.105 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - transfer-encoding: chunked
+12:56:43.173 [nioEventLoopGroup-1-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:10115 Received Request: POST /upload
+12:56:43.185 [nioEventLoopGroup-1-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route POST - /upload
+12:56:43.200 [nioEventLoopGroup-1-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route POST - /upload to controller class io.micronaut.docs.server.upload.UploadController
+12:56:43.298 [pool-1-thread-5] DEBUG i.m.h.s.n.m.NettyStreamingFileUpload - Transferring file file.json to location /tmp/file.json6873789932950502928temp
+12:56:43.336 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: POST /upload
+12:56:43.336 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:56:43.337 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:56:43.337 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 8
+12:56:43.337 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:43.337 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:56:43.337 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:43.337 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - Uploaded
+12:56:43.337 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:43.435 [nioEventLoopGroup-1-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: POST /upload/completed
+12:56:43.435 [nioEventLoopGroup-1-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(10115)
+12:56:43.436 [nioEventLoopGroup-1-6] TRACE i.m.http.client.DefaultHttpClient - Accept: text/plain
+12:56:43.436 [nioEventLoopGroup-1-6] TRACE i.m.http.client.DefaultHttpClient - content-type: multipart/form-data; boundary=f8a78e0c9160cf37
+12:56:43.436 [nioEventLoopGroup-1-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:56:43.436 [nioEventLoopGroup-1-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:43.436 [nioEventLoopGroup-1-6] TRACE i.m.http.client.DefaultHttpClient - transfer-encoding: chunked
+12:56:43.451 [nioEventLoopGroup-1-7] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:10115 Received Request: POST /upload/completed
+12:56:43.452 [nioEventLoopGroup-1-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route POST - /upload/completed
+12:56:43.455 [nioEventLoopGroup-1-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route POST - /upload/completed to controller class io.micronaut.docs.server.upload.UploadController
+12:56:43.480 [nioEventLoopGroup-1-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: POST /upload/completed
+12:56:43.480 [nioEventLoopGroup-1-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:56:43.480 [nioEventLoopGroup-1-6] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:56:43.480 [nioEventLoopGroup-1-6] TRACE i.m.http.client.DefaultHttpClient - content-length: 8
+12:56:43.480 [nioEventLoopGroup-1-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:43.481 [nioEventLoopGroup-1-6] TRACE i.m.http.client.DefaultHttpClient - Body
+12:56:43.481 [nioEventLoopGroup-1-6] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:43.481 [nioEventLoopGroup-1-6] TRACE i.m.http.client.DefaultHttpClient - Uploaded
+12:56:43.481 [nioEventLoopGroup-1-6] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:43.491 [nioEventLoopGroup-1-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: POST /upload/bytes
+12:56:43.491 [nioEventLoopGroup-1-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(10115)
+12:56:43.492 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - Accept: text/plain
+12:56:43.492 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - content-type: multipart/form-data; boundary=50609d9bc49e87d3
+12:56:43.492 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:56:43.492 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:43.492 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - transfer-encoding: chunked
+12:56:43.498 [nioEventLoopGroup-1-8] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:10115 Received Request: POST /upload/bytes
+12:56:43.499 [nioEventLoopGroup-1-8] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route POST - /upload/bytes
+12:56:43.500 [nioEventLoopGroup-1-8] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route POST - /upload/bytes to controller class io.micronaut.docs.server.upload.UploadController
+12:56:43.520 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: POST /upload/bytes
+12:56:43.521 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:56:43.521 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:56:43.521 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 8
+12:56:43.521 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:56:43.521 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:56:43.521 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:56:43.521 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - Uploaded
+12:56:43.521 [nioEventLoopGroup-1-3] TRACE i.m.http.client.DefaultHttpClient - ----
 </pre>
 </span>
 </div>
@@ -183,7 +171,7 @@ Executing fiveMinutesAfterLastExecution()
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at May 24, 2018 12:54:03 PM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:57:04 PM</p>
 </div>
 </div>
 </body>

@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.191s</div>
+<div class="counter">0.054s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,12 +79,12 @@
 </thead>
 <tr>
 <td class="success">test accessing a non sensitive endpoint without authentication</td>
-<td>0.147s</td>
+<td>0.041s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test accessing a sensitive endpoint without authentication</td>
-<td>0.044s</td>
+<td>0.013s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -92,46 +92,8 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>11:35:26.157 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-11:35:26.181 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-11:35:26.212 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@57e67ed8]
-11:35:26.243 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@fe59939]
-11:35:26.292 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 23842
-11:35:26.314 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerStartupEvent[source=io.micronaut.http.server.netty.NettyHttpServer@54594084]
-11:35:26.379 [nioEventLoopGroup-15-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /non-sensitive
-11:35:26.380 [nioEventLoopGroup-15-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(23842)
-11:35:26.380 [nioEventLoopGroup-15-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-11:35:26.380 [nioEventLoopGroup-15-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-11:35:26.399 [nioEventLoopGroup-15-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:23842 Received Request: GET /non-sensitive
-11:35:26.399 [nioEventLoopGroup-15-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /non-sensitive
-11:35:26.399 [nioEventLoopGroup-15-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /non-sensitive to controller class io.micronaut.security.authorization.NonSensitiveEndpoint
-11:35:26.466 [nioEventLoopGroup-15-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /non-sensitive
-11:35:26.466 [nioEventLoopGroup-15-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-11:35:26.466 [nioEventLoopGroup-15-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-11:35:26.466 [nioEventLoopGroup-15-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 13
-11:35:26.466 [nioEventLoopGroup-15-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-11:35:26.466 [nioEventLoopGroup-15-3] TRACE i.m.http.client.DefaultHttpClient - Body
-11:35:26.466 [nioEventLoopGroup-15-3] TRACE i.m.http.client.DefaultHttpClient - ----
-11:35:26.466 [nioEventLoopGroup-15-3] TRACE i.m.http.client.DefaultHttpClient - Not logged in
-11:35:26.466 [nioEventLoopGroup-15-3] TRACE i.m.http.client.DefaultHttpClient - ----
-11:35:26.483 [nioEventLoopGroup-15-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /sensitive
-11:35:26.483 [nioEventLoopGroup-15-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(23842)
-11:35:26.484 [nioEventLoopGroup-15-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-11:35:26.484 [nioEventLoopGroup-15-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
-11:35:26.500 [nioEventLoopGroup-15-7] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:23842 Received Request: GET /sensitive
-11:35:26.501 [nioEventLoopGroup-15-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /sensitive
-11:35:26.501 [nioEventLoopGroup-15-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /sensitive to controller class io.micronaut.security.authorization.SensitiveEndpoint
-11:35:26.510 [nioEventLoopGroup-15-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /sensitive
-11:35:26.510 [nioEventLoopGroup-15-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 401 Unauthorized
-11:35:26.510 [nioEventLoopGroup-15-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
-11:35:26.510 [nioEventLoopGroup-15-6] TRACE i.m.http.client.DefaultHttpClient - Body
-11:35:26.510 [nioEventLoopGroup-15-6] TRACE i.m.http.client.DefaultHttpClient - ----
-11:35:26.510 [nioEventLoopGroup-15-6] TRACE i.m.http.client.DefaultHttpClient - 
-11:35:26.510 [nioEventLoopGroup-15-6] TRACE i.m.http.client.DefaultHttpClient - ----
-11:35:26.510 [nioEventLoopGroup-15-6] TRACE i.m.http.client.DefaultHttpClient - Full HTTP response received an empty body
-11:35:26.510 [nioEventLoopGroup-15-6] TRACE i.m.http.client.DefaultHttpClient - Unable to convert response body to target type class java.lang.String
-11:35:26.621 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerShutdownEvent[source=io.micronaut.http.server.netty.NettyHttpServer@54594084]
-11:35:26.621 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@fe59939]
+<pre>12:53:16.460 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:53:16.463 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
 </pre>
 </span>
 </div>
@@ -143,7 +105,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 11:35:33 AM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:53:18 PM</p>
 </div>
 </div>
 </body>

@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">1.508s</div>
+<div class="counter">1.564s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,17 +79,17 @@
 </thead>
 <tr>
 <td class="success">test multiple cluster connections</td>
-<td>0.065s</td>
+<td>0.116s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test no configuration</td>
-<td>0.756s</td>
+<td>0.731s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test single cluster connection</td>
-<td>0.687s</td>
+<td>0.717s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -97,280 +97,289 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>12:51:22.954 [Test worker] INFO io.micronaut.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:22.991 [Test worker] INFO io.micronaut.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:23.003 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.yaml.YamlPropertySourceLoader@1f0e0742
-12:51:23.010 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.PropertiesPropertySourceLoader@265de1e2
-12:51:23.017 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
-12:51:23.020 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
-12:51:23.023 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.DefaultApplicationContext$BootstrapEnvironment@272cfe5e
-12:51:23.027 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for instance: io.micronaut.context.DefaultApplicationContext$BootstrapEnvironment@272cfe5e
-12:51:23.030 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
-12:51:23.105 [Test worker] DEBUG com.datastax.driver.core.SystemProperties - com.datastax.driver.NEW_NODE_DELAY_SECONDS is undefined, using default value 1
-12:51:23.105 [Test worker] DEBUG com.datastax.driver.core.SystemProperties - com.datastax.driver.NON_BLOCKING_EXECUTOR_SIZE is undefined, using default value 2
-12:51:23.107 [Test worker] DEBUG com.datastax.driver.core.SystemProperties - com.datastax.driver.NOTIF_LOCK_TIMEOUT_SECONDS is undefined, using default value 60
-12:51:23.129 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.configuration.cassandra
-12:51:23.129 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
-12:51:23.130 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
-12:51:23.132 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
-12:51:23.133 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.event.ApplicationEventListener
-12:51:23.134 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-12:51:23.146 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-12:51:23.148 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.env.BootstrapPropertySourceLocator
-12:51:23.148 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.env.BootstrapPropertySourceLocator
-12:51:23.150 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.yaml.YamlPropertySourceLoader@68a71b5f
-12:51:23.151 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.PropertiesPropertySourceLoader@7cab6788
-12:51:23.152 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
-12:51:23.153 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
-12:51:23.155 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
-12:51:23.162 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
-12:51:23.165 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
-12:51:23.166 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
-12:51:23.170 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.DefaultApplicationContext$RuntimeConfiguredEnvironment@5e96f498
-12:51:23.170 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for instance: io.micronaut.context.DefaultApplicationContext$RuntimeConfiguredEnvironment@5e96f498
-12:51:23.171 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.ExecutableMethodProcessorListener@38fd3b3e
-12:51:23.173 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for instance: io.micronaut.context.ExecutableMethodProcessorListener@38fd3b3e
-12:51:23.181 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
-12:51:23.182 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: io.micronaut.core.convert.TypeConverter
-12:51:23.182 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.core.convert.TypeConverter
-12:51:23.183 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.core.convert.TypeConverter
-12:51:23.183 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: io.micronaut.core.convert.TypeConverterRegistrar
-12:51:23.184 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.core.convert.TypeConverterRegistrar
-12:51:23.184 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.core.convert.TypeConverterRegistrar
-12:51:23.184 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.configuration.cassandra
-12:51:23.184 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
-12:51:23.185 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
-12:51:23.185 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
-12:51:23.185 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.event.ApplicationEventListener
-12:51:23.185 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-12:51:23.186 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-12:51:23.187 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.194 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.202 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: []
-12:51:23.205 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class com.datastax.driver.core.Cluster
-12:51:23.207 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: class com.datastax.driver.core.Cluster
-12:51:23.208 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.209 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.209 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: []
-12:51:23.209 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: []
-12:51:23.210 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Stopping BeanContext
-12:51:23.212 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;ShutdownEvent&gt; io.micronaut.context.event.ApplicationEventListener 
-12:51:23.213 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;ShutdownEvent&gt; 
-12:51:23.213 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;ShutdownEvent&gt; 
-12:51:23.228 [Test worker] INFO io.micronaut.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:23.250 [Test worker] INFO io.micronaut.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:23.252 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.yaml.YamlPropertySourceLoader@589cb71f
-12:51:23.253 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.PropertiesPropertySourceLoader@5f742e33
-12:51:23.254 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
-12:51:23.255 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
-12:51:23.255 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
-12:51:23.255 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
-12:51:23.256 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
-12:51:23.256 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.DefaultApplicationContext$BootstrapEnvironment@366013d7
-12:51:23.257 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for instance: io.micronaut.context.DefaultApplicationContext$BootstrapEnvironment@366013d7
-12:51:23.257 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
-12:51:23.259 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.configuration.cassandra
-12:51:23.259 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
-12:51:23.259 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
-12:51:23.259 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
-12:51:23.260 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.event.ApplicationEventListener
-12:51:23.260 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-12:51:23.260 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-12:51:23.261 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.env.BootstrapPropertySourceLocator
-12:51:23.261 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.env.BootstrapPropertySourceLocator
-12:51:23.262 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.yaml.YamlPropertySourceLoader@ce9e5bc
-12:51:23.263 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.PropertiesPropertySourceLoader@6e8f982b
-12:51:23.264 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
-12:51:23.264 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
-12:51:23.265 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
-12:51:23.265 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
-12:51:23.266 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
-12:51:23.267 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
-12:51:23.267 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
-12:51:23.267 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
-12:51:23.268 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
-12:51:23.268 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.DefaultApplicationContext$RuntimeConfiguredEnvironment@7aa5f7ac
-12:51:23.268 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for instance: io.micronaut.context.DefaultApplicationContext$RuntimeConfiguredEnvironment@7aa5f7ac
-12:51:23.269 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.ExecutableMethodProcessorListener@4d8f626b
-12:51:23.269 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for instance: io.micronaut.context.ExecutableMethodProcessorListener@4d8f626b
-12:51:23.269 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
-12:51:23.270 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: io.micronaut.core.convert.TypeConverter
-12:51:23.270 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.core.convert.TypeConverter
-12:51:23.271 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.core.convert.TypeConverter
-12:51:23.271 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: io.micronaut.core.convert.TypeConverterRegistrar
-12:51:23.271 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.core.convert.TypeConverterRegistrar
-12:51:23.272 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.core.convert.TypeConverterRegistrar
-12:51:23.272 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.configuration.cassandra
-12:51:23.273 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
-12:51:23.273 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
-12:51:23.273 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
-12:51:23.274 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.event.ApplicationEventListener
-12:51:23.274 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-12:51:23.274 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-12:51:23.275 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.276 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.284 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration]
-12:51:23.286 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: io.micronaut.configuration.cassandra.CassandraConfiguration 
-12:51:23.287 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class com.datastax.driver.core.Cluster
-12:51:23.288 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: class com.datastax.driver.core.Cluster
-12:51:23.288 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.289 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.290 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration]
-12:51:23.294 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.ClusterFactory]
-12:51:23.294 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: com.datastax.driver.core.Cluster 
-12:51:23.298 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class com.datastax.driver.core.Cluster
-12:51:23.298 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: class com.datastax.driver.core.Cluster
-12:51:23.299 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.299 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.300 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration]
-12:51:23.300 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.ClusterFactory]
-12:51:23.300 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: com.datastax.driver.core.Cluster 
-12:51:23.304 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.ClusterFactory
-12:51:23.307 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: class io.micronaut.configuration.cassandra.ClusterFactory
-12:51:23.308 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.ClusterFactory]
-12:51:23.309 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: io.micronaut.configuration.cassandra.ClusterFactory 
-12:51:23.309 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;ClusterFactory&gt; io.micronaut.context.event.BeanCreatedEventListener 
-12:51:23.322 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.BeanCreatedEventListener
-12:51:23.323 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [io.micronaut.context.DefaultBeanContext$NoInjectionBeanDefinition@13447fa3] for type: interface io.micronaut.context.event.BeanCreatedEventListener
-12:51:23.323 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [io.micronaut.context.DefaultBeanContext$NoInjectionBeanDefinition@13447fa3]
-12:51:23.323 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;ClusterFactory&gt; 
-12:51:23.324 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;ClusterFactory&gt; 
-12:51:23.324 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.configuration.cassandra.ClusterFactory@3f2e6a3b] from definition [Definition: io.micronaut.configuration.cassandra.ClusterFactory] with qualifier [null]
-12:51:23.325 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.configuration.cassandra.ClusterFactory]: io.micronaut.configuration.cassandra.ClusterFactory@3f2e6a3b 
-12:51:23.333 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.334 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.335 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration]
-12:51:23.335 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.configuration.cassandra.CassandraConfiguration] for qualifier: @Named('default') 
-12:51:23.340 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: @Named('default') io.micronaut.configuration.cassandra.CassandraConfiguration 
-12:51:23.593 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;CassandraConfiguration&gt; io.micronaut.context.event.BeanCreatedEventListener 
-12:51:23.595 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;CassandraConfiguration&gt; 
-12:51:23.597 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;CassandraConfiguration&gt; 
-12:51:23.601 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.configuration.cassandra.CassandraConfiguration@1d32c7a0] from definition [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] with qualifier [@Named('default')]
-12:51:23.601 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [@Named('default') io.micronaut.configuration.cassandra.CassandraConfiguration]: io.micronaut.configuration.cassandra.CassandraConfiguration@1d32c7a0 
-12:51:23.805 [Test worker] DEBUG com.datastax.driver.core.SystemProperties - com.datastax.driver.USE_NATIVE_CLOCK is undefined, using default value true
-12:51:23.805 [Test worker] INFO com.datastax.driver.core.ClockFactory - Using native clock to generate timestamps.
-12:51:23.868 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;Cluster&gt; io.micronaut.context.event.BeanCreatedEventListener 
-12:51:23.869 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;Cluster&gt; 
-12:51:23.870 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;Cluster&gt; 
-12:51:23.870 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [com.datastax.driver.core.Cluster@6079368e] from definition [Definition: io.micronaut.configuration.cassandra.ClusterFactory] with qualifier [null]
-12:51:23.870 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [@Named('default') com.datastax.driver.core.Cluster]: com.datastax.driver.core.Cluster@6079368e 
-12:51:23.909 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Stopping BeanContext
-12:51:23.910 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;ShutdownEvent&gt; io.micronaut.context.event.ApplicationEventListener 
-12:51:23.910 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;ShutdownEvent&gt; 
-12:51:23.910 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;ShutdownEvent&gt; 
-12:51:23.916 [Test worker] INFO io.micronaut.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:23.919 [Test worker] INFO io.micronaut.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:23.920 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.yaml.YamlPropertySourceLoader@4de7bcab
-12:51:23.921 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.PropertiesPropertySourceLoader@1d78e201
-12:51:23.922 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
-12:51:23.923 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
-12:51:23.923 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
-12:51:23.923 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
-12:51:23.924 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
-12:51:23.924 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.DefaultApplicationContext$BootstrapEnvironment@1c6940ca
-12:51:23.924 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for instance: io.micronaut.context.DefaultApplicationContext$BootstrapEnvironment@1c6940ca
-12:51:23.924 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
-12:51:23.926 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.configuration.cassandra
-12:51:23.926 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
-12:51:23.926 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
-12:51:23.927 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
-12:51:23.927 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.event.ApplicationEventListener
-12:51:23.927 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-12:51:23.927 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-12:51:23.928 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.env.BootstrapPropertySourceLocator
-12:51:23.928 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.env.BootstrapPropertySourceLocator
-12:51:23.928 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.yaml.YamlPropertySourceLoader@125c1523
-12:51:23.929 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.PropertiesPropertySourceLoader@54798447
-12:51:23.930 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
-12:51:23.930 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
-12:51:23.931 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
-12:51:23.931 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
-12:51:23.931 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
-12:51:23.931 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
-12:51:23.932 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
-12:51:23.932 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
-12:51:23.932 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
-12:51:23.932 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.DefaultApplicationContext$RuntimeConfiguredEnvironment@759500df
-12:51:23.932 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for instance: io.micronaut.context.DefaultApplicationContext$RuntimeConfiguredEnvironment@759500df
-12:51:23.933 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.ExecutableMethodProcessorListener@1a0c2252
-12:51:23.933 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for instance: io.micronaut.context.ExecutableMethodProcessorListener@1a0c2252
-12:51:23.933 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
-12:51:23.934 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: io.micronaut.core.convert.TypeConverter
-12:51:23.934 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.core.convert.TypeConverter
-12:51:23.934 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.core.convert.TypeConverter
-12:51:23.934 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: io.micronaut.core.convert.TypeConverterRegistrar
-12:51:23.934 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.core.convert.TypeConverterRegistrar
-12:51:23.935 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.core.convert.TypeConverterRegistrar
-12:51:23.936 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.configuration.cassandra
-12:51:23.937 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
-12:51:23.937 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
-12:51:23.937 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
-12:51:23.937 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.event.ApplicationEventListener
-12:51:23.937 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-12:51:23.938 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-12:51:23.938 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class com.datastax.driver.core.Cluster
-12:51:23.938 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: class com.datastax.driver.core.Cluster
-12:51:23.939 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.939 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.939 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration, Definition: io.micronaut.configuration.cassandra.CassandraConfiguration]
-12:51:23.940 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.ClusterFactory, Definition: io.micronaut.configuration.cassandra.ClusterFactory]
-12:51:23.940 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Searching for @Primary for type [com.datastax.driver.core.Cluster] from candidates: [Definition: io.micronaut.configuration.cassandra.ClusterFactory, Definition: io.micronaut.configuration.cassandra.ClusterFactory] 
-12:51:23.941 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: com.datastax.driver.core.Cluster 
-12:51:23.941 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.ClusterFactory
-12:51:23.941 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: class io.micronaut.configuration.cassandra.ClusterFactory
-12:51:23.941 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.ClusterFactory]
-12:51:23.941 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: io.micronaut.configuration.cassandra.ClusterFactory 
-12:51:23.942 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;ClusterFactory&gt; io.micronaut.context.event.BeanCreatedEventListener 
-12:51:23.942 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.BeanCreatedEventListener
-12:51:23.942 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [io.micronaut.context.DefaultBeanContext$NoInjectionBeanDefinition@13447fa3] for type: interface io.micronaut.context.event.BeanCreatedEventListener
-12:51:23.942 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [io.micronaut.context.DefaultBeanContext$NoInjectionBeanDefinition@13447fa3]
-12:51:23.942 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;ClusterFactory&gt; 
-12:51:23.943 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;ClusterFactory&gt; 
-12:51:23.943 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.configuration.cassandra.ClusterFactory@2d8656f9] from definition [Definition: io.micronaut.configuration.cassandra.ClusterFactory] with qualifier [null]
-12:51:23.943 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.configuration.cassandra.ClusterFactory]: io.micronaut.configuration.cassandra.ClusterFactory@2d8656f9 
-12:51:23.943 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.943 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.944 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration, Definition: io.micronaut.configuration.cassandra.CassandraConfiguration]
-12:51:23.944 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.configuration.cassandra.CassandraConfiguration] for qualifier: @Named('default') 
-12:51:23.944 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: @Named('default') io.micronaut.configuration.cassandra.CassandraConfiguration 
-12:51:23.947 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;CassandraConfiguration&gt; io.micronaut.context.event.BeanCreatedEventListener 
-12:51:23.947 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;CassandraConfiguration&gt; 
-12:51:23.948 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;CassandraConfiguration&gt; 
-12:51:23.948 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.configuration.cassandra.CassandraConfiguration@5663ffa9] from definition [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] with qualifier [@Named('default')]
-12:51:23.948 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [@Named('default') io.micronaut.configuration.cassandra.CassandraConfiguration]: io.micronaut.configuration.cassandra.CassandraConfiguration@5663ffa9 
-12:51:23.948 [Test worker] DEBUG com.datastax.driver.core.SystemProperties - com.datastax.driver.USE_NATIVE_CLOCK is undefined, using default value true
-12:51:23.948 [Test worker] INFO com.datastax.driver.core.ClockFactory - Using native clock to generate timestamps.
-12:51:23.949 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;Cluster&gt; io.micronaut.context.event.BeanCreatedEventListener 
-12:51:23.949 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;Cluster&gt; 
-12:51:23.949 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;Cluster&gt; 
-12:51:23.949 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [com.datastax.driver.core.Cluster@60178679] from definition [Definition: io.micronaut.configuration.cassandra.ClusterFactory] with qualifier [null]
-12:51:23.949 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [@Named('default') com.datastax.driver.core.Cluster]: com.datastax.driver.core.Cluster@60178679 
-12:51:23.955 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class com.datastax.driver.core.Cluster
-12:51:23.956 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: class com.datastax.driver.core.Cluster
-12:51:23.956 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.956 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.957 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration, Definition: io.micronaut.configuration.cassandra.CassandraConfiguration]
-12:51:23.957 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.ClusterFactory, Definition: io.micronaut.configuration.cassandra.ClusterFactory]
-12:51:23.957 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [com.datastax.driver.core.Cluster] for qualifier: @Named('secondary') 
-12:51:23.957 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: @Named('secondary') com.datastax.driver.core.Cluster 
-12:51:23.958 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.configuration.cassandra.ClusterFactory@2d8656f9] for type [class io.micronaut.configuration.cassandra.ClusterFactory] and qualifier [null]
-12:51:23.958 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.958 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
-12:51:23.959 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration, Definition: io.micronaut.configuration.cassandra.CassandraConfiguration]
-12:51:23.959 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.configuration.cassandra.CassandraConfiguration] for qualifier: @Named('secondary') 
-12:51:23.959 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: @Named('secondary') io.micronaut.configuration.cassandra.CassandraConfiguration 
-12:51:23.962 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;CassandraConfiguration&gt; io.micronaut.context.event.BeanCreatedEventListener 
-12:51:23.962 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.configuration.cassandra.CassandraConfiguration@5b71a8ed] from definition [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] with qualifier [@Named('secondary')]
-12:51:23.962 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [@Named('secondary') io.micronaut.configuration.cassandra.CassandraConfiguration]: io.micronaut.configuration.cassandra.CassandraConfiguration@5b71a8ed 
-12:51:23.962 [Test worker] DEBUG com.datastax.driver.core.SystemProperties - com.datastax.driver.USE_NATIVE_CLOCK is undefined, using default value true
-12:51:23.962 [Test worker] INFO com.datastax.driver.core.ClockFactory - Using native clock to generate timestamps.
-12:51:23.963 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;Cluster&gt; io.micronaut.context.event.BeanCreatedEventListener 
-12:51:23.963 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [com.datastax.driver.core.Cluster@86f114b] from definition [Definition: io.micronaut.configuration.cassandra.ClusterFactory] with qualifier [@Named('secondary')]
-12:51:23.963 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [@Named('secondary') com.datastax.driver.core.Cluster]: com.datastax.driver.core.Cluster@86f114b 
-12:51:23.977 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Stopping BeanContext
-12:51:23.977 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;ShutdownEvent&gt; io.micronaut.context.event.ApplicationEventListener 
-12:51:23.977 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;ShutdownEvent&gt; 
-12:51:23.977 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;ShutdownEvent&gt; 
+<pre>12:54:07.682 [Test worker] INFO io.micronaut.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:54:07.724 [Test worker] INFO io.micronaut.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:54:07.741 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.yaml.YamlPropertySourceLoader@1f0e0742
+12:54:07.747 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.PropertiesPropertySourceLoader@265de1e2
+12:54:07.756 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
+12:54:07.758 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
+12:54:07.762 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.DefaultApplicationContext$BootstrapEnvironment@272cfe5e
+12:54:07.766 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for instance: io.micronaut.context.DefaultApplicationContext$BootstrapEnvironment@272cfe5e
+12:54:07.770 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
+12:54:07.838 [Test worker] DEBUG com.datastax.driver.core.SystemProperties - com.datastax.driver.NEW_NODE_DELAY_SECONDS is undefined, using default value 1
+12:54:07.839 [Test worker] DEBUG com.datastax.driver.core.SystemProperties - com.datastax.driver.NON_BLOCKING_EXECUTOR_SIZE is undefined, using default value 2
+12:54:07.840 [Test worker] DEBUG com.datastax.driver.core.SystemProperties - com.datastax.driver.NOTIF_LOCK_TIMEOUT_SECONDS is undefined, using default value 60
+12:54:07.863 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.configuration.cassandra
+12:54:07.864 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
+12:54:07.865 [Test worker] DEBUG io.micronaut.context.event.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@584764c8]
+12:54:07.866 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
+12:54:07.868 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
+12:54:07.870 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.event.ApplicationEventListener
+12:54:07.871 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+12:54:07.872 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+12:54:07.874 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.env.BootstrapPropertySourceLocator
+12:54:07.874 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.env.BootstrapPropertySourceLocator
+12:54:07.877 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.yaml.YamlPropertySourceLoader@3abfd51a
+12:54:07.878 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.PropertiesPropertySourceLoader@68a71b5f
+12:54:07.879 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
+12:54:07.881 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
+12:54:07.882 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
+12:54:07.884 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
+12:54:07.885 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
+12:54:07.885 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
+12:54:07.886 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.DefaultApplicationContext$RuntimeConfiguredEnvironment@7cab6788
+12:54:07.886 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for instance: io.micronaut.context.DefaultApplicationContext$RuntimeConfiguredEnvironment@7cab6788
+12:54:07.888 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.ExecutableMethodProcessorListener@319928c4
+12:54:07.891 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for instance: io.micronaut.context.ExecutableMethodProcessorListener@319928c4
+12:54:07.891 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
+12:54:07.892 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: io.micronaut.core.convert.TypeConverter
+12:54:07.892 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.core.convert.TypeConverter
+12:54:07.893 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.core.convert.TypeConverter
+12:54:07.894 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: io.micronaut.core.convert.TypeConverterRegistrar
+12:54:07.894 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.core.convert.TypeConverterRegistrar
+12:54:07.894 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.core.convert.TypeConverterRegistrar
+12:54:07.895 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.configuration.cassandra
+12:54:07.895 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
+12:54:07.895 [Test worker] DEBUG io.micronaut.context.event.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@10147387]
+12:54:07.895 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
+12:54:07.896 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
+12:54:07.896 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.event.ApplicationEventListener
+12:54:07.896 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+12:54:07.897 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+12:54:07.898 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:07.906 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:07.909 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: []
+12:54:07.912 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class com.datastax.driver.core.Cluster
+12:54:07.915 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: class com.datastax.driver.core.Cluster
+12:54:07.916 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:07.916 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:07.917 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: []
+12:54:07.917 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: []
+12:54:07.919 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Stopping BeanContext
+12:54:07.919 [Test worker] DEBUG io.micronaut.context.event.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@10147387]
+12:54:07.919 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;ShutdownEvent&gt; io.micronaut.context.event.ApplicationEventListener 
+12:54:07.920 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;ShutdownEvent&gt; 
+12:54:07.920 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;ShutdownEvent&gt; 
+12:54:07.937 [Test worker] INFO io.micronaut.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:54:07.962 [Test worker] INFO io.micronaut.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:54:07.964 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.yaml.YamlPropertySourceLoader@71e7c168
+12:54:07.966 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.PropertiesPropertySourceLoader@589cb71f
+12:54:07.968 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
+12:54:07.972 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
+12:54:07.974 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
+12:54:07.975 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
+12:54:07.976 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
+12:54:07.981 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.DefaultApplicationContext$BootstrapEnvironment@5f742e33
+12:54:07.982 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for instance: io.micronaut.context.DefaultApplicationContext$BootstrapEnvironment@5f742e33
+12:54:07.982 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
+12:54:07.984 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.configuration.cassandra
+12:54:07.984 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
+12:54:07.984 [Test worker] DEBUG io.micronaut.context.event.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@366013d7]
+12:54:07.985 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
+12:54:07.985 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
+12:54:07.986 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.event.ApplicationEventListener
+12:54:07.986 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+12:54:07.986 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+12:54:07.987 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.env.BootstrapPropertySourceLocator
+12:54:07.988 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.env.BootstrapPropertySourceLocator
+12:54:07.992 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.yaml.YamlPropertySourceLoader@3aa1a794
+12:54:07.993 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.PropertiesPropertySourceLoader@ce9e5bc
+12:54:07.993 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
+12:54:07.994 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
+12:54:07.994 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
+12:54:07.996 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
+12:54:07.996 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
+12:54:07.998 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
+12:54:07.998 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
+12:54:07.999 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
+12:54:07.999 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
+12:54:07.999 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.DefaultApplicationContext$RuntimeConfiguredEnvironment@6e8f982b
+12:54:07.999 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for instance: io.micronaut.context.DefaultApplicationContext$RuntimeConfiguredEnvironment@6e8f982b
+12:54:08.001 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.ExecutableMethodProcessorListener@7aa5f7ac
+12:54:08.002 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for instance: io.micronaut.context.ExecutableMethodProcessorListener@7aa5f7ac
+12:54:08.002 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
+12:54:08.003 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: io.micronaut.core.convert.TypeConverter
+12:54:08.003 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.core.convert.TypeConverter
+12:54:08.004 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.core.convert.TypeConverter
+12:54:08.004 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: io.micronaut.core.convert.TypeConverterRegistrar
+12:54:08.005 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.core.convert.TypeConverterRegistrar
+12:54:08.007 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.core.convert.TypeConverterRegistrar
+12:54:08.007 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.configuration.cassandra
+12:54:08.007 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
+12:54:08.007 [Test worker] DEBUG io.micronaut.context.event.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@4d8f626b]
+12:54:08.008 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
+12:54:08.008 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
+12:54:08.008 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.event.ApplicationEventListener
+12:54:08.009 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+12:54:08.010 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+12:54:08.012 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:08.013 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:08.022 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration]
+12:54:08.026 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: io.micronaut.configuration.cassandra.CassandraConfiguration 
+12:54:08.027 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class com.datastax.driver.core.Cluster
+12:54:08.030 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: class com.datastax.driver.core.Cluster
+12:54:08.031 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:08.033 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:08.034 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration]
+12:54:08.042 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.ClusterFactory]
+12:54:08.043 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: com.datastax.driver.core.Cluster 
+12:54:08.049 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class com.datastax.driver.core.Cluster
+12:54:08.050 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: class com.datastax.driver.core.Cluster
+12:54:08.051 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:08.052 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:08.052 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration]
+12:54:08.052 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.ClusterFactory]
+12:54:08.052 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: com.datastax.driver.core.Cluster 
+12:54:08.056 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.ClusterFactory
+12:54:08.057 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: class io.micronaut.configuration.cassandra.ClusterFactory
+12:54:08.058 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.ClusterFactory]
+12:54:08.058 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: io.micronaut.configuration.cassandra.ClusterFactory 
+12:54:08.058 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;ClusterFactory&gt; io.micronaut.context.event.BeanCreatedEventListener 
+12:54:08.061 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.BeanCreatedEventListener
+12:54:08.069 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [io.micronaut.context.DefaultBeanContext$NoInjectionBeanDefinition@38fd3b3e] for type: interface io.micronaut.context.event.BeanCreatedEventListener
+12:54:08.069 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [io.micronaut.context.DefaultBeanContext$NoInjectionBeanDefinition@38fd3b3e]
+12:54:08.069 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;ClusterFactory&gt; 
+12:54:08.069 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;ClusterFactory&gt; 
+12:54:08.070 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.configuration.cassandra.ClusterFactory@fa49932] from definition [Definition: io.micronaut.configuration.cassandra.ClusterFactory] with qualifier [null]
+12:54:08.071 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.configuration.cassandra.ClusterFactory]: io.micronaut.configuration.cassandra.ClusterFactory@fa49932 
+12:54:08.076 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:08.077 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:08.078 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration]
+12:54:08.078 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.configuration.cassandra.CassandraConfiguration] for qualifier: @Named('default') 
+12:54:08.087 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: @Named('default') io.micronaut.configuration.cassandra.CassandraConfiguration 
+12:54:08.342 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;CassandraConfiguration&gt; io.micronaut.context.event.BeanCreatedEventListener 
+12:54:08.343 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;CassandraConfiguration&gt; 
+12:54:08.347 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;CassandraConfiguration&gt; 
+12:54:08.348 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.configuration.cassandra.CassandraConfiguration@2e93e0f5] from definition [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] with qualifier [@Named('default')]
+12:54:08.348 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [@Named('default') io.micronaut.configuration.cassandra.CassandraConfiguration]: io.micronaut.configuration.cassandra.CassandraConfiguration@2e93e0f5 
+12:54:08.540 [Test worker] DEBUG com.datastax.driver.core.SystemProperties - com.datastax.driver.USE_NATIVE_CLOCK is undefined, using default value true
+12:54:08.541 [Test worker] INFO com.datastax.driver.core.ClockFactory - Using native clock to generate timestamps.
+12:54:08.605 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;Cluster&gt; io.micronaut.context.event.BeanCreatedEventListener 
+12:54:08.606 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;Cluster&gt; 
+12:54:08.606 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;Cluster&gt; 
+12:54:08.607 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [com.datastax.driver.core.Cluster@34121599] from definition [Definition: io.micronaut.configuration.cassandra.ClusterFactory] with qualifier [null]
+12:54:08.607 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [@Named('default') com.datastax.driver.core.Cluster]: com.datastax.driver.core.Cluster@34121599 
+12:54:08.646 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Stopping BeanContext
+12:54:08.646 [Test worker] DEBUG io.micronaut.context.event.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@4d8f626b]
+12:54:08.647 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;ShutdownEvent&gt; io.micronaut.context.event.ApplicationEventListener 
+12:54:08.647 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;ShutdownEvent&gt; 
+12:54:08.647 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;ShutdownEvent&gt; 
+12:54:08.653 [Test worker] INFO io.micronaut.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:54:08.656 [Test worker] INFO io.micronaut.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:54:08.657 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.yaml.YamlPropertySourceLoader@5ad50d7d
+12:54:08.658 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.PropertiesPropertySourceLoader@4de7bcab
+12:54:08.659 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
+12:54:08.659 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
+12:54:08.660 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
+12:54:08.660 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
+12:54:08.660 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
+12:54:08.660 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.DefaultApplicationContext$BootstrapEnvironment@1d78e201
+12:54:08.661 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for instance: io.micronaut.context.DefaultApplicationContext$BootstrapEnvironment@1d78e201
+12:54:08.661 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
+12:54:08.663 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.configuration.cassandra
+12:54:08.663 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
+12:54:08.663 [Test worker] DEBUG io.micronaut.context.event.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@1c6940ca]
+12:54:08.663 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
+12:54:08.663 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
+12:54:08.664 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.event.ApplicationEventListener
+12:54:08.664 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+12:54:08.664 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+12:54:08.665 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.env.BootstrapPropertySourceLocator
+12:54:08.665 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.env.BootstrapPropertySourceLocator
+12:54:08.666 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.yaml.YamlPropertySourceLoader@44e57265
+12:54:08.667 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Reading property sources from loader: io.micronaut.context.env.PropertiesPropertySourceLoader@125c1523
+12:54:08.667 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
+12:54:08.668 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
+12:54:08.668 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: env
+12:54:08.669 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
+12:54:08.669 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
+12:54:08.669 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: system
+12:54:08.670 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
+12:54:08.670 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
+12:54:08.670 [Test worker] DEBUG io.micronaut.context.env.DefaultEnvironment - Processing property source: test
+12:54:08.670 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.DefaultApplicationContext$RuntimeConfiguredEnvironment@54798447
+12:54:08.670 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for instance: io.micronaut.context.DefaultApplicationContext$RuntimeConfiguredEnvironment@54798447
+12:54:08.671 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for instance: io.micronaut.context.ExecutableMethodProcessorListener@759500df
+12:54:08.671 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for instance: io.micronaut.context.ExecutableMethodProcessorListener@759500df
+12:54:08.671 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
+12:54:08.672 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: io.micronaut.core.convert.TypeConverter
+12:54:08.672 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.core.convert.TypeConverter
+12:54:08.673 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.core.convert.TypeConverter
+12:54:08.673 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: io.micronaut.core.convert.TypeConverterRegistrar
+12:54:08.673 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.core.convert.TypeConverterRegistrar
+12:54:08.673 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.core.convert.TypeConverterRegistrar
+12:54:08.674 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.configuration.cassandra
+12:54:08.674 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
+12:54:08.674 [Test worker] DEBUG io.micronaut.context.event.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@1a0c2252]
+12:54:08.674 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
+12:54:08.675 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
+12:54:08.675 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [] for type: interface io.micronaut.context.event.ApplicationEventListener
+12:54:08.675 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+12:54:08.676 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+12:54:08.676 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class com.datastax.driver.core.Cluster
+12:54:08.676 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: class com.datastax.driver.core.Cluster
+12:54:08.677 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:08.677 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:08.678 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration, Definition: io.micronaut.configuration.cassandra.CassandraConfiguration]
+12:54:08.678 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.ClusterFactory, Definition: io.micronaut.configuration.cassandra.ClusterFactory]
+12:54:08.678 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Searching for @Primary for type [com.datastax.driver.core.Cluster] from candidates: [Definition: io.micronaut.configuration.cassandra.ClusterFactory, Definition: io.micronaut.configuration.cassandra.ClusterFactory] 
+12:54:08.679 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: com.datastax.driver.core.Cluster 
+12:54:08.680 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.ClusterFactory
+12:54:08.680 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: class io.micronaut.configuration.cassandra.ClusterFactory
+12:54:08.680 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.ClusterFactory]
+12:54:08.680 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: io.micronaut.configuration.cassandra.ClusterFactory 
+12:54:08.681 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;ClusterFactory&gt; io.micronaut.context.event.BeanCreatedEventListener 
+12:54:08.681 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.BeanCreatedEventListener
+12:54:08.681 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [io.micronaut.context.DefaultBeanContext$NoInjectionBeanDefinition@38fd3b3e] for type: interface io.micronaut.context.event.BeanCreatedEventListener
+12:54:08.682 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [io.micronaut.context.DefaultBeanContext$NoInjectionBeanDefinition@38fd3b3e]
+12:54:08.682 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;ClusterFactory&gt; 
+12:54:08.682 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;ClusterFactory&gt; 
+12:54:08.683 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.configuration.cassandra.ClusterFactory@70c823c7] from definition [Definition: io.micronaut.configuration.cassandra.ClusterFactory] with qualifier [null]
+12:54:08.683 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.configuration.cassandra.ClusterFactory]: io.micronaut.configuration.cassandra.ClusterFactory@70c823c7 
+12:54:08.683 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:08.684 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:08.684 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration, Definition: io.micronaut.configuration.cassandra.CassandraConfiguration]
+12:54:08.684 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.configuration.cassandra.CassandraConfiguration] for qualifier: @Named('default') 
+12:54:08.685 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: @Named('default') io.micronaut.configuration.cassandra.CassandraConfiguration 
+12:54:08.687 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;CassandraConfiguration&gt; io.micronaut.context.event.BeanCreatedEventListener 
+12:54:08.688 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;CassandraConfiguration&gt; 
+12:54:08.688 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;CassandraConfiguration&gt; 
+12:54:08.688 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.configuration.cassandra.CassandraConfiguration@2d8656f9] from definition [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] with qualifier [@Named('default')]
+12:54:08.689 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [@Named('default') io.micronaut.configuration.cassandra.CassandraConfiguration]: io.micronaut.configuration.cassandra.CassandraConfiguration@2d8656f9 
+12:54:08.689 [Test worker] DEBUG com.datastax.driver.core.SystemProperties - com.datastax.driver.USE_NATIVE_CLOCK is undefined, using default value true
+12:54:08.689 [Test worker] INFO com.datastax.driver.core.ClockFactory - Using native clock to generate timestamps.
+12:54:08.689 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;Cluster&gt; io.micronaut.context.event.BeanCreatedEventListener 
+12:54:08.690 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;Cluster&gt; 
+12:54:08.690 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;Cluster&gt; 
+12:54:08.691 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [com.datastax.driver.core.Cluster@5663ffa9] from definition [Definition: io.micronaut.configuration.cassandra.ClusterFactory] with qualifier [null]
+12:54:08.691 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [@Named('default') com.datastax.driver.core.Cluster]: com.datastax.driver.core.Cluster@5663ffa9 
+12:54:08.701 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class com.datastax.driver.core.Cluster
+12:54:08.709 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: class com.datastax.driver.core.Cluster
+12:54:08.710 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:08.710 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:08.711 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration, Definition: io.micronaut.configuration.cassandra.CassandraConfiguration]
+12:54:08.711 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.ClusterFactory, Definition: io.micronaut.configuration.cassandra.ClusterFactory]
+12:54:08.711 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [com.datastax.driver.core.Cluster] for qualifier: @Named('secondary') 
+12:54:08.711 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.ClusterFactory] for type: @Named('secondary') com.datastax.driver.core.Cluster 
+12:54:08.712 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.configuration.cassandra.ClusterFactory@70c823c7] for type [class io.micronaut.configuration.cassandra.ClusterFactory] and qualifier [null]
+12:54:08.712 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:08.713 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: class io.micronaut.configuration.cassandra.CassandraConfiguration
+12:54:08.714 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finalized bean definitions candidates: [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration, Definition: io.micronaut.configuration.cassandra.CassandraConfiguration]
+12:54:08.714 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.configuration.cassandra.CassandraConfiguration] for qualifier: @Named('secondary') 
+12:54:08.714 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] for type: @Named('secondary') io.micronaut.configuration.cassandra.CassandraConfiguration 
+12:54:08.717 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;CassandraConfiguration&gt; io.micronaut.context.event.BeanCreatedEventListener 
+12:54:08.718 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.configuration.cassandra.CassandraConfiguration@709d23b] from definition [Definition: io.micronaut.configuration.cassandra.CassandraConfiguration] with qualifier [@Named('secondary')]
+12:54:08.720 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [@Named('secondary') io.micronaut.configuration.cassandra.CassandraConfiguration]: io.micronaut.configuration.cassandra.CassandraConfiguration@709d23b 
+12:54:08.720 [Test worker] DEBUG com.datastax.driver.core.SystemProperties - com.datastax.driver.USE_NATIVE_CLOCK is undefined, using default value true
+12:54:08.720 [Test worker] INFO com.datastax.driver.core.ClockFactory - Using native clock to generate timestamps.
+12:54:08.721 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;Cluster&gt; io.micronaut.context.event.BeanCreatedEventListener 
+12:54:08.725 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [com.datastax.driver.core.Cluster@5b71a8ed] from definition [Definition: io.micronaut.configuration.cassandra.ClusterFactory] with qualifier [@Named('secondary')]
+12:54:08.726 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [@Named('secondary') com.datastax.driver.core.Cluster]: com.datastax.driver.core.Cluster@5b71a8ed 
+12:54:08.765 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Stopping BeanContext
+12:54:08.765 [Test worker] DEBUG io.micronaut.context.event.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@1a0c2252]
+12:54:08.765 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;ShutdownEvent&gt; io.micronaut.context.event.ApplicationEventListener 
+12:54:08.765 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;ShutdownEvent&gt; 
+12:54:08.765 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;ShutdownEvent&gt; 
 </pre>
 </span>
 </div>
@@ -382,7 +391,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at May 24, 2018 12:51:24 PM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:54:08 PM</p>
 </div>
 </div>
 </body>

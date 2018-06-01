@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">1.673s</div>
+<div class="counter">1.686s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,27 +79,27 @@
 </thead>
 <tr>
 <td class="success">test basic http trace error</td>
-<td>0.327s</td>
+<td>0.340s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test basic http tracing</td>
-<td>0.238s</td>
+<td>0.223s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test rxjava http tracing</td>
-<td>0.179s</td>
+<td>0.230s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">tested nested http error tracing</td>
-<td>0.413s</td>
+<td>0.420s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">tested nested http tracing</td>
-<td>0.516s</td>
+<td>0.473s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -107,68 +107,68 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>12:51:13.362 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:13.366 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:13.501 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 60210
-12:51:13.526 [nioEventLoopGroup-6-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/hello/John
-12:51:13.526 [nioEventLoopGroup-6-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(60210)
-12:51:13.527 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: 1bd5489c28f9d13a
-12:51:13.527 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: 1bd5489c28f9d13a
-12:51:13.528 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
-12:51:13.530 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:51:13.530 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:13.538 [nioEventLoopGroup-6-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:60210 Received Request: GET /traced/hello/John
-12:51:13.539 [nioEventLoopGroup-6-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/hello/John
-12:51:13.540 [nioEventLoopGroup-6-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/hello/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
-12:51:13.568 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/hello/John
-12:51:13.568 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-12:51:13.568 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:51:13.568 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
-12:51:13.568 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:13.568 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - Body
-12:51:13.568 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:13.569 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - John
-12:51:13.569 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:13.572 [Test worker] WARN  c.n.c.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
-12:51:13.572 [Test worker] INFO  c.n.c.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
-12:51:13.596 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:13.599 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:13.671 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 62080
-12:51:13.706 [nioEventLoopGroup-7-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/rxjava/John
-12:51:13.707 [nioEventLoopGroup-7-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(62080)
-12:51:13.708 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: 9f0c08b4779b57e2
-12:51:13.710 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: 9f0c08b4779b57e2
-12:51:13.713 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
-12:51:13.713 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:51:13.714 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:13.715 [nioEventLoopGroup-7-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:62080 Received Request: GET /traced/rxjava/John
-12:51:13.715 [nioEventLoopGroup-7-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/rxjava/John
-12:51:13.716 [nioEventLoopGroup-7-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/rxjava/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
-12:51:13.755 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/rxjava/John
-12:51:13.755 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-12:51:13.755 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:51:13.755 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
-12:51:13.755 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:13.755 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - Body
-12:51:13.755 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:13.755 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - John
-12:51:13.756 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:13.759 [Test worker] WARN  c.n.c.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
-12:51:13.759 [Test worker] INFO  c.n.c.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
-12:51:13.781 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:13.785 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:13.882 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 22613
-12:51:13.901 [nioEventLoopGroup-8-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/error/John
-12:51:13.902 [nioEventLoopGroup-8-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(22613)
-12:51:13.902 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: ee038ae5ff388ef9
-12:51:13.903 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: ee038ae5ff388ef9
-12:51:13.905 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
-12:51:13.905 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:51:13.906 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:13.911 [nioEventLoopGroup-8-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:22613 Received Request: GET /traced/error/John
-12:51:13.912 [nioEventLoopGroup-8-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/error/John
-12:51:13.912 [nioEventLoopGroup-8-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/error/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
-12:51:13.932 [nioEventLoopGroup-8-4] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: bad
+<pre>12:53:57.858 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:53:57.862 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:53:57.997 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 20757
+12:53:58.027 [nioEventLoopGroup-6-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/hello/John
+12:53:58.029 [nioEventLoopGroup-6-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(20757)
+12:53:58.029 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: 7ccbe7aaa65cc82e
+12:53:58.030 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: 7ccbe7aaa65cc82e
+12:53:58.032 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
+12:53:58.032 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:53:58.032 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:58.035 [nioEventLoopGroup-6-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:20757 Received Request: GET /traced/hello/John
+12:53:58.038 [nioEventLoopGroup-6-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/hello/John
+12:53:58.038 [nioEventLoopGroup-6-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/hello/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
+12:53:58.055 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/hello/John
+12:53:58.055 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:53:58.056 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:53:58.056 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+12:53:58.056 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:58.056 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:53:58.056 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:58.056 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - John
+12:53:58.056 [nioEventLoopGroup-6-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:58.059 [Test worker] WARN  c.n.c.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+12:53:58.059 [Test worker] INFO  c.n.c.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+12:53:58.078 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:53:58.083 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:53:58.214 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 48552
+12:53:58.256 [nioEventLoopGroup-7-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/rxjava/John
+12:53:58.259 [nioEventLoopGroup-7-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(48552)
+12:53:58.264 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: 0a302abc43328cdd
+12:53:58.265 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: 0a302abc43328cdd
+12:53:58.266 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
+12:53:58.267 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:53:58.267 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:58.268 [nioEventLoopGroup-7-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:48552 Received Request: GET /traced/rxjava/John
+12:53:58.269 [nioEventLoopGroup-7-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/rxjava/John
+12:53:58.269 [nioEventLoopGroup-7-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/rxjava/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
+12:53:58.289 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/rxjava/John
+12:53:58.289 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:53:58.289 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:53:58.289 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+12:53:58.289 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:58.289 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:53:58.289 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:58.289 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - John
+12:53:58.289 [nioEventLoopGroup-7-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:58.297 [Test worker] WARN  c.n.c.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+12:53:58.297 [Test worker] INFO  c.n.c.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+12:53:58.310 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:53:58.315 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:53:58.419 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 44755
+12:53:58.441 [nioEventLoopGroup-8-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/error/John
+12:53:58.441 [nioEventLoopGroup-8-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(44755)
+12:53:58.442 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: 82a159b56b9666b7
+12:53:58.442 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: 82a159b56b9666b7
+12:53:58.442 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
+12:53:58.442 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:53:58.443 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:58.446 [nioEventLoopGroup-8-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:44755 Received Request: GET /traced/error/John
+12:53:58.447 [nioEventLoopGroup-8-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/error/John
+12:53:58.447 [nioEventLoopGroup-8-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/error/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
+12:53:58.474 [nioEventLoopGroup-8-4] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: bad
 java.lang.RuntimeException: bad
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
@@ -182,10 +182,10 @@ java.lang.RuntimeException: bad
 	at io.micronaut.tracing.brave.HttpTracingSpec$TracedController.error(HttpTracingSpec.groovy:201)
 	at io.micronaut.tracing.brave.$HttpTracingSpec$TracedControllerDefinition$$exec3.invokeInternal(Unknown Source)
 	at io.micronaut.context.AbstractExecutableMethod.invoke(AbstractExecutableMethod.java:126)
-	at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:1951)
-	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:293)
+	at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:1964)
+	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:291)
 	at io.micronaut.web.router.RouteMatch.execute(RouteMatch.java:123)
-	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1125)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1126)
 	at io.reactivex.internal.operators.flowable.FlowableCreate.subscribeActual(FlowableCreate.java:72)
 	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
 	at io.reactivex.internal.operators.flowable.FlowableMap.subscribeActual(FlowableMap.java:38)
@@ -206,90 +206,90 @@ java.lang.RuntimeException: bad
 	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
 	at io.reactivex.internal.schedulers.ExecutorScheduler$ExecutorWorker$BooleanRunnable.run(ExecutorScheduler.java:261)
 	at io.reactivex.internal.schedulers.ExecutorScheduler$ExecutorWorker.run(ExecutorScheduler.java:226)
+	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
 	at java.lang.Thread.run(Thread.java:748)
-12:51:14.017 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/error/John
-12:51:14.017 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 500 Internal Server Error
-12:51:14.018 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:51:14.018 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 40
-12:51:14.018 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:14.018 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - Body
-12:51:14.018 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:14.018 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;message&quot;:&quot;Internal Server Error: bad&quot;}
-12:51:14.018 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:14.084 [Test worker] WARN  c.n.c.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
-12:51:14.085 [Test worker] INFO  c.n.c.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
-12:51:14.103 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:14.106 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:14.193 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 30159
-12:51:14.240 [nioEventLoopGroup-9-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/nested/John
-12:51:14.241 [nioEventLoopGroup-9-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30159)
-12:51:14.241 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: 98253ec539623b51
-12:51:14.241 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: 98253ec539623b51
-12:51:14.241 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
-12:51:14.242 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:51:14.242 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:14.245 [nioEventLoopGroup-9-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30159 Received Request: GET /traced/nested/John
-12:51:14.246 [nioEventLoopGroup-9-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/nested/John
-12:51:14.246 [nioEventLoopGroup-9-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/nested/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
-12:51:14.273 [nioEventLoopGroup-9-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/hello/John
-12:51:14.274 [nioEventLoopGroup-9-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30159)
-12:51:14.274 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: 98253ec539623b51
-12:51:14.275 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: b418955e24a030bb
-12:51:14.275 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-ParentSpanId: 98253ec539623b51
-12:51:14.275 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
-12:51:14.275 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:51:14.275 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:14.287 [nioEventLoopGroup-9-7] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30159 Received Request: GET /traced/hello/John
-12:51:14.287 [nioEventLoopGroup-9-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/hello/John
-12:51:14.287 [nioEventLoopGroup-9-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/hello/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
-12:51:14.293 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/hello/John
-12:51:14.293 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-12:51:14.293 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:51:14.293 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
-12:51:14.293 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:14.293 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - Body
-12:51:14.293 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:14.293 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - John
-12:51:14.293 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:14.298 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/nested/John
-12:51:14.299 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
-12:51:14.299 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:51:14.299 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
-12:51:14.299 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:14.299 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - Body
-12:51:14.299 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:14.299 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - John
-12:51:14.299 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:14.409 [Test worker] WARN  c.n.c.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
-12:51:14.409 [Test worker] INFO  c.n.c.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
-12:51:14.620 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:14.623 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:51:14.710 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 60378
-12:51:14.737 [nioEventLoopGroup-10-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/nestedError/John
-12:51:14.737 [nioEventLoopGroup-10-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(60378)
-12:51:14.740 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: 4d799a8ede2a2570
-12:51:14.741 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: 4d799a8ede2a2570
-12:51:14.741 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
-12:51:14.741 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:51:14.741 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:14.743 [nioEventLoopGroup-10-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:60378 Received Request: GET /traced/nestedError/John
-12:51:14.743 [nioEventLoopGroup-10-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/nestedError/John
-12:51:14.744 [nioEventLoopGroup-10-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/nestedError/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
-12:51:14.774 [nioEventLoopGroup-10-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/error/John
-12:51:14.774 [nioEventLoopGroup-10-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(60378)
-12:51:14.774 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: 4d799a8ede2a2570
-12:51:14.774 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: 494b74a02fe1a889
-12:51:14.774 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-ParentSpanId: 4d799a8ede2a2570
-12:51:14.774 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
-12:51:14.774 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
-12:51:14.774 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:14.777 [nioEventLoopGroup-10-7] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:60378 Received Request: GET /traced/error/John
-12:51:14.777 [nioEventLoopGroup-10-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/error/John
-12:51:14.777 [nioEventLoopGroup-10-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/error/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
-12:51:14.780 [nioEventLoopGroup-10-7] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: bad
+12:53:58.542 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/error/John
+12:53:58.542 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 500 Internal Server Error
+12:53:58.542 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:53:58.542 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 40
+12:53:58.542 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:58.543 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:53:58.543 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:58.543 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;message&quot;:&quot;Internal Server Error: bad&quot;}
+12:53:58.543 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:58.634 [Test worker] WARN  c.n.c.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+12:53:58.634 [Test worker] INFO  c.n.c.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+12:53:58.651 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:53:58.654 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:53:58.740 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 22433
+12:53:58.757 [nioEventLoopGroup-9-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/nested/John
+12:53:58.757 [nioEventLoopGroup-9-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(22433)
+12:53:58.757 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: 81d4753f9c56c58a
+12:53:58.759 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: 81d4753f9c56c58a
+12:53:58.759 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
+12:53:58.759 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:53:58.759 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:58.762 [nioEventLoopGroup-9-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:22433 Received Request: GET /traced/nested/John
+12:53:58.762 [nioEventLoopGroup-9-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/nested/John
+12:53:58.762 [nioEventLoopGroup-9-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/nested/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
+12:53:58.784 [nioEventLoopGroup-9-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/hello/John
+12:53:58.786 [nioEventLoopGroup-9-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(22433)
+12:53:58.787 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: 81d4753f9c56c58a
+12:53:58.788 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: 135009c6fe540b75
+12:53:58.788 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-ParentSpanId: 81d4753f9c56c58a
+12:53:58.788 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
+12:53:58.788 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:53:58.788 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:58.792 [nioEventLoopGroup-9-7] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:22433 Received Request: GET /traced/hello/John
+12:53:58.792 [nioEventLoopGroup-9-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/hello/John
+12:53:58.793 [nioEventLoopGroup-9-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/hello/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
+12:53:58.797 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/hello/John
+12:53:58.798 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:53:58.798 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:53:58.798 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+12:53:58.798 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:58.798 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - Body
+12:53:58.798 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:58.798 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - John
+12:53:58.798 [nioEventLoopGroup-9-6] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:58.803 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/nested/John
+12:53:58.803 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:53:58.803 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:53:58.803 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+12:53:58.803 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:58.803 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:53:58.803 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:58.803 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - John
+12:53:58.803 [nioEventLoopGroup-9-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:58.913 [Test worker] WARN  c.n.c.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+12:53:58.913 [Test worker] INFO  c.n.c.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+12:53:59.122 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:53:59.125 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:53:59.204 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 12626
+12:53:59.230 [nioEventLoopGroup-10-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/nestedError/John
+12:53:59.230 [nioEventLoopGroup-10-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(12626)
+12:53:59.232 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: c8ea1bcff8021359
+12:53:59.234 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: c8ea1bcff8021359
+12:53:59.235 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
+12:53:59.235 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:53:59.235 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:59.241 [nioEventLoopGroup-10-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:12626 Received Request: GET /traced/nestedError/John
+12:53:59.241 [nioEventLoopGroup-10-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/nestedError/John
+12:53:59.242 [nioEventLoopGroup-10-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/nestedError/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
+12:53:59.269 [nioEventLoopGroup-10-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /traced/error/John
+12:53:59.274 [nioEventLoopGroup-10-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(12626)
+12:53:59.275 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-TraceId: c8ea1bcff8021359
+12:53:59.275 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-SpanId: 8fe3aa890c640074
+12:53:59.275 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-ParentSpanId: c8ea1bcff8021359
+12:53:59.276 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - X-B3-Sampled: 1
+12:53:59.276 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:53:59.276 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:59.277 [nioEventLoopGroup-10-7] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:12626 Received Request: GET /traced/error/John
+12:53:59.278 [nioEventLoopGroup-10-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /traced/error/John
+12:53:59.278 [nioEventLoopGroup-10-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /traced/error/John to controller class io.micronaut.tracing.brave.HttpTracingSpec$TracedController
+12:53:59.284 [nioEventLoopGroup-10-7] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: bad
 java.lang.RuntimeException: bad
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
@@ -301,10 +301,10 @@ java.lang.RuntimeException: bad
 	at io.micronaut.tracing.brave.HttpTracingSpec$TracedController.error(HttpTracingSpec.groovy:201)
 	at io.micronaut.tracing.brave.$HttpTracingSpec$TracedControllerDefinition$$exec3.invokeInternal(Unknown Source)
 	at io.micronaut.context.AbstractExecutableMethod.invoke(AbstractExecutableMethod.java:126)
-	at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:1951)
-	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:293)
+	at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:1964)
+	at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:291)
 	at io.micronaut.web.router.RouteMatch.execute(RouteMatch.java:123)
-	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1125)
+	at io.micronaut.http.server.netty.RoutingInBoundHandler.lambda$buildResultEmitter$13(RoutingInBoundHandler.java:1126)
 	at io.reactivex.internal.operators.flowable.FlowableCreate.subscribeActual(FlowableCreate.java:72)
 	at io.reactivex.Flowable.subscribe(Flowable.java:14349)
 	at io.reactivex.internal.operators.flowable.FlowableMap.subscribeActual(FlowableMap.java:38)
@@ -327,23 +327,23 @@ java.lang.RuntimeException: bad
 	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
 	at io.reactivex.internal.schedulers.ExecutorScheduler$ExecutorWorker$BooleanRunnable.run(ExecutorScheduler.java:261)
 	at io.reactivex.internal.schedulers.ExecutorScheduler$ExecutorWorker.run(ExecutorScheduler.java:226)
+	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
 	at java.lang.Thread.run(Thread.java:748)
-12:51:14.786 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/error/John
-12:51:14.786 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 500 Internal Server Error
-12:51:14.786 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:51:14.786 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - content-length: 40
-12:51:14.786 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:14.786 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - Body
-12:51:14.786 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:14.786 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - {&quot;message&quot;:&quot;Internal Server Error: bad&quot;}
-12:51:14.786 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:14.791 [pool-9-thread-1] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.tracing.brave.HttpTracingSpec$TracedClient$Intercepted] executed with error: Internal Server Error: bad
+12:53:59.289 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/error/John
+12:53:59.289 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 500 Internal Server Error
+12:53:59.289 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:53:59.289 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - content-length: 40
+12:53:59.289 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:59.289 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - Body
+12:53:59.289 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:59.289 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - {&quot;message&quot;:&quot;Internal Server Error: bad&quot;}
+12:53:59.290 [nioEventLoopGroup-10-6] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:59.295 [pool-9-thread-1] ERROR i.m.r.intercept.RecoveryInterceptor - Type [io.micronaut.tracing.brave.HttpTracingSpec$TracedClient$Intercepted] executed with error: Internal Server Error: bad
 io.micronaut.http.client.exceptions.HttpClientResponseException: Internal Server Error: bad
-	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1144)
-	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1083)
+	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1151)
+	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1090)
 	at io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)
 	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
 	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
@@ -382,13 +382,12 @@ io.micronaut.http.client.exceptions.HttpClientResponseException: Internal Server
 	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:497)
 	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:459)
 	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:858)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
 	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:138)
 	at java.lang.Thread.run(Thread.java:748)
-12:51:14.808 [nioEventLoopGroup-10-4] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: Internal Server Error: bad
+12:53:59.317 [nioEventLoopGroup-10-4] ERROR i.m.h.s.netty.RoutingInBoundHandler - Unexpected error occurred: Internal Server Error: bad
 io.micronaut.http.client.exceptions.HttpClientResponseException: Internal Server Error: bad
-	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1144)
-	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1083)
+	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1151)
+	at io.micronaut.http.client.DefaultHttpClient$5.channelRead0(DefaultHttpClient.java:1090)
 	at io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)
 	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
 	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
@@ -427,20 +426,19 @@ io.micronaut.http.client.exceptions.HttpClientResponseException: Internal Server
 	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:497)
 	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:459)
 	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:858)
-	at io.micronaut.tracing.instrument.util.TracingRunnable.run(TracingRunnable.java:54)
 	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:138)
 	at java.lang.Thread.run(Thread.java:748)
-12:51:14.813 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/nestedError/John
-12:51:14.813 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 500 Internal Server Error
-12:51:14.813 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
-12:51:14.813 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 63
-12:51:14.813 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
-12:51:14.813 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - Body
-12:51:14.813 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:14.813 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;message&quot;:&quot;Internal Server Error: Internal Server Error: bad&quot;}
-12:51:14.813 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - ----
-12:51:14.816 [Test worker] WARN  c.n.c.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
-12:51:14.817 [Test worker] INFO  c.n.c.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+12:53:59.321 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /traced/nestedError/John
+12:53:59.321 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 500 Internal Server Error
+12:53:59.321 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:53:59.321 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 63
+12:53:59.321 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:53:59.321 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:53:59.321 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:59.321 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;message&quot;:&quot;Internal Server Error: Internal Server Error: bad&quot;}
+12:53:59.321 [nioEventLoopGroup-10-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:53:59.325 [Test worker] WARN  c.n.c.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+12:53:59.325 [Test worker] INFO  c.n.c.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
 </pre>
 </span>
 </div>
@@ -452,7 +450,7 @@ io.micronaut.http.client.exceptions.HttpClientResponseException: Internal Server
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at May 24, 2018 12:51:15 PM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:54:00 PM</p>
 </div>
 </div>
 </body>

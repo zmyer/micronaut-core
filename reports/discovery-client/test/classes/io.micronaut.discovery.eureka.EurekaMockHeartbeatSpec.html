@@ -29,7 +29,7 @@
 </td>
 <td>
 <div class="infoBox" id="failures">
-<div class="counter">1</div>
+<div class="counter">0</div>
 <p>failures</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.065s</div>
+<div class="counter">5.135s</div>
 <p>duration</p>
 </div>
 </td>
@@ -50,8 +50,8 @@
 </div>
 </td>
 <td>
-<div class="infoBox failures" id="successRate">
-<div class="percent">0%</div>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
 <p>successful</p>
 </div>
 </td>
@@ -61,94 +61,13 @@
 <div id="tabs">
 <ul class="tabLinks">
 <li>
-<a href="#tab0">Failed tests</a>
+<a href="#tab0">Tests</a>
 </li>
 <li>
-<a href="#tab1">Tests</a>
-</li>
-<li>
-<a href="#tab2">Standard output</a>
+<a href="#tab1">Standard output</a>
 </li>
 </ul>
 <div id="tab0" class="tab">
-<h2>Failed tests</h2>
-<div class="test">
-<a name="test that the server reports a heartbeat to Eureka"></a>
-<h3 class="failures">test that the server reports a heartbeat to Eureka</h3>
-<span class="code">
-<pre>io.micronaut.context.exceptions.BeanContextException: Error loading bean [io.micronaut.discovery.consul.client.v1.AbstractConsulClient$Intercepted]: null
-	at io.micronaut.context.DefaultBeanContext.lambda$findBeanCandidates$28(DefaultBeanContext.java:1043)
-	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
-	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
-	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:948)
-	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
-	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
-	at java.util.stream.ReduceOps$ReduceTask.doLeaf(ReduceOps.java:747)
-	at java.util.stream.ReduceOps$ReduceTask.doLeaf(ReduceOps.java:721)
-	at java.util.stream.AbstractTask.compute(AbstractTask.java:316)
-	at java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:731)
-	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
-	at java.util.concurrent.ForkJoinPool.helpComplete(ForkJoinPool.java:1870)
-	at java.util.concurrent.ForkJoinPool.awaitJoin(ForkJoinPool.java:2045)
-	at java.util.concurrent.ForkJoinTask.doInvoke(ForkJoinTask.java:404)
-	at java.util.concurrent.ForkJoinTask.invoke(ForkJoinTask.java:734)
-	at java.util.stream.ReduceOps$ReduceOp.evaluateParallel(ReduceOps.java:714)
-	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:233)
-	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
-	at io.micronaut.context.DefaultBeanContext.findBeanCandidates(DefaultBeanContext.java:1053)
-	at io.micronaut.context.DefaultApplicationContext.findBeanCandidates(DefaultApplicationContext.java:194)
-	at io.micronaut.context.DefaultBeanContext.findConcreteCandidateNoCache(DefaultBeanContext.java:1449)
-	at io.micronaut.context.DefaultBeanContext.containsBean(DefaultBeanContext.java:464)
-	at io.micronaut.context.BeanDefinitionRegistry.containsBean(BeanDefinitionRegistry.java:290)
-	at io.micronaut.context.RequiresCondition.matchesPresenceOfBeans(RequiresCondition.java:429)
-	at io.micronaut.context.RequiresCondition.processRequires(RequiresCondition.java:183)
-	at io.micronaut.context.RequiresCondition.matches(RequiresCondition.java:108)
-	at io.micronaut.context.AbstractBeanContextConditional.isEnabled(AbstractBeanContextConditional.java:53)
-	at io.micronaut.context.AbstractBeanDefinition.isEnabled(AbstractBeanDefinition.java:112)
-	at io.micronaut.context.DefaultBeanContext.lambda$findBeanCandidates$30(DefaultBeanContext.java:1052)
-	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:174)
-	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
-	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
-	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:948)
-	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
-	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
-	at java.util.stream.ReduceOps$ReduceTask.doLeaf(ReduceOps.java:747)
-	at java.util.stream.ReduceOps$ReduceTask.doLeaf(ReduceOps.java:721)
-	at java.util.stream.AbstractTask.compute(AbstractTask.java:316)
-	at java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:731)
-	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
-	at java.util.concurrent.ForkJoinPool$WorkQueue.execLocalTasks(ForkJoinPool.java:1040)
-	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1058)
-	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
-	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
-Caused by: java.lang.NullPointerException
-	at io.micronaut.inject.annotation.DefaultAnnotationMetadata.flushCache(DefaultAnnotationMetadata.java:632)
-	at io.micronaut.inject.annotation.DefaultAnnotationMetadata.configure(DefaultAnnotationMetadata.java:142)
-	at io.micronaut.context.AbstractBeanDefinition.lambda$configure$4(AbstractBeanDefinition.java:389)
-	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
-	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:948)
-	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
-	at java.util.stream.ForEachOps$ForEachTask.compute(ForEachOps.java:291)
-	at java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:731)
-	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
-	at java.util.concurrent.ForkJoinPool.helpComplete(ForkJoinPool.java:1870)
-	at java.util.concurrent.ForkJoinPool.awaitJoin(ForkJoinPool.java:2045)
-	at java.util.concurrent.ForkJoinTask.doInvoke(ForkJoinTask.java:404)
-	at java.util.concurrent.ForkJoinTask.invoke(ForkJoinTask.java:734)
-	at java.util.stream.ForEachOps$ForEachOp.evaluateParallel(ForEachOps.java:160)
-	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateParallel(ForEachOps.java:174)
-	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:233)
-	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
-	at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:583)
-	at io.micronaut.context.AbstractBeanDefinition.configure(AbstractBeanDefinition.java:386)
-	at io.micronaut.context.AbstractBeanDefinitionReference.load(AbstractBeanDefinitionReference.java:101)
-	at io.micronaut.context.DefaultBeanContext.lambda$findBeanCandidates$28(DefaultBeanContext.java:1041)
-	... 43 more
-</pre>
-</span>
-</div>
-</div>
-<div id="tab1" class="tab">
 <h2>Tests</h2>
 <table>
 <thead>
@@ -159,17 +78,929 @@ Caused by: java.lang.NullPointerException
 </tr>
 </thead>
 <tr>
-<td class="failures">test that the server reports a heartbeat to Eureka</td>
-<td>0.065s</td>
-<td class="failures">failed</td>
+<td class="success">test that the server reports a heartbeat to Eureka</td>
+<td>5.135s</td>
+<td class="success">passed</td>
 </tr>
 </table>
 </div>
-<div id="tab2" class="tab">
+<div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>12:02:28.074 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:02:28.078 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+<pre>12:49:18.747 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:49:18.749 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:49:18.787 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 30196
+12:49:18.790 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:49:18.792 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:49:18.833 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 24935
+12:49:18.848 [Test worker] INFO  o.h.v.i.engine.ConfigurationImpl - HV000002: Ignoring XML configuration.
+12:49:18.906 [nioEventLoopGroup-56-4] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: POST /eureka/apps/heartbeat-service
+12:49:18.914 [nioEventLoopGroup-56-4] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:18.914 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:18.914 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:18.914 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:18.914 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:18.914 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 739
+12:49:18.914 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:18.914 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:18.914 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - {&quot;instance&quot;:{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}}
+12:49:18.914 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:18.907 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:18.914 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:18.914 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:18.914 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:18.914 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:18.915 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:18.915 [nioEventLoopGroup-55-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: POST /eureka/apps/heartbeat-service
+12:49:18.915 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route POST - /eureka/apps/heartbeat-service
+12:49:18.916 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route POST - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:18.919 [nioEventLoopGroup-55-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:18.919 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:18.920 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:18.937 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:18.937 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:18.937 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:18.937 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 44
+12:49:18.937 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:18.937 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:18.937 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:18.937 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;}}
+12:49:18.937 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:18.945 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: POST /eureka/apps/heartbeat-service
+12:49:18.945 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:18.945 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:18.945 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:18.945 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 12
+12:49:18.945 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:18.945 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:18.945 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - [NO_CONTENT]
+12:49:18.945 [nioEventLoopGroup-56-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:18.945 [nioEventLoopGroup-56-4] INFO  i.m.d.registration.AutoRegistration - Registered service [heartbeat-service] with Eureka
+12:49:19.043 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:19.043 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:19.043 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:19.043 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:19.043 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:19.043 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.045 [nioEventLoopGroup-55-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:19.045 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:19.045 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:19.055 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:19.055 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:19.056 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:19.056 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:19.056 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.056 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:19.056 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.056 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:19.056 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.172 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:19.172 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:19.172 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:19.172 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:19.172 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:19.172 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.173 [nioEventLoopGroup-55-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:19.174 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:19.174 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:19.176 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:19.176 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:19.176 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:19.176 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:19.176 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.176 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:19.176 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.176 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:19.176 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.280 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:19.280 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:19.280 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:19.280 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:19.280 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:19.280 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.281 [nioEventLoopGroup-55-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:19.281 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:19.281 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:19.283 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:19.283 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:19.283 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:19.283 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:19.283 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.283 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:19.283 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.283 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:19.283 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.387 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:19.387 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:19.387 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:19.387 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:19.387 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:19.387 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.388 [nioEventLoopGroup-55-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:19.388 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:19.388 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:19.390 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:19.390 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:19.390 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:19.390 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:19.390 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.390 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:19.390 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.390 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:19.390 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.493 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:19.493 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:19.493 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:19.493 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:19.494 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:19.494 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.494 [nioEventLoopGroup-55-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:19.494 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:19.494 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:19.496 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:19.496 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:19.496 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:19.496 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:19.496 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.496 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:19.496 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.496 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:19.496 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.600 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:19.600 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:19.600 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:19.600 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:19.600 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:19.600 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.600 [nioEventLoopGroup-55-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:19.600 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:19.601 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:19.602 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:19.602 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:19.602 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:19.602 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:19.602 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.602 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:19.603 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.603 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:19.603 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.706 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:19.706 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:19.706 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:19.706 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:19.706 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:19.706 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.707 [nioEventLoopGroup-55-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:19.707 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:19.707 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:19.709 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:19.709 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:19.709 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:19.709 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:19.709 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.709 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:19.709 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.709 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:19.709 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.813 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:19.813 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:19.813 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:19.813 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:19.813 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:19.813 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.813 [nioEventLoopGroup-55-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:19.813 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:19.814 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:19.815 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:19.815 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:19.815 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:19.815 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:19.815 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.815 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:19.815 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.816 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:19.816 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.919 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:19.919 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:19.919 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:19.919 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:19.919 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:19.919 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.920 [nioEventLoopGroup-55-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:19.920 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:19.920 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:19.922 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:19.922 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:19.922 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:19.922 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:19.922 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:19.922 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:19.922 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:19.922 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:19.922 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.025 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:20.025 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:20.025 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:20.025 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:20.025 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:20.025 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.026 [nioEventLoopGroup-55-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:20.026 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:20.026 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:20.028 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:20.028 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:20.028 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:20.028 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:20.028 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.028 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:20.028 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.028 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:20.028 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.132 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:20.132 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:20.132 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:20.132 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:20.132 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:20.132 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.132 [nioEventLoopGroup-55-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:20.133 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:20.133 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:20.134 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:20.134 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:20.134 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:20.134 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:20.134 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.134 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:20.134 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.134 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:20.134 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.240 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:20.240 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:20.240 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:20.240 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:20.240 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:20.240 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.241 [nioEventLoopGroup-55-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:20.241 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:20.241 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:20.242 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:20.242 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:20.242 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:20.242 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:20.242 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.243 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:20.243 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.243 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:20.243 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.346 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:20.346 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:20.346 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:20.347 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:20.347 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:20.347 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.348 [nioEventLoopGroup-55-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:20.348 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:20.349 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:20.351 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:20.351 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:20.351 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:20.351 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:20.351 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.352 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:20.352 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.352 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:20.352 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.455 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:20.455 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:20.456 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:20.456 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:20.456 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:20.456 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.456 [nioEventLoopGroup-55-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:20.456 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:20.457 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:20.458 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:20.458 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:20.458 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:20.458 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:20.458 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.458 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:20.458 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.458 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:20.458 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.562 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:20.562 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:20.562 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:20.562 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:20.562 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:20.562 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.563 [nioEventLoopGroup-55-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:20.563 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:20.563 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:20.565 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:20.565 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:20.565 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:20.565 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:20.565 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.565 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:20.565 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.565 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:20.565 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.669 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:20.669 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:20.669 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:20.669 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:20.669 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:20.669 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.669 [nioEventLoopGroup-55-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:20.669 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:20.670 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:20.671 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:20.671 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:20.671 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:20.671 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:20.671 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.672 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:20.672 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.672 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:20.672 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.775 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:20.775 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:20.775 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:20.775 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:20.775 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:20.775 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.775 [nioEventLoopGroup-55-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:20.775 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:20.775 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:20.777 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:20.777 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:20.777 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:20.777 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:20.777 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.777 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:20.777 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.777 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:20.777 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.880 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:20.880 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:20.880 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:20.880 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:20.880 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:20.880 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.880 [nioEventLoopGroup-55-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:20.880 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:20.881 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:20.882 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:20.882 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:20.882 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:20.882 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:20.882 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.882 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:20.882 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.882 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:20.882 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.986 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:20.986 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:20.986 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:20.986 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:20.986 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:20.986 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.987 [nioEventLoopGroup-55-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:20.987 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:20.987 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:20.989 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:20.989 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:20.989 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:20.989 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:20.989 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:20.989 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:20.989 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:20.989 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:20.989 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.092 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:21.092 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:21.092 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:21.093 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:21.093 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:21.093 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.093 [nioEventLoopGroup-55-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:21.093 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:21.093 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:21.095 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:21.095 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:21.095 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:21.095 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:21.095 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.095 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:21.095 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.095 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:21.095 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.198 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:21.198 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:21.198 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:21.198 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:21.198 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:21.198 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.199 [nioEventLoopGroup-55-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:21.199 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:21.199 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:21.201 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:21.201 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:21.201 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:21.201 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:21.201 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.201 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:21.201 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.201 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:21.201 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.304 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:21.305 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:21.305 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:21.305 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:21.305 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:21.305 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.305 [nioEventLoopGroup-55-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:21.305 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:21.305 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:21.306 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:21.307 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:21.307 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:21.307 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:21.307 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.307 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:21.307 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.307 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:21.307 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.409 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:21.409 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:21.409 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:21.409 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:21.409 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:21.409 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.410 [nioEventLoopGroup-55-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:21.410 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:21.410 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:21.411 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:21.419 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:21.419 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:21.419 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:21.419 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.419 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:21.419 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.419 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:21.419 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.523 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:21.523 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:21.523 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:21.523 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:21.523 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:21.523 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.523 [nioEventLoopGroup-55-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:21.523 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:21.524 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:21.525 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:21.525 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:21.525 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:21.525 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:21.525 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.525 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:21.525 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.525 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:21.525 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.628 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:21.628 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:21.628 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:21.628 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:21.628 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:21.628 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.628 [nioEventLoopGroup-55-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:21.628 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:21.628 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:21.631 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:21.631 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:21.631 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:21.631 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:21.631 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.631 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:21.631 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.631 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:21.631 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.734 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:21.734 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:21.734 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:21.734 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:21.734 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:21.734 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.735 [nioEventLoopGroup-55-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:21.735 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:21.735 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:21.737 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:21.737 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:21.737 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:21.737 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:21.737 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.737 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:21.737 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.737 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:21.737 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.840 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:21.840 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:21.840 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:21.840 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:21.840 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:21.840 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.840 [nioEventLoopGroup-55-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:21.841 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:21.841 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:21.842 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:21.842 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:21.842 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:21.842 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:21.842 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.842 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:21.842 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.842 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:21.842 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.945 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:21.945 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:21.945 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:21.945 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:21.945 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:21.945 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.946 [nioEventLoopGroup-55-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:21.946 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:21.946 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:21.948 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:21.948 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:21.948 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:21.948 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:21.948 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:21.948 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:21.948 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:21.948 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:21.948 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.051 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:22.051 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:22.051 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:22.051 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:22.051 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:22.051 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.052 [nioEventLoopGroup-55-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:22.052 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:22.052 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:22.054 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:22.054 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:22.054 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:22.054 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:22.054 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.054 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:22.054 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.054 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:22.054 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.157 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:22.157 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:22.157 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:22.157 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:22.157 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:22.157 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.158 [nioEventLoopGroup-55-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:22.158 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:22.158 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:22.160 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:22.160 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:22.160 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:22.160 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:22.160 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.160 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:22.160 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.160 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:22.160 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.263 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:22.263 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:22.263 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:22.263 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:22.263 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:22.263 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.264 [nioEventLoopGroup-55-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:22.264 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:22.264 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:22.266 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:22.266 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:22.266 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:22.266 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:22.266 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.266 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:22.266 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.266 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:22.266 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.369 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:22.369 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:22.369 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:22.369 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:22.369 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:22.369 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.370 [nioEventLoopGroup-55-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:22.370 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:22.370 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:22.371 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:22.371 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:22.371 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:22.371 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:22.371 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.371 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:22.371 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.372 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:22.372 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.475 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:22.475 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:22.475 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:22.475 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:22.475 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:22.475 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.476 [nioEventLoopGroup-55-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:22.476 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:22.476 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:22.477 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:22.477 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:22.477 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:22.477 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:22.477 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.478 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:22.478 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.478 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:22.478 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.580 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:22.581 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:22.581 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:22.581 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:22.581 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:22.581 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.581 [nioEventLoopGroup-55-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:22.581 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:22.581 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:22.583 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:22.583 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:22.583 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:22.583 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:22.583 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.583 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:22.584 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.584 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:22.584 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.687 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:22.687 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:22.687 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:22.687 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:22.687 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:22.687 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.688 [nioEventLoopGroup-55-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:22.688 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:22.688 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:22.690 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:22.690 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:22.690 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:22.690 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:22.690 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.690 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:22.690 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.690 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:22.690 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.792 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:22.793 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:22.793 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:22.793 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:22.793 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:22.793 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.794 [nioEventLoopGroup-55-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:22.795 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:22.795 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:22.797 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:22.797 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:22.797 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:22.797 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:22.797 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.797 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:22.797 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.797 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:22.797 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.900 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:22.900 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:22.900 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:22.900 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:22.900 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:22.900 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.901 [nioEventLoopGroup-55-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:22.901 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:22.901 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:22.903 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:22.904 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:22.904 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:22.904 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:22.904 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:22.904 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:22.904 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:22.904 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:22.904 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.007 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:23.008 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:23.008 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:23.008 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:23.008 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:23.008 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.008 [nioEventLoopGroup-55-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:23.008 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:23.008 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:23.010 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:23.010 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:23.010 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:23.010 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:23.010 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.010 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:23.010 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.011 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:23.011 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.114 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:23.114 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:23.114 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:23.114 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:23.114 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:23.114 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.114 [nioEventLoopGroup-55-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:23.114 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:23.115 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:23.116 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:23.116 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:23.116 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:23.116 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:23.116 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.116 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:23.116 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.116 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:23.116 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.219 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:23.219 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:23.219 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:23.219 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:23.219 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:23.219 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.220 [nioEventLoopGroup-55-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:23.220 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:23.220 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:23.221 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:23.221 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:23.221 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:23.221 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:23.221 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.221 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:23.221 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.221 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:23.221 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.324 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:23.324 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:23.324 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:23.324 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:23.324 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:23.324 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.325 [nioEventLoopGroup-55-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:23.325 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:23.325 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:23.327 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:23.327 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:23.327 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:23.327 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:23.327 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.327 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:23.327 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.327 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:23.327 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.431 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:23.431 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:23.431 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:23.431 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:23.431 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:23.431 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.431 [nioEventLoopGroup-55-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:23.431 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:23.432 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:23.434 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:23.434 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:23.434 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:23.434 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:23.434 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.434 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:23.434 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.434 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:23.434 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.537 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:23.537 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:23.537 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:23.537 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:23.537 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:23.537 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.538 [nioEventLoopGroup-55-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:23.538 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:23.538 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:23.540 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:23.540 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:23.540 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:23.540 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:23.540 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.540 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:23.540 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.540 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:23.540 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.643 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:23.643 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:23.643 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:23.643 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:23.643 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:23.643 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.644 [nioEventLoopGroup-55-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:23.644 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:23.644 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:23.646 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:23.646 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:23.646 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:23.646 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:23.646 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.646 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:23.646 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.646 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:23.646 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.749 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:23.749 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:23.749 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:23.749 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:23.749 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:23.749 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.749 [nioEventLoopGroup-55-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:23.750 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:23.750 [nioEventLoopGroup-55-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:23.751 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:23.751 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:23.751 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:23.751 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:23.751 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.751 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:23.751 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.751 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:23.751 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.818 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: PUT /eureka/apps/heartbeat-service/heartbeat-service%3A24935
+12:49:23.818 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:23.818 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:23.818 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:23.818 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:23.818 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.818 [nioEventLoopGroup-55-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: PUT /eureka/apps/heartbeat-service/heartbeat-service%3A24935
+12:49:23.818 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route PUT - /eureka/apps/heartbeat-service/heartbeat-service%3A24935
+12:49:23.819 [nioEventLoopGroup-55-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route PUT - /eureka/apps/heartbeat-service/heartbeat-service%3A24935 to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:23.821 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: PUT /eureka/apps/heartbeat-service/heartbeat-service%3A24935
+12:49:23.821 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:23.822 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:23.822 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.822 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+12:49:23.822 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:23.822 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.822 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - [OK]
+12:49:23.822 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.855 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps/heartbeat-service
+12:49:23.855 [nioEventLoopGroup-56-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:23.855 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:23.855 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:23.855 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:23.855 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.855 [nioEventLoopGroup-55-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: GET /eureka/apps/heartbeat-service
+12:49:23.856 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps/heartbeat-service
+12:49:23.856 [nioEventLoopGroup-55-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps/heartbeat-service to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:23.857 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps/heartbeat-service
+12:49:23.857 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:23.857 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:23.857 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 785
+12:49:23.857 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.857 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:23.857 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.857 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;application&quot;:{&quot;name&quot;:&quot;heartbeat-service&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;heartbeat-service:24935&quot;,&quot;app&quot;:&quot;heartbeat-service&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:24935},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:24935&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:24935/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;heartbeat-service&quot;,&quot;secureVipAddress&quot;:&quot;heartbeat-service&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}}
+12:49:23.857 [nioEventLoopGroup-56-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.867 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: DELETE /eureka/apps/heartbeat-service/heartbeat-service%3A24935
+12:49:23.867 [nioEventLoopGroup-56-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(30196)
+12:49:23.867 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:23.867 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:23.867 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:23.867 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.868 [nioEventLoopGroup-55-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:30196 Received Request: DELETE /eureka/apps/heartbeat-service/heartbeat-service%3A24935
+12:49:23.868 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route DELETE - /eureka/apps/heartbeat-service/heartbeat-service%3A24935
+12:49:23.868 [nioEventLoopGroup-55-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route DELETE - /eureka/apps/heartbeat-service/heartbeat-service%3A24935 to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:23.870 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: DELETE /eureka/apps/heartbeat-service/heartbeat-service%3A24935
+12:49:23.870 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:23.870 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:23.870 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:23.870 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+12:49:23.870 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:23.870 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.870 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - [OK]
+12:49:23.870 [nioEventLoopGroup-56-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:23.871 [Test worker] INFO  i.m.d.registration.AutoRegistration - De-registered service [heartbeat-service] with Eureka
 </pre>
 </span>
 </div>
@@ -181,7 +1012,7 @@ Caused by: java.lang.NullPointerException
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:02:29 PM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:49:24 PM</p>
 </div>
 </div>
 </body>

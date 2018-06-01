@@ -29,7 +29,7 @@
 </td>
 <td>
 <div class="infoBox" id="failures">
-<div class="counter">1</div>
+<div class="counter">0</div>
 <p>failures</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.094s</div>
+<div class="counter">0.374s</div>
 <p>duration</p>
 </div>
 </td>
@@ -50,8 +50,8 @@
 </div>
 </td>
 <td>
-<div class="infoBox failures" id="successRate">
-<div class="percent">0%</div>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
 <p>successful</p>
 </div>
 </td>
@@ -61,94 +61,13 @@
 <div id="tabs">
 <ul class="tabLinks">
 <li>
-<a href="#tab0">Failed tests</a>
+<a href="#tab0">Tests</a>
 </li>
 <li>
-<a href="#tab1">Tests</a>
-</li>
-<li>
-<a href="#tab2">Standard output</a>
+<a href="#tab1">Standard output</a>
 </li>
 </ul>
 <div id="tab0" class="tab">
-<h2>Failed tests</h2>
-<div class="test">
-<a name="test the consul service's health status is correct"></a>
-<h3 class="failures">test the consul service's health status is correct</h3>
-<span class="code">
-<pre>io.micronaut.context.exceptions.BeanContextException: Error loading bean [io.micronaut.discovery.consul.client.v1.AbstractConsulClient$Intercepted]: null
-	at io.micronaut.context.DefaultBeanContext.lambda$findBeanCandidates$28(DefaultBeanContext.java:1043)
-	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
-	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
-	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:948)
-	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
-	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
-	at java.util.stream.ReduceOps$ReduceTask.doLeaf(ReduceOps.java:747)
-	at java.util.stream.ReduceOps$ReduceTask.doLeaf(ReduceOps.java:721)
-	at java.util.stream.AbstractTask.compute(AbstractTask.java:316)
-	at java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:731)
-	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
-	at java.util.concurrent.ForkJoinPool.helpComplete(ForkJoinPool.java:1870)
-	at java.util.concurrent.ForkJoinPool.awaitJoin(ForkJoinPool.java:2045)
-	at java.util.concurrent.ForkJoinTask.doInvoke(ForkJoinTask.java:404)
-	at java.util.concurrent.ForkJoinTask.invoke(ForkJoinTask.java:734)
-	at java.util.stream.ReduceOps$ReduceOp.evaluateParallel(ReduceOps.java:714)
-	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:233)
-	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
-	at io.micronaut.context.DefaultBeanContext.findBeanCandidates(DefaultBeanContext.java:1053)
-	at io.micronaut.context.DefaultApplicationContext.findBeanCandidates(DefaultApplicationContext.java:194)
-	at io.micronaut.context.DefaultBeanContext.findConcreteCandidateNoCache(DefaultBeanContext.java:1449)
-	at io.micronaut.context.DefaultBeanContext.containsBean(DefaultBeanContext.java:464)
-	at io.micronaut.context.BeanDefinitionRegistry.containsBean(BeanDefinitionRegistry.java:290)
-	at io.micronaut.context.RequiresCondition.matchesPresenceOfBeans(RequiresCondition.java:429)
-	at io.micronaut.context.RequiresCondition.processRequires(RequiresCondition.java:183)
-	at io.micronaut.context.RequiresCondition.matches(RequiresCondition.java:108)
-	at io.micronaut.context.AbstractBeanContextConditional.isEnabled(AbstractBeanContextConditional.java:53)
-	at io.micronaut.context.AbstractBeanDefinition.isEnabled(AbstractBeanDefinition.java:112)
-	at io.micronaut.context.DefaultBeanContext.lambda$findBeanCandidates$30(DefaultBeanContext.java:1052)
-	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:174)
-	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
-	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
-	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:948)
-	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
-	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
-	at java.util.stream.ReduceOps$ReduceTask.doLeaf(ReduceOps.java:747)
-	at java.util.stream.ReduceOps$ReduceTask.doLeaf(ReduceOps.java:721)
-	at java.util.stream.AbstractTask.compute(AbstractTask.java:316)
-	at java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:731)
-	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
-	at java.util.concurrent.ForkJoinPool$WorkQueue.execLocalTasks(ForkJoinPool.java:1040)
-	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1058)
-	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
-	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
-Caused by: java.lang.NullPointerException
-	at io.micronaut.inject.annotation.DefaultAnnotationMetadata.flushCache(DefaultAnnotationMetadata.java:632)
-	at io.micronaut.inject.annotation.DefaultAnnotationMetadata.configure(DefaultAnnotationMetadata.java:142)
-	at io.micronaut.context.AbstractBeanDefinition.lambda$configure$4(AbstractBeanDefinition.java:389)
-	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
-	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:948)
-	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
-	at java.util.stream.ForEachOps$ForEachTask.compute(ForEachOps.java:291)
-	at java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:731)
-	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
-	at java.util.concurrent.ForkJoinPool.helpComplete(ForkJoinPool.java:1870)
-	at java.util.concurrent.ForkJoinPool.awaitJoin(ForkJoinPool.java:2045)
-	at java.util.concurrent.ForkJoinTask.doInvoke(ForkJoinTask.java:404)
-	at java.util.concurrent.ForkJoinTask.invoke(ForkJoinTask.java:734)
-	at java.util.stream.ForEachOps$ForEachOp.evaluateParallel(ForEachOps.java:160)
-	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateParallel(ForEachOps.java:174)
-	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:233)
-	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
-	at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:583)
-	at io.micronaut.context.AbstractBeanDefinition.configure(AbstractBeanDefinition.java:386)
-	at io.micronaut.context.AbstractBeanDefinitionReference.load(AbstractBeanDefinitionReference.java:101)
-	at io.micronaut.context.DefaultBeanContext.lambda$findBeanCandidates$28(DefaultBeanContext.java:1041)
-	... 43 more
-</pre>
-</span>
-</div>
-</div>
-<div id="tab1" class="tab">
 <h2>Tests</h2>
 <table>
 <thead>
@@ -159,17 +78,136 @@ Caused by: java.lang.NullPointerException
 </tr>
 </thead>
 <tr>
-<td class="failures">test the consul service's health status is correct</td>
-<td>0.094s</td>
-<td class="failures">failed</td>
+<td class="success">test the consul service's health status is correct</td>
+<td>0.374s</td>
+<td class="success">passed</td>
 </tr>
 </table>
 </div>
-<div id="tab2" class="tab">
+<div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>12:02:26.415 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:02:26.420 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+<pre>12:49:05.615 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:49:05.618 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:49:05.700 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 14052
+12:49:05.706 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:49:05.709 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:49:05.768 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 47173
+12:49:05.800 [nioEventLoopGroup-20-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /v1/health/service/my-service?passing=false
+12:49:05.801 [nioEventLoopGroup-20-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(14052)
+12:49:05.801 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:05.801 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:05.801 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:05.801 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:05.803 [nioEventLoopGroup-19-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:14052 Received Request: GET /v1/health/service/my-service?passing=false
+12:49:05.803 [nioEventLoopGroup-19-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /v1/health/service/my-service
+12:49:05.803 [nioEventLoopGroup-19-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /v1/health/service/my-service to controller class io.micronaut.discovery.consul.MockConsulServer
+12:49:05.810 [nioEventLoopGroup-20-4] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: PUT /v1/agent/service/register
+12:49:05.810 [nioEventLoopGroup-20-4] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(14052)
+12:49:05.810 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:05.810 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:05.810 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:05.810 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:05.810 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 124
+12:49:05.811 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:05.813 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:05.816 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - {&quot;Name&quot;:&quot;my-service&quot;,&quot;Address&quot;:&quot;localhost&quot;,&quot;Port&quot;:47173,&quot;Checks&quot;:[{&quot;Status&quot;:&quot;passing&quot;,&quot;TTL&quot;:&quot;25s&quot;}],&quot;ID&quot;:&quot;my-service:47173&quot;}
+12:49:05.817 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:05.818 [nioEventLoopGroup-19-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:14052 Received Request: PUT /v1/agent/service/register
+12:49:05.819 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /v1/health/service/my-service?passing=false
+12:49:05.819 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:05.819 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:05.819 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 2
+12:49:05.819 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:05.819 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:05.819 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:05.819 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - []
+12:49:05.819 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:05.820 [nioEventLoopGroup-19-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route PUT - /v1/agent/service/register
+12:49:05.826 [nioEventLoopGroup-19-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route PUT - /v1/agent/service/register to controller class io.micronaut.discovery.consul.MockConsulServer
+12:49:05.836 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: PUT /v1/agent/service/register
+12:49:05.836 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:05.836 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:05.836 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:05.836 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+12:49:05.836 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:05.836 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:05.836 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - [OK]
+12:49:05.836 [nioEventLoopGroup-20-4] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:05.836 [nioEventLoopGroup-20-4] INFO  i.m.d.registration.AutoRegistration - Registered service [my-service] with Consul
+12:49:05.928 [nioEventLoopGroup-20-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /v1/health/service/my-service?passing=false
+12:49:05.928 [nioEventLoopGroup-20-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(14052)
+12:49:05.928 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:05.928 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:05.928 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:05.928 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:05.930 [nioEventLoopGroup-19-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:14052 Received Request: GET /v1/health/service/my-service?passing=false
+12:49:05.931 [nioEventLoopGroup-19-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /v1/health/service/my-service
+12:49:05.931 [nioEventLoopGroup-19-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /v1/health/service/my-service to controller class io.micronaut.discovery.consul.MockConsulServer
+12:49:05.941 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /v1/health/service/my-service?passing=false
+12:49:05.941 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:05.941 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:05.941 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 259
+12:49:05.941 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:05.941 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:05.941 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:05.941 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - [{&quot;Node&quot;:{&quot;Node&quot;:&quot;8a7c9010-203c-4ade-ba72-0a13ca7435a2&quot;,&quot;Address&quot;:&quot;travis-job-daebea48-f0ea-4e7e-9105-30cfae2abb18&quot;},&quot;Service&quot;:{&quot;ID&quot;:&quot;my-service:47173&quot;,&quot;Name&quot;:&quot;my-service&quot;,&quot;Address&quot;:&quot;localhost&quot;,&quot;Port&quot;:47173},&quot;Checks&quot;:[{&quot;Id&quot;:&quot;my-service&quot;,&quot;Status&quot;:&quot;passing&quot;}]}]
+12:49:05.941 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:05.945 [nioEventLoopGroup-20-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: PUT /v1/agent/check/fail/service%3Amy-service%3A47173
+12:49:05.945 [nioEventLoopGroup-20-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(14052)
+12:49:05.945 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:05.945 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:05.945 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:05.945 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:05.947 [nioEventLoopGroup-19-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:14052 Received Request: PUT /v1/agent/check/fail/service%3Amy-service%3A47173
+12:49:05.948 [nioEventLoopGroup-19-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route PUT - /v1/agent/check/fail/service%3Amy-service%3A47173
+12:49:05.948 [nioEventLoopGroup-19-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route PUT - /v1/agent/check/fail/service%3Amy-service%3A47173 to controller class io.micronaut.discovery.consul.MockConsulServer
+12:49:05.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: PUT /v1/agent/check/fail/service%3Amy-service%3A47173
+12:49:05.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:05.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:05.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:05.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+12:49:05.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:05.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:05.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - [OK]
+12:49:05.955 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:05.958 [nioEventLoopGroup-20-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /v1/health/service/my-service?passing=false
+12:49:05.958 [nioEventLoopGroup-20-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(14052)
+12:49:05.958 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:05.958 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:05.958 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:05.958 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:05.959 [nioEventLoopGroup-19-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:14052 Received Request: GET /v1/health/service/my-service?passing=false
+12:49:05.959 [nioEventLoopGroup-19-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /v1/health/service/my-service
+12:49:05.959 [nioEventLoopGroup-19-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /v1/health/service/my-service to controller class io.micronaut.discovery.consul.MockConsulServer
+12:49:05.961 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /v1/health/service/my-service?passing=false
+12:49:05.961 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:05.961 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:05.961 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 260
+12:49:05.962 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:05.962 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:05.962 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:05.962 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - [{&quot;Node&quot;:{&quot;Node&quot;:&quot;8a7c9010-203c-4ade-ba72-0a13ca7435a2&quot;,&quot;Address&quot;:&quot;travis-job-daebea48-f0ea-4e7e-9105-30cfae2abb18&quot;},&quot;Service&quot;:{&quot;ID&quot;:&quot;my-service:47173&quot;,&quot;Name&quot;:&quot;my-service&quot;,&quot;Address&quot;:&quot;localhost&quot;,&quot;Port&quot;:47173},&quot;Checks&quot;:[{&quot;Id&quot;:&quot;my-service&quot;,&quot;Status&quot;:&quot;critical&quot;}]}]
+12:49:05.962 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:05.971 [nioEventLoopGroup-20-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: PUT /v1/agent/service/deregister/my-service%3A47173
+12:49:05.971 [nioEventLoopGroup-20-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(14052)
+12:49:05.972 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:05.972 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:05.972 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:05.972 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:05.972 [nioEventLoopGroup-19-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:14052 Received Request: PUT /v1/agent/service/deregister/my-service%3A47173
+12:49:05.972 [nioEventLoopGroup-19-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route PUT - /v1/agent/service/deregister/my-service%3A47173
+12:49:05.972 [nioEventLoopGroup-19-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route PUT - /v1/agent/service/deregister/my-service%3A47173 to controller class io.micronaut.discovery.consul.MockConsulServer
+12:49:05.976 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: PUT /v1/agent/service/deregister/my-service%3A47173
+12:49:05.976 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:05.976 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:05.976 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:05.976 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+12:49:05.976 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:05.976 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:05.976 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - [OK]
+12:49:05.976 [nioEventLoopGroup-20-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:05.977 [Test worker] INFO  i.m.d.registration.AutoRegistration - De-registered service [my-service] with Consul
 </pre>
 </span>
 </div>
@@ -181,7 +219,7 @@ Caused by: java.lang.NullPointerException
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:02:29 PM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:49:24 PM</p>
 </div>
 </div>
 </body>

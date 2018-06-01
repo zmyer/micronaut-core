@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.085s</div>
+<div class="counter">0.079s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,7 +79,7 @@
 </thead>
 <tr>
 <td class="success">test that concurrent access to a singleton returns the same object</td>
-<td>0.085s</td>
+<td>0.079s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -87,88 +87,88 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>11:33:59.130 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
-11:33:59.133 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.reactor.converters.$PublisherToMonoConverterDefinition] will not be loaded due to failing conditions:
-11:33:59.133 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [reactor.core.publisher.Mono] is not present
-11:33:59.133 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.reactor.converters.$PublisherToFluxConverterDefinition] will not be loaded due to failing conditions:
-11:33:59.133 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [reactor.core.publisher.Flux] is not present
-11:33:59.134 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.rxjava1.converters.$RxJava1ConverterRegistrarDefinition] will not be loaded due to failing conditions:
-11:33:59.134 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [hu.akarnokd.rxjava.interop.RxJavaInterop] is not present
-11:33:59.135 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.inject.configurations.NotABean
-11:33:59.135 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for type: class io.micronaut.inject.configurations.NotABean
-11:33:59.135 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresbean will not be loaded due to failing conditions:
-11:33:59.135 [Test worker] DEBUG io.micronaut.context.condition.Condition - * No bean of type [class io.micronaut.inject.configurations.NotABean] present within context
-11:33:59.135 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresbean.RequiresBean] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresbean]] is not enabled
-11:33:59.135 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresconfig will not be loaded due to failing conditions:
-11:33:59.135 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Required configuration [test] is not active
-11:33:59.135 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresconfig.RequiresConfig] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresconfig]] is not enabled
-11:33:59.136 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiressdk will not be loaded due to failing conditions:
-11:33:59.136 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiressdk.RequiresJava9] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiressdk]] is not enabled
-11:33:59.137 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresproperty will not be loaded due to failing conditions:
-11:33:59.137 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
-11:33:59.137 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresproperty.RequiresProperty] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresproperty]] is not enabled
-11:33:59.138 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.http.client.reactor.$ReactorReactiveClientResultTransformerDefinition] will not be loaded due to failing conditions:
-11:33:59.138 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [reactor.core.publisher.Mono] is not present
-11:33:59.138 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.http.server.cors will not be loaded due to failing conditions:
-11:33:59.138 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
-11:33:59.138 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.http.server.cors.CorsOriginConverter] will not be loaded because the configuration [Optional[Configuration: io.micronaut.http.server.cors]] is not enabled
-11:33:59.138 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.http.server.cors.CorsFilter] will not be loaded because the configuration [Optional[Configuration: io.micronaut.http.server.cors]] is not enabled
-11:33:59.139 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;A&gt; io.micronaut.context.event.BeanCreatedEventListener 
-11:33:59.139 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.BeanCreatedEventListener
-11:33:59.139 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.inject.lifecyle.BeanCreationEventListenerSpec$BCreationListener] for type: interface io.micronaut.context.event.BeanCreatedEventListener
-11:33:59.139 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;A&gt; 
-11:33:59.139 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;A&gt; 
-11:33:59.139 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.scope.ContextScopeSpec$A@6b205d93] from definition [Definition: io.micronaut.inject.scope.ContextScopeSpec$A] with qualifier [null]
-11:33:59.139 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.scope.ContextScopeSpec$A]: io.micronaut.inject.scope.ContextScopeSpec$A@6b205d93 
-11:33:59.139 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [Definition: io.micronaut.health.HeartbeatTask] will not be loaded due to failing conditions:
-11:33:59.140 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
-11:33:59.140 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.jackson,io.micronaut.inject.configurations.requirescondition2,io.micronaut.inject.configurations.requiresconditionfalse,io.micronaut.inject.configurations.requiresconditiontrue,io.micronaut.inject.configurations.requirescondition
-11:33:59.140 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
-11:33:59.140 [Test worker] DEBUG io.micronaut.context.event.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultBeanContext@5efc9f1]
-11:33:59.140 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
-11:33:59.140 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
-11:33:59.140 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [Definition: io.micronaut.health.HeartbeatTask] will not be loaded due to failing conditions:
-11:33:59.140 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
-11:33:59.140 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.runtime.context.scope.refresh.RefreshScope, Definition: io.micronaut.context.event.SecondListener, Definition: io.micronaut.context.event.MyListener, Definition: io.micronaut.http.client.scope.ClientScope] for type: interface io.micronaut.context.event.ApplicationEventListener
-11:33:59.140 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-11:33:59.140 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-11:33:59.150 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B
-11:33:59.150 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] for type: class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B
-11:33:59.150 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] for type: io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B 
-11:33:59.157 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;B&gt; io.micronaut.context.event.BeanCreatedEventListener 
-11:33:59.157 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;B&gt; 
-11:33:59.157 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;B&gt; 
-11:33:59.157 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] from definition [Definition: io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] with qualifier [null]
-11:33:59.157 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B]: io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325 
-11:33:59.158 [Thread-6] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B]: io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325 
-11:33:59.159 [Thread-8] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.160 [Thread-7] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.160 [Thread-9] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.160 [Thread-10] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.160 [Thread-11] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.162 [Thread-19] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.162 [Thread-13] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.162 [Thread-14] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.162 [Thread-15] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.162 [Thread-16] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.162 [Thread-17] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.162 [Thread-18] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.163 [Thread-20] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.163 [Thread-21] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.163 [Thread-22] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.164 [Thread-24] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.167 [Thread-12] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.167 [Thread-26] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.171 [Thread-27] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.171 [Thread-28] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.172 [Thread-29] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.172 [Thread-30] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.173 [Thread-31] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.164 [Thread-25] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.163 [Thread-23] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.209 [Thread-34] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.210 [Thread-32] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
-11:33:59.210 [Thread-33] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@3b699325] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+<pre>12:51:56.245 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
+12:51:56.249 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.reactor.converters.$PublisherToMonoConverterDefinition] will not be loaded due to failing conditions:
+12:51:56.249 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [reactor.core.publisher.Mono] is not present
+12:51:56.249 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.reactor.converters.$PublisherToFluxConverterDefinition] will not be loaded due to failing conditions:
+12:51:56.249 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [reactor.core.publisher.Flux] is not present
+12:51:56.249 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.rxjava1.converters.$RxJava1ConverterRegistrarDefinition] will not be loaded due to failing conditions:
+12:51:56.249 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [hu.akarnokd.rxjava.interop.RxJavaInterop] is not present
+12:51:56.250 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.inject.configurations.NotABean
+12:51:56.250 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for type: class io.micronaut.inject.configurations.NotABean
+12:51:56.250 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresbean will not be loaded due to failing conditions:
+12:51:56.250 [Test worker] DEBUG io.micronaut.context.condition.Condition - * No bean of type [class io.micronaut.inject.configurations.NotABean] present within context
+12:51:56.250 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresbean.RequiresBean] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresbean]] is not enabled
+12:51:56.251 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresconfig will not be loaded due to failing conditions:
+12:51:56.251 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Required configuration [test] is not active
+12:51:56.251 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresconfig.RequiresConfig] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresconfig]] is not enabled
+12:51:56.251 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiressdk will not be loaded due to failing conditions:
+12:51:56.251 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiressdk.RequiresJava9] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiressdk]] is not enabled
+12:51:56.252 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresproperty will not be loaded due to failing conditions:
+12:51:56.252 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
+12:51:56.252 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresproperty.RequiresProperty] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresproperty]] is not enabled
+12:51:56.253 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.http.client.reactor.$ReactorReactiveClientResultTransformerDefinition] will not be loaded due to failing conditions:
+12:51:56.253 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [reactor.core.publisher.Mono] is not present
+12:51:56.253 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.http.server.cors will not be loaded due to failing conditions:
+12:51:56.253 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
+12:51:56.253 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.http.server.cors.CorsOriginConverter] will not be loaded because the configuration [Optional[Configuration: io.micronaut.http.server.cors]] is not enabled
+12:51:56.253 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.http.server.cors.CorsFilter] will not be loaded because the configuration [Optional[Configuration: io.micronaut.http.server.cors]] is not enabled
+12:51:56.254 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;A&gt; io.micronaut.context.event.BeanCreatedEventListener 
+12:51:56.254 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.BeanCreatedEventListener
+12:51:56.254 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.inject.lifecyle.BeanCreationEventListenerSpec$BCreationListener] for type: interface io.micronaut.context.event.BeanCreatedEventListener
+12:51:56.254 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;A&gt; 
+12:51:56.254 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;A&gt; 
+12:51:56.254 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.scope.ContextScopeSpec$A@3d6ed526] from definition [Definition: io.micronaut.inject.scope.ContextScopeSpec$A] with qualifier [null]
+12:51:56.254 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.scope.ContextScopeSpec$A]: io.micronaut.inject.scope.ContextScopeSpec$A@3d6ed526 
+12:51:56.254 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [Definition: io.micronaut.health.HeartbeatTask] will not be loaded due to failing conditions:
+12:51:56.254 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
+12:51:56.254 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.jackson,io.micronaut.inject.configurations.requirescondition2,io.micronaut.inject.configurations.requiresconditionfalse,io.micronaut.inject.configurations.requiresconditiontrue,io.micronaut.inject.configurations.requirescondition
+12:51:56.254 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
+12:51:56.254 [Test worker] DEBUG io.micronaut.context.event.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultBeanContext@4154c07f]
+12:51:56.254 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
+12:51:56.254 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
+12:51:56.255 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [Definition: io.micronaut.health.HeartbeatTask] will not be loaded due to failing conditions:
+12:51:56.255 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
+12:51:56.255 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.runtime.context.scope.refresh.RefreshScope, Definition: io.micronaut.context.event.SecondListener, Definition: io.micronaut.context.event.MyListener, Definition: io.micronaut.http.client.scope.ClientScope] for type: interface io.micronaut.context.event.ApplicationEventListener
+12:51:56.255 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+12:51:56.255 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+12:51:56.272 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B
+12:51:56.274 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] for type: class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B
+12:51:56.274 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] for type: io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B 
+12:51:56.277 [Thread-6] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;B&gt; io.micronaut.context.event.BeanCreatedEventListener 
+12:51:56.277 [Thread-6] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;B&gt; 
+12:51:56.277 [Thread-6] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;B&gt; 
+12:51:56.277 [Thread-6] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] from definition [Definition: io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] with qualifier [null]
+12:51:56.279 [Thread-6] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B]: io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb 
+12:51:56.279 [Thread-9] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B]: io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb 
+12:51:56.280 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B]: io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb 
+12:51:56.281 [Thread-10] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.283 [Thread-11] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.288 [Thread-12] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.289 [Thread-13] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.289 [Thread-14] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.289 [Thread-15] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.290 [Thread-16] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.290 [Thread-17] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.290 [Thread-18] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.292 [Thread-20] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.293 [Thread-21] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.293 [Thread-22] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.293 [Thread-23] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.294 [Thread-24] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.295 [Thread-25] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.295 [Thread-19] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.296 [Thread-8] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B]: io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb 
+12:51:56.301 [Thread-7] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B]: io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb 
+12:51:56.301 [Thread-27] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.302 [Thread-28] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.302 [Thread-29] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.302 [Thread-26] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.302 [Thread-30] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.303 [Thread-31] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.303 [Thread-33] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.307 [Thread-32] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
+12:51:56.321 [Thread-34] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B@6ed7dfb] for type [class io.micronaut.inject.concurrency.ConcurrentSingleAccessSpec$B] and qualifier [null]
 </pre>
 </span>
 </div>
@@ -180,7 +180,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 11:34:06 AM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:52:03 PM</p>
 </div>
 </div>
 </body>

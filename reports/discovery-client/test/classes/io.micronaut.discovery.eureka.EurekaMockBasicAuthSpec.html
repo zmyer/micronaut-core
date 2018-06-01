@@ -29,7 +29,7 @@
 </td>
 <td>
 <div class="infoBox" id="failures">
-<div class="counter">1</div>
+<div class="counter">0</div>
 <p>failures</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.122s</div>
+<div class="counter">1.128s</div>
 <p>duration</p>
 </div>
 </td>
@@ -50,8 +50,8 @@
 </div>
 </td>
 <td>
-<div class="infoBox failures" id="successRate">
-<div class="percent">0%</div>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
 <p>successful</p>
 </div>
 </td>
@@ -61,94 +61,13 @@
 <div id="tabs">
 <ul class="tabLinks">
 <li>
-<a href="#tab0">Failed tests</a>
+<a href="#tab0">Tests</a>
 </li>
 <li>
-<a href="#tab1">Tests</a>
-</li>
-<li>
-<a href="#tab2">Standard output</a>
+<a href="#tab1">Standard output</a>
 </li>
 </ul>
 <div id="tab0" class="tab">
-<h2>Failed tests</h2>
-<div class="test">
-<a name="test authentication works"></a>
-<h3 class="failures">test authentication works</h3>
-<span class="code">
-<pre>io.micronaut.context.exceptions.BeanContextException: Error loading bean [io.micronaut.discovery.consul.client.v1.AbstractConsulClient$Intercepted]: null
-	at io.micronaut.context.DefaultBeanContext.lambda$findBeanCandidates$28(DefaultBeanContext.java:1043)
-	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
-	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
-	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:948)
-	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
-	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
-	at java.util.stream.ReduceOps$ReduceTask.doLeaf(ReduceOps.java:747)
-	at java.util.stream.ReduceOps$ReduceTask.doLeaf(ReduceOps.java:721)
-	at java.util.stream.AbstractTask.compute(AbstractTask.java:316)
-	at java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:731)
-	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
-	at java.util.concurrent.ForkJoinPool.helpComplete(ForkJoinPool.java:1870)
-	at java.util.concurrent.ForkJoinPool.awaitJoin(ForkJoinPool.java:2045)
-	at java.util.concurrent.ForkJoinTask.doInvoke(ForkJoinTask.java:404)
-	at java.util.concurrent.ForkJoinTask.invoke(ForkJoinTask.java:734)
-	at java.util.stream.ReduceOps$ReduceOp.evaluateParallel(ReduceOps.java:714)
-	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:233)
-	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
-	at io.micronaut.context.DefaultBeanContext.findBeanCandidates(DefaultBeanContext.java:1053)
-	at io.micronaut.context.DefaultApplicationContext.findBeanCandidates(DefaultApplicationContext.java:194)
-	at io.micronaut.context.DefaultBeanContext.findConcreteCandidateNoCache(DefaultBeanContext.java:1449)
-	at io.micronaut.context.DefaultBeanContext.containsBean(DefaultBeanContext.java:464)
-	at io.micronaut.context.BeanDefinitionRegistry.containsBean(BeanDefinitionRegistry.java:290)
-	at io.micronaut.context.RequiresCondition.matchesPresenceOfBeans(RequiresCondition.java:429)
-	at io.micronaut.context.RequiresCondition.processRequires(RequiresCondition.java:183)
-	at io.micronaut.context.RequiresCondition.matches(RequiresCondition.java:108)
-	at io.micronaut.context.AbstractBeanContextConditional.isEnabled(AbstractBeanContextConditional.java:53)
-	at io.micronaut.context.AbstractBeanDefinition.isEnabled(AbstractBeanDefinition.java:112)
-	at io.micronaut.context.DefaultBeanContext.lambda$findBeanCandidates$30(DefaultBeanContext.java:1052)
-	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:174)
-	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
-	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
-	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:948)
-	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
-	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
-	at java.util.stream.ReduceOps$ReduceTask.doLeaf(ReduceOps.java:747)
-	at java.util.stream.ReduceOps$ReduceTask.doLeaf(ReduceOps.java:721)
-	at java.util.stream.AbstractTask.compute(AbstractTask.java:316)
-	at java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:731)
-	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
-	at java.util.concurrent.ForkJoinPool$WorkQueue.execLocalTasks(ForkJoinPool.java:1040)
-	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1058)
-	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
-	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
-Caused by: java.lang.NullPointerException
-	at io.micronaut.inject.annotation.DefaultAnnotationMetadata.flushCache(DefaultAnnotationMetadata.java:632)
-	at io.micronaut.inject.annotation.DefaultAnnotationMetadata.configure(DefaultAnnotationMetadata.java:142)
-	at io.micronaut.context.AbstractBeanDefinition.lambda$configure$4(AbstractBeanDefinition.java:389)
-	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
-	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:948)
-	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
-	at java.util.stream.ForEachOps$ForEachTask.compute(ForEachOps.java:291)
-	at java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:731)
-	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
-	at java.util.concurrent.ForkJoinPool.helpComplete(ForkJoinPool.java:1870)
-	at java.util.concurrent.ForkJoinPool.awaitJoin(ForkJoinPool.java:2045)
-	at java.util.concurrent.ForkJoinTask.doInvoke(ForkJoinTask.java:404)
-	at java.util.concurrent.ForkJoinTask.invoke(ForkJoinTask.java:734)
-	at java.util.stream.ForEachOps$ForEachOp.evaluateParallel(ForEachOps.java:160)
-	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateParallel(ForEachOps.java:174)
-	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:233)
-	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
-	at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:583)
-	at io.micronaut.context.AbstractBeanDefinition.configure(AbstractBeanDefinition.java:386)
-	at io.micronaut.context.AbstractBeanDefinitionReference.load(AbstractBeanDefinitionReference.java:101)
-	at io.micronaut.context.DefaultBeanContext.lambda$findBeanCandidates$28(DefaultBeanContext.java:1041)
-	... 43 more
-</pre>
-</span>
-</div>
-</div>
-<div id="tab1" class="tab">
 <h2>Tests</h2>
 <table>
 <thead>
@@ -159,17 +78,122 @@ Caused by: java.lang.NullPointerException
 </tr>
 </thead>
 <tr>
-<td class="failures">test authentication works</td>
-<td>0.122s</td>
-<td class="failures">failed</td>
+<td class="success">test authentication works</td>
+<td>1.128s</td>
+<td class="success">passed</td>
 </tr>
 </table>
 </div>
-<div id="tab2" class="tab">
+<div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>12:02:27.299 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-12:02:27.307 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+<pre>12:49:13.035 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:49:13.039 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:49:13.087 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 43886
+12:49:13.091 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:49:13.094 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+12:49:13.163 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 26449
+12:49:13.221 [Test worker] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.0.2.Final
+12:49:13.233 [Test worker] INFO  o.h.v.i.engine.ConfigurationImpl - HV000002: Ignoring XML configuration.
+12:49:13.732 [nioEventLoopGroup-41-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps
+12:49:13.732 [nioEventLoopGroup-41-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(43886)
+12:49:13.732 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:13.732 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:13.732 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic Zm9vOmJhcg==
+12:49:13.732 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:13.735 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:13.744 [nioEventLoopGroup-40-3] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:43886 Received Request: GET /eureka/apps
+12:49:13.744 [nioEventLoopGroup-40-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps
+12:49:13.744 [nioEventLoopGroup-40-3] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:13.773 [nioEventLoopGroup-41-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: POST /eureka/apps/authenticated-server
+12:49:13.775 [nioEventLoopGroup-41-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(43886)
+12:49:13.783 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:13.783 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:13.783 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic Zm9vOmJhcg==
+12:49:13.783 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:13.783 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:13.784 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 751
+12:49:13.784 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:13.784 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:13.784 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;instance&quot;:{&quot;instanceId&quot;:&quot;authenticated-server:26449&quot;,&quot;app&quot;:&quot;authenticated-server&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:26449},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:26449&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:26449/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:26449/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;authenticated-server&quot;,&quot;secureVipAddress&quot;:&quot;authenticated-server&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}}
+12:49:13.784 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:13.785 [nioEventLoopGroup-40-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:43886 Received Request: POST /eureka/apps/authenticated-server
+12:49:13.785 [nioEventLoopGroup-40-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route POST - /eureka/apps/authenticated-server
+12:49:13.785 [nioEventLoopGroup-40-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route POST - /eureka/apps/authenticated-server to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:13.798 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps
+12:49:13.799 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:13.799 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:13.799 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 19
+12:49:13.799 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:13.799 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:13.799 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:13.799 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - {&quot;applications&quot;:{}}
+12:49:13.799 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:13.826 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: POST /eureka/apps/authenticated-server
+12:49:13.826 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:13.826 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:13.826 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:13.826 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 12
+12:49:13.826 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:13.826 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:13.826 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - [NO_CONTENT]
+12:49:13.826 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:13.826 [nioEventLoopGroup-41-3] INFO  i.m.d.registration.AutoRegistration - Registered service [authenticated-server] with Eureka
+12:49:13.915 [nioEventLoopGroup-41-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps
+12:49:13.915 [nioEventLoopGroup-41-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(43886)
+12:49:13.915 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:13.915 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:13.915 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic Zm9vOmJhcg==
+12:49:13.915 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:13.915 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:13.916 [nioEventLoopGroup-40-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:43886 Received Request: GET /eureka/apps
+12:49:13.917 [nioEventLoopGroup-40-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps
+12:49:13.917 [nioEventLoopGroup-40-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:13.929 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps
+12:49:13.929 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:13.929 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:13.929 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 819
+12:49:13.929 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:13.929 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:13.929 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:13.929 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;applications&quot;:{&quot;application&quot;:[{&quot;name&quot;:&quot;authenticated-server&quot;,&quot;instances&quot;:[{&quot;instanceId&quot;:&quot;authenticated-server:26449&quot;,&quot;app&quot;:&quot;authenticated-server&quot;,&quot;ipAddr&quot;:&quot;127.0.0.1&quot;,&quot;port&quot;:{&quot;@enabled&quot;:true,&quot;$&quot;:26449},&quot;securePort&quot;:{&quot;@enabled&quot;:false,&quot;$&quot;:0},&quot;homePageUrl&quot;:&quot;http://localhost:26449&quot;,&quot;statusPageUrl&quot;:&quot;http://localhost:26449/health&quot;,&quot;healthCheckUrl&quot;:&quot;http://localhost:26449/health&quot;,&quot;secureHealthCheckUrl&quot;:&quot;https://localhost/health&quot;,&quot;vipAddress&quot;:&quot;authenticated-server&quot;,&quot;secureVipAddress&quot;:&quot;authenticated-server&quot;,&quot;countryId&quot;:1,&quot;dataCenterInfo&quot;:{&quot;@class&quot;:&quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,&quot;name&quot;:&quot;MyOwn&quot;},&quot;hostName&quot;:&quot;localhost&quot;,&quot;status&quot;:&quot;UP&quot;,&quot;leaseInfo&quot;:{&quot;renewalIntervalInSecs&quot;:30,&quot;durationInSecs&quot;:90,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0}}]}]}}
+12:49:13.929 [nioEventLoopGroup-41-3] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:13.933 [nioEventLoopGroup-41-7] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /eureka/apps
+12:49:13.934 [nioEventLoopGroup-41-7] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(43886)
+12:49:13.934 [nioEventLoopGroup-41-7] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:13.934 [nioEventLoopGroup-41-7] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:13.935 [nioEventLoopGroup-40-5] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:43886 Received Request: GET /eureka/apps
+12:49:13.935 [nioEventLoopGroup-40-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /eureka/apps
+12:49:13.935 [nioEventLoopGroup-40-5] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /eureka/apps to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:13.936 [nioEventLoopGroup-41-7] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /eureka/apps
+12:49:13.936 [nioEventLoopGroup-41-7] TRACE i.m.http.client.DefaultHttpClient - Status Code: 403 Forbidden
+12:49:13.936 [nioEventLoopGroup-41-7] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:13.936 [nioEventLoopGroup-41-7] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:13.936 [nioEventLoopGroup-41-7] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:13.936 [nioEventLoopGroup-41-7] TRACE i.m.http.client.DefaultHttpClient - 
+12:49:13.936 [nioEventLoopGroup-41-7] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:13.936 [nioEventLoopGroup-41-7] TRACE i.m.http.client.DefaultHttpClient - Full HTTP response received an empty body
+12:49:13.936 [nioEventLoopGroup-41-7] TRACE i.m.http.client.DefaultHttpClient - Unable to convert response body to target type class java.lang.String
+12:49:13.940 [nioEventLoopGroup-41-5] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: DELETE /eureka/apps/authenticated-server/authenticated-server%3A26449
+12:49:13.940 [nioEventLoopGroup-41-5] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(43886)
+12:49:13.940 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - Content-Type: application/json
+12:49:13.940 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - Accept: application/json
+12:49:13.940 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic Zm9vOmJhcg==
+12:49:13.940 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+12:49:13.940 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:13.941 [nioEventLoopGroup-40-2] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:43886 Received Request: DELETE /eureka/apps/authenticated-server/authenticated-server%3A26449
+12:49:13.941 [nioEventLoopGroup-40-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route DELETE - /eureka/apps/authenticated-server/authenticated-server%3A26449
+12:49:13.941 [nioEventLoopGroup-40-2] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route DELETE - /eureka/apps/authenticated-server/authenticated-server%3A26449 to controller class io.micronaut.discovery.eureka.MockEurekaServer
+12:49:13.945 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: DELETE /eureka/apps/authenticated-server/authenticated-server%3A26449
+12:49:13.945 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+12:49:13.945 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+12:49:13.945 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - connection: close
+12:49:13.945 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - content-length: 4
+12:49:13.945 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - Body
+12:49:13.945 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:13.945 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - [OK]
+12:49:13.945 [nioEventLoopGroup-41-5] TRACE i.m.http.client.DefaultHttpClient - ----
+12:49:13.946 [Test worker] INFO  i.m.d.registration.AutoRegistration - De-registered service [authenticated-server] with Eureka
 </pre>
 </span>
 </div>
@@ -181,7 +205,7 @@ Caused by: java.lang.NullPointerException
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:02:29 PM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:49:24 PM</p>
 </div>
 </div>
 </body>

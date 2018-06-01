@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.044s</div>
+<div class="counter">0.047s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,7 +79,7 @@
 </thead>
 <tr>
 <td class="success">test that concurrent access to a singleton returns the same object</td>
-<td>0.044s</td>
+<td>0.047s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -87,82 +87,82 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>20:15:30.677 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
-20:15:30.679 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.inject.configurations.NotABean
-20:15:30.679 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for type: class io.micronaut.inject.configurations.NotABean
-20:15:30.679 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresbean will not be loaded due to failing conditions:
-20:15:30.679 [Test worker] DEBUG io.micronaut.context.condition.Condition - * No bean of type [class io.micronaut.inject.configurations.NotABean] present within context
-20:15:30.679 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresbean.RequiresBean] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresbean]] is not enabled
-20:15:30.679 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresconfig will not be loaded due to failing conditions:
-20:15:30.679 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Required configuration [test] is not active
-20:15:30.679 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresconfig.RequiresConfig] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresconfig]] is not enabled
-20:15:30.680 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiressdk will not be loaded due to failing conditions:
-20:15:30.680 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiressdk.RequiresJava9] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiressdk]] is not enabled
-20:15:30.680 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresproperty will not be loaded due to failing conditions:
-20:15:30.680 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
-20:15:30.680 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresproperty.RequiresProperty] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresproperty]] is not enabled
-20:15:30.681 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.reactor.converters.$PublisherToMonoConverterDefinition] will not be loaded due to failing conditions:
-20:15:30.681 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [reactor.core.publisher.Mono] is not present
-20:15:30.682 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.reactor.converters.$PublisherToFluxConverterDefinition] will not be loaded due to failing conditions:
-20:15:30.682 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [reactor.core.publisher.Flux] is not present
-20:15:30.682 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.rxjava1.converters.$RxJava1ConverterRegistrarDefinition] will not be loaded due to failing conditions:
-20:15:30.682 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [hu.akarnokd.rxjava.interop.RxJavaInterop] is not present
-20:15:30.683 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;A&gt; io.micronaut.context.event.BeanCreatedEventListener 
-20:15:30.683 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.BeanCreatedEventListener
-20:15:30.683 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.inject.lifecycle.beancreationeventlistener.BCreationListener] for type: interface io.micronaut.context.event.BeanCreatedEventListener
-20:15:30.683 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;A&gt; 
-20:15:30.683 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;A&gt; 
-20:15:30.683 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.scope.A@13785c67] from definition [Definition: io.micronaut.inject.scope.A] with qualifier [null]
-20:15:30.683 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.scope.A]: io.micronaut.inject.scope.A@13785c67 
-20:15:30.683 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [Definition: io.micronaut.health.HeartbeatTask] will not be loaded due to failing conditions:
-20:15:30.683 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
-20:15:30.683 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.jackson,io.micronaut.inject.configurations.requiresconditionfalse,io.micronaut.inject.configurations.requiresconditiontrue
-20:15:30.683 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
-20:15:30.683 [Test worker] DEBUG io.micronaut.context.event.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultBeanContext@5412fe1f]
-20:15:30.684 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
-20:15:30.684 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
-20:15:30.684 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [Definition: io.micronaut.health.HeartbeatTask] will not be loaded due to failing conditions:
-20:15:30.684 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
-20:15:30.684 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.runtime.context.scope.refresh.RefreshScope] for type: interface io.micronaut.context.event.ApplicationEventListener
-20:15:30.684 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-20:15:30.684 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
-20:15:30.695 [Thread-4] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.inject.concurrency.ConcurrentB
-20:15:30.696 [Thread-4] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.inject.concurrency.ConcurrentB] for type: class io.micronaut.inject.concurrency.ConcurrentB
-20:15:30.696 [Thread-4] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.inject.concurrency.ConcurrentB] for type: io.micronaut.inject.concurrency.ConcurrentB 
-20:15:30.704 [Thread-4] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;ConcurrentB&gt; io.micronaut.context.event.BeanCreatedEventListener 
-20:15:30.704 [Thread-4] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;ConcurrentB&gt; 
-20:15:30.704 [Thread-4] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;ConcurrentB&gt; 
-20:15:30.705 [Thread-4] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.concurrency.ConcurrentB@1e534d52] from definition [Definition: io.micronaut.inject.concurrency.ConcurrentB] with qualifier [null]
-20:15:30.705 [Thread-4] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.705 [Thread-33] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.706 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.707 [Thread-6] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.707 [Thread-7] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.708 [Thread-8] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.708 [Thread-9] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.708 [Thread-10] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.708 [Thread-11] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.708 [Thread-12] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.708 [Thread-13] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.708 [Thread-14] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.708 [Thread-15] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.708 [Thread-16] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.709 [Thread-17] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.709 [Thread-18] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.709 [Thread-19] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.709 [Thread-20] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.709 [Thread-21] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.709 [Thread-22] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.709 [Thread-23] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.709 [Thread-24] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.710 [Thread-25] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.710 [Thread-26] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.710 [Thread-27] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.710 [Thread-28] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.710 [Thread-29] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.710 [Thread-30] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.710 [Thread-31] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
-20:15:30.712 [Thread-32] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@1e534d52 
+<pre>00:36:33.544 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Starting BeanContext
+00:36:33.547 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.inject.configurations.NotABean
+00:36:33.547 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - No bean candidates found for type: class io.micronaut.inject.configurations.NotABean
+00:36:33.547 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresbean will not be loaded due to failing conditions:
+00:36:33.547 [Test worker] DEBUG io.micronaut.context.condition.Condition - * No bean of type [class io.micronaut.inject.configurations.NotABean] present within context
+00:36:33.547 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresbean.RequiresBean] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresbean]] is not enabled
+00:36:33.547 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresconfig will not be loaded due to failing conditions:
+00:36:33.547 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Required configuration [test] is not active
+00:36:33.547 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresconfig.RequiresConfig] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresconfig]] is not enabled
+00:36:33.548 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiressdk will not be loaded due to failing conditions:
+00:36:33.548 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiressdk.RequiresJava9] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiressdk]] is not enabled
+00:36:33.548 [Test worker] DEBUG io.micronaut.context.condition.Condition - Configuration: io.micronaut.inject.configurations.requiresproperty will not be loaded due to failing conditions:
+00:36:33.548 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
+00:36:33.548 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.inject.configurations.requiresproperty.RequiresProperty] will not be loaded because the configuration [Optional[Configuration: io.micronaut.inject.configurations.requiresproperty]] is not enabled
+00:36:33.549 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.reactor.converters.$PublisherToMonoConverterDefinition] will not be loaded due to failing conditions:
+00:36:33.549 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [reactor.core.publisher.Mono] is not present
+00:36:33.549 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.reactor.converters.$PublisherToFluxConverterDefinition] will not be loaded due to failing conditions:
+00:36:33.549 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [reactor.core.publisher.Flux] is not present
+00:36:33.550 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [io.micronaut.reactive.rxjava1.converters.$RxJava1ConverterRegistrarDefinition] will not be loaded due to failing conditions:
+00:36:33.550 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Class [hu.akarnokd.rxjava.interop.RxJavaInterop] is not present
+00:36:33.550 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;A&gt; io.micronaut.context.event.BeanCreatedEventListener 
+00:36:33.551 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.BeanCreatedEventListener
+00:36:33.551 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.inject.lifecycle.beancreationeventlistener.BCreationListener] for type: interface io.micronaut.context.event.BeanCreatedEventListener
+00:36:33.551 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;A&gt; 
+00:36:33.551 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;A&gt; 
+00:36:33.551 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.scope.A@37fcc0b] from definition [Definition: io.micronaut.inject.scope.A] with qualifier [null]
+00:36:33.551 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.scope.A]: io.micronaut.inject.scope.A@37fcc0b 
+00:36:33.551 [Test worker] DEBUG io.micronaut.context.condition.Condition - Bean [Definition: io.micronaut.health.HeartbeatTask] will not be loaded due to failing conditions:
+00:36:33.551 [Test worker] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
+00:36:33.551 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Loaded active configurations: io.micronaut.jackson,io.micronaut.inject.configurations.requiresconditionfalse,io.micronaut.inject.configurations.requiresconditiontrue
+00:36:33.551 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - BeanContext Started.
+00:36:33.551 [Test worker] DEBUG io.micronaut.context.event.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultBeanContext@3f3c535c]
+00:36:33.551 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;StartupEvent&gt; io.micronaut.context.event.ApplicationEventListener 
+00:36:33.551 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: interface io.micronaut.context.event.ApplicationEventListener
+00:36:33.551 [ForkJoinPool.commonPool-worker-1] DEBUG io.micronaut.context.condition.Condition - Bean [Definition: io.micronaut.health.HeartbeatTask] will not be loaded due to failing conditions:
+00:36:33.551 [ForkJoinPool.commonPool-worker-1] DEBUG io.micronaut.context.condition.Condition - * Bean requires property but BeanContext does not support property resolution
+00:36:33.552 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.runtime.context.scope.refresh.RefreshScope] for type: interface io.micronaut.context.event.ApplicationEventListener
+00:36:33.552 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+00:36:33.552 [Test worker] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.ApplicationEventListener] for qualifier: &lt;StartupEvent&gt; 
+00:36:33.564 [Thread-4] DEBUG io.micronaut.context.DefaultBeanContext - Finding candidate beans for type: class io.micronaut.inject.concurrency.ConcurrentB
+00:36:33.565 [Thread-4] DEBUG io.micronaut.context.DefaultBeanContext - Resolved bean candidates [Definition: io.micronaut.inject.concurrency.ConcurrentB] for type: class io.micronaut.inject.concurrency.ConcurrentB
+00:36:33.565 [Thread-4] DEBUG io.micronaut.context.DefaultBeanContext - Found concrete candidate [Definition: io.micronaut.inject.concurrency.ConcurrentB] for type: io.micronaut.inject.concurrency.ConcurrentB 
+00:36:33.576 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Resolving beans for type: &lt;ConcurrentB&gt; io.micronaut.context.event.BeanCreatedEventListener 
+00:36:33.578 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Qualifying bean [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;ConcurrentB&gt; 
+00:36:33.579 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Found no matching beans of type [io.micronaut.context.event.BeanCreatedEventListener] for qualifier: &lt;ConcurrentB&gt; 
+00:36:33.579 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Created bean [io.micronaut.inject.concurrency.ConcurrentB@4975a805] from definition [Definition: io.micronaut.inject.concurrency.ConcurrentB] with qualifier [null]
+00:36:33.579 [Thread-5] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.582 [Thread-32] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.582 [Thread-31] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.582 [Thread-30] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.582 [Thread-29] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.582 [Thread-28] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.582 [Thread-27] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.582 [Thread-26] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.582 [Thread-25] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.582 [Thread-24] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.582 [Thread-23] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.583 [Thread-22] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.583 [Thread-21] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.583 [Thread-20] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.583 [Thread-19] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.583 [Thread-18] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.583 [Thread-17] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.583 [Thread-16] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.583 [Thread-15] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.583 [Thread-14] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.583 [Thread-13] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.583 [Thread-12] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.583 [Thread-11] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.583 [Thread-10] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.583 [Thread-9] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.583 [Thread-8] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.583 [Thread-7] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.584 [Thread-4] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.584 [Thread-6] DEBUG io.micronaut.context.DefaultBeanContext - Registering singleton bean for type [io.micronaut.inject.concurrency.ConcurrentB]: io.micronaut.inject.concurrency.ConcurrentB@4975a805 
+00:36:33.586 [Thread-33] DEBUG io.micronaut.context.DefaultBeanContext - Resolved existing bean [io.micronaut.inject.concurrency.ConcurrentB@4975a805] for type [class io.micronaut.inject.concurrency.ConcurrentB] and qualifier [null]
 </pre>
 </span>
 </div>
@@ -174,7 +174,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at May 31, 2018 8:15:40 PM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 12:36:43 AM</p>
 </div>
 </div>
 </body>

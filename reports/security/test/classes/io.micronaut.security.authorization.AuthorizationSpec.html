@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.224s</div>
+<div class="counter">0.322s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,22 +79,22 @@
 </thead>
 <tr>
 <td class="success">java.security.Principal Argument Binders binds even if Optional&lt;Principal&gt;</td>
-<td>0.025s</td>
+<td>0.069s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test /beans is secured</td>
-<td>0.020s</td>
+<td>0.053s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test accessing a controller without a rule</td>
-<td>0.010s</td>
+<td>0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test accessing a non sensitive endpoint with authentication</td>
-<td>0.007s</td>
+<td>0.006s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -104,7 +104,7 @@
 </tr>
 <tr>
 <td class="success">test accessing a sensitive endpoint with Authentication binded with authentication</td>
-<td>0.014s</td>
+<td>0.018s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -114,27 +114,27 @@
 </tr>
 <tr>
 <td class="success">test accessing a sensitive endpoint without authentication</td>
-<td>0.007s</td>
+<td>0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test accessing an anonymous without authentication</td>
-<td>0.014s</td>
+<td>0.055s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test accessing the secured admin action with the required role</td>
-<td>0.027s</td>
+<td>0.006s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test accessing the secured admin action without the required role</td>
-<td>0.007s</td>
+<td>0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test accessing the secured controller</td>
-<td>0.018s</td>
+<td>0.011s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -144,12 +144,12 @@
 </tr>
 <tr>
 <td class="success">test accessing the url map admin action with the required role</td>
-<td>0.006s</td>
+<td>0.008s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test accessing the url map admin action without the required role</td>
-<td>0.010s</td>
+<td>0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -159,12 +159,12 @@
 </tr>
 <tr>
 <td class="success">test accessing the url map controller and bind to java.util.Principal</td>
-<td>0.020s</td>
+<td>0.006s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">test accessing the url map controller without authentication</td>
-<td>0.005s</td>
+<td>0.034s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -172,37 +172,332 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>10:35:20.183 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-10:35:20.191 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-10:35:20.204 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@2843585c]
-10:35:20.224 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@31f43367]
-10:35:20.261 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerStartupEvent[source=io.micronaut.http.server.netty.NettyHttpServer@2905d6e0]
+<pre>11:35:26.693 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+11:35:26.699 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+11:35:26.734 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@6f88aec5]
+11:35:26.777 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@48d8c62a]
+11:35:26.841 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 7242
+11:35:26.847 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerStartupEvent[source=io.micronaut.http.server.netty.NettyHttpServer@273679fc]
+11:35:26.875 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /beans
+11:35:26.876 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:26.876 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:26.876 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:26.881 [nioEventLoopGroup-16-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /beans
+11:35:26.883 [nioEventLoopGroup-16-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /beans
+11:35:26.884 [nioEventLoopGroup-16-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /beans to controller class io.micronaut.management.endpoint.beans.BeansEndpoint
+11:35:26.907 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /beans
+11:35:26.907 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 401 Unauthorized
+11:35:26.907 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:26.907 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:26.907 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:26.907 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - 
+11:35:26.907 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:26.937 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /anonymous/hello
+11:35:26.937 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:26.937 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:26.937 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:26.941 [nioEventLoopGroup-16-7] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /anonymous/hello
+11:35:26.943 [nioEventLoopGroup-16-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /anonymous/hello
+11:35:26.943 [nioEventLoopGroup-16-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /anonymous/hello to controller class io.micronaut.security.authorization.AnonymousController
+11:35:26.959 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /anonymous/hello
+11:35:26.960 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+11:35:26.960 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+11:35:26.960 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - content-length: 17
+11:35:26.960 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:26.960 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:26.960 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:26.960 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - You are anonymous
+11:35:26.961 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:26.981 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /anonymous/hello
+11:35:26.981 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:26.981 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic dmFsaWQ6cGFzc3dvcmQ=
+11:35:26.981 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:26.981 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:26.985 [nioEventLoopGroup-16-8] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /anonymous/hello
+11:35:26.986 [nioEventLoopGroup-16-8] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /anonymous/hello
+11:35:26.986 [nioEventLoopGroup-16-8] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /anonymous/hello to controller class io.micronaut.security.authorization.AnonymousController
 io.micronaut.security.authentication.providers.DelegatingAuthenticationProvider
-10:35:20.324 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:26.994 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.030 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /anonymous/hello
+11:35:27.030 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+11:35:27.030 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+11:35:27.030 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 13
+11:35:27.030 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.030 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:27.030 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.030 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - You are valid
+11:35:27.030 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.033 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /urlMap/authenticated
+11:35:27.033 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:27.033 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:27.033 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.053 [nioEventLoopGroup-16-9] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /urlMap/authenticated
+11:35:27.055 [nioEventLoopGroup-16-9] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /urlMap/authenticated
+11:35:27.057 [nioEventLoopGroup-16-9] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /urlMap/authenticated to controller class io.micronaut.security.authorization.UrlMapController
+11:35:27.062 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /urlMap/authenticated
+11:35:27.062 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 401 Unauthorized
+11:35:27.063 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.063 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:27.063 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.063 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - 
+11:35:27.063 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.067 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /urlMap/authenticated
+11:35:27.067 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:27.067 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic dmFsaWQ6cGFzc3dvcmQ=
+11:35:27.067 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:27.067 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.068 [nioEventLoopGroup-16-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /urlMap/authenticated
+11:35:27.068 [nioEventLoopGroup-16-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /urlMap/authenticated
+11:35:27.068 [nioEventLoopGroup-16-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /urlMap/authenticated to controller class io.micronaut.security.authorization.UrlMapController
 io.micronaut.security.authentication.providers.DelegatingAuthenticationProvider
-10:35:20.341 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.069 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.074 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /urlMap/authenticated
+11:35:27.074 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+11:35:27.074 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+11:35:27.075 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 22
+11:35:27.075 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.075 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:27.075 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.075 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - valid is authenticated
+11:35:27.075 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.077 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /urlMap/principal
+11:35:27.077 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:27.077 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic dmFsaWQ6cGFzc3dvcmQ=
+11:35:27.078 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:27.078 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.078 [nioEventLoopGroup-16-7] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /urlMap/principal
+11:35:27.079 [nioEventLoopGroup-16-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /urlMap/principal
+11:35:27.079 [nioEventLoopGroup-16-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /urlMap/principal to controller class io.micronaut.security.authorization.UrlMapController
 io.micronaut.security.authentication.providers.DelegatingAuthenticationProvider
-10:35:20.358 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.080 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.081 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /urlMap/principal
+11:35:27.081 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+11:35:27.081 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+11:35:27.082 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - content-length: 22
+11:35:27.082 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.082 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:27.082 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.082 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - valid is authenticated
+11:35:27.082 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.083 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /urlMap/admin
+11:35:27.083 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:27.083 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic dmFsaWQ6cGFzc3dvcmQ=
+11:35:27.083 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:27.083 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.084 [nioEventLoopGroup-16-8] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /urlMap/admin
+11:35:27.084 [nioEventLoopGroup-16-8] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /urlMap/admin
+11:35:27.084 [nioEventLoopGroup-16-8] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /urlMap/admin to controller class io.micronaut.security.authorization.UrlMapController
 io.micronaut.security.authentication.providers.DelegatingAuthenticationProvider
-10:35:20.375 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.085 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.088 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /urlMap/admin
+11:35:27.088 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 403 Forbidden
+11:35:27.088 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.088 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:27.088 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.088 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - 
+11:35:27.088 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.088 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Full HTTP response received an empty body
+11:35:27.088 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Unable to convert response body to target type class java.lang.String
+11:35:27.090 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /urlMap/admin
+11:35:27.090 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:27.090 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic YWRtaW46cGFzc3dvcmQ=
+11:35:27.090 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:27.090 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.091 [nioEventLoopGroup-16-9] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /urlMap/admin
+11:35:27.091 [nioEventLoopGroup-16-9] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /urlMap/admin
+11:35:27.091 [nioEventLoopGroup-16-9] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /urlMap/admin to controller class io.micronaut.security.authorization.UrlMapController
 io.micronaut.security.authentication.providers.DelegatingAuthenticationProvider
-10:35:20.381 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=YWRtaW46cGFzc3dvcmQ=]
+11:35:27.092 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=YWRtaW46cGFzc3dvcmQ=]
+11:35:27.097 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /urlMap/admin
+11:35:27.097 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+11:35:27.097 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+11:35:27.097 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - content-length: 14
+11:35:27.097 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.097 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:27.097 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.097 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - You have admin
+11:35:27.097 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.099 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /secured/authenticated
+11:35:27.099 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:27.100 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:27.100 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.100 [nioEventLoopGroup-16-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /secured/authenticated
+11:35:27.100 [nioEventLoopGroup-16-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /secured/authenticated
+11:35:27.101 [nioEventLoopGroup-16-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /secured/authenticated to controller class io.micronaut.security.authorization.SecuredController
+11:35:27.102 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /secured/authenticated
+11:35:27.102 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 401 Unauthorized
+11:35:27.102 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.102 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:27.102 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.102 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - 
+11:35:27.102 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.105 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /secured/authenticated
+11:35:27.105 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:27.105 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic dmFsaWQ6cGFzc3dvcmQ=
+11:35:27.105 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:27.105 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.105 [nioEventLoopGroup-16-7] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /secured/authenticated
+11:35:27.106 [nioEventLoopGroup-16-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /secured/authenticated
+11:35:27.106 [nioEventLoopGroup-16-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /secured/authenticated to controller class io.micronaut.security.authorization.SecuredController
 io.micronaut.security.authentication.providers.DelegatingAuthenticationProvider
-10:35:20.395 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.108 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.113 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /secured/authenticated
+11:35:27.114 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+11:35:27.114 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+11:35:27.114 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - content-length: 22
+11:35:27.114 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.114 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:27.114 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.114 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - valid is authenticated
+11:35:27.114 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.115 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /secured/admin
+11:35:27.116 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:27.116 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic dmFsaWQ6cGFzc3dvcmQ=
+11:35:27.116 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:27.116 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.116 [nioEventLoopGroup-16-8] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /secured/admin
+11:35:27.116 [nioEventLoopGroup-16-8] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /secured/admin
+11:35:27.116 [nioEventLoopGroup-16-8] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /secured/admin to controller class io.micronaut.security.authorization.SecuredController
 io.micronaut.security.authentication.providers.DelegatingAuthenticationProvider
-10:35:20.412 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.117 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.118 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /secured/admin
+11:35:27.118 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 403 Forbidden
+11:35:27.118 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.118 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:27.118 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.118 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - 
+11:35:27.118 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.118 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Full HTTP response received an empty body
+11:35:27.118 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Unable to convert response body to target type class java.lang.String
+11:35:27.121 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /secured/admin
+11:35:27.121 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:27.121 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic YWRtaW46cGFzc3dvcmQ=
+11:35:27.121 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:27.121 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.121 [nioEventLoopGroup-16-9] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /secured/admin
+11:35:27.121 [nioEventLoopGroup-16-9] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /secured/admin
+11:35:27.122 [nioEventLoopGroup-16-9] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /secured/admin to controller class io.micronaut.security.authorization.SecuredController
 io.micronaut.security.authentication.providers.DelegatingAuthenticationProvider
-10:35:20.434 [pool-15-thread-2] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=YWRtaW46cGFzc3dvcmQ=]
+11:35:27.123 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=YWRtaW46cGFzc3dvcmQ=]
+11:35:27.124 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /secured/admin
+11:35:27.124 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+11:35:27.124 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+11:35:27.124 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - content-length: 14
+11:35:27.124 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.125 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:27.125 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.125 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - You have admin
+11:35:27.125 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.127 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /noRule/index
+11:35:27.127 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:27.127 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic dmFsaWQ6cGFzc3dvcmQ=
+11:35:27.127 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:27.127 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.127 [nioEventLoopGroup-16-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /noRule/index
+11:35:27.128 [nioEventLoopGroup-16-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /noRule/index
+11:35:27.128 [nioEventLoopGroup-16-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /noRule/index to controller class io.micronaut.security.authorization.NoRuleController
 io.micronaut.security.authentication.providers.DelegatingAuthenticationProvider
-10:35:20.448 [pool-15-thread-2] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.129 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.130 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /noRule/index
+11:35:27.130 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 403 Forbidden
+11:35:27.130 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.130 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:27.130 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.130 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - 
+11:35:27.130 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.130 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Full HTTP response received an empty body
+11:35:27.130 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Unable to convert response body to target type class java.lang.String
+11:35:27.132 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /non-sensitive
+11:35:27.132 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:27.132 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:27.133 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.133 [nioEventLoopGroup-16-7] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /non-sensitive
+11:35:27.133 [nioEventLoopGroup-16-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /non-sensitive
+11:35:27.133 [nioEventLoopGroup-16-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /non-sensitive to controller class io.micronaut.security.authorization.NonSensitiveEndpoint
+11:35:27.136 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /non-sensitive
+11:35:27.136 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+11:35:27.136 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+11:35:27.136 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - content-length: 13
+11:35:27.136 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.136 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:27.137 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.137 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Not logged in
+11:35:27.137 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.138 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /non-sensitive
+11:35:27.139 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:27.139 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic dmFsaWQ6cGFzc3dvcmQ=
+11:35:27.139 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:27.139 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.140 [nioEventLoopGroup-16-8] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /non-sensitive
+11:35:27.140 [nioEventLoopGroup-16-8] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /non-sensitive
+11:35:27.140 [nioEventLoopGroup-16-8] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /non-sensitive to controller class io.micronaut.security.authorization.NonSensitiveEndpoint
 io.micronaut.security.authentication.providers.DelegatingAuthenticationProvider
-10:35:20.462 [pool-15-thread-2] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.141 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.142 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /non-sensitive
+11:35:27.142 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+11:35:27.142 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+11:35:27.142 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 18
+11:35:27.142 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.142 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:27.142 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.142 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Logged in as valid
+11:35:27.142 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.145 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /sensitive
+11:35:27.145 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:27.145 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:27.145 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.146 [nioEventLoopGroup-16-9] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /sensitive
+11:35:27.146 [nioEventLoopGroup-16-9] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /sensitive
+11:35:27.146 [nioEventLoopGroup-16-9] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /sensitive to controller class io.micronaut.security.authorization.SensitiveEndpoint
+11:35:27.147 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /sensitive
+11:35:27.147 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 401 Unauthorized
+11:35:27.148 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.148 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:27.148 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.148 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - 
+11:35:27.148 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.148 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Full HTTP response received an empty body
+11:35:27.148 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Unable to convert response body to target type class java.lang.String
+11:35:27.149 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /sensitive
+11:35:27.150 [nioEventLoopGroup-16-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:27.150 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic dmFsaWQ6cGFzc3dvcmQ=
+11:35:27.150 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:27.150 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.150 [nioEventLoopGroup-16-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /sensitive
+11:35:27.150 [nioEventLoopGroup-16-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /sensitive
+11:35:27.151 [nioEventLoopGroup-16-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /sensitive to controller class io.micronaut.security.authorization.SensitiveEndpoint
 io.micronaut.security.authentication.providers.DelegatingAuthenticationProvider
-10:35:20.476 [pool-15-thread-2] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.151 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.157 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /sensitive
+11:35:27.157 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+11:35:27.157 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+11:35:27.157 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 11
+11:35:27.157 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.157 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:27.157 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.157 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - Hello valid
+11:35:27.157 [nioEventLoopGroup-16-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.159 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /sensitiveauthentication
+11:35:27.159 [nioEventLoopGroup-16-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(7242)
+11:35:27.160 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic dmFsaWQ6cGFzc3dvcmQ=
+11:35:27.160 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:27.160 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.160 [nioEventLoopGroup-16-7] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:7242 Received Request: GET /sensitiveauthentication
+11:35:27.160 [nioEventLoopGroup-16-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /sensitiveauthentication
+11:35:27.160 [nioEventLoopGroup-16-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /sensitiveauthentication to controller class io.micronaut.security.authorization.SensitiveWithAuthenticationEndpoint
 io.micronaut.security.authentication.providers.DelegatingAuthenticationProvider
-10:35:20.488 [pool-15-thread-2] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
-10:35:20.605 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerShutdownEvent[source=io.micronaut.http.server.netty.NettyHttpServer@2905d6e0]
-10:35:20.606 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@31f43367]
+11:35:27.161 [pool-15-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dmFsaWQ6cGFzc3dvcmQ=]
+11:35:27.175 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /sensitiveauthentication
+11:35:27.175 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+11:35:27.175 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+11:35:27.175 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - content-length: 11
+11:35:27.175 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:27.175 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:27.175 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.175 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - Hello valid
+11:35:27.175 [nioEventLoopGroup-16-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:27.289 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerShutdownEvent[source=io.micronaut.http.server.netty.NettyHttpServer@273679fc]
+11:35:27.289 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@48d8c62a]
 </pre>
 </span>
 </div>
@@ -214,7 +509,7 @@ io.micronaut.security.authentication.providers.DelegatingAuthenticationProvider
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 10:35:23 AM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 11:35:33 AM</p>
 </div>
 </div>
 </body>

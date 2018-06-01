@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.137s</div>
+<div class="counter">0.193s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,7 +79,7 @@
 </thead>
 <tr>
 <td class="success">LogoutController is not accessible at /logout but at /salir</td>
-<td>0.137s</td>
+<td>0.193s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -87,18 +87,61 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>10:35:16.665 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-10:35:16.669 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-10:35:16.694 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@574f81e2]
-10:35:16.737 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@503d8f4b]
-10:35:16.780 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerStartupEvent[source=io.micronaut.http.server.netty.NettyHttpServer@55d7d17e]
+<pre>11:35:21.228 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+11:35:21.230 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+11:35:21.279 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@390371c9]
+11:35:21.338 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@7557af81]
+11:35:21.416 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 53265
+11:35:21.433 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerStartupEvent[source=io.micronaut.http.server.netty.NettyHttpServer@29f45bd2]
+11:35:21.492 [nioEventLoopGroup-8-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: POST /logout
+11:35:21.492 [nioEventLoopGroup-8-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(53265)
+11:35:21.492 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic dXNlcjpwYXNzd29yZA==
+11:35:21.492 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:21.493 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:21.493 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+11:35:21.493 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 0
+11:35:21.493 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:21.493 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:21.493 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - 
+11:35:21.493 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:21.503 [nioEventLoopGroup-8-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:53265 Received Request: POST /logout
+11:35:21.504 [nioEventLoopGroup-8-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route POST - /logout
+11:35:21.504 [nioEventLoopGroup-8-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - No matching route found for URI /logout and method POST
 io.micronaut.security.endpoints.LogoutControllerPathConfigurableSpec$CustomAuthenticationProvider
-10:35:16.858 [nioEventLoopGroup-8-4] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dXNlcjpwYXNzd29yZA==]
+11:35:21.539 [nioEventLoopGroup-8-4] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dXNlcjpwYXNzd29yZA==]
+11:35:21.546 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: POST /logout
+11:35:21.546 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 403 Forbidden
+11:35:21.546 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:21.546 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:21.546 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:21.546 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - 
+11:35:21.546 [nioEventLoopGroup-8-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:21.584 [nioEventLoopGroup-8-6] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: POST /salir
+11:35:21.585 [nioEventLoopGroup-8-6] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(53265)
+11:35:21.585 [nioEventLoopGroup-8-6] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic dXNlcjpwYXNzd29yZA==
+11:35:21.585 [nioEventLoopGroup-8-6] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:21.585 [nioEventLoopGroup-8-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:21.585 [nioEventLoopGroup-8-6] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+11:35:21.585 [nioEventLoopGroup-8-6] TRACE i.m.http.client.DefaultHttpClient - content-length: 0
+11:35:21.585 [nioEventLoopGroup-8-6] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:21.585 [nioEventLoopGroup-8-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:21.585 [nioEventLoopGroup-8-6] TRACE i.m.http.client.DefaultHttpClient - 
+11:35:21.585 [nioEventLoopGroup-8-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:21.597 [nioEventLoopGroup-8-7] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:53265 Received Request: POST /salir
+11:35:21.597 [nioEventLoopGroup-8-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route POST - /salir
+11:35:21.597 [nioEventLoopGroup-8-7] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route POST - /salir to controller class io.micronaut.security.endpoints.LogoutController
 io.micronaut.security.endpoints.LogoutControllerPathConfigurableSpec$CustomAuthenticationProvider
-10:35:16.893 [pool-7-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dXNlcjpwYXNzd29yZA==]
-10:35:16.918 [pool-7-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.LogoutEvent[source=io.micronaut.security.authentication.AuthenticationUserDetailsAdapter@507f9f41]
-10:35:16.953 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerShutdownEvent[source=io.micronaut.http.server.netty.NettyHttpServer@55d7d17e]
-10:35:16.954 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@503d8f4b]
+11:35:21.604 [pool-7-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dXNlcjpwYXNzd29yZA==]
+11:35:21.620 [pool-7-thread-1] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.LogoutEvent[source=io.micronaut.security.authentication.AuthenticationUserDetailsAdapter@168b5698]
+11:35:21.631 [nioEventLoopGroup-8-6] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: POST /salir
+11:35:21.631 [nioEventLoopGroup-8-6] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+11:35:21.631 [nioEventLoopGroup-8-6] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:21.631 [nioEventLoopGroup-8-6] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:21.631 [nioEventLoopGroup-8-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:21.631 [nioEventLoopGroup-8-6] TRACE i.m.http.client.DefaultHttpClient - 
+11:35:21.631 [nioEventLoopGroup-8-6] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:21.700 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerShutdownEvent[source=io.micronaut.http.server.netty.NettyHttpServer@29f45bd2]
+11:35:21.700 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@7557af81]
 </pre>
 </span>
 </div>
@@ -110,7 +153,7 @@ io.micronaut.security.endpoints.LogoutControllerPathConfigurableSpec$CustomAuthe
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 10:35:23 AM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 11:35:33 AM</p>
 </div>
 </div>
 </body>

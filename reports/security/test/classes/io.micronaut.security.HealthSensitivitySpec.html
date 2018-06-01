@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">1.483s</div>
+<div class="counter">1.359s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,17 +79,17 @@
 </thead>
 <tr>
 <td class="success">If endpoints.health.sensitive=true with security but unauthenticated =&gt; 401</td>
-<td>0.370s</td>
+<td>0.392s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">If endpoints.health.sensitive=true without security =&gt; 401</td>
-<td>0.377s</td>
+<td>0.336s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">endpoints.health.sensitive=true micronaut.security.enabled=true authenticated =&gt; STATUS_DESCRIPTION_DETAILS</td>
-<td>0.736s</td>
+<td>0.631s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -97,29 +97,84 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>10:35:22.075 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-10:35:22.078 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-10:35:22.093 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@519bef69]
-10:35:22.114 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@400a8f3]
-10:35:22.196 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerStartupEvent[source=io.micronaut.http.server.netty.NettyHttpServer@b00604e]
-10:35:22.318 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerShutdownEvent[source=io.micronaut.http.server.netty.NettyHttpServer@b00604e]
-10:35:22.319 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@400a8f3]
-10:35:22.443 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-10:35:22.446 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-10:35:22.493 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@5f23add5]
-10:35:22.535 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@6ca8f576]
-10:35:22.636 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerStartupEvent[source=io.micronaut.http.server.netty.NettyHttpServer@1ec2c8f2]
-10:35:22.712 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerShutdownEvent[source=io.micronaut.http.server.netty.NettyHttpServer@1ec2c8f2]
-10:35:22.713 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@6ca8f576]
-10:35:22.898 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-10:35:22.911 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
-10:35:22.963 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@70122dbb]
-10:35:23.016 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@642bcef9]
-10:35:23.104 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerStartupEvent[source=io.micronaut.http.server.netty.NettyHttpServer@15aa9869]
+<pre>11:35:28.895 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+11:35:28.896 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+11:35:28.917 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@6e85b6be]
+11:35:28.950 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@4a6a03c5]
+11:35:28.988 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 17540
+11:35:28.991 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerStartupEvent[source=io.micronaut.http.server.netty.NettyHttpServer@768061f5]
+11:35:29.025 [nioEventLoopGroup-18-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /health
+11:35:29.025 [nioEventLoopGroup-18-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(17540)
+11:35:29.025 [nioEventLoopGroup-18-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:29.025 [nioEventLoopGroup-18-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:29.027 [nioEventLoopGroup-18-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:17540 Received Request: GET /health
+11:35:29.027 [nioEventLoopGroup-18-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /health
+11:35:29.028 [nioEventLoopGroup-18-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /health to controller class io.micronaut.management.endpoint.health.HealthEndpoint
+11:35:29.077 [nioEventLoopGroup-18-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /health
+11:35:29.078 [nioEventLoopGroup-18-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 401 Unauthorized
+11:35:29.078 [nioEventLoopGroup-18-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:29.078 [nioEventLoopGroup-18-3] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:29.078 [nioEventLoopGroup-18-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:29.078 [nioEventLoopGroup-18-3] TRACE i.m.http.client.DefaultHttpClient - 
+11:35:29.078 [nioEventLoopGroup-18-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:29.078 [nioEventLoopGroup-18-3] TRACE i.m.http.client.DefaultHttpClient - Full HTTP response received an empty body
+11:35:29.078 [nioEventLoopGroup-18-3] TRACE i.m.http.client.DefaultHttpClient - Unable to convert response body to target type interface java.util.Map
+11:35:29.118 [/127.0.0.1:34218 to /127.0.0.1:38401 workers Thread 2] TRACE i.m.http.client.DefaultHttpClient - Full HTTP response received an empty body
+11:35:29.118 [/127.0.0.1:34218 to /127.0.0.1:38401 workers Thread 2] TRACE i.m.http.client.DefaultHttpClient - Unable to convert response body to target type class io.micronaut.http.hateos.JsonError
+11:35:29.118 [/127.0.0.1:34218 to /127.0.0.1:38401 workers Thread 2] TRACE i.m.http.client.DefaultHttpClient - Unable to convert response body to target type class io.micronaut.http.hateos.JsonError
+11:35:29.163 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerShutdownEvent[source=io.micronaut.http.server.netty.NettyHttpServer@768061f5]
+11:35:29.170 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@4a6a03c5]
+11:35:29.285 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+11:35:29.286 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+11:35:29.301 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@5712fe35]
+11:35:29.336 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@32448ba0]
+11:35:29.377 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 16456
+11:35:29.385 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerStartupEvent[source=io.micronaut.http.server.netty.NettyHttpServer@6806c5e9]
+11:35:29.413 [nioEventLoopGroup-19-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /health
+11:35:29.417 [nioEventLoopGroup-19-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(16456)
+11:35:29.417 [nioEventLoopGroup-19-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:29.417 [nioEventLoopGroup-19-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:29.423 [nioEventLoopGroup-19-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:16456 Received Request: GET /health
+11:35:29.424 [nioEventLoopGroup-19-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /health
+11:35:29.425 [nioEventLoopGroup-19-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /health to controller class io.micronaut.management.endpoint.health.HealthEndpoint
+11:35:29.451 [nioEventLoopGroup-19-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /health
+11:35:29.451 [nioEventLoopGroup-19-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 401 Unauthorized
+11:35:29.451 [nioEventLoopGroup-19-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:29.451 [nioEventLoopGroup-19-3] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:29.451 [nioEventLoopGroup-19-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:29.451 [nioEventLoopGroup-19-3] TRACE i.m.http.client.DefaultHttpClient - 
+11:35:29.451 [nioEventLoopGroup-19-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:29.451 [nioEventLoopGroup-19-3] TRACE i.m.http.client.DefaultHttpClient - Full HTTP response received an empty body
+11:35:29.451 [nioEventLoopGroup-19-3] TRACE i.m.http.client.DefaultHttpClient - Unable to convert response body to target type interface java.util.Map
+11:35:29.511 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerShutdownEvent[source=io.micronaut.http.server.netty.NettyHttpServer@6806c5e9]
+11:35:29.512 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@32448ba0]
+11:35:29.634 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+11:35:29.636 [Test worker] INFO  i.m.context.env.DefaultEnvironment - Established active environments: [test, cloud, gcp]
+11:35:29.662 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext$BootstrapApplicationContext@2ea89217]
+11:35:29.786 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.StartupEvent[source=io.micronaut.context.DefaultApplicationContext@21fd34d6]
+11:35:29.835 [Test worker] DEBUG i.m.h.server.netty.NettyHttpServer - Binding server to port: 36358
+11:35:29.843 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerStartupEvent[source=io.micronaut.http.server.netty.NettyHttpServer@12308540]
+11:35:29.874 [nioEventLoopGroup-20-3] DEBUG i.m.http.client.DefaultHttpClient - Sending HTTP Request: GET /health
+11:35:29.874 [nioEventLoopGroup-20-3] DEBUG i.m.http.client.DefaultHttpClient - Chosen Server: localhost(36358)
+11:35:29.874 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Authorization: Basic dXNlcjpwYXNzd29yZA==
+11:35:29.874 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - host: localhost
+11:35:29.874 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:29.882 [nioEventLoopGroup-20-4] DEBUG i.m.h.server.netty.NettyHttpServer - Server localhost:36358 Received Request: GET /health
+11:35:29.883 [nioEventLoopGroup-20-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matching route GET - /health
+11:35:29.884 [nioEventLoopGroup-20-4] DEBUG i.m.h.s.netty.RoutingInBoundHandler - Matched route GET - /health to controller class io.micronaut.management.endpoint.health.HealthEndpoint
 io.micronaut.security.HealthSensitivitySpec$AuthenticationProviderUserPassword
-10:35:23.174 [nioEventLoopGroup-20-4] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dXNlcjpwYXNzd29yZA==]
-10:35:23.462 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerShutdownEvent[source=io.micronaut.http.server.netty.NettyHttpServer@15aa9869]
-10:35:23.463 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@642bcef9]
+11:35:29.906 [nioEventLoopGroup-20-4] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.security.event.TokenValidatedEvent[source=dXNlcjpwYXNzd29yZA==]
+11:35:29.991 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - HTTP Client Response Received for Request: GET /health
+11:35:29.992 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Status Code: 200 OK
+11:35:29.992 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - content-type: application/json
+11:35:29.992 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - content-length: 222
+11:35:29.992 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - connection: close
+11:35:29.992 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - Body
+11:35:29.992 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:29.992 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - {&quot;status&quot;:&quot;DOWN&quot;,&quot;details&quot;:{&quot;compositeDiscoveryClient()&quot;:{&quot;status&quot;:&quot;UP&quot;},&quot;diskSpace&quot;:{&quot;status&quot;:&quot;DOWN&quot;,&quot;details&quot;:{&quot;error&quot;:&quot;Free disk space below threshold. Available: 17775898624 bytes (threshold: 10736344498176 bytes)&quot;}}}}
+11:35:29.992 [nioEventLoopGroup-20-3] TRACE i.m.http.client.DefaultHttpClient - ----
+11:35:30.139 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.runtime.server.event.ServerShutdownEvent[source=io.micronaut.http.server.netty.NettyHttpServer@12308540]
+11:35:30.140 [Test worker] DEBUG i.m.c.e.ApplicationEventPublisher - Publishing event: io.micronaut.context.event.ShutdownEvent[source=io.micronaut.context.DefaultApplicationContext@21fd34d6]
 </pre>
 </span>
 </div>
@@ -131,7 +186,7 @@ io.micronaut.security.HealthSensitivitySpec$AuthenticationProviderUserPassword
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 10:35:23 AM</p>
+<a href="http://www.gradle.org">Gradle 4.6</a> at Jun 1, 2018 11:35:33 AM</p>
 </div>
 </div>
 </body>

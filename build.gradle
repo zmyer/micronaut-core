@@ -236,12 +236,25 @@ subprojects { subproject ->
         jvmArgs '-Duser.country=US'
         jvmArgs '-Duser.language=en'
         testLogging {
-            showStandardStreams = !System.getenv("TRAVIS")
+//            showStandardStreams = !System.getenv("TRAVIS")
             exceptionFormat = 'full'
         }
-        afterSuite {
-            System.out.print('.')
+        beforeTest {
+            System.out.println("STARTING: ${it.className}.$it.name")
             System.out.flush()
+        }
+        afterTest {
+            System.out.println("FINISHED: ${it.className}.$it.name")
+            System.out.flush()
+        }
+        reports.html.enabled = !System.getenv("TRAVIS")
+        reports.junitXml.enabled = !System.getenv("TRAVIS")
+    }
+
+    tasks.withType(Checkstyle) {
+        reports {
+            xml.enabled = !System.getenv("TRAVIS")
+            html.enabled = !System.getenv("TRAVIS")
         }
     }
 

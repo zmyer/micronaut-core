@@ -21,6 +21,8 @@ import io.micronaut.core.util.StringUtils;
 import io.micronaut.core.value.PropertyResolver;
 
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The default {@link PropertyPlaceholderResolver}.
@@ -35,6 +37,15 @@ public class DefaultPropertyPlaceholderResolver implements PropertyPlaceholderRe
      */
     public static final String PREFIX = "${";
 
+    /**
+     * Suffix for placeholder in properties.
+     */
+    public static final String SUFFIX = "}";
+
+    private static final Pattern ESCAPE_SEQUENCE = Pattern.compile("(.+)?:`([^`]+?)`");
+    private static final Pattern ENVIRONMENT_VAR_SEQUENCE = Pattern.compile("^[\\p{Lu}_{0-9}]+");
+    private static final char COLON = ':';
+
     private final PropertyResolver environment;
     private final String prefix;
 
@@ -44,6 +55,11 @@ public class DefaultPropertyPlaceholderResolver implements PropertyPlaceholderRe
     public DefaultPropertyPlaceholderResolver(PropertyResolver environment) {
         this.environment = environment;
         this.prefix = PREFIX;
+    }
+
+    @Override
+    public String getPrefix() {
+        return this.prefix;
     }
 
     @Override
@@ -68,14 +84,30 @@ public class DefaultPropertyPlaceholderResolver implements PropertyPlaceholderRe
         return str;
     }
 
+    /**
+     * Resolves a replacement for the given expression. Returning true if the replacement was resolved.
+     *
+     * @param builder The builder
+     * @param str The full string
+     * @param expr The current expression
+     * @return True if a placeholder was resolved
+     */
+    protected boolean resolveReplacement(StringBuilder builder, String str, String expr) {
+        if (environment.containsProperty(expr)) {
+            builder.append(environment.getProperty(expr, String.class).orElseThrow(() -> new ConfigurationException("Could not resolve placeholder ${" + expr + "} in value: " + str)));
+            return true;
+        }
+        return false;
+    }
+
     private String resolvePlaceholders(String str, int startIndex) {
         StringBuilder builder = new StringBuilder(str.substring(0, startIndex));
-        String restOfString = str.substring(startIndex + 2, str.length());
+        String restOfString = str.substring(startIndex + 2);
         int i = restOfString.indexOf('}');
         if (i > -1) {
             String expr = restOfString.substring(0, i).trim();
             if (restOfString.length() > i) {
-                restOfString = restOfString.substring(i + 1, restOfString.length());
+                restOfString = restOfString.substring(i + 1);
             }
             resolveExpression(builder, str, expr);
 
@@ -93,37 +125,41 @@ public class DefaultPropertyPlaceholderResolver implements PropertyPlaceholderRe
 
     private void resolveExpression(StringBuilder builder, String str, String expr) {
         String defaultValue = null;
-        int j = expr.indexOf(':');
-        if (j > -1) {
-            defaultValue = expr.substring(j + 1, expr.length());
-            expr = expr.substring(0, j);
-        }
-        if (expr.indexOf('.') > -1) {
-            if (defaultValue != null) {
-                if (defaultValue.contains(":")) {
-                    StringBuilder resolved = new StringBuilder();
-                    resolveExpression(resolved, expr, defaultValue);
-                    builder.append(environment.getProperty(expr, String.class, resolved.toString()));
-                } else {
-                    builder.append(environment.getProperty(expr, String.class, defaultValue));
-                }
-            } else {
-                String finalExpr = expr;
-                builder.append(environment.getProperty(expr, String.class).orElseThrow(() -> new ConfigurationException("Could not resolve placeholder ${" + finalExpr + "} in value: " + str)));
+        Matcher matcher = ESCAPE_SEQUENCE.matcher(expr);
+
+        boolean escaped = false;
+        if (matcher.find()) {
+            defaultValue = matcher.group(2);
+            expr = matcher.group(1);
+            escaped = true;
+        } else {
+            int j = expr.indexOf(COLON);
+            if (j > -1) {
+                defaultValue = expr.substring(j + 1);
+                expr = expr.substring(0, j);
             }
-        } else if (expr.matches("^[\\p{Lu}_]+")) {
+        }
+
+        if (resolveReplacement(builder, str, expr)) {
+            return;
+        }
+        if (ENVIRONMENT_VAR_SEQUENCE.matcher(expr).matches()) {
             String v = System.getenv(expr);
             if (StringUtils.isNotEmpty(v)) {
                 builder.append(v);
-            } else if (defaultValue != null) {
-                builder.append(defaultValue);
-            } else {
-                throw new ConfigurationException("Could not resolve placeholder ${" + expr + "} in value: " + str);
+                return;
             }
-        } else if (defaultValue != null) {
-            builder.append(defaultValue);
-        } else {
-            throw new ConfigurationException("Could not resolve placeholder ${" + expr + "} in value: " + str);
         }
+        if (defaultValue != null) {
+            if (!escaped && (ESCAPE_SEQUENCE.matcher(defaultValue).find() || defaultValue.indexOf(COLON) > -1)) {
+                StringBuilder resolved = new StringBuilder();
+                resolveExpression(resolved, expr, defaultValue);
+                builder.append(resolved);
+            } else {
+                builder.append(defaultValue);
+            }
+            return;
+        }
+        throw new ConfigurationException("Could not resolve placeholder ${" + expr + "} in value: " + str);
     }
 }

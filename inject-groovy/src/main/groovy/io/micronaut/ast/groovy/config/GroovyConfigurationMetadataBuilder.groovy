@@ -21,10 +21,12 @@ import io.micronaut.ast.groovy.utils.AstGenericUtils
 import io.micronaut.context.annotation.ConfigurationReader
 import io.micronaut.context.annotation.EachProperty
 import io.micronaut.core.annotation.AnnotationMetadata
+import io.micronaut.core.util.StringUtils
 import io.micronaut.inject.configuration.ConfigurationMetadataBuilder
 import org.codehaus.groovy.ast.ClassHelper
 import org.codehaus.groovy.ast.ClassNode
 import org.codehaus.groovy.ast.InnerClassNode
+import org.codehaus.groovy.control.SourceUnit
 
 import java.util.function.Function
 
@@ -36,6 +38,12 @@ import java.util.function.Function
  */
 @CompileStatic
 class GroovyConfigurationMetadataBuilder extends ConfigurationMetadataBuilder<ClassNode> {
+
+    final SourceUnit sourceUnit
+
+    GroovyConfigurationMetadataBuilder(SourceUnit sourceUnit) {
+        this.sourceUnit = sourceUnit
+    }
 
     @Override
     protected String buildPropertyPath(ClassNode owningType, ClassNode declaringType, String propertyName) {
@@ -53,7 +61,7 @@ class GroovyConfigurationMetadataBuilder extends ConfigurationMetadataBuilder<Cl
             declaringType = ((InnerClassNode) declaringType).getOuterClass()
             if (declaringType != null) {
 
-                AnnotationMetadata parentMetadata = AstAnnotationUtils.getAnnotationMetadata(declaringType)
+                AnnotationMetadata parentMetadata = AstAnnotationUtils.getAnnotationMetadata(sourceUnit, declaringType)
                 Optional<String> parentConfig = parentMetadata.getValue(ConfigurationReader.class, String.class)
                 if (parentConfig.isPresent()) {
                     String parentPath = parentConfig.get()
@@ -76,10 +84,10 @@ class GroovyConfigurationMetadataBuilder extends ConfigurationMetadataBuilder<Cl
     }
 
     private String calculateInitialPath(ClassNode owningType, ClassNode declaringType) {
-        AnnotationMetadata annotationMetadata = AstAnnotationUtils.getAnnotationMetadata(declaringType)
+        AnnotationMetadata annotationMetadata = AstAnnotationUtils.getAnnotationMetadata(sourceUnit, declaringType)
         return annotationMetadata.getValue(ConfigurationReader.class, String.class)
                 .map(pathEvaluationFunction(annotationMetadata)).orElseGet( {->
-            AnnotationMetadata ownerMetadata = AstAnnotationUtils.getAnnotationMetadata(owningType);
+            AnnotationMetadata ownerMetadata = AstAnnotationUtils.getAnnotationMetadata(sourceUnit, owningType)
             return ownerMetadata.getValue(ConfigurationReader.class, String.class)
                                 .map(pathEvaluationFunction(ownerMetadata)).orElseThrow({ ->
                 new IllegalStateException("Non @ConfigurationProperties type visited")
@@ -92,8 +100,9 @@ class GroovyConfigurationMetadataBuilder extends ConfigurationMetadataBuilder<Cl
             if (annotationMetadata.hasDeclaredAnnotation(EachProperty.class)) {
                 return path + ".*"
             }
-            String prefix = annotationMetadata.getValue("io.micronaut.management.endpoint.Endpoint", "prefix", String.class).orElse(null)
-            if (prefix != null) {
+            String prefix = annotationMetadata.getValue(ConfigurationReader.class, "prefix", String.class)
+                    .orElse(null)
+            if (StringUtils.isNotEmpty(prefix)) {
                 return prefix + "." + path
             } else {
                 return path
@@ -109,7 +118,7 @@ class GroovyConfigurationMetadataBuilder extends ConfigurationMetadataBuilder<Cl
     private void prependSuperclasses(ClassNode declaringType, StringBuilder path) {
         ClassNode superclass = declaringType.getSuperClass()
         while (superclass != ClassHelper.OBJECT_TYPE) {
-            Optional<String> parentConfig = AstAnnotationUtils.getAnnotationMetadata(superclass).getValue(ConfigurationReader.class, String.class)
+            Optional<String> parentConfig = AstAnnotationUtils.getAnnotationMetadata(sourceUnit, superclass).getValue(ConfigurationReader.class, String.class)
             if (parentConfig.isPresent()) {
                 path.insert(0, parentConfig.get() + '.')
                 superclass = superclass.getSuperClass()

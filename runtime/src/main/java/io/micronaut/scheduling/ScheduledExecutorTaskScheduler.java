@@ -38,6 +38,7 @@ import java.util.function.Supplier;
  * @author graemerocher
  * @since 1.0
  */
+@Named(TaskExecutors.SCHEDULED)
 @Primary
 public class ScheduledExecutorTaskScheduler implements TaskScheduler {
 

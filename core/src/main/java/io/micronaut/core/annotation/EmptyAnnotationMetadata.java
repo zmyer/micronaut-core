@@ -16,7 +16,7 @@
 
 package io.micronaut.core.annotation;
 
-import io.micronaut.core.convert.value.ConvertibleValues;
+import io.micronaut.core.type.Argument;
 import io.micronaut.core.value.OptionalValues;
 
 import java.lang.annotation.Annotation;
@@ -31,6 +31,7 @@ import java.util.Set;
  * @author Graeme Rocher
  * @since 1.0
  */
+@Internal
 class EmptyAnnotationMetadata implements AnnotationMetadata {
     @Override
     public boolean hasDeclaredAnnotation(String annotation) {
@@ -68,18 +69,18 @@ class EmptyAnnotationMetadata implements AnnotationMetadata {
     }
 
     @Override
-    public List<String> getDeclaredAnnotationNamesTypeByStereotype(String stereotype) {
+    public List<String> getDeclaredAnnotationNamesByStereotype(String stereotype) {
         return Collections.emptyList();
     }
 
     @Override
-    public ConvertibleValues<Object> getValues(String annotation) {
-        return ConvertibleValues.empty();
+    public <T extends Annotation> Optional<AnnotationValue<T>> findAnnotation(String annotation) {
+        return Optional.empty();
     }
 
     @Override
-    public ConvertibleValues<Object> getDeclaredValues(String annotation) {
-        return ConvertibleValues.empty();
+    public <T extends Annotation> Optional<AnnotationValue<T>> findDeclaredAnnotation(String annotation) {
+        return Optional.empty();
     }
 
     @Override
@@ -88,22 +89,37 @@ class EmptyAnnotationMetadata implements AnnotationMetadata {
     }
 
     @Override
+    public <T> Optional<T> getDefaultValue(String annotation, String member, Argument<T> requiredType) {
+        return Optional.empty();
+    }
+
+    @Override
     public <T> Optional<T> getDefaultValue(String annotation, String member, Class<T> requiredType) {
         return Optional.empty();
     }
 
     @Override
-    public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
+    public <T extends Annotation> List<AnnotationValue<T>> getAnnotationValuesByType(Class<T> annotationType) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public <T extends Annotation> List<AnnotationValue<T>> getDeclaredAnnotationValuesByType(Class<T> annotationType) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public <T extends Annotation> T synthesize(Class<T> annotationClass) {
         return null;
     }
 
     @Override
-    public Annotation[] getAnnotations() {
+    public Annotation[] synthesizeAll() {
         return AnnotationUtil.ZERO_ANNOTATIONS;
     }
 
     @Override
-    public Annotation[] getDeclaredAnnotations() {
+    public Annotation[] synthesizeDeclared() {
         return AnnotationUtil.ZERO_ANNOTATIONS;
     }
 }

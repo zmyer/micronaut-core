@@ -20,7 +20,7 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Produces
-import io.micronaut.security.Secured
+import io.micronaut.security.annotation.Secured
 
 import javax.annotation.Nullable
 import java.security.Principal
@@ -31,7 +31,7 @@ import java.security.Principal
 class HomeController {
 
     @Produces(MediaType.TEXT_HTML)
-    @Get("/")
+    @Get
     String index(@Nullable Principal principal) {
         return html(principal != null, principal != null ? principal.getName() : null)
     }

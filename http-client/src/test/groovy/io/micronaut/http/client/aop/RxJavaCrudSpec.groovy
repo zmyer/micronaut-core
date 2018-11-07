@@ -25,13 +25,12 @@ import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Patch
 import io.micronaut.http.annotation.Post
-import io.micronaut.http.client.Client
+import io.micronaut.http.client.annotation.Client
 import io.micronaut.runtime.server.EmbeddedServer
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 
-import javax.inject.Singleton
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -176,13 +175,13 @@ class RxJavaCrudSpec extends Specification {
         @Get("/res/{id}")
         Single<HttpResponse<Book>> getResponse(Long id)
 
-        @Get('/')
+        @Get
         Single<List<Book>> list()
 
         @Delete("/{id}")
         Maybe<Book> delete(Long id)
 
-        @Post('/')
+        @Post
         Single<Book> save(String title)
 
         @Patch("/{id}")

@@ -44,7 +44,7 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Filter
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Header
-import io.micronaut.http.client.Client
+import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.client.RxHttpClient
 import io.micronaut.http.filter.ClientFilterChain
 import io.micronaut.http.filter.HttpClientFilter
@@ -54,7 +54,7 @@ import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
-import javax.inject.Inject
+
 import javax.inject.Singleton
 
 /**
@@ -78,7 +78,7 @@ class ThirdPartyClientFilterSpec extends Specification {
         given:
         BintrayService bintrayService = context.getBean(BintrayService)
 
-        PollingConditions conditions = new PollingConditions(timeout: 1)
+        PollingConditions conditions = new PollingConditions(timeout: 3, delay: 1)
 
         when:
         String result
@@ -100,7 +100,7 @@ class ThirdPartyClientFilterSpec extends Specification {
     @Controller('/repos')
     static class HeaderController {
 
-        @Get(uri = "/grails")
+        @Get(value = "/grails")
         String echoAuthorization(@Header String authorization) {
             authorization
         }

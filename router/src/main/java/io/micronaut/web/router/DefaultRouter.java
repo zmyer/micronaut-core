@@ -17,22 +17,17 @@
 package io.micronaut.web.router;
 
 import io.micronaut.core.order.OrderUtil;
+import io.micronaut.core.reflect.ClassUtils;
 import io.micronaut.http.HttpMethod;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.filter.HttpFilter;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -55,7 +50,8 @@ public class DefaultRouter implements Router {
      *
      * @param builders The builders
      */
-    public DefaultRouter(RouteBuilder... builders) {
+    @Inject
+    public DefaultRouter(Collection<RouteBuilder> builders) {
         List<UriRoute> getRoutes = new ArrayList<>();
         List<UriRoute> putRoutes = new ArrayList<>();
         List<UriRoute> postRoutes = new ArrayList<>();
@@ -142,9 +138,18 @@ public class DefaultRouter implements Router {
         }
     }
 
+    /**
+     * Construct a new router for the given route builders.
+     *
+     * @param builders The builders
+     */
+    public DefaultRouter(RouteBuilder... builders) {
+        this(Arrays.asList(builders));
+    }
+
     @SuppressWarnings("unchecked")
     @Override
-    public <T> Stream<UriRouteMatch<T>> find(HttpMethod httpMethod, CharSequence uri) {
+    public <T, R> Stream<UriRouteMatch<T, R>> find(HttpMethod httpMethod, CharSequence uri) {
         UriRoute[] routes = routesByMethod[httpMethod.ordinal()];
         return Arrays
             .stream(routes)
@@ -161,7 +166,7 @@ public class DefaultRouter implements Router {
     }
 
     @Override
-    public <T> Optional<UriRouteMatch<T>> route(HttpMethod httpMethod, CharSequence uri) {
+    public <T, R> Optional<UriRouteMatch<T, R>> route(HttpMethod httpMethod, CharSequence uri) {
         UriRoute[] routes = routesByMethod[httpMethod.ordinal()];
         Optional<UriRouteMatch> result = Arrays
             .stream(routes)
@@ -175,10 +180,10 @@ public class DefaultRouter implements Router {
     }
 
     @Override
-    public <T> Optional<RouteMatch<T>> route(HttpStatus status) {
+    public <R> Optional<RouteMatch<R>> route(HttpStatus status) {
         for (StatusRoute statusRoute : routesByStatus) {
             if (statusRoute.originatingType() == null) {
-                Optional<RouteMatch<T>> match = statusRoute.match(status);
+                Optional<RouteMatch<R>> match = statusRoute.match(status);
                 if (match.isPresent()) {
                     return match;
                 }
@@ -188,9 +193,9 @@ public class DefaultRouter implements Router {
     }
 
     @Override
-    public <T> Optional<RouteMatch<T>> route(Class originatingClass, HttpStatus status) {
+    public <R> Optional<RouteMatch<R>> route(Class originatingClass, HttpStatus status) {
         for (StatusRoute statusRoute : routesByStatus) {
-            Optional<RouteMatch<T>> match = statusRoute.match(originatingClass, status);
+            Optional<RouteMatch<R>> match = statusRoute.match(originatingClass, status);
             if (match.isPresent()) {
                 return match;
             }
@@ -199,14 +204,28 @@ public class DefaultRouter implements Router {
     }
 
     @Override
-    public <T> Optional<RouteMatch<T>> route(Class originatingClass, Throwable error) {
+    public <R> Optional<RouteMatch<R>> route(Class originatingClass, Throwable error) {
+        Map<ErrorRoute, RouteMatch<R>> matchedRoutes = new LinkedHashMap<>();
         for (ErrorRoute errorRoute : errorRoutes) {
-            Optional<RouteMatch<T>> match = errorRoute.match(originatingClass, error);
-            if (match.isPresent()) {
-                return match;
+            Optional<RouteMatch<R>> match = errorRoute.match(originatingClass, error);
+            match.ifPresent((m) -> {
+                matchedRoutes.put(errorRoute, m);
+            });
+        }
+        return findRouteMatch(matchedRoutes, error);
+    }
+
+    @Override
+    public <R> Optional<RouteMatch<R>> route(Throwable error) {
+        Map<ErrorRoute, RouteMatch<R>> matchedRoutes = new LinkedHashMap<>();
+        for (ErrorRoute errorRoute : errorRoutes) {
+            if (errorRoute.originatingType() == null) {
+                Optional<RouteMatch<R>> match = errorRoute.match(error);
+                match.ifPresent((m) -> matchedRoutes.put(errorRoute, m));
             }
         }
-        return Optional.empty();
+
+        return findRouteMatch(matchedRoutes, error);
     }
 
     @Override
@@ -226,22 +245,9 @@ public class DefaultRouter implements Router {
         }
     }
 
-    @Override
-    public <T> Optional<RouteMatch<T>> route(Throwable error) {
-        for (ErrorRoute errorRoute : errorRoutes) {
-            if (errorRoute.originatingType() == null) {
-                Optional<RouteMatch<T>> match = errorRoute.match(error);
-                if (match.isPresent()) {
-                    return match;
-                }
-            }
-        }
-        return Optional.empty();
-    }
-
     @SuppressWarnings("unchecked")
     @Override
-    public <T> Stream<UriRouteMatch<T>> findAny(CharSequence uri) {
+    public <T, R> Stream<UriRouteMatch<T, R>> findAny(CharSequence uri) {
         return Arrays
             .stream(routesByMethod)
             .filter(Objects::nonNull)
@@ -255,5 +261,37 @@ public class DefaultRouter implements Router {
         Collections.sort(routes);
         Collections.reverse(routes);
         return routes.toArray(new UriRoute[routes.size()]);
+    }
+
+    private <T> Optional<RouteMatch<T>> findRouteMatch(Map<ErrorRoute, RouteMatch<T>> matchedRoutes, Throwable error) {
+        if (matchedRoutes.size() == 1) {
+            return matchedRoutes.values().stream().findFirst();
+        } else if (matchedRoutes.size() > 1) {
+            int minCount = Integer.MAX_VALUE;
+
+            Supplier<List<Class>> hierarchySupplier = () -> ClassUtils.resolveHierarchy(error.getClass());
+            Optional<RouteMatch<T>> match = Optional.empty();
+            Class errorClass = error.getClass();
+
+            for (Map.Entry<ErrorRoute, RouteMatch<T>> entry: matchedRoutes.entrySet()) {
+                Class exceptionType = entry.getKey().exceptionType();
+                if (exceptionType.equals(errorClass)) {
+                    match = Optional.of(entry.getValue());
+                    break;
+                } else {
+                    List<Class> hierarchy = hierarchySupplier.get();
+                    //measures the distance in the hierarchy from the error and the route error type
+                    int index = hierarchy.indexOf(exceptionType);
+                    //the class closest in the hierarchy should be chosen
+                    if (index > -1 && index < minCount) {
+                        minCount = index;
+                        match = Optional.of(entry.getValue());
+                    }
+                }
+            }
+
+            return match;
+        }
+        return Optional.empty();
     }
 }

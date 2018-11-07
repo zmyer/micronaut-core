@@ -21,7 +21,6 @@ import io.micronaut.context.DefaultBeanContext;
 import io.micronaut.context.Qualifier;
 import io.micronaut.context.env.DefaultEnvironment;
 import io.micronaut.core.convert.ArgumentConversionContext;
-import io.micronaut.inject.BeanDefinition;
 import io.micronaut.inject.qualifiers.Qualifiers;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
@@ -34,12 +33,14 @@ import org.springframework.core.env.Environment;
 
 import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
  * Adds Micronaut beans to a Spring application context.  This processor will
- * find all of the singleton Micronaut beans marked with a specified stereotype
- * annotation and add them as singleton beans to the Spring application context.
+ * find all of the Micronaut beans of the specified types
+ * and add them as beans to the Spring application context.
  *
  * @author jeffbrown
  * @since 1.0
@@ -48,53 +49,56 @@ public class MicronautBeanProcessor implements BeanFactoryPostProcessor, Disposa
 
     private static final String MICRONAUT_BEAN_TYPE_PROPERTY_NAME = "micronautBeanType";
     private static final String MICRONAUT_CONTEXT_PROPERTY_NAME = "micronautContext";
+    private static final String MICRONAUT_SINGLETON_PROPERTY_NAME = "micronautSingleton";
 
     protected DefaultBeanContext micronautContext;
-    protected final Class<? extends Annotation> micronautBeanStereotype;
+    protected final List<Class<?>> micronautBeanQualifierTypes;
     private Environment environment;
 
     /**
      *
-     * @param stereotype The stereotype annotation associated with the
+     * @param qualifierTypes The types associated with the
      *                   Micronaut beans which should be added to the
      *                   Spring application context.
      */
-    public MicronautBeanProcessor(Class<? extends Annotation> stereotype) {
-        this.micronautBeanStereotype = stereotype;
+    public MicronautBeanProcessor(Class<?>... qualifierTypes) {
+        this.micronautBeanQualifierTypes = Arrays.asList(qualifierTypes);
     }
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         if (environment != null) {
             micronautContext = new DefaultApplicationContext(environment.getActiveProfiles()) {
+                DefaultEnvironment env = new DefaultEnvironment(environment.getActiveProfiles()) {
+                    @Override
+                    public io.micronaut.context.env.Environment start() {
+                        return this;
+                    }
+
+                    @Override
+                    public io.micronaut.context.env.Environment stop() {
+                        return this;
+                    }
+
+                    @Override
+                    public boolean containsProperty(@Nullable String name) {
+                        return environment.containsProperty(name);
+                    }
+
+                    @Override
+                    public boolean containsProperties(@Nullable String name) {
+                        return environment.containsProperty(name);
+                    }
+
+                    @Override
+                    public <T> Optional<T> getProperty(@Nullable String name, ArgumentConversionContext<T> conversionContext) {
+                        return Optional.ofNullable(environment.getProperty(name, conversionContext.getArgument().getType()));
+                    }
+                };
+
                 @Override
                 public io.micronaut.context.env.Environment getEnvironment() {
-                    return new DefaultEnvironment(environment.getActiveProfiles()) {
-                        @Override
-                        public io.micronaut.context.env.Environment start() {
-                            return this;
-                        }
-
-                        @Override
-                        public io.micronaut.context.env.Environment stop() {
-                            return this;
-                        }
-
-                        @Override
-                        public boolean containsProperty(@Nullable String name) {
-                            return environment.containsProperty(name);
-                        }
-
-                        @Override
-                        public boolean containsProperties(@Nullable String name) {
-                            return environment.containsProperty(name);
-                        }
-
-                        @Override
-                        public <T> Optional<T> getProperty(@Nullable String name, ArgumentConversionContext<T> conversionContext) {
-                            return Optional.ofNullable(environment.getProperty(name, conversionContext.getArgument().getType()));
-                        }
-                    };
+                    return env;
                 }
             };
         } else {
@@ -102,18 +106,26 @@ public class MicronautBeanProcessor implements BeanFactoryPostProcessor, Disposa
         }
         micronautContext.start();
 
-
-        Qualifier<Object> micronautBeanQualifier = Qualifiers.byStereotype(micronautBeanStereotype);
-        micronautContext.getBeanDefinitions(micronautBeanQualifier)
+        micronautBeanQualifierTypes
                 .stream()
-                .filter(BeanDefinition::isSingleton)
-                .forEach(definition -> {
-                    final BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder
-                            .rootBeanDefinition(MicronautSpringBeanFactory.class.getName());
-                    beanDefinitionBuilder.addPropertyValue(MICRONAUT_BEAN_TYPE_PROPERTY_NAME, definition.getBeanType());
-                    beanDefinitionBuilder.addPropertyValue(MICRONAUT_CONTEXT_PROPERTY_NAME, micronautContext);
-                    ((DefaultListableBeanFactory) beanFactory).registerBeanDefinition(definition.getName(), beanDefinitionBuilder.getBeanDefinition());
-                });
+                .forEach(micronautBeanQualifierType -> {
+            Qualifier<Object> micronautBeanQualifier;
+            if (micronautBeanQualifierType.isAnnotation()) {
+                micronautBeanQualifier = Qualifiers.byStereotype((Class<? extends Annotation>) micronautBeanQualifierType);
+            } else {
+                micronautBeanQualifier = Qualifiers.byType(micronautBeanQualifierType);
+            }
+            micronautContext.getBeanDefinitions(micronautBeanQualifier)
+                    .stream()
+                    .forEach(definition -> {
+                        final BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder
+                                .rootBeanDefinition(MicronautSpringBeanFactory.class.getName());
+                        beanDefinitionBuilder.addPropertyValue(MICRONAUT_BEAN_TYPE_PROPERTY_NAME, definition.getBeanType());
+                        beanDefinitionBuilder.addPropertyValue(MICRONAUT_CONTEXT_PROPERTY_NAME, micronautContext);
+                        beanDefinitionBuilder.addPropertyValue(MICRONAUT_SINGLETON_PROPERTY_NAME, definition.isSingleton());
+                        ((DefaultListableBeanFactory) beanFactory).registerBeanDefinition(definition.getName(), beanDefinitionBuilder.getBeanDefinition());
+                    });
+        });
     }
 
     @Override

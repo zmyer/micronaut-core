@@ -21,10 +21,13 @@ import io.micronaut.ast.groovy.utils.AstAnnotationUtils
 class CustomVisitorSpec extends AbstractBeanDefinitionSpec {
 
     void setup() {
-        ControllerGetVisitor.VISITED_ELEMENTS = []
-        AllElementsVisitor.VISITED_ELEMENTS = []
-        AllClassesVisitor.VISITED_ELEMENTS = []
-        InjectVisitor.VISITED_ELEMENTS = []
+        ControllerGetVisitor.clearVisited()
+        AllElementsVisitor.clearVisited()
+        AllClassesVisitor.clearVisited()
+        InjectVisitor.clearVisited()
+    }
+
+    void cleanup() {
         AstAnnotationUtils.invalidateCache()
     }
 
@@ -39,12 +42,11 @@ import javax.inject.Inject
 class TestController {
 
     @Inject private String privateField
-    @Inject protected String protectedField  
-    @Inject public String publicField
-    @Inject @groovy.transform.PackageScope String packagePrivateField
-    @Inject String property
+    protected String protectedField  
+    public String publicField
+    @groovy.transform.PackageScope String packagePrivateField
+    String property
     
-    @Inject
     TestController(String constructorArg) {}
     
     @Inject
@@ -63,10 +65,9 @@ class TestController {
 }
 ''')
         expect:
-        ControllerGetVisitor.VISITED_ELEMENTS == ["test.TestController", "getMethod"]
-        AllElementsVisitor.VISITED_ELEMENTS.toSet() == ["test.TestController", "<init>", "privateField", "protectedField", "publicField", "packagePrivateField", "property", "setterMethod", "getMethod", "postMethod"].toSet()
-        AllClassesVisitor.VISITED_ELEMENTS == ["test.TestController", "getMethod"]
-        InjectVisitor.VISITED_ELEMENTS.toSet() == ["test.TestController", "<init>", "privateField", "protectedField", "publicField", "packagePrivateField", "property", "setterMethod"].toSet()
+        ControllerGetVisitor.getVisited() == ["test.TestController", "getMethod"]
+        AllElementsVisitor.getVisited().toSet() == ["test.TestController","privateField", "protectedField", "publicField", "packagePrivateField", "property", "setterMethod", "getMethod", "postMethod"].toSet()
+        AllClassesVisitor.getVisited() == ["test.TestController", "getMethod"]
     }
 
     void "test non controller class is not visited by custom visitor"() {
@@ -76,19 +77,17 @@ package test;
 import io.micronaut.http.annotation.*
 import javax.inject.Inject
 
-@javax.inject.Singleton
 public class TestController {
 
     @Inject private String privateField
-    @Inject protected String protectedField  
-    @Inject public String publicField
-    @Inject @groovy.transform.PackageScope String packagePrivateField
-    @Inject String property
+    protected String protectedField  
+    public String publicField
+    @groovy.transform.PackageScope String packagePrivateField
+    String property
     
-    @Inject
+    
     TestController(String constructorArg) {}
     
-    @Inject
     void setterMethod(String method) {}
     
     @Get("/getMethod")
@@ -104,9 +103,9 @@ public class TestController {
 }
 ''')
         expect:
-        ControllerGetVisitor.VISITED_ELEMENTS == []
-        AllElementsVisitor.VISITED_ELEMENTS == []
-        AllClassesVisitor.VISITED_ELEMENTS == ["test.TestController", "getMethod"]
-        InjectVisitor.VISITED_ELEMENTS.toSet() == ["test.TestController", "<init>", "privateField", "protectedField", "publicField", "packagePrivateField", "property", "setterMethod"].toSet()
+        ControllerGetVisitor.getVisited().empty
+        AllElementsVisitor.getVisited().empty
+        AllClassesVisitor.getVisited() == ["test.TestController", "getMethod"]
+        InjectVisitor.getVisited() == ["test.TestController", "privateField"]
     }
 }

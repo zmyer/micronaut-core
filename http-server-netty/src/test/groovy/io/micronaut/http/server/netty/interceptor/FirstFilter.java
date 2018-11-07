@@ -15,7 +15,6 @@
  */
 package io.micronaut.http.server.netty.interceptor;
 
-import io.micronaut.http.annotation.Filter;
 import io.micronaut.core.async.publisher.Publishers;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -36,7 +35,6 @@ public class FirstFilter implements HttpFilter {
     public int getOrder() {
         return TestSecurityFilter.POSITION - 100;
     }
-
 
     @Override
     public Publisher<? extends HttpResponse<?>> doFilter(HttpRequest<?> request, FilterChain chain) {

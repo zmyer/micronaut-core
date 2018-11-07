@@ -16,6 +16,7 @@
 
 package io.micronaut.http.client.ssl;
 
+import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.io.ResourceResolver;
 import io.micronaut.http.ssl.*;
 import io.netty.handler.ssl.ClientAuth;
@@ -23,7 +24,6 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.net.ssl.KeyManagerFactory;
@@ -40,6 +40,7 @@ import java.util.Optional;
  * @since 1.0
  */
 @Singleton
+@Internal
 public class NettyClientSslBuilder extends SslBuilder<SslContext> {
 
     /**

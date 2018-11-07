@@ -16,12 +16,12 @@
 
 package io.micronaut.context;
 
-import io.micronaut.context.annotation.Requirements;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.condition.Condition;
 import io.micronaut.context.condition.Failure;
 import io.micronaut.core.annotation.AnnotationMetadata;
 import io.micronaut.core.annotation.AnnotationMetadataProvider;
+import io.micronaut.core.annotation.Internal;
 import io.micronaut.inject.BeanConfiguration;
 import io.micronaut.inject.BeanContextConditional;
 import org.slf4j.Logger;
@@ -36,6 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author graemerocher
  * @since 1.0
  */
+@Internal
 abstract class AbstractBeanContextConditional implements BeanContextConditional, AnnotationMetadataProvider {
 
     static final Logger LOG = LoggerFactory.getLogger(Condition.class);
@@ -44,11 +45,11 @@ abstract class AbstractBeanContextConditional implements BeanContextConditional,
 
     @Override
     public boolean isEnabled(BeanContext context) {
-        int contextId = context.hashCode();
+        int contextId = System.identityHashCode(context);
         Boolean enabled = this.enabled.get(contextId);
         if (enabled == null) {
             AnnotationMetadata annotationMetadata = getAnnotationMetadata();
-            Condition condition = annotationMetadata.hasStereotype(Requirements.class) || annotationMetadata.hasStereotype(Requires.class) ? new RequiresCondition(annotationMetadata) : null;
+            Condition condition = annotationMetadata.hasStereotype(Requires.class) ? new RequiresCondition(annotationMetadata) : null;
             DefaultConditionContext<AbstractBeanContextConditional> conditionContext = new DefaultConditionContext<>(context, this);
             enabled = condition == null || condition.matches(conditionContext);
             if (LOG.isDebugEnabled() && !enabled) {

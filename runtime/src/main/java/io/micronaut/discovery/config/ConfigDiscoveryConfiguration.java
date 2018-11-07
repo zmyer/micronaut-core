@@ -36,9 +36,15 @@ public abstract class ConfigDiscoveryConfiguration implements Toggleable {
     /**
      * The default path.
      */
-    public static final String DEFAULT_PATH = "/" + PREFIX + "/";
+    public static final String DEFAULT_PATH = PREFIX + "/";
 
-    private boolean enabled = true;
+    /**
+     * The default enable value.
+     */
+    @SuppressWarnings("WeakerAccess")
+    public static final boolean DEFAULT_ENABLED = true;
+
+    private boolean enabled = DEFAULT_ENABLED;
     private String path;
     private Format format = Format.NATIVE;
 
@@ -51,6 +57,7 @@ public abstract class ConfigDiscoveryConfiguration implements Toggleable {
     }
 
     /**
+     * Default value ({@value #DEFAULT_ENABLED}).
      * @param enabled Enable the distributed configuration
      */
     public void setEnabled(boolean enabled) {

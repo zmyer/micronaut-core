@@ -16,6 +16,7 @@
 
 package io.micronaut.http.netty.stream;
 
+import io.micronaut.core.annotation.Internal;
 import io.micronaut.http.netty.reactive.HandlerPublisher;
 import io.micronaut.http.netty.reactive.HandlerSubscriber;
 import io.netty.channel.*;
@@ -39,6 +40,7 @@ import java.util.Queue;
  * @author Graeme Rocher
  * @since 1.0
  */
+@Internal
 abstract class HttpStreamsHandler<In extends HttpMessage, Out extends HttpMessage> extends ChannelDuplexHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpStreamsHandler.class);
@@ -173,7 +175,7 @@ abstract class HttpStreamsHandler<In extends HttpMessage, Out extends HttpMessag
     @Override
     public void channelRead(final ChannelHandlerContext ctx, Object msg) throws Exception {
 
-        if (inClass.isInstance(msg)) {
+        if (isValidInMessage(msg)) {
 
             receivedInMessage(ctx);
             final In inMsg = inClass.cast(msg);
@@ -181,6 +183,9 @@ abstract class HttpStreamsHandler<In extends HttpMessage, Out extends HttpMessag
             if (inMsg instanceof FullHttpMessage) {
 
                 // Forward as is
+                FullHttpMessage message = (FullHttpMessage) inMsg;
+                // will be released by fireChannelRead
+                message.retain();
                 ctx.fireChannelRead(inMsg);
                 consumedInMessage(ctx);
 
@@ -226,6 +231,9 @@ abstract class HttpStreamsHandler<In extends HttpMessage, Out extends HttpMessag
         if (currentlyStreamedMessage == msg) {
             ignoreBodyRead = true;
             // Need to do a read in case the subscriber ignored a read completed.
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Calling ctx.read() for cancelled subscription");
+            }
             ctx.read();
         }
     }
@@ -273,7 +281,7 @@ abstract class HttpStreamsHandler<In extends HttpMessage, Out extends HttpMessag
 
     @Override
     public void write(final ChannelHandlerContext ctx, Object msg, final ChannelPromise promise) throws Exception {
-        if (outClass.isInstance(msg)) {
+        if (isValidOutMessage(msg)) {
 
             Outgoing out = new Outgoing(outClass.cast(msg), promise);
             receivedOutMessage(ctx);
@@ -323,8 +331,6 @@ abstract class HttpStreamsHandler<In extends HttpMessage, Out extends HttpMessag
                         }
                         ctx.writeAndFlush(new DefaultHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.INTERNAL_SERVER_ERROR))
                            .addListener(ChannelFutureListener.CLOSE);
-                    } catch (Exception e) {
-                        ctx.close();
                     } finally {
                         ctx.read();
                     }
@@ -376,7 +382,11 @@ abstract class HttpStreamsHandler<In extends HttpMessage, Out extends HttpMessag
      */
     private void removeHandlerIfActive(ChannelHandlerContext ctx, String name) {
         if (ctx.channel().isActive()) {
-            ctx.pipeline().remove(name);
+            ChannelPipeline pipeline = ctx.pipeline();
+            ChannelHandler handler = pipeline.get(name);
+            if (handler != null) {
+                pipeline.remove(name);
+            }
         }
     }
 
@@ -397,6 +407,22 @@ abstract class HttpStreamsHandler<In extends HttpMessage, Out extends HttpMessag
     }
 
     /**
+     * @param msg The message
+     * @return True if the handler should write the message
+     */
+    protected boolean isValidOutMessage(Object msg) {
+        return outClass.isInstance(msg);
+    }
+
+    /**
+     * @param msg The message
+     * @return True if the handler should read the message
+     */
+    protected boolean isValidInMessage(Object msg) {
+        return inClass.isInstance(msg);
+    }
+
+    /**
      * The outgoing class.
      */
     class Outgoing {
@@ -412,4 +438,5 @@ abstract class HttpStreamsHandler<In extends HttpMessage, Out extends HttpMessag
             this.promise = promise;
         }
     }
+
 }

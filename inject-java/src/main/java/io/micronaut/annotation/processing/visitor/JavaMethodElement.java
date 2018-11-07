@@ -17,9 +17,18 @@
 package io.micronaut.annotation.processing.visitor;
 
 import io.micronaut.core.annotation.AnnotationMetadata;
-import io.micronaut.inject.visitor.MethodElement;
+import io.micronaut.inject.ast.ClassElement;
+import io.micronaut.inject.ast.MethodElement;
+import io.micronaut.inject.ast.ParameterElement;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * A method element returning data from a {@link ExecutableElement}.
@@ -30,14 +39,51 @@ import javax.lang.model.element.ExecutableElement;
 class JavaMethodElement extends AbstractJavaElement implements MethodElement {
 
     private final ExecutableElement executableElement;
+    private final JavaVisitorContext visitorContext;
 
     /**
      * @param executableElement  The {@link ExecutableElement}
      * @param annotationMetadata The annotation metadata
+     * @param visitorContext The visitor context
      */
-    JavaMethodElement(ExecutableElement executableElement, AnnotationMetadata annotationMetadata) {
+    JavaMethodElement(
+            ExecutableElement executableElement,
+            AnnotationMetadata annotationMetadata,
+            JavaVisitorContext visitorContext) {
         super(executableElement, annotationMetadata);
         this.executableElement = executableElement;
+        this.visitorContext = visitorContext;
     }
 
+    @Override
+    public Optional<String> getDocumentation() {
+        return Optional.ofNullable(visitorContext.getElements().getDocComment(executableElement));
+    }
+
+    @Override
+    public ClassElement getReturnType() {
+        TypeMirror returnType = executableElement.getReturnType();
+        return mirrorToClassElement(returnType, visitorContext);
+    }
+
+    @Override
+    public ParameterElement[] getParameters() {
+        List<? extends VariableElement> parameters = executableElement.getParameters();
+        return parameters.stream().map((Function<VariableElement, ParameterElement>) variableElement ->
+                new JavaParameterElement(variableElement, visitorContext.getAnnotationUtils().getAnnotationMetadata(variableElement), visitorContext)
+        ).toArray(ParameterElement[]::new);
+    }
+
+    @Override
+    public ClassElement getDeclaringType() {
+        final Element enclosingElement = executableElement.getEnclosingElement();
+        if (!(enclosingElement instanceof TypeElement)) {
+            throw new IllegalStateException("Enclosing element should be a type element");
+        }
+        return new JavaClassElement(
+                (TypeElement) enclosingElement,
+                visitorContext.getAnnotationUtils().getAnnotationMetadata(enclosingElement),
+                visitorContext
+        );
+    }
 }

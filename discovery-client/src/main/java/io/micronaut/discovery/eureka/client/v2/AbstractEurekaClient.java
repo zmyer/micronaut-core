@@ -33,7 +33,7 @@ import io.micronaut.discovery.eureka.condition.RequiresEureka;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Produces;
-import io.micronaut.http.client.Client;
+import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientException;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.jackson.annotation.JacksonFeatures;
@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
  * @author Graeme Rocher
  * @since 1.0
  */
-@Client(id = EurekaClient.SERVICE_ID, path = "/eureka", configuration = EurekaConfiguration.class)
+@Client(id = EurekaClient.SERVICE_ID, path = EurekaConfiguration.CONTEXT_PATH_PLACEHOLDER, configuration = EurekaConfiguration.class)
 @JacksonFeatures(
     enabledSerializationFeatures = WRAP_ROOT_VALUE,
     disabledSerializationFeatures = WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED,
@@ -60,6 +60,20 @@ import java.util.stream.Collectors;
 @Validated
 @RequiresEureka
 abstract class AbstractEurekaClient implements EurekaClient {
+
+    static final String EXPR_EUREKA_REGISTRATION_RETRY_DELAY = "${" + EurekaConfiguration.EurekaRegistrationConfiguration.PREFIX + ".retry-delay:3s}";
+    static final String EXPR_EUREKA_REGISTRATION_RETRY_COUNT = "${" + EurekaConfiguration.EurekaRegistrationConfiguration.PREFIX + ".retry-count:10}";
+
+    private final EurekaConfiguration.EurekaDiscoveryConfiguration discoveryConfiguration;
+
+    /**
+     * Default constructor.
+     *
+     * @param discoveryConfiguration The discovery configuration.
+     */
+    protected AbstractEurekaClient(EurekaConfiguration.EurekaDiscoveryConfiguration discoveryConfiguration) {
+        this.discoveryConfiguration = discoveryConfiguration;
+    }
 
     @Override
     public String getDescription() {
@@ -72,7 +86,12 @@ abstract class AbstractEurekaClient implements EurekaClient {
         Flowable<List<ServiceInstance>> flowable = Flowable.fromPublisher(getApplicationInfo(serviceId)).map(applicationInfo -> {
             List<InstanceInfo> instances = applicationInfo.getInstances();
             return instances.stream()
-                .map(EurekaServiceInstance::new)
+                .map(ii -> {
+                    if (!discoveryConfiguration.isUseSecurePort()) {
+                        ii.setSecurePort(-1);
+                    }
+                    return new EurekaServiceInstance(ii);
+                })
                 .collect(Collectors.toList());
         });
 
@@ -114,7 +133,7 @@ abstract class AbstractEurekaClient implements EurekaClient {
     }
 
     /**
-     * @return A {@link Publisher} with applications info
+     * @return A {@link Publisher} with applications info.
      */
     @SuppressWarnings("WeakerAccess")
     @Get("/apps")

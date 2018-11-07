@@ -21,13 +21,6 @@ import io.micronaut.context.annotation.Type
 import io.micronaut.inject.AbstractTypeElementSpec
 import io.micronaut.inject.BeanDefinition
 import io.micronaut.inject.BeanFactory
-import io.micronaut.context.ApplicationContext
-import io.micronaut.context.DefaultBeanContext
-import io.micronaut.inject.AbstractTypeElementSpec
-import io.micronaut.inject.BeanDefinition
-import io.micronaut.inject.BeanFactory
-import io.micronaut.inject.writer.BeanDefinitionVisitor
-import spock.lang.Specification
 
 /**
  * @author graemerocher
@@ -68,7 +61,7 @@ class MyBean {
         beanDefinition.constructor.arguments[0].name == 'val'
         beanDefinition.constructor.arguments[1].name == 'beanContext'
         beanDefinition.constructor.arguments[2].name == 'interceptors'
-        beanDefinition.constructor.arguments[2].getAnnotation(Type.class).value()[0] == Mutating
+        beanDefinition.constructor.arguments[2].synthesize(Type.class).value()[0] == Mutating
 
         when:
         def context = ApplicationContext.run('foo.bar':'test')

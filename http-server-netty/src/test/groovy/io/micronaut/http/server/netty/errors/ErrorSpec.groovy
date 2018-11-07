@@ -25,8 +25,6 @@ import io.micronaut.http.hateos.JsonError
 import io.micronaut.http.server.netty.AbstractMicronautSpec
 import io.micronaut.http.annotation.Get
 
-import javax.inject.Singleton
-
 /**
  * Tests for different kinds of errors and the expected responses
  *
@@ -46,8 +44,6 @@ class ErrorSpec extends AbstractMicronautSpec {
         response.code() == HttpStatus.INTERNAL_SERVER_ERROR.code
         response.header(HttpHeaders.CONTENT_TYPE) == MediaType.APPLICATION_JSON
         response.getBody(JsonError).get().message == 'Internal Server Error: bad'
-
-
     }
 
     void "test 404 error"() {
@@ -61,14 +57,12 @@ class ErrorSpec extends AbstractMicronautSpec {
         response.code() == HttpStatus.NOT_FOUND.code
         response.header(HttpHeaders.CONTENT_TYPE) == MediaType.APPLICATION_JSON
 
-
         when:
         def json = new JsonSlurper().parseText(response.getBody(String).orElse(null))
 
         then:
         json.message == 'Page Not Found'
         json._links.self.href == '/errors/blah'
-
     }
 
     void "test 405 error"() {
@@ -82,20 +76,18 @@ class ErrorSpec extends AbstractMicronautSpec {
         response.code() == HttpStatus.METHOD_NOT_ALLOWED.code
         response.header(HttpHeaders.CONTENT_TYPE) == MediaType.APPLICATION_JSON
 
-
         when:
         def json = new JsonSlurper().parseText(response.getBody(String).orElse(null))
 
         then:
         json.message == 'Method [POST] not allowed. Allowed methods: [GET]'
         json._links.self.href == '/errors/server-error'
-
-
     }
+
     @Controller('/errors')
     static class ErrorController {
 
-        @Get
+        @Get('/server-error')
         String serverError() {
             throw new RuntimeException("bad")
         }

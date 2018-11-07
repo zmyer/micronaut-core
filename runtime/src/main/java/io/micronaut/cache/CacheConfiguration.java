@@ -40,6 +40,12 @@ public class CacheConfiguration {
      */
     public static final String PREFIX = "micronaut.caches";
 
+    /**
+     * The default test mode value.
+     */
+    @SuppressWarnings("WeakerAccess")
+    public static final boolean DEFAULT_TESTMODE = false;
+
     protected Charset charset;
 
     private Integer initialCapacity;
@@ -47,7 +53,7 @@ public class CacheConfiguration {
     private Long maximumWeight;
     private Duration expireAfterWrite;
     private Duration expireAfterAccess;
-
+    private boolean testMode = DEFAULT_TESTMODE;
     private final String cacheName;
 
     /**
@@ -158,5 +164,24 @@ public class CacheConfiguration {
      */
     public void setCharset(Charset charset) {
         this.charset = charset;
+    }
+
+    /**
+     * Some caches have a test mode. For example to to enable the eager execution of cleanup operations making it
+     * easier to test.
+     *
+     * @return True if it test mode is enabled
+     */
+    public boolean isTestMode() {
+        return testMode;
+    }
+
+    /**
+     * Set whether test mode is enabled. Default value ({@value #DEFAULT_TESTMODE}).
+     *
+     * @param testMode True if test mode is eanbled
+     */
+    public void setTestMode(boolean testMode) {
+        this.testMode = testMode;
     }
 }

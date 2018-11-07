@@ -27,7 +27,6 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Header
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.client.StreamRequestSpec.Book
-import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.runtime.server.EmbeddedServer
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -35,18 +34,17 @@ import io.reactivex.FlowableEmitter
 import io.reactivex.FlowableOnSubscribe
 import io.reactivex.Single
 import io.reactivex.annotations.NonNull
-import io.reactivex.functions.Function
 import spock.lang.AutoCleanup
-import spock.lang.IgnoreIf
 import spock.lang.Shared
 import spock.lang.Specification
 import java.nio.charset.StandardCharsets
+import java.time.Duration
 
 /**
  * @author graemerocher
  * @since 1.0
  */
-@IgnoreIf({System.getenv("TRAVIS")})
+//@IgnoreIf({env["TRAVIS"]})
 class StreamRequestSpec extends Specification {
     @Shared @AutoCleanup EmbeddedServer embeddedServer =
             ApplicationContext.run(EmbeddedServer)
@@ -139,8 +137,11 @@ class StreamRequestSpec extends Specification {
     }
 
     void "test stream post request with POJOs flowable"() {
+
         given:
-        RxHttpClient client = RxHttpClient.create(embeddedServer.getURL())
+        def configuration = new DefaultHttpClientConfiguration()
+        configuration.setReadTimeout(Duration.ofMinutes(1))
+        RxHttpClient client = new DefaultHttpClient(embeddedServer.getURL(), configuration)
 
         when:
         int i = 0
@@ -222,29 +223,29 @@ class StreamRequestSpec extends Specification {
     @Controller('/stream/request')
     static class StreamController {
 
-        @Post(consumes = MediaType.TEXT_PLAIN)
+        @Post(uri = "/strings", consumes = MediaType.TEXT_PLAIN)
         Single<List<String>> strings(@Body Flowable<String> strings) {
             strings.toList()
         }
 
-        @Post(consumes = MediaType.TEXT_PLAIN)
+        @Post(uri = "/bytes", consumes = MediaType.TEXT_PLAIN)
         Single<List<String>> bytes(@Body Flowable<byte[]> strings) {
             strings.map({ byte[] bytes -> new String(bytes, StandardCharsets.UTF_8)}).toList()
         }
 
-        @Post
+        @Post("/pojos")
         Single<List<Book>> pojos(@Header MediaType contentType, @Body Single<List<Book>> books) {
             assert contentType == MediaType.APPLICATION_JSON_TYPE
             books
         }
 
-        @Post
+        @Post("/pojo-flowable")
         Flowable<Book> pojoFlowable(@Header MediaType contentType, @Body Flowable<Book> books) {
             assert contentType == MediaType.APPLICATION_JSON_TYPE
             books
         }
 
-        @Post
+        @Post("/pojo-flowable-error")
         Flowable<Book> pojoFlowableError(@Header MediaType contentType, @Body Flowable<Book> books) {
             return books.flatMap({ Book book ->
                 if(book.title.endsWith("3")) {

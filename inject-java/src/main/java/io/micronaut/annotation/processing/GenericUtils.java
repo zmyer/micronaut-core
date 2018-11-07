@@ -109,9 +109,12 @@ public class GenericUtils {
     public List<? extends TypeMirror> interfaceGenericTypesFor(TypeElement element, String interfaceName) {
         for (TypeMirror tm : element.getInterfaces()) {
             DeclaredType declaredType = (DeclaredType) tm;
-            TypeElement interfaceType = elementUtils.getTypeElement(typeUtils.erasure(declaredType).toString());
-            if (interfaceName.equals(interfaceType.getQualifiedName().toString())) {
-                return declaredType.getTypeArguments();
+            Element declaredElement = declaredType.asElement();
+            if (declaredElement instanceof TypeElement) {
+               TypeElement te = (TypeElement) declaredElement;
+                if (interfaceName.equals(te.getQualifiedName().toString())) {
+                    return declaredType.getTypeArguments();
+                }
             }
         }
         return Collections.emptyList();
@@ -349,21 +352,34 @@ public class GenericUtils {
     }
 
     private void resolveGenericTypeParameter(Map<String, Object> resolvedParameters, String parameterName, TypeMirror mirror, Map<String, Object> boundTypes) {
-        DeclaredType declaredType = (DeclaredType) mirror;
-        List<? extends TypeMirror> nestedArguments = declaredType.getTypeArguments();
-        if (nestedArguments.isEmpty()) {
-            resolvedParameters.put(
-                parameterName,
-                resolveTypeReference(typeUtils.erasure(mirror), resolvedParameters)
-            );
-        } else {
-            resolvedParameters.put(
-                parameterName,
-                Collections.singletonMap(
-                    resolveTypeReference(typeUtils.erasure(mirror), resolvedParameters),
-                    resolveGenericTypes(declaredType, boundTypes)
-                )
-            );
+        if (mirror instanceof DeclaredType) {
+            DeclaredType declaredType = (DeclaredType) mirror;
+            List<? extends TypeMirror> nestedArguments = declaredType.getTypeArguments();
+            if (nestedArguments.isEmpty()) {
+                resolvedParameters.put(
+                        parameterName,
+                        resolveTypeReference(typeUtils.erasure(mirror), resolvedParameters)
+                );
+            } else {
+                resolvedParameters.put(
+                        parameterName,
+                        Collections.singletonMap(
+                                resolveTypeReference(typeUtils.erasure(mirror), resolvedParameters),
+                                resolveGenericTypes(declaredType, boundTypes)
+                        )
+                );
+            }
+        } else if (mirror instanceof TypeVariable) {
+            TypeVariable tv = (TypeVariable) mirror;
+            TypeMirror upperBound = tv.getUpperBound();
+            if (upperBound instanceof DeclaredType) {
+                resolveGenericTypeParameter(
+                        resolvedParameters,
+                        parameterName,
+                        upperBound,
+                        boundTypes
+                );
+            }
         }
     }
 

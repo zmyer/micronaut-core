@@ -23,7 +23,7 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.MutableHttpHeaders;
 import io.micronaut.http.MutableHttpResponse;
-import io.micronaut.http.netty.NettyHttpResponse;
+import io.micronaut.http.netty.NettyMutableHttpResponse;
 import io.micronaut.http.server.netty.types.NettyCustomizableResponseTypeHandler;
 import io.micronaut.http.server.netty.types.NettyFileCustomizableResponseType;
 import io.micronaut.http.server.types.CustomizableResponseTypeException;
@@ -61,7 +61,7 @@ public class FileTypeHandler implements NettyCustomizableResponseTypeHandler<Obj
 
     @SuppressWarnings("MagicNumber")
     @Override
-    public void handle(Object obj, HttpRequest<?> request, NettyHttpResponse<?> response, ChannelHandlerContext context) {
+    public void handle(Object obj, HttpRequest<?> request, NettyMutableHttpResponse<?> response, ChannelHandlerContext context) {
         NettyFileCustomizableResponseType type;
         if (obj instanceof File) {
             type = new NettySystemFileCustomizableResponseType((File) obj);
@@ -131,10 +131,17 @@ public class FileTypeHandler implements NettyCustomizableResponseTypeHandler<Obj
 
         // Add cache headers
         LocalDateTime cacheSeconds = now.plus(configuration.getCacheSeconds(), ChronoUnit.SECONDS);
-        headers.expires(cacheSeconds);
+        if (response.header(HttpHeaders.EXPIRES) == null) {
+            headers.expires(cacheSeconds);
+        }
 
-        response.header(HttpHeaders.CACHE_CONTROL, "private, max-age=" + configuration.getCacheSeconds());
-        headers.lastModified(lastModified);
+        if (response.header(HttpHeaders.CACHE_CONTROL) == null) {
+            response.header(HttpHeaders.CACHE_CONTROL, "private, max-age=" + configuration.getCacheSeconds());
+        }
+
+        if (response.header(HttpHeaders.LAST_MODIFIED) == null) {
+            headers.lastModified(lastModified);
+        }
     }
 
     /**
@@ -147,7 +154,7 @@ public class FileTypeHandler implements NettyCustomizableResponseTypeHandler<Obj
     }
 
     private FullHttpResponse notModified() {
-        NettyHttpResponse response = (NettyHttpResponse) HttpResponse.notModified();
+        NettyMutableHttpResponse response = (NettyMutableHttpResponse) HttpResponse.notModified();
         setDateHeader(response);
         return response.getNativeResponse();
     }

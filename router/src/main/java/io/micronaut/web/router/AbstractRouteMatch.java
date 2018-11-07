@@ -17,7 +17,6 @@
 package io.micronaut.web.router;
 
 import io.micronaut.core.annotation.AnnotationMetadata;
-import io.micronaut.core.annotation.AnnotationUtil;
 import io.micronaut.core.bind.ArgumentBinder;
 import io.micronaut.core.bind.annotation.Bindable;
 import io.micronaut.core.convert.ArgumentConversionContext;
@@ -32,11 +31,12 @@ import io.micronaut.http.HttpRequest;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.sse.Event;
+import io.micronaut.inject.ExecutableMethod;
 import io.micronaut.inject.MethodExecutionHandle;
 import io.micronaut.web.router.exceptions.UnsatisfiedRouteException;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,13 +52,14 @@ import java.util.stream.Collectors;
 /**
  * Abstract implementation of the {@link RouteMatch} interface.
  *
+ * @param <T> The target type
  * @param <R> Route Match
  * @author Graeme Rocher
  * @since 1.0
  */
-abstract class AbstractRouteMatch<R> implements MethodBasedRouteMatch<R> {
+abstract class AbstractRouteMatch<T, R> implements MethodBasedRouteMatch<T, R> {
 
-    protected final MethodExecutionHandle<R> executableMethod;
+    protected final MethodExecutionHandle<T, R> executableMethod;
     protected final ConversionService<?> conversionService;
     protected final Map<String, Argument> requiredInputs;
     protected final DefaultRouteBuilder.AbstractRoute abstractRoute;
@@ -84,17 +85,15 @@ abstract class AbstractRouteMatch<R> implements MethodBasedRouteMatch<R> {
         this.acceptedMediaTypes = abstractRoute.getConsumes();
     }
 
-    private String resolveInputName(Argument requiredArgument) {
-        Optional<Annotation> ann = requiredArgument.findAnnotationWithStereoType(Bindable.class);
-        return ann.map(annotation -> {
-            Optional<String> value = AnnotationUtil.findValueOfType(annotation, String.class);
-            return value.map(s -> {
-                if (StringUtils.isEmpty(s)) {
-                    return requiredArgument.getName();
-                }
-                return s;
-            }).orElse(requiredArgument.getName());
-        }).orElse(requiredArgument.getName());
+    @Override
+    public T getTarget() {
+        return executableMethod.getTarget();
+    }
+
+    @Nonnull
+    @Override
+    public ExecutableMethod<?, R> getExecutableMethod() {
+        return executableMethod.getExecutableMethod();
     }
 
     @Override
@@ -115,12 +114,18 @@ abstract class AbstractRouteMatch<R> implements MethodBasedRouteMatch<R> {
     @SuppressWarnings("unchecked")
     @Override
     public Optional<Argument<?>> getBodyArgument() {
-        String bodyArgument = abstractRoute.bodyArgument;
+
+        Argument<?> arg = abstractRoute.bodyArgument;
+        if (arg != null) {
+            return Optional.of(arg);
+        }
+
+        String bodyArgument = abstractRoute.bodyArgumentName;
         if (bodyArgument != null) {
             return Optional.ofNullable(requiredInputs.get(bodyArgument));
         } else {
             for (Argument argument : getArguments()) {
-                if (argument.getAnnotation(Body.class) != null) {
+                if (argument.getAnnotationMetadata().hasAnnotation(Body.class)) {
                     return Optional.of(argument);
                 }
             }
@@ -141,7 +146,7 @@ abstract class AbstractRouteMatch<R> implements MethodBasedRouteMatch<R> {
 
     @Override
     public boolean isExecutable() {
-        Map<String, Object> variables = getVariables();
+        Map<String, Object> variables = getVariableValues();
         for (Map.Entry<String, Argument> entry : requiredInputs.entrySet()) {
             Object value = variables.get(entry.getKey());
             if (value == null || value instanceof UnresolvedArgument) {
@@ -201,7 +206,7 @@ abstract class AbstractRouteMatch<R> implements MethodBasedRouteMatch<R> {
             return executableMethod.invoke();
         } else {
             List argumentList = new ArrayList();
-            Map<String, Object> variables = getVariables();
+            Map<String, Object> variables = getVariableValues();
             Iterator<Object> valueIterator = variables.values().iterator();
             int i = 0;
             for (Argument targetArgument : targetArguments) {
@@ -232,7 +237,7 @@ abstract class AbstractRouteMatch<R> implements MethodBasedRouteMatch<R> {
             return executableMethod.invoke();
         } else {
             ConversionService conversionService = this.conversionService;
-            Map<String, Object> uriVariables = getVariables();
+            Map<String, Object> uriVariables = getVariableValues();
             List argumentList = new ArrayList();
 
             for (Map.Entry<String, Argument> entry : requiredInputs.entrySet()) {
@@ -261,7 +266,7 @@ abstract class AbstractRouteMatch<R> implements MethodBasedRouteMatch<R> {
                             argumentList.add(resolveValueOrError(argument, conversionContext, result));
                         }
                     } else {
-                        if (argument.getDeclaredAnnotation(Nullable.class) != null) {
+                        if (argument.isDeclaredAnnotationPresent(Nullable.class)) {
                             argumentList.add(null);
                             continue;
                         } else {
@@ -299,10 +304,18 @@ abstract class AbstractRouteMatch<R> implements MethodBasedRouteMatch<R> {
 
     @Override
     public RouteMatch<R> fulfill(Map<String, Object> argumentValues) {
-        Map<String, Object> oldVariables = getVariables();
+        Map<String, Object> oldVariables = getVariableValues();
         Map<String, Object> newVariables = new LinkedHashMap<>(oldVariables);
         for (Argument requiredArgument : getArguments()) {
             Object value = argumentValues.get(requiredArgument.getName());
+            Optional<Argument<?>> ba = getBodyArgument();
+            if (ba.isPresent()) {
+                Argument<?> a = ba.get();
+                if (a.getName().equals(requiredArgument.getName())) {
+                    requiredArgument = a;
+                }
+            }
+
             if (value != null) {
                 String name = resolveInputName(requiredArgument);
                 if (value instanceof UnresolvedArgument) {
@@ -335,7 +348,7 @@ abstract class AbstractRouteMatch<R> implements MethodBasedRouteMatch<R> {
     protected Object resolveValueOrError(Argument argument, ConversionContext conversionContext, Optional<?> result) {
         if (!result.isPresent()) {
             Optional<ConversionError> lastError = conversionContext.getLastError();
-            if (!lastError.isPresent() && argument.getDeclaredAnnotation(Nullable.class) != null) {
+            if (!lastError.isPresent() && argument.isDeclaredAnnotationPresent(Nullable.class)) {
                 return null;
             }
             throw lastError.map(conversionError ->
@@ -352,4 +365,12 @@ abstract class AbstractRouteMatch<R> implements MethodBasedRouteMatch<R> {
      * @return A RouteMatch
      */
     protected abstract RouteMatch<R> newFulfilled(Map<String, Object> newVariables, List<Argument> requiredArguments);
+
+    private String resolveInputName(Argument requiredArgument) {
+        String inputName = requiredArgument.getAnnotationMetadata().getValue(Bindable.class, String.class).orElse(null);
+        if (StringUtils.isEmpty(inputName)) {
+            inputName = requiredArgument.getName();
+        }
+        return inputName;
+    }
 }

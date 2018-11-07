@@ -22,7 +22,6 @@ import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.client.multipart.MultipartBody
 import io.reactivex.Flowable
-import spock.lang.Ignore
 
 /**
  * @author Graeme Rocher
@@ -50,7 +49,7 @@ class StreamUploadSpec extends AbstractMicronautSpec {
 
         then:
         response.code() == HttpStatus.OK.code
-        result == "Uploaded"
+        result == "Uploaded ${data.size()}"
     }
 
     void "test upload big FileUpload object via transferTo"() {
@@ -80,7 +79,7 @@ class StreamUploadSpec extends AbstractMicronautSpec {
 
         then:
         response.code() == HttpStatus.OK.code
-        result == "Uploaded"
+        result == "Uploaded ${data.size()}"
         file.exists()
         file.text == data
     }

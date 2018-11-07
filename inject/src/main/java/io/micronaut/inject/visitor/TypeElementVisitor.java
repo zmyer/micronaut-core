@@ -16,11 +16,16 @@
 
 package io.micronaut.inject.visitor;
 
+import io.micronaut.inject.ast.ClassElement;
+import io.micronaut.inject.ast.ConstructorElement;
+import io.micronaut.inject.ast.FieldElement;
+import io.micronaut.inject.ast.MethodElement;
+
 /**
  * Provides a hook into the compilation process to allow user defined functionality to be created at compile time.
  *
- * @param <C> The annotation required on the class.
- * @param <E> The annotation required on the element.
+ * @param <C> The annotation required on the class. Use {@link Object} for all classes.
+ * @param <E> The annotation required on the element. Use {@link Object} for all elements.
  * @author James Kleeh
  * @since 1.0
  */
@@ -43,6 +48,17 @@ public interface TypeElementVisitor<C, E> {
      * @param context The visitor context
      */
     default void visitMethod(MethodElement element, VisitorContext context) {
+        // no-op
+    }
+
+
+    /**
+     * Executed when a constructor is encountered that matches the <C> generic.
+     *
+     * @param element The element
+     * @param context The visitor context
+     */
+    default void visitConstructor(ConstructorElement element, VisitorContext context) {
         // no-op
     }
 

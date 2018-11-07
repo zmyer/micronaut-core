@@ -18,7 +18,7 @@ package io.micronaut.docs.server.intro;
 
 // tag::imports[]
 import io.micronaut.http.annotation.Get;
-import io.micronaut.http.client.Client;
+import io.micronaut.http.client.annotation.Client;
 import io.reactivex.Single;
 // end::imports[]
 
@@ -30,7 +30,7 @@ import io.reactivex.Single;
 @Client("/hello") // <1>
 public interface HelloClient {
 
-    @Get("/") // <2>
+    @Get // <2>
     Single<String> hello(); // <3>
 }
 // end::class[]

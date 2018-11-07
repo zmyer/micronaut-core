@@ -1,41 +1,33 @@
+/*
+ * Copyright 2017-2018 original authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.micronaut.cli.io.support
 
-import org.eclipse.aether.artifact.DefaultArtifact
-import org.eclipse.aether.graph.Dependency
+import io.micronaut.cli.profile.Feature
+import io.micronaut.cli.profile.Profile
 
-class BuildTokens {
+abstract class BuildTokens {
+    final String sourceLanguage, testFramework
 
-    protected int getJavaVersion() {
-        String version = System.getProperty("java.version")
-        if (version.startsWith("1.")) {
-            version = version.substring(2)
-        }
-        // Allow these formats:
-        // 1.8.0_72-ea
-        // 9-ea
-        // 9
-        // 9.0.1
-        int dotPos = version.indexOf('.')
-        int dashPos = version.indexOf('-')
-        return Integer.parseInt(version.substring(0,
-                dotPos > -1 ? dotPos : dashPos > -1 ? dashPos : version.size()));
+    BuildTokens(String sourceLanguage, String testFramework) {
+        this.sourceLanguage = sourceLanguage
+        this.testFramework = testFramework
     }
 
-    protected String getJdkVersion() {
-        String version = System.getProperty("java.version")
-        int dotPos = version.indexOf('.')
-        int dashPos = version.indexOf('-')
+    abstract Map getTokens(Profile profile, List<Feature> features)
 
-        if (version.startsWith("1.")) {
-            dotPos += 2
-        }
-
-        return version.substring(0,
-                dotPos > -1 ? dotPos : dashPos > -1 ? dashPos : version.size())
-    }
-
-    Dependency getAnnotationApi() {
-        new Dependency(new DefaultArtifact('javax.annotation:javax.annotation-api:1.3.2'), "compile")
-    }
-
+    abstract Map getTokens(List<String> services)
 }

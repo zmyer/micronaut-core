@@ -44,8 +44,12 @@ class DefaultFeature implements Feature {
     final NavigableMap configuration = new NavigableMap()
     final List<Dependency> dependencies = []
     final List<String> buildPlugins
+    final List<String> jvmArgs
     final List<String> dependentFeatures = []
+    final List<String> defaultFeatures = []
     private Boolean requested = false
+    final Integer minJava
+    final Integer maxJava
 
     DefaultFeature(Profile profile, String name, Resource location) {
         this.profile = profile
@@ -55,7 +59,13 @@ class DefaultFeature implements Feature {
         def featureConfig = (Map<String, Object>) new Yaml().loadAs(featureYml.getInputStream(), Map)
         configuration.merge(featureConfig)
         def dependencyMap = configuration.get("dependencies")
-        dependentFeatures.addAll((List) configuration.get("dependentFeatures", Collections.emptyList()))
+        Map featureMap = (Map) configuration.get("features", Collections.emptyMap())
+        if (featureMap.containsKey("dependent")) {
+            dependentFeatures.addAll((List) featureMap.get("dependent", Collections.emptyList()))
+        }
+        if (featureMap.containsKey("default")) {
+            defaultFeatures.addAll((List) featureMap.get("default", Collections.emptyList()))
+        }
 
         if (dependencyMap instanceof List) {
 
@@ -84,6 +94,10 @@ class DefaultFeature implements Feature {
             }
         }
         this.buildPlugins = (List<String>) configuration.get("build.plugins", [])
+        this.jvmArgs = (List<String>) configuration.get("jvmArgs", [])
+
+        this.minJava = (Integer) configuration.get("java.min") ?: null
+        this.maxJava = (Integer) configuration.get("java.max") ?: null
     }
 
     @Override
@@ -97,6 +111,21 @@ class DefaultFeature implements Feature {
     }
 
     @Override
+    Iterable<Feature> getDefaultFeatures(io.micronaut.cli.profile.Profile profile) {
+        profile.getFeatures().findAll { Feature f -> defaultFeatures.contains(f.name) }
+    }
+
+    @Override
+    Integer getMinJavaVersion() {
+        minJava
+    }
+
+    @Override
+    Integer getMaxJavaVersion() {
+        maxJava
+    }
+
+    @Override
     void setRequested(Boolean r) {
         requested = r
     }
@@ -104,5 +133,21 @@ class DefaultFeature implements Feature {
     @Override
     Boolean getRequested() {
         requested
+    }
+
+    @Override
+    boolean isSupported(Integer javaVersion) {
+        if (minJavaVersion != null) {
+            if (maxJavaVersion != null) {
+                return javaVersion >= minJavaVersion && javaVersion <= maxJavaVersion
+            } else {
+                return javaVersion >= minJavaVersion
+            }
+        }
+        if (maxJavaVersion != null) {
+            return javaVersion <= maxJavaVersion
+        }
+
+        true
     }
 }

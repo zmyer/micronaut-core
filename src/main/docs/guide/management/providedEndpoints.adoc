@@ -16,6 +16,10 @@ When the `management` dependency is added to your project, the following built-i
 | `/health`
 |Returns information about the "health" of the application (see <<healthEndpoint, HealthEndpoint>>)
 
+|api:configuration.metrics.management.endpoint.MetricsEndpoint[]
+| `/metrics`
+|Return the <<metricsEndpoint,application metrics>>. Requires the `micrometer-core` configuration on the classpath.
+
 |api:management.endpoint.refresh.RefreshEndpoint[]
 | `/refresh`
 |Refreshes the application state (see <<refreshEndpoint, RefreshEndpoint>>)
@@ -23,6 +27,10 @@ When the `management` dependency is added to your project, the following built-i
 |api:management.endpoint.routes.RoutesEndpoint[]
 | `/routes`
 |Returns information about URIs available to be called for your application (see <<routesEndpoint, RoutesEndpoint>>)
+
+|api:management.endpoint.loggers.LoggersEndpoint[]
+| `/loggers`
+|Returns information about available loggers and permits changing the configured log level (see <<loggersEndpoint, LoggersEndpoint>>)
 
 |===
 
@@ -37,3 +45,8 @@ In addition, the following built-in endpoint(s) are provided by the `management`
 |Shuts down the application server (see <<stopEndpoint, ServerStopEndpoint>>)
 
 |===
+
+
+=== JMX
+
+Micronaut provides functionality to register endpoints with JMX. See the section on <<jmx, JMX>> to get started.

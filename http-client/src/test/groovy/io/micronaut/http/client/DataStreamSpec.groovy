@@ -31,7 +31,6 @@ import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 
-import javax.inject.Singleton
 import java.nio.charset.StandardCharsets
 
 /**
@@ -132,10 +131,28 @@ class DataStreamSpec extends Specification {
 
     }
 
+    void "test that stream response is free of race conditions"() {
+        given:
+        RxStreamingHttpClient client = context.createBean(RxStreamingHttpClient,embeddedServer.getURL())
+
+        when:
+        List<byte[]> arrays = client.exchangeStream(HttpRequest.GET(
+                '/datastream/books'
+        )).blockingIterable().toList().collect { res -> res.body.get().toByteArray() }
+
+        then:
+        arrays.size() == 2
+        new String(arrays[0]) == 'The Stand'
+        new String(arrays[1]) == 'The Shining'
+
+        cleanup:
+        client.stop()
+
+    }
     @Controller("/datastream/books")
     static class BookController {
 
-        @Get(uri = '/', produces = MediaType.APPLICATION_JSON_STREAM)
+        @Get(produces = MediaType.APPLICATION_JSON_STREAM)
         Publisher<byte[]> list() {
             return Flowable.just("The Stand".getBytes(StandardCharsets.UTF_8), "The Shining".getBytes(StandardCharsets.UTF_8))
         }

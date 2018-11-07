@@ -26,8 +26,6 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.http.server.netty.AbstractMicronautSpec
 
-import javax.inject.Singleton
-
 /**
  * @author Iván López
  * @since 1.0
@@ -70,8 +68,7 @@ class HttpStatusExceptionSpec extends AbstractMicronautSpec {
 
     @Controller('/errors')
     static class BookController {
-
-        @Get('/')
+        @Get
         String serverError() {
             throw new HttpStatusException(HttpStatus.UNPROCESSABLE_ENTITY, 'The error message')
         }

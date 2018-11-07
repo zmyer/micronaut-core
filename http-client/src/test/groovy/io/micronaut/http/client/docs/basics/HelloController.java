@@ -22,6 +22,7 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
 import io.micronaut.http.client.*;
+import io.micronaut.http.client.annotation.Client;
 import io.reactivex.Maybe;
 // end::imports[]
 
@@ -41,7 +42,7 @@ public class HelloController {
     // tag::nonblocking[]
     @Get("/hello/{name}")
     Maybe<String> hello(String name) { // <1>
-        return httpClient.retrieve( GET("/endpoint/hello/" + name) )
+        return httpClient.retrieve( GET("/hello/" + name) )
                          .firstElement(); // <2>
     }
     // end::nonblocking[]
@@ -64,7 +65,7 @@ public class HelloController {
         return message;
     }
 
-    @Post(uri= "/hello", consumes = MediaType.TEXT_PLAIN, produces = MediaType.TEXT_PLAIN)
+    @Post(value = "/hello", consumes = MediaType.TEXT_PLAIN, produces = MediaType.TEXT_PLAIN)
     @Status(HttpStatus.CREATED)
     String echoHello(@Body String message) {
         return message;

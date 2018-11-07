@@ -24,7 +24,6 @@ import io.micronaut.context.env.PropertySource;
 import io.micronaut.context.env.PropertySourceLoader;
 import io.micronaut.context.env.yaml.YamlPropertySourceLoader;
 import io.micronaut.context.exceptions.ConfigurationException;
-import io.micronaut.core.reflect.ClassUtils;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.discovery.config.ConfigDiscoveryConfiguration;
@@ -115,12 +114,10 @@ public class ConsulConfigurationClient implements ConfigurationClient {
             path += "/";
         }
 
-        String pathPrefix = path.substring(1);
+        String pathPrefix = path;
         String commonConfigPath = path + Environment.DEFAULT_NAME;
-        String commonPrefix = commonConfigPath.substring(1);
         final boolean hasApplicationSpecificConfig = serviceId.isPresent();
         String applicationSpecificPath = hasApplicationSpecificConfig ? path + serviceId.get() : null;
-        String applicationPrefix = hasApplicationSpecificConfig ? applicationSpecificPath.substring(1) : null;
 
         String dc = configDiscoveryConfiguration.getDatacenter().orElse(null);
         Function<Throwable, Publisher<? extends List<KeyValue>>> errorHandler = throwable -> {
@@ -153,8 +150,8 @@ public class ConsulConfigurationClient implements ConfigurationClient {
                     String key = keyValue.getKey();
                     String value = keyValue.getValue();
                     boolean isFolder = key.endsWith("/") && value == null;
-                    boolean isCommonConfigKey = key.startsWith(commonPrefix);
-                    boolean isApplicationSpecificConfigKey = hasApplicationSpecificConfig && key.startsWith(applicationPrefix);
+                    boolean isCommonConfigKey = key.startsWith(commonConfigPath);
+                    boolean isApplicationSpecificConfigKey = hasApplicationSpecificConfig && key.startsWith(applicationSpecificPath);
                     boolean validKey = isCommonConfigKey || isApplicationSpecificConfigKey;
                     if (!isFolder && validKey) {
 
@@ -163,7 +160,7 @@ public class ConsulConfigurationClient implements ConfigurationClient {
                                 String fileName = key.substring(pathPrefix.length());
                                 int i = fileName.lastIndexOf('.');
                                 if (i > -1) {
-                                    String ext = fileName.substring(i + 1, fileName.length());
+                                    String ext = fileName.substring(i + 1);
                                     fileName = fileName.substring(0, i);
                                     PropertySourceLoader propertySourceLoader = resolveLoader(ext);
                                     if (propertySourceLoader != null) {
@@ -185,11 +182,11 @@ public class ConsulConfigurationClient implements ConfigurationClient {
                                 String property = null;
                                 Set<String> propertySourceNames = null;
                                 if (isCommonConfigKey) {
-                                    property = resolvePropertyName(commonPrefix, key);
+                                    property = resolvePropertyName(commonConfigPath, key);
                                     propertySourceNames = resolvePropertySourceNames(pathPrefix, key, activeNames);
 
                                 } else if (isApplicationSpecificConfigKey) {
-                                    property = resolvePropertyName(applicationPrefix, key);
+                                    property = resolvePropertyName(applicationSpecificPath, key);
                                     propertySourceNames = resolvePropertySourceNames(pathPrefix, key, activeNames);
                                 }
                                 if (property != null && propertySourceNames != null) {
@@ -288,9 +285,7 @@ public class ConsulConfigurationClient implements ConfigurationClient {
                     return new PropertiesPropertySourceLoader();
                 case "yml":
                 case "yaml":
-                    if (ClassUtils.isPresent("org.yaml.snakeyaml.Yaml", YamlPropertySourceLoader.class.getClassLoader())) {
-                        return new YamlPropertySourceLoader();
-                    }
+                    return new YamlPropertySourceLoader();
                 default:
                     // no-op
             }

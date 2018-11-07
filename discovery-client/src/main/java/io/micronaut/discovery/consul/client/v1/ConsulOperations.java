@@ -16,14 +16,12 @@
 
 package io.micronaut.discovery.consul.client.v1;
 
-import io.micronaut.context.annotation.Parameter;
-import io.micronaut.discovery.consul.ConsulConfiguration;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.annotation.Put;
+import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.retry.annotation.Retryable;
 import org.reactivestreams.Publisher;
 
@@ -31,7 +29,6 @@ import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * API operations for Consul.
@@ -48,8 +45,7 @@ public interface ConsulOperations {
      * @param value The value as a String
      * @return A {@link Publisher} that emits a boolean if the operation succeeded
      */
-    @Put(uri = "/kv/{key}", consumes = MediaType.TEXT_PLAIN)
-    @Produces(value = MediaType.TEXT_PLAIN, single = true)
+    @Put(value = "/kv/{+key}", processes = MediaType.TEXT_PLAIN, single = true)
     Publisher<Boolean> putValue(String key, @Body String value);
 
     /**
@@ -58,8 +54,7 @@ public interface ConsulOperations {
      * @param key The key to read
      * @return A {@link Publisher} that emits a list of {@link KeyValue}
      */
-    @Get("/kv/{key}?recurse")
-    @Produces(single = true)
+    @Get(uri = "/kv/{+key}?recurse", single = true)
     Publisher<List<KeyValue>> readValues(String key);
 
     /**
@@ -71,15 +66,14 @@ public interface ConsulOperations {
      * @param seperator  The separator to use
      * @return A {@link Publisher} that emits a list of {@link KeyValue}
      */
-    @Get("/kv/{key}?recurse=true{&dc}{&raw}{&seperator}")
-    @Produces(single = true)
+    @Get(uri = "/kv/{+key}?recurse=true{&dc}{&raw}{&seperator}", single = true)
     @Retryable(
-        attempts = "${" + ConsulConfiguration.ConsulConfigDiscoveryConfiguration.PREFIX + ".retryCount:3}",
-        delay = "${" + ConsulConfiguration.ConsulConfigDiscoveryConfiguration.PREFIX + ".retryDelay:1s}"
+        attempts = AbstractConsulClient.EXPR_CONSUL_CONFIG_RETRY_COUNT,
+        delay = AbstractConsulClient.EXPR_CONSUL_CONFIG_RETRY_DELAY
     )
     Publisher<List<KeyValue>> readValues(
         String key,
-        @Nullable @Parameter("dc") String datacenter,
+        @Nullable @QueryValue("dc") String datacenter,
         @Nullable Boolean raw,
         @Nullable String seperator);
 
@@ -88,9 +82,13 @@ public interface ConsulOperations {
      *
      * @param checkId The check ID
      * @param note    An optional note
-     * @return An {@link HttpStatus} of {@link HttpStatus#OK} if all is well
+     * @return An {@link io.micronaut.http.HttpStatus} of {@link io.micronaut.http.HttpStatus#OK} if all is well
      */
     @Put("/agent/check/pass/{checkId}{?note}")
+    @Retryable(
+            attempts = AbstractConsulClient.CONSUL_REGISTRATION_RETRY_COUNT,
+            delay = AbstractConsulClient.CONSUL_REGISTRATION_RETRY_DELAY
+    )
     Publisher<HttpStatus> pass(String checkId, @Nullable String note);
 
     /**
@@ -98,7 +96,7 @@ public interface ConsulOperations {
      *
      * @param checkId The check ID
      * @param note    An optional note
-     * @return An {@link HttpStatus} of {@link HttpStatus#OK} if all is well
+     * @return An {@link io.micronaut.http.HttpStatus} of {@link io.micronaut.http.HttpStatus#OK} if all is well
      */
     @Put("/agent/check/warn/{checkId}{?note}")
     Publisher<HttpStatus> warn(String checkId, @Nullable String note);
@@ -108,16 +106,19 @@ public interface ConsulOperations {
      *
      * @param checkId The check ID
      * @param note    An optional note
-     * @return An {@link HttpStatus} of {@link HttpStatus#OK} if all is well
+     * @return An {@link io.micronaut.http.HttpStatus} of {@link io.micronaut.http.HttpStatus#OK} if all is well
      */
     @Put("/agent/check/fail/{checkId}{?note}")
+    @Retryable(
+            attempts = AbstractConsulClient.CONSUL_REGISTRATION_RETRY_COUNT,
+            delay = AbstractConsulClient.CONSUL_REGISTRATION_RETRY_DELAY
+    )
     Publisher<HttpStatus> fail(String checkId, @Nullable String note);
 
     /**
      * @return The current leader address
      */
-    @Get("/status/leader")
-    @Produces(single = true)
+    @Get(uri = "/status/leader", single = true)
     Publisher<String> status();
 
     /**
@@ -126,8 +127,7 @@ public interface ConsulOperations {
      * @param entry The entry to register
      * @return A {@link Publisher} that emits a boolean true if the operation was successful
      */
-    @Put("/catalog/register")
-    @Produces(single = true)
+    @Put(uri = "/catalog/register", single = true)
     Publisher<Boolean> register(@NotNull @Body CatalogEntry entry);
 
     /**
@@ -136,8 +136,7 @@ public interface ConsulOperations {
      * @param entry The entry to register
      * @return A {@link Publisher} that emits a boolean true if the operation was successful
      */
-    @Put("/catalog/deregister")
-    @Produces(single = true)
+    @Put(uri = "/catalog/deregister", single = true)
     Publisher<Boolean> deregister(@NotNull @Body CatalogEntry entry);
 
     /**
@@ -148,8 +147,8 @@ public interface ConsulOperations {
      */
     @Put("/agent/service/register")
     @Retryable(
-        attempts = "${" + ConsulConfiguration.ConsulRegistrationConfiguration.PREFIX + ".retryCount:3}",
-        delay = "${" + ConsulConfiguration.ConsulRegistrationConfiguration.PREFIX + ".retryDelay:1s}"
+        attempts = AbstractConsulClient.CONSUL_REGISTRATION_RETRY_COUNT,
+        delay = AbstractConsulClient.CONSUL_REGISTRATION_RETRY_DELAY
     )
     Publisher<HttpStatus> register(@NotNull @Body NewServiceEntry entry);
 
@@ -161,8 +160,8 @@ public interface ConsulOperations {
      */
     @Put("/agent/service/deregister/{service}")
     @Retryable(
-        attempts = "${" + ConsulConfiguration.ConsulRegistrationConfiguration.PREFIX + ".retryCount:3}",
-        delay = "${" + ConsulConfiguration.ConsulRegistrationConfiguration.PREFIX + ".retryDelay:1s}"
+        attempts = AbstractConsulClient.CONSUL_REGISTRATION_RETRY_COUNT,
+        delay = AbstractConsulClient.CONSUL_REGISTRATION_RETRY_DELAY
     )
     Publisher<HttpStatus> deregister(@NotNull String service);
 
@@ -171,9 +170,24 @@ public interface ConsulOperations {
      *
      * @return The {@link NewServiceEntry} instances
      */
-    @Get("/agent/services")
-    @Produces(single = true)
+    @Get(uri = "/agent/services", single = true)
     Publisher<Map<String, ServiceEntry>> getServices();
+
+    /**
+     * Returns the members the agent sees in the cluster gossip pool.
+     *
+     * @return the {@link MemberEntry} instances
+     */
+    @Get(uri = "/agent/members", single = true)
+    Publisher<List<MemberEntry>> getMembers();
+
+    /**
+     * Returns the configuration and member information of the local agent.
+     *
+     * @return the {@link LocalAgentConfiguration} instance
+     */
+    @Get(uri = "/agent/self", single = true)
+    Publisher<LocalAgentConfiguration> getSelf();
 
     /**
      * Gets the healthy services that are passing health checks.
@@ -184,21 +198,19 @@ public interface ConsulOperations {
      * @param dc      The dc
      * @return The {@link HealthEntry} instances
      */
-    @Get("/health/service/{service}{?passing,tag,dc}")
-    @Produces(single = true)
+    @Get(uri = "/health/service/{service}{?passing,tag,dc}", single = true)
     Publisher<List<HealthEntry>> getHealthyServices(
         @NotNull String service,
-        Optional<Boolean> passing,
-        Optional<String> tag,
-        Optional<String> dc);
+        @Nullable Boolean passing,
+        @Nullable String tag,
+        @Nullable String dc);
 
     /**
      * Gets all of the registered nodes.
      *
      * @return All the nodes
      */
-    @Get("/catalog/nodes")
-    @Produces(single = true)
+    @Get(uri = "/catalog/nodes", single = true)
     Publisher<List<CatalogEntry>> getNodes();
 
     /**
@@ -207,8 +219,7 @@ public interface ConsulOperations {
      * @param datacenter The data center
      * @return A publisher that emits the nodes
      */
-    @Get("/catalog/nodes?dc={datacenter}")
-    @Produces(single = true)
+    @Get(uri = "/catalog/nodes?dc={datacenter}", single = true)
     Publisher<List<CatalogEntry>> getNodes(@NotNull String datacenter);
 
     /**
@@ -216,15 +227,14 @@ public interface ConsulOperations {
      *
      * @return A Map where the keys are service names and the values are service tags
      */
-    @Get("/catalog/services")
-    @Produces(single = true)
+    @Get(uri = "/catalog/services", single = true)
     Publisher<Map<String, List<String>>> getServiceNames();
 
     /**
      * Pass the TTL check. See https://www.consul.io/api/agent/check.html.
      *
      * @param checkId The check ID
-     * @return An {@link HttpStatus} of {@link HttpStatus#OK} if all is well
+     * @return An {@link io.micronaut.http.HttpStatus} of {@link io.micronaut.http.HttpStatus#OK} if all is well
      */
     default Publisher<HttpStatus> pass(String checkId) {
         return pass(checkId, null);
@@ -234,7 +244,7 @@ public interface ConsulOperations {
      * Warn the TTL check. See https://www.consul.io/api/agent/check.html.
      *
      * @param checkId The check ID
-     * @return An {@link HttpStatus} of {@link HttpStatus#OK} if all is well
+     * @return An {@link io.micronaut.http.HttpStatus} of {@link io.micronaut.http.HttpStatus#OK} if all is well
      */
     default Publisher<HttpStatus> warn(String checkId) {
         return warn(checkId, null);
@@ -244,7 +254,7 @@ public interface ConsulOperations {
      * Fail the TTL check. See https://www.consul.io/api/agent/check.html.
      *
      * @param checkId The check ID
-     * @return An {@link HttpStatus} of {@link HttpStatus#OK} if all is well
+     * @return An {@link io.micronaut.http.HttpStatus} of {@link io.micronaut.http.HttpStatus#OK} if all is well
      */
     default Publisher<HttpStatus> fail(String checkId) {
         return fail(checkId, null);
@@ -257,6 +267,6 @@ public interface ConsulOperations {
      * @return The {@link HealthEntry} instances
      */
     default Publisher<List<HealthEntry>> getHealthyServices(@NotNull String service) {
-        return getHealthyServices(service, Optional.empty(), Optional.empty(), Optional.empty());
+        return getHealthyServices(service, null, null, null);
     }
 }

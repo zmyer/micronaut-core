@@ -37,9 +37,8 @@ import io.micronaut.health.HeartbeatConfiguration;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.runtime.ApplicationConfiguration;
 import io.micronaut.runtime.server.EmbeddedServerInstance;
+import io.reactivex.Single;
 import org.reactivestreams.Publisher;
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 import javax.inject.Singleton;
 import java.net.MalformedURLException;
@@ -96,59 +95,45 @@ public class ConsulAutoRegistration extends DiscoveryServiceAutoRegistration {
 
             if (status.equals(HealthStatus.UP)) {
                 // send a request to /agent/check/pass/:check_id
-                consulClient.pass(checkId).subscribe(new Subscriber<HttpStatus>() {
-                    @Override
-                    public void onSubscribe(Subscription subscription) {
-                        subscription.request(1);
-                    }
-
-                    @Override
-                    public void onNext(HttpStatus httpStatus) {
+                Single<HttpStatus> passPublisher = Single.fromPublisher(consulClient.pass(checkId));
+                passPublisher.subscribe((httpStatus, throwable) -> {
+                    if (throwable == null) {
                         if (LOG.isDebugEnabled()) {
                             LOG.debug("Successfully reported passing state to Consul");
                         }
-                    }
+                    } else {
+                        // check if the service is still registered with Consul
+                        Single.fromPublisher(consulClient.getServiceIds()).subscribe((serviceIds, throwable1) -> {
+                            if (throwable1 == null) {
+                                String serviceId = idGenerator.generateId(environment, instance);
+                                if (!serviceIds.contains(serviceId)) {
+                                    if (LOG.isInfoEnabled()) {
+                                        LOG.info("Instance [{}] no longer registered with Consul. Attempting re-registration.", instance.getId());
+                                    }
+                                    register(instance);
+                                }
+                            }
+                        });
 
-                    @Override
-                    public void onError(Throwable throwable) {
                         String errorMessage = getErrorMessage(throwable, "Error reporting passing state to Consul: ");
                         if (LOG.isErrorEnabled()) {
                             LOG.error(errorMessage, throwable);
                         }
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        // no-op
                     }
                 });
             } else {
                 // send a request to /agent/check/fail/:check_id
-                consulClient.fail(checkId, status.getDescription().orElse(null)).subscribe(new Subscriber<HttpStatus>() {
-                    @Override
-                    public void onSubscribe(Subscription subscription) {
-                        subscription.request(1);
-                    }
-
-                    @Override
-                    public void onNext(HttpStatus httpStatus) {
+                Single<HttpStatus> failPublisher = Single.fromPublisher(consulClient.fail(checkId, status.getDescription().orElse(null)));
+                failPublisher.subscribe((httpStatus, throwable) -> {
+                    if (throwable == null) {
                         if (LOG.isDebugEnabled()) {
                             LOG.debug("Successfully reported failure state to Consul");
                         }
-                    }
-
-                    @Override
-                    public void onError(Throwable throwable) {
+                    } else {
                         String errorMessage = getErrorMessage(throwable, "Error reporting passing state to Consul: ");
                         if (LOG.isErrorEnabled()) {
                             LOG.error(errorMessage, throwable);
                         }
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        // no-op
                     }
                 });
             }

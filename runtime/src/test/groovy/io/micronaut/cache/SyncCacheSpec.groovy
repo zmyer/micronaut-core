@@ -41,9 +41,11 @@ class SyncCacheSpec extends Specification {
         given:
         ApplicationContext applicationContext = ApplicationContext.run(
                 'micronaut.caches.counter.initialCapacity':10,
+                'micronaut.caches.counter.testMode':true,
                 'micronaut.caches.counter.maximumSize':20,
                 'micronaut.caches.counter2.initialCapacity':10,
-                'micronaut.caches.counter2.maximumSize':20
+                'micronaut.caches.counter2.maximumSize':20,
+                'micronaut.caches.counter2.testMode':true
         )
 
         when:
@@ -140,7 +142,8 @@ class SyncCacheSpec extends Specification {
         given:
         ApplicationContext applicationContext = ApplicationContext.run(
                 'micronaut.caches.test.initialCapacity':1,
-                'micronaut.caches.test.maximumSize':3
+                'micronaut.caches.test.maximumSize':3,
+                'micronaut.caches.test.test-mode':true,
         )
 
         when:
@@ -155,7 +158,7 @@ class SyncCacheSpec extends Specification {
         syncCache.put("three", 3)
         syncCache.put("four", 4)
         syncCache.nativeCache.cleanUp()
-        PollingConditions conditions = new PollingConditions(timeout: 5)
+        PollingConditions conditions = new PollingConditions(timeout: 15, delay: 0.5)
 
         then:
         conditions.eventually {

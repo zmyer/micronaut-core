@@ -18,13 +18,15 @@ package io.micronaut.core.convert;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import io.micronaut.core.annotation.AnnotationUtil;
+import io.micronaut.core.annotation.AnnotationClassValue;
+import io.micronaut.core.annotation.AnnotationMetadata;
 import io.micronaut.core.convert.format.Format;
 import io.micronaut.core.convert.format.FormattingTypeConverter;
 import io.micronaut.core.convert.format.ReadableBytesTypeConverter;
 import io.micronaut.core.convert.value.ConvertibleValues;
 import io.micronaut.core.convert.value.ConvertibleValuesMap;
 import io.micronaut.core.io.IOUtils;
+import io.micronaut.core.io.buffer.ReferenceCounted;
 import io.micronaut.core.naming.NameUtils;
 import io.micronaut.core.reflect.ClassUtils;
 import io.micronaut.core.reflect.ReflectionUtils;
@@ -82,6 +84,8 @@ public class DefaultConversionService implements ConversionService<DefaultConver
     private static final int CACHE_MAX = 60;
     private final Map<ConvertiblePair, TypeConverter> typeConverters = new ConcurrentHashMap<>();
     private final Cache<ConvertiblePair, TypeConverter> converterCache = Caffeine.newBuilder()
+                                                                                 // override the executor for GraalVM
+                                                                                 .executor(Runnable::run)
                                                                                  .maximumSize(CACHE_MAX)
                                                                                  .build();
 
@@ -108,8 +112,7 @@ public class DefaultConversionService implements ConversionService<DefaultConver
             return Optional.of((T) object);
         }
 
-        Optional<? extends Class<? extends Annotation>> formattingAnn = AnnotationUtil.findAnnotationWithStereoType(Format.class, context.getAnnotations())
-                                                                                      .map(Annotation::annotationType);
+        Optional<? extends Class<? extends Annotation>> formattingAnn = context.getAnnotationMetadata().getAnnotationTypeByStereotype(Format.class);
         Class<? extends Annotation> formattingAnnotation = formattingAnn.orElse(null);
         ConvertiblePair pair = new ConvertiblePair(sourceType, targetType, formattingAnnotation);
         TypeConverter typeConverter = converterCache.getIfPresent(pair);
@@ -183,6 +186,9 @@ public class DefaultConversionService implements ConversionService<DefaultConver
             }
             return ClassUtils.forName(object.toString(), classLoader);
         });
+
+        // AnnotationClassValue -> Class
+        addConverter(AnnotationClassValue.class, Class.class, (object, targetType, context) -> object.getType());
 
         // URI -> URL
         addConverter(URI.class, URL.class, uri -> {
@@ -265,6 +271,16 @@ public class DefaultConversionService implements ConversionService<DefaultConver
                     return Optional.empty();
                 }
             }
+        );
+
+        // Date -> CharSequence
+        addConverter(
+                Date.class,
+                CharSequence.class,
+                (object, targetType, context) -> {
+                    SimpleDateFormat format = resolveFormat(context);
+                    return Optional.of(format.format(object));
+                }
         );
 
         // String -> Integer
@@ -426,18 +442,25 @@ public class DefaultConversionService implements ConversionService<DefaultConver
 
         // String -> Array
         addConverter(CharSequence.class, Object[].class, (CharSequence object, Class<Object[]> targetType, ConversionContext context) -> {
-            String str = object.toString();
-            String[] strings = str.split(",");
-            Class<?> componentType = ReflectionUtils.getWrapperType(targetType.getComponentType());
-            Object newArray = Array.newInstance(componentType, strings.length);
-            for (int i = 0; i < strings.length; i++) {
-                String string = strings[i];
-                Optional<?> converted = convert(string, componentType);
-                if (converted.isPresent()) {
-                    Array.set(newArray, i, converted.get());
+            if (object instanceof AnnotationClassValue && targetType.equals(AnnotationClassValue[].class)) {
+                AnnotationClassValue[] array = new AnnotationClassValue[1];
+                array[0] = (AnnotationClassValue) object;
+                return Optional.of(array);
+            } else {
+
+                String str = object.toString();
+                String[] strings = str.split(",");
+                Class<?> componentType = ReflectionUtils.getWrapperType(targetType.getComponentType());
+                Object newArray = Array.newInstance(componentType, strings.length);
+                for (int i = 0; i < strings.length; i++) {
+                    String string = strings[i];
+                    Optional<?> converted = convert(string, componentType);
+                    if (converted.isPresent()) {
+                        Array.set(newArray, i, converted.get());
+                    }
                 }
+                return Optional.of((Object[]) newArray);
             }
-            return Optional.of((Object[]) newArray);
         });
 
         // String -> Int Array
@@ -676,7 +699,7 @@ public class DefaultConversionService implements ConversionService<DefaultConver
                         continue;
                     }
                 }
-                if (!valueType.isInstance(value)) {
+                if (!valueType.isInstance(value) || Map.class.isAssignableFrom(valueType)) {
                     Optional converted = convert(value, valueType, valContext);
                     if (converted.isPresent()) {
                         value = converted.get();
@@ -690,6 +713,14 @@ public class DefaultConversionService implements ConversionService<DefaultConver
         });
 
         addConverter(Map.class, ConvertibleValues.class, (object, targetType, context) -> Optional.of(new ConvertibleValuesMap<Object>(object)));
+
+        // Micronaut ByteBuffer -> byte for streamed results from HTTP clients
+        addConverter(io.micronaut.core.io.buffer.ByteBuffer.class, byte[].class, (object, targetType, context) -> {
+            byte[] result = object.toByteArray();
+            ((ReferenceCounted) object).release();
+            return Optional.of(result);
+        });
+
     }
 
     /**
@@ -702,8 +733,8 @@ public class DefaultConversionService implements ConversionService<DefaultConver
      */
     protected <T> TypeConverter findTypeConverter(Class<?> sourceType, Class<T> targetType, Class<? extends Annotation> formattingAnnotation) {
         TypeConverter typeConverter = null;
-        List<Class> sourceHierarchy = resolveHierarchy(sourceType);
-        List<Class> targetHierarchy = resolveHierarchy(targetType);
+        List<Class> sourceHierarchy = ClassUtils.resolveHierarchy(sourceType);
+        List<Class> targetHierarchy = ClassUtils.resolveHierarchy(targetType);
         boolean hasFormatting = formattingAnnotation != null;
         for (Class sourceSuperType : sourceHierarchy) {
             for (Class targetSuperType : targetHierarchy) {
@@ -731,8 +762,8 @@ public class DefaultConversionService implements ConversionService<DefaultConver
     }
 
     private SimpleDateFormat resolveFormat(ConversionContext context) {
-        Format ann = context.getAnnotation(Format.class);
-        Optional<String> format = ann != null ? Optional.of(ann.value()) : Optional.empty();
+        AnnotationMetadata annotationMetadata = context.getAnnotationMetadata();
+        Optional<String> format = annotationMetadata.getValue(Format.class, String.class);
         return format
             .map((pattern) -> new SimpleDateFormat(pattern, context.getLocale()))
             .orElse(new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", context.getLocale()));
@@ -746,43 +777,6 @@ public class DefaultConversionService implements ConversionService<DefaultConver
             pair = new ConvertiblePair(sourceType, targetType);
         }
         return pair;
-    }
-
-    private void populateHierarchyInterfaces(Class<?> superclass, List<Class> hierarchy) {
-        if (!hierarchy.contains(superclass)) {
-            hierarchy.add(superclass);
-        }
-        for (Class<?> aClass : superclass.getInterfaces()) {
-            if (!hierarchy.contains(aClass)) {
-                hierarchy.add(aClass);
-            }
-            populateHierarchyInterfaces(aClass, hierarchy);
-        }
-    }
-
-    private List<Class> resolveHierarchy(Class<?> type) {
-        Class<?> superclass = type.getSuperclass();
-        List<Class> hierarchy = new ArrayList<>();
-        if (superclass != null) {
-            populateHierarchyInterfaces(type, hierarchy);
-
-            while (superclass != Object.class) {
-                populateHierarchyInterfaces(superclass, hierarchy);
-                superclass = superclass.getSuperclass();
-            }
-        } else if (type.isInterface()) {
-            populateHierarchyInterfaces(type, hierarchy);
-        }
-
-        if (type.isArray()) {
-            if (!type.getComponentType().isPrimitive()) {
-                hierarchy.add(Object[].class);
-            }
-        } else {
-            hierarchy.add(Object.class);
-        }
-
-        return hierarchy;
     }
 
     /**

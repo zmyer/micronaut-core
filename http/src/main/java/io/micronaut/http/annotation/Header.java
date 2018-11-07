@@ -18,15 +18,35 @@ package io.micronaut.http.annotation;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import io.micronaut.context.annotation.AliasFor;
 import io.micronaut.core.bind.annotation.Bindable;
 
 import java.lang.annotation.*;
 
 /**
- * An annotation that can be applied to method argument to indicate that the method argument is bound from an HTTP header
- * This also can be used in conjection with @Headers to list headers on a client class that will always be applied.
- * Example on a class:
+ * <p>An annotation that can be applied to method argument to indicate that the method argument is bound from an HTTP header
+ *   This also can be used in conjunction with &#064;Headers to list headers on a client class that will always be applied.</p>
+ * <p></p>
+ * <p>The following example demonstrates usage at the type level to declare default values to pass in the request when using the {@code Client} annotation:</p>
+ * <p></p>
  *
+ * <pre class="code">
+ * &#064;Header(name="X-Username",value='Freddy'),
+ * &#064;Header(name="X-MyParam",value='${foo.bar}')
+ * &#064;Client('/users')
+ * interface UserClient {
+ *
+ * }
+ * </pre>
+ *
+ * <p>When declared as a binding annotation the <code>&#064;Header</code> annotation is declared on each parameter to be bound:</p>
+ *
+ * <pre class="code">
+ * &#064;Get('/user')
+ * User get(&#064;Header('X-Username') String username, &#064;Header('X-MyParam') String myparam) {
+ *    return new User(username, myparam);
+ * }
+ * </pre>
  *
  * @author Graeme Rocher
  * @author rvanderwerf
@@ -34,7 +54,7 @@ import java.lang.annotation.*;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.TYPE}) // this can be either type or param
+@Target({ElementType.PARAMETER, ElementType.TYPE, ElementType.METHOD}) // this can be either type or param
 @Repeatable(value = Headers.class)
 @Bindable
 public @interface Header {
@@ -43,12 +63,21 @@ public @interface Header {
      * If used as a bound parameter, this is the header name. If used on a class level this is value and not the header name.
      * @return The name of the header, otherwise it is inferred from the parameter name
      */
+    @AliasFor(annotation = Bindable.class, member = "value")
     String value() default "";
 
     /**
      * If used on a class level with @Headers this is the header name and value is the value.
      * @return name of header when using with @Headers
      */
+    @AliasFor(annotation = Bindable.class, member = "value")
     String name() default "";
+
+    /**
+     * @see Bindable#defaultValue()
+     * @return The default value
+     */
+    @AliasFor(annotation = Bindable.class, member = "defaultValue")
+    String defaultValue() default "";
 
 }

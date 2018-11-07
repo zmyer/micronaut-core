@@ -15,7 +15,6 @@
  */
 package io.micronaut.http.server.netty.binding
 
-import io.micronaut.context.annotation.Parameter
 import io.micronaut.http.HttpMethod
 import io.micronaut.http.HttpParameters
 import io.micronaut.http.HttpRequest
@@ -35,10 +34,8 @@ import javax.annotation.Nullable
  */
 class ParameterBindingSpec extends AbstractMicronautSpec {
 
-
     @Unroll
     void "test bind HTTP parameters for URI #httpMethod #uri"() {
-
         given:
         def req = httpMethod == HttpMethod.GET ? HttpRequest.GET(uri) : HttpRequest.POST(uri, '{}')
         def exchange = rxClient.exchange(req, String)
@@ -52,8 +49,6 @@ class ParameterBindingSpec extends AbstractMicronautSpec {
         expect:
         body == result
         status == httpStatus
-
-
 
         where:
         httpMethod      | uri                                             | result                      | httpStatus
@@ -84,22 +79,21 @@ class ParameterBindingSpec extends AbstractMicronautSpec {
         HttpMethod.GET  | '/parameter/query?name=Fr%20ed'                 | "Parameter Value: Fr ed"    | HttpStatus.OK
         HttpMethod.GET  | '/parameter/queryName/Fr%20ed'                  | "Parameter Value: Fr ed"    | HttpStatus.OK
         HttpMethod.POST | '/parameter/query?name=Fr%20ed'                 | "Parameter Value: Fr ed"    | HttpStatus.OK
-
     }
 
-    @Controller(produces = MediaType.TEXT_PLAIN)
+    @Controller(value = "/parameter", produces = MediaType.TEXT_PLAIN)
     static class ParameterController {
-        @Get('/')
+        @Get
         String index(Integer max) {
             "Parameter Value: $max"
         }
 
-        @Post
+        @Post("/save")
         String save(Integer max) {
             "Parameter Value: $max"
         }
 
-        @Post
+        @Post("/save-again")
         String saveAgain(@QueryValue Integer max) {
             "Parameter Value: $max"
         }
@@ -109,54 +103,53 @@ class ParameterBindingSpec extends AbstractMicronautSpec {
             "Parameter Value: $max"
         }
 
-        @Get
+        @Get("/simple")
         String simple(@QueryValue Integer max) {
             "Parameter Value: $max"
         }
 
         @Get('/path/{max}')
-        String path(@Parameter("max") Integer maximum) {
+        String path(@QueryValue("max") Integer maximum) {
             "Parameter Value: $maximum"
         }
 
         @Get('/path/{id}/foo/{fooId}')
-        String path2(@Parameter("id") Long someId, Long fooId) {
+        String path2(@QueryValue("id") Long someId, Long fooId) {
             "Parameter Values: $someId $fooId"
         }
 
         @Get('/path/{id}/bar{/barId}')
-        String optionalPath(@Parameter("id") Long someId, @Nullable Long barId) {
+        String optionalPath(@QueryValue("id") Long someId, @Nullable Long barId) {
             "Parameter Values: $someId ${barId ?: ''}"
         }
 
-        @Get
+        @Get("/named")
         String named(@QueryValue('maximum') Integer max) {
             "Parameter Value: $max"
         }
 
-        @Get
+        @Get("/optional")
         String optional(@QueryValue Optional<Integer> max) {
             "Parameter Value: ${max.orElse(10)}"
         }
 
-
-        @Get
+        @Get("/all")
         String all(HttpParameters parameters) {
             "Parameter Value: ${parameters.get('max', Integer, 10)}"
         }
 
-        @Get
+        @Get("/map")
         String map(Map<String, Integer> values) {
             "Parameter Value: ${values.max} ${values.offset}"
         }
 
-        @Get
+        @Get("/list")
         String list(List<Integer> values) {
             assert values.every() { it instanceof Integer }
             "Parameter Value: ${values.inspect()}"
         }
 
-        @Get
+        @Get("/optional-list")
         String optionalList(Optional<List<Integer>> values) {
             if (values.isPresent()) {
                 assert values.get().every() { it instanceof Integer }

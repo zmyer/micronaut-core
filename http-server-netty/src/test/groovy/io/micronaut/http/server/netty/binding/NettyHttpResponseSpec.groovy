@@ -23,7 +23,7 @@ import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.cookie.Cookie
-import io.micronaut.http.netty.NettyHttpResponse
+import io.micronaut.http.netty.NettyMutableHttpResponse
 import spock.lang.Specification
 
 import java.time.Duration
@@ -37,7 +37,7 @@ class NettyHttpResponseSpec extends Specification {
     void "test add headers"() {
         given:
         DefaultFullHttpResponse nettyResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK)
-        NettyHttpResponse response = new NettyHttpResponse(nettyResponse, new DefaultConversionService())
+        NettyMutableHttpResponse response = new NettyMutableHttpResponse(nettyResponse, new DefaultConversionService())
 
         response.status(HttpStatus."$status")
         response.headers.add(header, value)
@@ -51,11 +51,10 @@ class NettyHttpResponseSpec extends Specification {
         HttpStatus.OK | HttpHeaders.CONTENT_TYPE | "application/json"
     }
 
-
     void "test add simple cookie"() {
         given:
         DefaultFullHttpResponse nettyResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK)
-        MutableHttpResponse response = new NettyHttpResponse(nettyResponse, new DefaultConversionService())
+        MutableHttpResponse response = new NettyMutableHttpResponse(nettyResponse, new DefaultConversionService())
 
         response.status(HttpStatus."$status")
         response.cookie(Cookie.of("foo", "bar"))
@@ -72,7 +71,7 @@ class NettyHttpResponseSpec extends Specification {
     void "test add cookie with max age"() {
         given:
         DefaultFullHttpResponse nettyResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK)
-        MutableHttpResponse response = new NettyHttpResponse(nettyResponse, new DefaultConversionService())
+        MutableHttpResponse response = new NettyMutableHttpResponse(nettyResponse, new DefaultConversionService())
 
         response.status(HttpStatus."$status")
         response.cookie(Cookie.of("foo", "bar").maxAge(Duration.ofHours(2)))

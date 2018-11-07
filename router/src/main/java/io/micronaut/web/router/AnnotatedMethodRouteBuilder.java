@@ -18,7 +18,9 @@ package io.micronaut.web.router;
 
 import io.micronaut.context.ExecutionHandleLocator;
 import io.micronaut.context.processor.ExecutableMethodProcessor;
+import io.micronaut.core.annotation.AnnotationValue;
 import io.micronaut.core.convert.ConversionService;
+import io.micronaut.core.reflect.ClassLoadingReporter;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
@@ -35,14 +37,13 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.Trace;
+import io.micronaut.http.uri.UriTemplate;
 import io.micronaut.inject.BeanDefinition;
 import io.micronaut.inject.ExecutableMethod;
 
 import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 /**
@@ -65,7 +66,8 @@ public class AnnotatedMethodRouteBuilder extends DefaultRouteBuilder implements 
     public AnnotatedMethodRouteBuilder(ExecutionHandleLocator executionHandleLocator, UriNamingStrategy uriNamingStrategy, ConversionService<?> conversionService) {
         super(executionHandleLocator, uriNamingStrategy, conversionService);
         httpMethodsHandlers.put(Get.class, (BeanDefinition bean, ExecutableMethod method) -> {
-            String uri = method.getValue(HttpMethodMapping.class, String.class).orElse("");
+            AnnotationValue<HttpMethodMapping> mapping = method.getAnnotation(HttpMethodMapping.class);
+            String uri = mapping.getRequiredValue(String.class);
             MediaType[] produces = method.getValue(Produces.class, MediaType[].class).orElse(null);
             Route route = GET(resolveUri(bean, uri,
                 method,
@@ -79,7 +81,8 @@ public class AnnotatedMethodRouteBuilder extends DefaultRouteBuilder implements 
         });
 
         httpMethodsHandlers.put(Post.class, (BeanDefinition bean, ExecutableMethod method) -> {
-            String uri = method.getValue(HttpMethodMapping.class, String.class).orElse("");
+            AnnotationValue<HttpMethodMapping> mapping = method.getAnnotation(HttpMethodMapping.class);
+            String uri = mapping.getRequiredValue(String.class);
             MediaType[] consumes = method.getValue(Consumes.class, MediaType[].class).orElse(null);
             MediaType[] produces = method.getValue(Produces.class, MediaType[].class).orElse(null);
             Route route = POST(resolveUri(bean, uri,
@@ -95,7 +98,8 @@ public class AnnotatedMethodRouteBuilder extends DefaultRouteBuilder implements 
         });
 
         httpMethodsHandlers.put(Put.class, (BeanDefinition bean, ExecutableMethod method) -> {
-            String uri = method.getValue(HttpMethodMapping.class, String.class).orElse("");
+            AnnotationValue<HttpMethodMapping> mapping = method.getAnnotation(HttpMethodMapping.class);
+            String uri = mapping.getRequiredValue(String.class);
             MediaType[] consumes = method.getValue(Consumes.class, MediaType[].class).orElse(null);
             MediaType[] produces = method.getValue(Produces.class, MediaType[].class).orElse(null);
             Route route = PUT(resolveUri(bean, uri,
@@ -111,7 +115,8 @@ public class AnnotatedMethodRouteBuilder extends DefaultRouteBuilder implements 
         });
 
         httpMethodsHandlers.put(Patch.class, (BeanDefinition bean, ExecutableMethod method) -> {
-            String uri = method.getValue(HttpMethodMapping.class, String.class).orElse("");
+            AnnotationValue<HttpMethodMapping> mapping = method.getAnnotation(HttpMethodMapping.class);
+            String uri = mapping.getRequiredValue(String.class);
             MediaType[] consumes = method.getValue(Consumes.class, MediaType[].class).orElse(null);
             MediaType[] produces = method.getValue(Produces.class, MediaType[].class).orElse(null);
             Route route = PATCH(resolveUri(bean, uri,
@@ -127,7 +132,8 @@ public class AnnotatedMethodRouteBuilder extends DefaultRouteBuilder implements 
         });
 
         httpMethodsHandlers.put(Delete.class, (BeanDefinition bean, ExecutableMethod method) -> {
-            String uri = method.getValue(HttpMethodMapping.class, String.class).orElse("");
+            AnnotationValue<HttpMethodMapping> mapping = method.getAnnotation(HttpMethodMapping.class);
+            String uri = mapping.getRequiredValue(String.class);
             MediaType[] consumes = method.getValue(Consumes.class, MediaType[].class).orElse(null);
             MediaType[] produces = method.getValue(Produces.class, MediaType[].class).orElse(null);
             Route route = DELETE(resolveUri(bean, uri,
@@ -144,7 +150,8 @@ public class AnnotatedMethodRouteBuilder extends DefaultRouteBuilder implements 
 
 
         httpMethodsHandlers.put(Head.class, (BeanDefinition bean, ExecutableMethod method) -> {
-            String uri = method.getValue(HttpMethodMapping.class, String.class).orElse("");
+            AnnotationValue<HttpMethodMapping> mapping = method.getAnnotation(HttpMethodMapping.class);
+            String uri = mapping.getRequiredValue(String.class);
             Route route = HEAD(resolveUri(bean, uri,
                 method,
                 uriNamingStrategy),
@@ -157,7 +164,8 @@ public class AnnotatedMethodRouteBuilder extends DefaultRouteBuilder implements 
         });
 
         httpMethodsHandlers.put(Options.class, (BeanDefinition bean, ExecutableMethod method) -> {
-            String uri = method.getValue(HttpMethodMapping.class, String.class).orElse("");
+            AnnotationValue<HttpMethodMapping> mapping = method.getAnnotation(HttpMethodMapping.class);
+            String uri = mapping.getRequiredValue(String.class);
             MediaType[] consumes = method.getValue(Consumes.class, MediaType[].class).orElse(null);
             MediaType[] produces = method.getValue(Produces.class, MediaType[].class).orElse(null);
             Route route = OPTIONS(resolveUri(bean, uri,
@@ -173,7 +181,8 @@ public class AnnotatedMethodRouteBuilder extends DefaultRouteBuilder implements 
         });
 
         httpMethodsHandlers.put(Trace.class, (BeanDefinition bean, ExecutableMethod method) -> {
-            String uri = method.getValue(HttpMethodMapping.class, String.class).orElse("");
+            AnnotationValue<HttpMethodMapping> mapping = method.getAnnotation(HttpMethodMapping.class);
+            String uri = mapping.getRequiredValue(String.class);
             Route route = TRACE(resolveUri(bean, uri,
                 method,
                 uriNamingStrategy),
@@ -197,23 +206,29 @@ public class AnnotatedMethodRouteBuilder extends DefaultRouteBuilder implements 
                             status(declaringType, httpStatus, declaringType, method.getMethodName(), method.getArgumentTypes());
                         }
                     });
-                } else if (method.isPresent(Error.class, "value")) {
-                    Optional<Class> aClass = method.classValue(Error.class);
-                    aClass.ifPresent(exceptionType -> {
-                        if (Throwable.class.isAssignableFrom(exceptionType)) {
-                            if (isGlobal) {
-                                //noinspection unchecked
-                                error(exceptionType, declaringType, method.getMethodName(), method.getArgumentTypes());
-                            } else {
-                                error(declaringType, exceptionType, declaringType, method.getMethodName(), method.getArgumentTypes());
+                } else {
+                    Class exceptionType = null;
+                    if (method.isPresent(Error.class, "value")) {
+                        Optional<Class> annotationValue = method.classValue(Error.class);
+                        if (annotationValue.isPresent()) {
+                            if (Throwable.class.isAssignableFrom(annotationValue.get())) {
+                                exceptionType = annotationValue.get();
                             }
                         }
-                    });
-                } else {
+                    }
+                    if (exceptionType == null) {
+                        exceptionType = Arrays.stream(method.getArgumentTypes())
+                                .filter(Throwable.class::isAssignableFrom)
+                                .findFirst()
+                                .orElse(Throwable.class);
+                    }
+
                     if (isGlobal) {
-                        error(Throwable.class, declaringType, method.getMethodName(), method.getArgumentTypes());
+                        //noinspection unchecked
+                        error(exceptionType, declaringType, method.getMethodName(), method.getArgumentTypes());
                     } else {
-                        error(declaringType, Throwable.class, declaringType, method.getMethodName(), method.getArgumentTypes());
+                        //noinspection unchecked
+                        error(declaringType, exceptionType, declaringType, method.getMethodName(), method.getArgumentTypes());
                     }
                 }
             }
@@ -226,6 +241,10 @@ public class AnnotatedMethodRouteBuilder extends DefaultRouteBuilder implements 
         actionAnn.ifPresent(annotationClass -> {
                 BiConsumer<BeanDefinition, ExecutableMethod> handler = httpMethodsHandlers.get(annotationClass);
                 if (handler != null) {
+                    ClassLoadingReporter.reportBeanPresent(method.getReturnType().getType());
+                    for (Class argumentType : method.getArgumentTypes()) {
+                        ClassLoadingReporter.reportBeanPresent(argumentType);
+                    }
                     handler.accept(beanDefinition, method);
                 }
             }
@@ -233,15 +252,11 @@ public class AnnotatedMethodRouteBuilder extends DefaultRouteBuilder implements 
     }
 
     private String resolveUri(BeanDefinition bean, String value, ExecutableMethod method, UriNamingStrategy uriNamingStrategy) {
-        String rootUri = uriNamingStrategy.resolveUri(bean);
+        UriTemplate rootUri = UriTemplate.of(uriNamingStrategy.resolveUri(bean));
         if (StringUtils.isNotEmpty(value)) {
-            if (value.length() == 1 && value.charAt(0) == '/') {
-                return rootUri;
-            } else {
-                return rootUri + value;
-            }
+            return rootUri.nest(value).toString();
         } else {
-            return rootUri + uriNamingStrategy.resolveUri(method.getMethodName());
+            return rootUri.nest(uriNamingStrategy.resolveUri(method.getMethodName())).toString();
         }
     }
 }

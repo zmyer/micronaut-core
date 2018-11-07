@@ -15,11 +15,12 @@
  */
 package io.micronaut.cli.io.support
 
+import groovy.transform.InheritConstructors
 import groovy.xml.MarkupBuilder
 import io.micronaut.cli.profile.Feature
 import io.micronaut.cli.profile.Profile
 import io.micronaut.cli.profile.repository.MavenProfileRepository
-import org.eclipse.aether.artifact.DefaultArtifact
+import io.micronaut.cli.util.VersionInfo
 import org.eclipse.aether.graph.Dependency
 import org.eclipse.aether.graph.Exclusion
 
@@ -27,6 +28,7 @@ import org.eclipse.aether.graph.Exclusion
  * @author James Kleeh
  * @since 1.0
  */
+@InheritConstructors
 class MavenBuildTokens extends BuildTokens {
 
     public static Map<String, String> scopeConversions = [:]
@@ -40,9 +42,12 @@ class MavenBuildTokens extends BuildTokens {
         scopeConversions.put("testCompileOnly", "test")
     }
 
+    @Override
     Map getTokens(Profile profile, List<Feature> features) {
         Map tokens = [:]
-
+        tokens.put("testFramework", testFramework)
+        tokens.put("sourceLanguage", sourceLanguage)
+        
         def ln = System.getProperty("line.separator")
 
         def repositoriesWriter = new StringWriter()
@@ -84,9 +89,9 @@ class MavenBuildTokens extends BuildTokens {
             dependencies.addAll f.dependencies.findAll() { Dependency dep -> dep.scope != 'build' }
         }
 
-        if (getJavaVersion() >= 9) {
-            dependencies.add(getAnnotationApi())
-        }
+        List<Dependency> annotationProcessors = dependencies
+                .unique()
+                .findAll( { it.scope == 'annotationProcessor' || it.scope == 'kapt' })
 
         dependencies = dependencies.unique()
             .findAll { scopeConversions.containsKey(it.scope) }
@@ -97,6 +102,7 @@ class MavenBuildTokens extends BuildTokens {
 
         def dependenciesWriter = new StringWriter()
         MarkupBuilder dependenciesXml = new MarkupBuilder(dependenciesWriter)
+
         dependencies.each { Dependency dep ->
 
             def artifact = dep.artifact
@@ -121,13 +127,45 @@ class MavenBuildTokens extends BuildTokens {
             }
         }
 
+        def jvmArgsWriter = new StringWriter()
+        MarkupBuilder jvmArgsXml = new MarkupBuilder(jvmArgsWriter)
+
+        def arguments = profile.jvmArgs
+        for (Feature f in features) {
+            arguments.addAll(f.jvmArgs)
+        }
+
+        arguments.each { String arg ->
+            jvmArgsXml.argument("${arg}")
+        }
+
+        def annotationProcessorsWriter = new StringWriter()
+        MarkupBuilder annotationProcessorPathsXml = new MarkupBuilder(annotationProcessorsWriter)
+        annotationProcessors.each { Dependency dep ->
+            def artifact = dep.artifact
+            String methodToCall = sourceLanguage == 'kotlin' ? 'annotationProcessorPath' : 'path'
+            annotationProcessorPathsXml."$methodToCall" {
+                groupId(artifact.groupId)
+                artifactId(artifact.artifactId)
+                if (artifact.groupId.startsWith("io.micronaut")) {
+                    version("\${micronaut.version}")
+                } else {
+                    version(artifact.version)
+                }
+            }
+        }
+
+
+        tokens.put("arguments", prettyPrint(jvmArgsWriter.toString(), 12))
         tokens.put("dependencies", prettyPrint(dependenciesWriter.toString(), 8))
         tokens.put("repositories", prettyPrint(repositoriesWriter.toString(), 8))
-        tokens.put("jdkversion", getJdkVersion())
+        tokens.put("jdkversion", VersionInfo.getJdkVersion())
+        tokens.put("annotationProcessorPaths", prettyPrint(annotationProcessorsWriter.toString(), 14))
 
         tokens
     }
 
+    @Override
     Map getTokens(List<String> services) {
         final StringWriter modulesWriter = new StringWriter()
         MarkupBuilder modulesXml = new MarkupBuilder(modulesWriter)

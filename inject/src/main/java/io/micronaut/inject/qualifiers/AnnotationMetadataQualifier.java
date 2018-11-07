@@ -17,10 +17,12 @@
 package io.micronaut.inject.qualifiers;
 
 import io.micronaut.core.annotation.AnnotationMetadata;
+import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.inject.BeanType;
 
 import javax.inject.Named;
+import java.lang.annotation.Annotation;
 import java.util.stream.Stream;
 
 /**
@@ -30,9 +32,12 @@ import java.util.stream.Stream;
  * @author Graeme Rocher
  * @since 1.0
  */
+@Internal
 class AnnotationMetadataQualifier<T> extends NameQualifier<T> {
 
     private final AnnotationMetadata annotationMetadata;
+    private final Class<? extends Annotation> annotationType;
+    private final String qualifiedName;
 
     /**
      * @param metadata The annotation metadata
@@ -41,23 +46,37 @@ class AnnotationMetadataQualifier<T> extends NameQualifier<T> {
     AnnotationMetadataQualifier(AnnotationMetadata metadata, String name) {
         super(name);
         this.annotationMetadata = metadata;
+        this.annotationType = null;
+        this.qualifiedName = null;
+    }
+
+    /**
+     * @param metadata The annotation metadata
+     * @param annotationType     The name
+     */
+    AnnotationMetadataQualifier(AnnotationMetadata metadata, Class<? extends Annotation> annotationType) {
+        super(annotationType.getSimpleName());
+        this.annotationMetadata = metadata;
+        this.annotationType = annotationType;
+        this.qualifiedName = annotationType.getName();
     }
 
     @Override
     public <BT extends BeanType<T>> Stream<BT> reduce(Class<T> beanType, Stream<BT> candidates) {
         String name;
-        if (Named.class.getName().equals(getName())) {
-            String v = annotationMetadata.getValue(Named.class, String.class).orElse(null);
-            if (StringUtils.isNotEmpty(v)) {
-                name = Character.toUpperCase(v.charAt(0)) + v.substring(1);
-            } else {
-                name = getName();
-            }
-
+        String v = annotationMetadata.getValue(Named.class, String.class).orElse(null);
+        if (StringUtils.isNotEmpty(v)) {
+            name = Character.toUpperCase(v.charAt(0)) + v.substring(1);
+            return reduceByName(beanType, candidates, name);
         } else {
             name = getName();
+            return reduceByAnnotation(beanType, candidates, name, qualifiedName);
         }
 
-        return reduceByAnnotation(beanType, candidates, name);
+    }
+
+    @Override
+    public String toString() {
+        return annotationType == null ? super.toString() : "@" + annotationType.getSimpleName();
     }
 }

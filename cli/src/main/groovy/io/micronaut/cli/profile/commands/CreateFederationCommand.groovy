@@ -21,12 +21,15 @@ import groovy.transform.CompileStatic
 import io.micronaut.cli.MicronautCli
 import io.micronaut.cli.console.logging.ConsoleAntBuilder
 import io.micronaut.cli.console.logging.MicronautConsole
-import io.micronaut.cli.console.parsing.CommandLine
+import io.micronaut.cli.io.support.BuildTokens
 import io.micronaut.cli.io.support.GradleBuildTokens
 import io.micronaut.cli.io.support.MavenBuildTokens
 import io.micronaut.cli.profile.ExecutionContext
 import io.micronaut.cli.profile.Profile
 import io.micronaut.cli.util.VersionInfo
+import picocli.CommandLine.Command
+import picocli.CommandLine.Option
+import picocli.CommandLine.Parameters
 
 import java.nio.file.Paths
 
@@ -37,88 +40,64 @@ import java.nio.file.Paths
  * @since 1.0
  */
 @CompileStatic
-class CreateFederationCommand extends CreateAppCommand {
-    public static final String NAME = "create-federation"
-    public static final String SERVICES_FLAG = "services"
+@Command(name = 'create-federation', description = 'Creates a federation of services')
+class CreateFederationCommand extends AbstractCreateAppCommand {
+    public static final String NAME = 'create-federation'
 
+    @Parameters(arity = '0..1', paramLabel = 'NAME', description = 'The name of the federation to create.')
+    String federationName = ''
+
+    @Option(names = ['-s', '--services'], arity = "1..*", paramLabel = 'SERVICE', split = ',',
+            required = true, description = 'The names of the services to create.')
     List<String> services = []
 
-    CreateFederationCommand() {
-        description.description = "Creates a federation of services"
-        description.usage = "create-federation [NAME] --services [SERVICENAME-A SERVICENAME-B ...]"
+    // note: description contains a variable that will be replaced by picocli, not by Groovy
+    @Option(names = ['-b', '--build'], paramLabel = 'BUILD-TOOL', description = 'Which build tool to configure. Possible values: ${COMPLETION-CANDIDATES}.')
+    SupportedBuildTool build = SupportedBuildTool.gradle
 
-        final List<String> flags = getFlags()
-        if (flags.contains(SERVICES_FLAG)) {
-            description.flag(name: SERVICES_FLAG, description: "The names of the services to create", required:true)
-        }
+    CreateFederationCommand() {
     }
 
     @Override
     boolean handle(ExecutionContext executionContext) {
-        final CommandLine commandLine = executionContext.commandLine
-
-        final List<String> validFlags = getFlags()
-        commandLine.undeclaredOptions.each { String key, Object value ->
-            if (!validFlags.contains(key)) {
-                List possibleSolutions = validFlags.findAll { it.substring(0, 2) == key.substring(0, 2) }
-                StringBuilder warning = new StringBuilder("Unrecognized flag: ${key}.")
-                if (possibleSolutions) {
-                    warning.append(" Possible solutions: ")
-                    warning.append(possibleSolutions.join(", "))
-                }
-                executionContext.console.warn(warning.toString())
-            }
-        }
-
-        final String federationName = commandLine.remainingArgs ? commandLine.remainingArgs[0] : ""
-        final String[] featuresArray = commandLine.optionValue(FEATURES_FLAG)?.toString()?.split(',')
-        final Set<String> features = new HashSet<>()
-        if (featuresArray) {
-            features.addAll(featuresArray)
-        }
-        services = commandLine.optionValue(SERVICES_FLAG)?.toString()?.split(',')?.toList()
-        if (!services) {
-            StringBuilder warning = new StringBuilder("Missing required flag: --services= <service1 service2 service3 ..>")
-            executionContext.console.error(warning.toString())
-            return false
-        }
-        final String build = commandLine.hasOption(BUILD_FLAG) ? commandLine.optionValue(BUILD_FLAG) : "gradle"
-        final boolean inPlace = commandLine.hasOption(INPLACE_FLAG)
         final String micronautVersion = VersionInfo.getVersion(MicronautCli)
-        final String profileName = evaluateProfileName(commandLine)
-
-        final File serviceDir = inPlace ? new File('.').canonicalFile : new File(executionContext.baseDir, federationName)
-
-        for (String service : services) {
-            final CreateServiceCommandObject cmd = new CreateServiceCommandObject(
-                appName: service,
-                baseDir: serviceDir,
-                profileName: profileName,
-                micronautVersion: micronautVersion,
-                features: features,
-                inplace: false,
-                build: build,
-                console: executionContext.console,
-                skeletonExclude: ["gradle*", "gradle/", ".mvn/", "mvnw*"]
-            )
-            super.handle(cmd)
-        }
+        final File serviceDir = inplace ? new File('.').canonicalFile : new File(executionContext.baseDir, federationName)
+        final String profileName = evaluateProfileName()
 
         final CreateServiceCommandObject parent = new CreateServiceCommandObject(
-            appName: federationName,
-            baseDir: executionContext.baseDir,
-            profileName: 'federation',
-            micronautVersion: micronautVersion,
-            features: features,
-            inplace: inPlace,
-            build: build,
-            console: executionContext.console
+                appName: federationName,
+                baseDir: executionContext.baseDir,
+                profileName: 'federation',
+                micronautVersion: micronautVersion,
+                features: [] as Set,
+                inplace: this.inplace,
+                build: this.build.toString(),
+                console: executionContext.console
         )
-        super.handle(parent)
+        if (super.handle(parent)) {
+            for (String service : services) {
+                final CreateServiceCommandObject cmd = new CreateServiceCommandObject(
+                        appName: service,
+                        baseDir: serviceDir,
+                        profileName: profileName,
+                        micronautVersion: micronautVersion,
+                        features: new HashSet<>(this.features),
+                        inplace: false,
+                        build: this.build.toString(),
+                        console: executionContext.console,
+                        lang: resolveLang(),
+                        skeletonExclude: ["gradle*", "gradle/", ".mvn/", "mvnw*"]
+                )
+                super.handle(cmd)
+            }
+        }
     }
 
     @Override
     String getName() { NAME }
+
+    @Override
+    protected String getNameOfAppToCreate() { federationName }
 
     @Override
     protected void messageOnComplete(MicronautConsole console, CreateServiceCommandObject command, File targetDir) {
@@ -128,29 +107,11 @@ class CreateFederationCommand extends CreateAppCommand {
     }
 
     @Override
-    protected void populateDescription() {
-        description.argument(name: "Federation Name", description: "The name of the federation to create.", required: false)
-    }
-
-    @Override
-    protected List<String> getFlags() {
-        [BUILD_FLAG, FEATURES_FLAG, INPLACE_FLAG, SERVICES_FLAG, PROFILE_FLAG, SERVICES_FLAG]
-    }
-
-    @Override
     @CompileDynamic
-    protected void replaceBuildTokens(String build, Profile profile, List features, File targetDirectory) {
-        super.replaceBuildTokens(build, profile, features, targetDirectory)
-
+    protected void withTokens(BuildTokens buildTokens) {
         final AntBuilder ant = new ConsoleAntBuilder()
 
-        Map tokens = [:]
-        if (build == "gradle") {
-            tokens = new GradleBuildTokens().getTokens(services)
-        }
-        if (build == "maven") {
-            tokens = new MavenBuildTokens().getTokens(services)
-        }
+        Map tokens = buildTokens.getTokens(services)
 
         ant.replace(dir: targetDirectory) {
             tokens.each { k, v ->
@@ -160,7 +121,6 @@ class CreateFederationCommand extends CreateAppCommand {
                 }
             }
         }
-
     }
 
 }

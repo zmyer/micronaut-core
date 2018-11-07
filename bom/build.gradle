@@ -12,7 +12,7 @@ publishing {
                 xml.children().last() + {
                     def mkp = delegate
 
-
+                    mkp.packaging "pom"
                     mkp.properties {
                         for(dep in dependencyVersions) {
                             def v = dep.value.version
@@ -45,7 +45,7 @@ publishing {
 
                                 mkp.dependency {
                                     mkp.groupId p.group
-                                    mkp.artifactId p.name
+                                    mkp.artifactId "micronaut-$p.name"
                                     mkp.version p.version
                                 }
                             }
@@ -59,10 +59,12 @@ publishing {
 
                                 def versionExpr = "\${${dep.key}.version}"
 
-                                mkp.dependency {
-                                    mkp.groupId info.group
-                                    mkp.artifactId info.name
-                                    mkp.version versionExpr
+                                if (info.name) {
+                                    mkp.dependency {
+                                        mkp.groupId info.group
+                                        mkp.artifactId info.name
+                                        mkp.version versionExpr
+                                    }
                                 }
                                 if(info.modules) {
                                    for(m in info.modules) {

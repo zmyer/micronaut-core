@@ -16,6 +16,7 @@
 package io.micronaut.http.client
 
 import io.micronaut.context.ApplicationContext
+import io.micronaut.core.convert.format.Format
 import io.micronaut.core.type.Argument
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
@@ -23,12 +24,19 @@ import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.QueryValue
+import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.runtime.server.EmbeddedServer
 import io.reactivex.Flowable
+import io.reactivex.functions.Consumer
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
+import spock.util.concurrent.PollingConditions
+
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 /**
  * @author Graeme Rocher
@@ -75,6 +83,49 @@ class HttpGetSpec extends Specification {
         def e = thrown(HttpClientResponseException)
         e.message == "Page Not Found"
         e.status == HttpStatus.NOT_FOUND
+
+        cleanup:
+        client.stop()
+        client.close()
+    }
+
+    void "test 500 request with body"() {
+        given:
+        HttpClient client = HttpClient.create(embeddedServer.getURL())
+
+        when:
+        def flowable = Flowable.fromPublisher(client.exchange(
+                HttpRequest.GET("/get/error")
+        ))
+
+        flowable.blockingFirst()
+
+        then:
+        def e = thrown(HttpClientResponseException)
+        e.message == "Server error"
+        e.status == HttpStatus.INTERNAL_SERVER_ERROR
+
+        cleanup:
+        client.stop()
+        client.close()
+    }
+
+
+    void "test 500 request with json body"() {
+        given:
+        HttpClient client = HttpClient.create(embeddedServer.getURL())
+
+        when:
+        def flowable = Flowable.fromPublisher(client.exchange(
+                HttpRequest.GET("/get/jsonError")
+        ))
+
+        flowable.blockingFirst()
+
+        then:
+        def e = thrown(HttpClientResponseException)
+        e.message == "Internal Server Error"
+        e.status == HttpStatus.INTERNAL_SERVER_ERROR
 
         cleanup:
         client.stop()
@@ -229,13 +280,110 @@ class HttpGetSpec extends Specification {
 
         cleanup:
         client.stop()
+    }
 
+    void "test get with @Client"() {
+        given:
+        MyGetHelper helper = embeddedServer.applicationContext.getBean(MyGetHelper)
+
+        expect:
+        helper.simple() == "success"
+        helper.simpleSlash() == "success"
+        helper.simplePreceedingSlash() == "success"
+        helper.simpleDoubleSlash() == "success"
+        helper.queryParam() == "a!b"
+    }
+
+    void "test query parameter with @Client interface"() {
+        given:
+        MyGetClient client = embeddedServer.applicationContext.getBean(MyGetClient)
+
+        expect:
+        client.queryParam('{"service":["test"]}') == '{"service":["test"]}'
+        client.queryParam('foo', 'bar') == 'foo-bar'
+        client.queryParam('foo%', 'bar') == 'foo%-bar'
+    }
+
+    void "test body availability"() {
+        given:
+        RxHttpClient client = RxHttpClient.create(embeddedServer.getURL())
+
+        when:
+        Flowable<HttpResponse> flowable = client.exchange(
+                HttpRequest.GET("/get/simple")
+        )
+        String body
+        flowable.firstOrError().subscribe((Consumer){ HttpResponse res ->
+            Thread.sleep(3000)
+            body = res.getBody(String).orElse(null)
+        })
+        def conditions = new PollingConditions(timeout: 4)
+
+        then:
+        conditions.eventually {
+            assert body == 'success'
+        }
+
+        cleanup:
+        client.stop()
+    }
+
+    void "test blocking body availability"() {
+        given:
+        HttpClient backing = HttpClient.create(embeddedServer.getURL())
+        BlockingHttpClient client = backing.toBlocking()
+
+        when:
+        HttpResponse res = client.exchange(
+                HttpRequest.GET("/get/simple")
+        )
+        String body = res.getBody(String).orElse(null)
+
+        then:
+        body == null
+
+        cleanup:
+        backing.stop()
+    }
+
+    void "test that Optional.empty() should return 404"() {
+        given:
+        HttpClient client = HttpClient.create(embeddedServer.getURL())
+
+        when:
+        def flowable = Flowable.fromPublisher(client.exchange(
+                HttpRequest.GET("/get/empty")
+        ))
+
+        HttpResponse<Optional<String>> response = flowable.blockingFirst()
+
+        then:
+        def e = thrown(HttpClientResponseException)
+        e.message == "Page Not Found"
+        e.status == HttpStatus.NOT_FOUND
+
+        cleanup:
+        client.stop()
+        client.close()
+    }
+
+    void 'test format dates with @Format'() {
+        given:
+        MyGetClient client = embeddedServer.applicationContext.getBean(MyGetClient)
+        Date d = new Date(2018, 10, 20)
+        LocalDate dt = LocalDate.now()
+
+        expect:
+        client.formatDate(d) == d.toString()
+        client.formatDateQuery(d) == d.toString()
+        client.formatDateTime(dt) == dt.toString()
+        client.formatDateTimeQuery(dt) == dt.toString()
     }
 
     @Controller("/get")
     static class GetController {
 
-        @Get(uri = "/simple", produces = MediaType.TEXT_PLAIN)
+        @Get(value = "/simple", produces = MediaType.TEXT_PLAIN)
         String simple() {
             return "success"
         }
@@ -249,9 +397,127 @@ class HttpGetSpec extends Specification {
         List<Book> pojoList() {
             return [ new Book(title: "The Stand") ]
         }
+
+        @Get(value = "/error", produces = MediaType.TEXT_PLAIN)
+        HttpResponse error() {
+            return HttpResponse.serverError().body("Server error")
+        }
+
+        @Get("/jsonError")
+        HttpResponse jsonError() {
+            return HttpResponse.serverError().body([foo: "bar"])
+        }
+
+        @Get("/queryParam")
+        String queryParam(@QueryValue String foo) {
+            return foo
+        }
+
+        @Get("/multipleQueryParam")
+        String queryParam(@QueryValue String foo, @QueryValue String bar) {
+            return foo + '-' + bar
+        }
+
+        @Get("/empty")
+        Optional<String> empty() {
+            return Optional.empty()
+        }
+
+        @Get("/date/{myDate}")
+        String formatDate(@Format('yyyy-MM-dd') Date myDate) {
+            return myDate.toString()
+        }
+
+        @Get("/dateTime/{myDate}")
+        String formatDateTime(@Format('yyyy-MM-dd') LocalDate myDate) {
+            return myDate.toString()
+        }
+
+        @Get("/dateQuery")
+        String formatDateQuery(@QueryValue @Format('yyyy-MM-dd') Date myDate) {
+            return myDate.toString()
+        }
+
+        @Get("/dateTimeQuery")
+        String formatDateTimeQuery(@QueryValue @Format('yyyy-MM-dd') LocalDate myDate) {
+            return myDate.toString()
+        }
     }
 
     static class Book {
         String title
+    }
+
+    static class Error {
+        String message
+    }
+
+    @Client("/get")
+    static interface MyGetClient {
+        @Get(value = "/simple", produces = MediaType.TEXT_PLAIN)
+        String simple()
+
+        @Get("/pojo")
+        Book pojo()
+
+        @Get("/pojoList")
+        List<Book> pojoList()
+
+        @Get(value = "/error", produces = MediaType.TEXT_PLAIN)
+        HttpResponse error()
+
+        @Get("/jsonError")
+        HttpResponse jsonError()
+
+        @Get("/queryParam")
+        String queryParam(@QueryValue String foo)
+
+        @Get("/multipleQueryParam")
+        String queryParam(@QueryValue String foo, @QueryValue String bar)
+
+        @Get("/date/{myDate}")
+        String formatDate(@Format('yyyy-MM-dd') Date myDate)
+
+        @Get("/dateTime/{myDate}")
+        String formatDateTime(@Format('yyyy-MM-dd') LocalDate myDate)
+
+        @Get("/dateQuery")
+        String formatDateQuery(@QueryValue @Format('yyyy-MM-dd') Date myDate)
+
+        @Get("/dateTimeQuery")
+        String formatDateTimeQuery(@QueryValue @Format('yyyy-MM-dd') LocalDate myDate)
+
+    }
+
+    @javax.inject.Singleton
+    static class MyGetHelper {
+        private final RxStreamingHttpClient rxClientSlash
+        private final RxStreamingHttpClient rxClient
+
+        MyGetHelper(@Client("/get/") RxStreamingHttpClient rxClientSlash,
+                    @Client("/get") RxStreamingHttpClient rxClient) {
+            this.rxClient = rxClient
+            this.rxClientSlash = rxClientSlash
+        }
+
+        String simple() {
+            rxClient.toBlocking().exchange(HttpRequest.GET("simple"), String).body()
+        }
+
+        String simplePreceedingSlash() {
+            rxClient.toBlocking().exchange(HttpRequest.GET("/simple"), String).body()
+        }
+
+        String simpleSlash() {
+            rxClientSlash.toBlocking().exchange(HttpRequest.GET("simple"), String).body()
+        }
+
+        String simpleDoubleSlash() {
+            rxClientSlash.toBlocking().exchange(HttpRequest.GET("/simple"), String).body()
+        }
+
+        String queryParam() {
+            rxClient.toBlocking().exchange(HttpRequest.GET("/queryParam?foo=a!b"), String).body()
+        }
     }
 }

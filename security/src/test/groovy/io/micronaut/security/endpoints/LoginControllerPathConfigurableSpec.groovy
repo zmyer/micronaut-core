@@ -17,6 +17,7 @@ package io.micronaut.security.endpoints
 
 import io.micronaut.context.ApplicationContext
 import io.micronaut.context.annotation.Requires
+import io.micronaut.context.env.Environment
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
@@ -33,7 +34,6 @@ import io.micronaut.security.handlers.LoginHandler
 import io.reactivex.Flowable
 import org.reactivestreams.Publisher
 import spock.lang.AutoCleanup
-import spock.lang.IgnoreIf
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -48,7 +48,7 @@ class LoginControllerPathConfigurableSpec extends Specification {
             'micronaut.security.enabled': true,
             'micronaut.security.endpoints.login.enabled': true,
             'micronaut.security.endpoints.login.path': '/auth',
-    ], 'test')
+    ], Environment.TEST)
 
     @Shared
     @AutoCleanup

@@ -4,7 +4,9 @@ dependencies {
     compile project(":http-netty")
     compile project(":runtime")
     compile dependencyModuleVersion("netty", "netty-handler-proxy")
+
     compileOnly dependencyVersion("reactor")
+    compile project(":websocket")
 
     testCompile project(":inject-groovy")
     testCompile project(":validation")
@@ -15,8 +17,10 @@ dependencies {
     testRuntime project(":configurations:hibernate-validator")
 }
 
-tasks.withType(Test) {
-    testLogging {
-        showStandardStreams = true
-    }
-}
+//tasks.withType(Test) {
+//    testLogging {
+//        showStandardStreams = true
+//        exceptionFormat = 'full'
+//    }
+//}
+//

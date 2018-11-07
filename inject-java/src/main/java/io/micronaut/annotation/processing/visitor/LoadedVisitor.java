@@ -16,18 +16,17 @@
 
 package io.micronaut.annotation.processing.visitor;
 
-import io.micronaut.annotation.processing.AnnotationUtils;
 import io.micronaut.annotation.processing.GenericUtils;
 import io.micronaut.core.annotation.AnnotationMetadata;
 import io.micronaut.core.annotation.Internal;
+import io.micronaut.core.reflect.GenericTypeUtils;
+import io.micronaut.inject.processing.JavaModelUtils;
 import io.micronaut.inject.visitor.TypeElementVisitor;
 
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
+import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -42,7 +41,6 @@ import java.util.List;
 public class LoadedVisitor {
 
     private final TypeElementVisitor visitor;
-    private final AnnotationUtils annotationUtils;
     private final String classAnnotation;
     private final String elementAnnotation;
     private final JavaVisitorContext visitorContext;
@@ -52,20 +50,30 @@ public class LoadedVisitor {
      * @param visitorContext        The visitor context
      * @param genericUtils          The generic utils
      * @param processingEnvironment The {@link ProcessEnvironment}
-     * @param annotationUtils       The annotation utils
      */
     public LoadedVisitor(TypeElementVisitor visitor,
                          JavaVisitorContext visitorContext,
                          GenericUtils genericUtils,
-                         ProcessingEnvironment processingEnvironment,
-                         AnnotationUtils annotationUtils) {
+                         ProcessingEnvironment processingEnvironment) {
         this.visitorContext = visitorContext;
         this.visitor = visitor;
-        this.annotationUtils = annotationUtils;
-        TypeElement typeElement = processingEnvironment.getElementUtils().getTypeElement(visitor.getClass().getName());
-        List<? extends TypeMirror> generics = genericUtils.interfaceGenericTypesFor(typeElement, TypeElementVisitor.class.getName());
-        classAnnotation = generics.get(0).toString();
-        elementAnnotation = generics.get(1).toString();
+        Class<? extends TypeElementVisitor> aClass = visitor.getClass();
+
+        TypeElement typeElement = processingEnvironment.getElementUtils().getTypeElement(aClass.getName());
+        if (typeElement != null) {
+            List<? extends TypeMirror> generics = genericUtils.interfaceGenericTypesFor(typeElement, TypeElementVisitor.class.getName());
+            classAnnotation = generics.get(0).toString();
+            elementAnnotation = generics.get(1).toString();
+        } else {
+            Class[] classes = GenericTypeUtils.resolveInterfaceTypeArguments(aClass, TypeElementVisitor.class);
+            if (classes != null && classes.length == 2) {
+                classAnnotation = classes[0].getName();
+                elementAnnotation = classes[1].getName();
+            } else {
+                classAnnotation = Object.class.getName();
+                elementAnnotation = Object.class.getName();
+            }
+        }
     }
 
     /**
@@ -83,8 +91,8 @@ public class LoadedVisitor {
         if (classAnnotation.equals("java.lang.Object")) {
             return true;
         }
-        AnnotationMetadata annotationMetadata = annotationUtils.getAnnotationMetadata(typeElement);
-        return annotationMetadata.hasAnnotation(classAnnotation);
+        AnnotationMetadata annotationMetadata = visitorContext.getAnnotationUtils().getAnnotationMetadata(typeElement);
+        return annotationMetadata.hasStereotype(classAnnotation);
     }
 
     /**
@@ -95,7 +103,7 @@ public class LoadedVisitor {
         if (elementAnnotation.equals("java.lang.Object")) {
             return true;
         }
-        return annotationMetadata.hasDeclaredAnnotation(elementAnnotation);
+        return annotationMetadata.hasStereotype(elementAnnotation);
     }
 
     /**
@@ -106,11 +114,56 @@ public class LoadedVisitor {
      */
     public void visit(Element element, AnnotationMetadata annotationMetadata) {
         if (element instanceof VariableElement) {
-            visitor.visitField(new JavaFieldElement((VariableElement) element, annotationMetadata), visitorContext);
+            visitor.visitField(
+                    new JavaFieldElement(
+                            (VariableElement) element,
+                            annotationMetadata,
+                            visitorContext),
+                    visitorContext
+            );
         } else if (element instanceof ExecutableElement) {
-            visitor.visitMethod(new JavaMethodElement((ExecutableElement) element, annotationMetadata), visitorContext);
+            ExecutableElement executableElement = (ExecutableElement) element;
+            if (executableElement.getSimpleName().toString().equals("<init>")) {
+                visitor.visitConstructor(
+                        new JavaConstructorElement(
+                                executableElement,
+                                annotationMetadata, visitorContext),
+                        visitorContext
+                );
+            } else {
+                visitor.visitMethod(
+                        new JavaMethodElement(
+                                executableElement,
+                                annotationMetadata, visitorContext),
+                        visitorContext
+                );
+            }
         } else if (element instanceof TypeElement) {
-            visitor.visitClass(new JavaClassElement((TypeElement) element, annotationMetadata), visitorContext);
+            TypeElement typeElement = (TypeElement) element;
+            boolean isEnum = JavaModelUtils.resolveKind(typeElement, ElementKind.ENUM).isPresent();
+            if (isEnum) {
+                visitor.visitClass(
+                        new JavaEnumElement(
+                                typeElement,
+                                annotationMetadata,
+                                visitorContext,
+                                Collections.emptyList()),
+                        visitorContext
+                );
+            } else {
+                visitor.visitClass(
+                        new JavaClassElement(
+                                typeElement,
+                                annotationMetadata,
+                                visitorContext),
+                        visitorContext
+                );
+            }
         }
+    }
+
+    @Override
+    public String toString() {
+        return visitor.toString();
     }
 }

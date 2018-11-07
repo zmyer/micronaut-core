@@ -21,14 +21,13 @@ import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Patch
 import io.micronaut.http.annotation.Post
-import io.micronaut.http.client.Client
+import io.micronaut.http.client.annotation.Client
 import io.micronaut.runtime.server.EmbeddedServer
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 
 import javax.annotation.Nullable
-import javax.inject.Singleton
 import java.util.concurrent.atomic.AtomicLong
 
 
@@ -180,13 +179,13 @@ class NullableCrudSpec extends Specification {
         @Get("/show{/id}") // /show to avoid calling list instead
         NullableBook get(@Nullable Long id)
 
-        @Get('/')
+        @Get
         List<NullableBook> list()
 
         @Delete("{/id}")
         void delete(@Nullable Long id)
 
-        @Post('/')
+        @Post
         NullableBook save(@Nullable String title)
 
         @Patch("/{id}")

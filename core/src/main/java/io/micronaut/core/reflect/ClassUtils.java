@@ -17,11 +17,10 @@
 package io.micronaut.core.reflect;
 
 import io.micronaut.core.util.ArrayUtils;
+import io.micronaut.core.util.Toggleable;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * Utility methods for loading classes.
@@ -34,6 +33,9 @@ public class ClassUtils {
     public static final int EMPTY_OBJECT_ARRAY_HASH_CODE = Arrays.hashCode(ArrayUtils.EMPTY_OBJECT_ARRAY);
     public static final Map<String, Class> COMMON_CLASS_MAP = new HashMap<>();
     public static final String CLASS_EXTENSION = ".class";
+    
+    static final List<ClassLoadingReporter> CLASS_LOADING_REPORTERS;
+    static final boolean CLASS_LOADING_REPORTER_ENABLED;
 
     static {
         COMMON_CLASS_MAP.put(boolean.class.getName(), boolean.class);
@@ -63,6 +65,25 @@ public class ClassUtils {
         COMMON_CLASS_MAP.put(Float.class.getName(), Float.class);
         COMMON_CLASS_MAP.put(Character.class.getName(), Character.class);
         COMMON_CLASS_MAP.put(String.class.getName(), String.class);
+
+        List<ClassLoadingReporter> reporterList = new ArrayList<>();
+        try {
+            ServiceLoader<ClassLoadingReporter> reporters = ServiceLoader.load(ClassLoadingReporter.class);
+            for (ClassLoadingReporter reporter : reporters) {
+                if (reporter.isEnabled()) {
+                    reporterList.add(reporter);
+                }
+            }
+        } catch (Throwable e) {
+            reporterList = Collections.emptyList();
+        }
+
+        CLASS_LOADING_REPORTERS = reporterList;
+        if (CLASS_LOADING_REPORTERS == Collections.EMPTY_LIST) {
+            CLASS_LOADING_REPORTER_ENABLED = false;
+        } else {
+            CLASS_LOADING_REPORTER_ENABLED = reporterList.stream().anyMatch(Toggleable::isEnabled);
+        }
     }
 
     /**
@@ -85,10 +106,10 @@ public class ClassUtils {
      * Check whether the given class is present in the given classloader.
      *
      * @param name        The name of the class
-     * @param classLoader The classloader
+     * @param classLoader The classloader. If null will fallback to attempt the thread context loader, otherwise the system loader
      * @return True if it is
      */
-    public static boolean isPresent(String name, ClassLoader classLoader) {
+    public static boolean isPresent(String name, @Nullable ClassLoader classLoader) {
         return forName(name, classLoader).isPresent();
     }
 
@@ -99,7 +120,18 @@ public class ClassUtils {
      * @return True if it is
      */
     public static boolean isJavaLangType(Class type) {
-        return COMMON_CLASS_MAP.containsKey(type.getName());
+        String typeName = type.getName();
+        return isJavaLangType(typeName);
+    }
+
+    /**
+     * Return whether the given class is a common type found in <tt>java.lang</tt> such as String or a primitive type.
+     *
+     * @param typeName The type name
+     * @return True if it is
+     */
+    public static boolean isJavaLangType(String typeName) {
+        return COMMON_CLASS_MAP.containsKey(typeName);
     }
 
     /**
@@ -134,22 +166,77 @@ public class ClassUtils {
     }
 
     /**
-     * Attempt to load a class for the given name from the given class loader.
+     * Attempt to load a class for the given name from the given class loader. This method should be used
+     * as a last resort, and note that any usage of this method will create complications on GraalVM.
      *
      * @param name        The name of the class
-     * @param classLoader The classloader
+     * @param classLoader The classloader. If null will fallback to attempt the thread context loader, otherwise the system loader
      * @return An optional of the class
      */
-    public static Optional<Class> forName(String name, ClassLoader classLoader) {
+    public static Optional<Class> forName(String name, @Nullable ClassLoader classLoader) {
         try {
+            if (classLoader == null) {
+                classLoader = Thread.currentThread().getContextClassLoader();
+            }
+            if (classLoader == null) {
+                classLoader = ClassLoader.getSystemClassLoader();
+            }
+
             Optional<Class> commonType = Optional.ofNullable(COMMON_CLASS_MAP.get(name));
             if (commonType.isPresent()) {
                 return commonType;
             } else {
-                return Optional.of(Class.forName(name, true, classLoader));
+                Class<?> type = Class.forName(name, true, classLoader);
+                ClassLoadingReporter.reportPresent(type);
+                return Optional.of(type);
             }
         } catch (ClassNotFoundException | NoClassDefFoundError e) {
+            ClassLoadingReporter.reportMissing(name);
             return Optional.empty();
+        }
+    }
+
+    /**
+     * Builds a class hierarchy that includes all super classes
+     * and interfaces that the given class implements or extends from.
+     *
+     * @param type The class to start with
+     * @return The class hierarchy
+     */
+    public static List<Class> resolveHierarchy(Class<?> type) {
+        Class<?> superclass = type.getSuperclass();
+        List<Class> hierarchy = new ArrayList<>();
+        if (superclass != null) {
+            populateHierarchyInterfaces(type, hierarchy);
+
+            while (superclass != Object.class) {
+                populateHierarchyInterfaces(superclass, hierarchy);
+                superclass = superclass.getSuperclass();
+            }
+        } else if (type.isInterface()) {
+            populateHierarchyInterfaces(type, hierarchy);
+        }
+
+        if (type.isArray()) {
+            if (!type.getComponentType().isPrimitive()) {
+                hierarchy.add(Object[].class);
+            }
+        } else {
+            hierarchy.add(Object.class);
+        }
+
+        return hierarchy;
+    }
+
+    private static void populateHierarchyInterfaces(Class<?> superclass, List<Class> hierarchy) {
+        if (!hierarchy.contains(superclass)) {
+            hierarchy.add(superclass);
+        }
+        for (Class<?> aClass : superclass.getInterfaces()) {
+            if (!hierarchy.contains(aClass)) {
+                hierarchy.add(aClass);
+            }
+            populateHierarchyInterfaces(aClass, hierarchy);
         }
     }
 }

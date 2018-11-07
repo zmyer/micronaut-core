@@ -28,12 +28,15 @@ import io.micronaut.discovery.eureka.client.v2.InstanceInfo;
 import io.micronaut.health.HealthStatus;
 import io.micronaut.health.HeartbeatConfiguration;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.runtime.ApplicationConfiguration;
+import io.reactivex.Single;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
 import javax.inject.Singleton;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A {@link io.micronaut.discovery.registration.AutoRegistration} that registers with Eureka.
@@ -52,6 +55,7 @@ public class EurekaAutoRegistration extends DiscoveryServiceAutoRegistration {
     private final EurekaConfiguration eurekaConfiguration;
     private final HeartbeatConfiguration heartbeatConfiguration;
     private final ServiceInstanceIdGenerator idGenerator;
+    private final AtomicReference<HealthStatus> lastStatus = new AtomicReference<>();
 
     /**
      * @param environment            The environment
@@ -81,62 +85,66 @@ public class EurekaAutoRegistration extends DiscoveryServiceAutoRegistration {
         if (heartbeatConfiguration.isEnabled() && registration != null) {
             InstanceInfo instanceInfo = registration.getInstanceInfo();
             if (status.equals(HealthStatus.UP)) {
-                eurekaClient.heartbeat(instanceInfo.getApp(), instanceInfo.getId()).subscribe(new Subscriber<HttpStatus>() {
-                    @Override
-                    public void onSubscribe(Subscription s) {
-                        s.request(1);
-                    }
-
-                    @Override
-                    public void onNext(HttpStatus httpStatus) {
+                Single<HttpStatus> heartbeatPublisher = Single.fromPublisher(eurekaClient.heartbeat(instanceInfo.getApp(), instanceInfo.getId()));
+                //noinspection ResultOfMethodCallIgnored
+                heartbeatPublisher.subscribe((httpStatus, throwable) -> {
+                    if (throwable == null) {
                         if (LOG.isDebugEnabled()) {
                             LOG.debug("Successfully reported passing state to Eureka");
                         }
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-                        String errorMessage = getErrorMessage(t, "Error reporting passing state to Eureka: ");
-                        if (LOG.isErrorEnabled()) {
-                            LOG.error(errorMessage, t);
+                    } else {
+                        if (throwable instanceof HttpClientResponseException) {
+                            HttpClientResponseException hcre = (HttpClientResponseException) throwable;
+                            httpStatus = hcre.getStatus();
+                            if (httpStatus == HttpStatus.NOT_FOUND) {
+                                if (LOG.isInfoEnabled()) {
+                                    LOG.info("Instance [{}] no longer registered with Eureka. Attempting re-registration.", instance.getId());
+                                }
+                                register(instance);
+                                return;
+                            }
                         }
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        // no-op
+                        String errorMessage = getErrorMessage(throwable, "Error reporting passing state to Eureka: ");
+                        if (LOG.isErrorEnabled()) {
+                            LOG.error(errorMessage, throwable);
+                        }
                     }
                 });
-            } else {
+            }
+
+            final HealthStatus lastStatus = this.lastStatus.getAndSet(status);
+            if (lastStatus == null || !lastStatus.equals(status)) {
+
                 InstanceInfo.Status s = translateState(status);
                 eurekaClient.updateStatus(instanceInfo.getApp(), instanceInfo.getId(), s)
-                    .subscribe(new Subscriber<HttpStatus>() {
-                        @Override
-                        public void onSubscribe(Subscription s) {
-                            s.request(1);
-                        }
-
-                        @Override
-                        public void onNext(HttpStatus httpStatus) {
-                            if (LOG.isDebugEnabled()) {
-                                LOG.debug("Successfully reported status {} to Eureka", s);
+                        .subscribe(new Subscriber<HttpStatus>() {
+                            @Override
+                            public void onSubscribe(Subscription s) {
+                                s.request(1);
                             }
-                        }
 
-                        @Override
-                        public void onError(Throwable t) {
-                            String errorMessage = getErrorMessage(t, "Error reporting state to Eureka: ");
-                            if (LOG.isErrorEnabled()) {
-                                LOG.error(errorMessage, t);
+                            @Override
+                            public void onNext(HttpStatus httpStatus) {
+                                if (LOG.isDebugEnabled()) {
+                                    LOG.debug("Successfully reported status {} to Eureka", s);
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onComplete() {
-                            // no-op
-                        }
-                    });
+                            @Override
+                            public void onError(Throwable t) {
+                                String errorMessage = getErrorMessage(t, "Error reporting state to Eureka: ");
+                                if (LOG.isErrorEnabled()) {
+                                    LOG.error(errorMessage, t);
+                                }
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                // no-op
+                            }
+                        });
             }
+
         }
     }
 

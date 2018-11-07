@@ -15,8 +15,6 @@
  */
 package io.micronaut.http.server.netty.interceptor;
 
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
@@ -25,10 +23,10 @@ import io.micronaut.http.annotation.Get;
  * @author Graeme Rocher
  * @since 1.0
  */
-@Controller
+@Controller("/secure")
 public class SecureController {
 
-    @Get("/")
+    @Get
     public HttpResponse index(String username) {
         return HttpResponse.ok("Authenticated: " + username);
     }

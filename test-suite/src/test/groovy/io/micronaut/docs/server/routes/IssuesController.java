@@ -17,7 +17,6 @@ package io.micronaut.docs.server.routes;
 
 // tag::imports[]
 import io.micronaut.http.annotation.*;
-import javax.inject.Singleton;
 // end::imports[]
 
 
@@ -26,7 +25,7 @@ import javax.inject.Singleton;
  * @since 1.0
  */
 // tag::class[]
-@Controller // <1>
+@Controller("/issues") // <1>
 public class IssuesController {
 
     @Get("/{number}") // <2>

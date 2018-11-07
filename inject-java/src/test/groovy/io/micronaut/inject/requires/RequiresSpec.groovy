@@ -22,7 +22,6 @@ import io.micronaut.context.env.PropertySource
 import io.micronaut.inject.AbstractTypeElementSpec
 import io.micronaut.inject.BeanDefinition
 import io.micronaut.inject.BeanDefinitionReference
-import io.micronaut.inject.BeanFactory
 
 /**
  * @author Graeme Rocher
@@ -348,8 +347,6 @@ class MyBean {
         !beanDefinition.isEnabled(context)
     }
 
-
-
     void "test requires property and value with property present"() {
         when:
         BeanDefinition beanDefinition = buildBeanDefinition('test.MyBean', '''
@@ -405,6 +402,79 @@ package test;
 import io.micronaut.context.annotation.*;
 
 @Requires(property="foo.bar", value="test")
+@javax.inject.Singleton
+class MyBean {
+}
+''')
+
+        def context = ApplicationContext
+                .build('foo.bar':"blah")
+                .build()
+
+        context.environment.start()
+
+
+        then:
+        !beanDefinition.isEnabled(context)
+    }
+
+    //  *********************************************************************************
+
+    void "test requires property and pattern with property present"() {
+        when:
+        BeanDefinition beanDefinition = buildBeanDefinition('test.MyBean', '''
+package test;
+
+import io.micronaut.context.annotation.*;
+
+@Requires(property="foo.bar", pattern="\\\\d+")
+@javax.inject.Singleton
+class MyBean {
+}
+''')
+
+        def context = ApplicationContext
+                .build('foo.bar':"10")
+                .build()
+
+        context.environment.start()
+
+        then:
+        beanDefinition.isEnabled(context)
+    }
+
+    void "test requires property and pattern with property not present"() {
+        when:
+        BeanDefinition beanDefinition = buildBeanDefinition('test.MyBean', '''
+package test;
+
+import io.micronaut.context.annotation.*;
+
+@Requires(property="foo.bar", pattern="\\\\d+")
+@javax.inject.Singleton
+class MyBean {
+}
+''')
+
+        def context = ApplicationContext
+                .build()
+                .build()
+
+        context.environment.start()
+
+
+        then:
+        !beanDefinition.isEnabled(context)
+    }
+
+    void "test requires property and pattern with property not matching"() {
+        when:
+        BeanDefinition beanDefinition = buildBeanDefinition('test.MyBean', '''
+package test;
+
+import io.micronaut.context.annotation.*;
+
+@Requires(property="foo.bar", pattern="\\\\d+")
 @javax.inject.Singleton
 class MyBean {
 }

@@ -15,7 +15,6 @@
  */
 package io.micronaut.discovery.consul
 
-import io.micronaut.context.annotation.Parameter
 import io.micronaut.context.annotation.Requires
 import io.micronaut.core.async.publisher.Publishers
 import io.micronaut.core.util.StringUtils
@@ -24,13 +23,13 @@ import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.QueryValue
 import io.micronaut.runtime.server.EmbeddedServer
 import io.reactivex.Flowable
 import org.reactivestreams.Publisher
 import reactor.core.publisher.Mono
 
 import javax.annotation.Nullable
-import javax.inject.Singleton
 import javax.validation.constraints.NotNull
 import java.util.concurrent.ConcurrentHashMap
 import java.util.stream.Collectors
@@ -56,10 +55,24 @@ class MockConsulServer implements ConsulOperations {
     static NewServiceEntry lastNewEntry
     static List<String> passingReports = []
 
+    final MemberEntry agent = new MemberEntry().tap {
+        name = "localhost"
+        address = InetAddress.localHost
+        port = 8301
+        status = 1
+    }
+
     MockConsulServer(EmbeddedServer embeddedServer) {
         lastNewEntry = null
         passingReports.clear()
         nodeEntry = new CatalogEntry(UUID.randomUUID().toString(), InetAddress.localHost)
+    }
+
+    void reset() {
+        services.clear()
+        checks.clear()
+        passingReports.clear()
+        lastNewEntry = null
     }
 
     @Override
@@ -73,13 +86,13 @@ class MockConsulServer implements ConsulOperations {
                 folder = key.substring(0, i)
             }
             List<KeyValue> list = keyvalues.computeIfAbsent(folder, { String k -> []})
-            list.add(new KeyValue(key.substring(1), Base64.getEncoder().encodeToString(value.bytes)))
+            list.add(new KeyValue(key, Base64.getEncoder().encodeToString(value.bytes)))
         }
         return Flowable.just(true)
     }
 
     @Override
-    @Get("/kv/{key}")
+    @Get("/kv/{+key}")
     Mono<List<KeyValue>> readValues(String key) {
         key = URLDecoder.decode(key, "UTF-8")
         Map<String, List<KeyValue>> found = keyvalues.findAll { entry -> entry.key.startsWith(key)}
@@ -94,7 +107,7 @@ class MockConsulServer implements ConsulOperations {
 
                 List<KeyValue> values = keyvalues.get(prefix)
                 if(values) {
-                    return Mono.just(values.findAll({it.key.startsWith(key.substring(1))}))
+                    return Mono.just(values.findAll({it.key.startsWith(key)}))
                 }
             }
         }
@@ -103,8 +116,8 @@ class MockConsulServer implements ConsulOperations {
 
     @Override
     Mono<List<KeyValue>> readValues(String key,
-                                         @Nullable @Parameter("dc") String datacenter,
-                                         @Nullable Boolean raw, @Nullable String seperator) {
+                                    @Nullable @QueryValue("dc") String datacenter,
+                                    @Nullable Boolean raw, @Nullable String seperator) {
         return readValues(key)
     }
 
@@ -112,7 +125,7 @@ class MockConsulServer implements ConsulOperations {
     Publisher<HttpStatus> pass(String checkId, @Nullable String note) {
         passingReports.add(checkId)
         String service = nameFromCheck(checkId)
-        checks.get(service)?.setStatus(Check.Status.PASSING.name().toLowerCase())
+        checks.get(service).setStatus(Check.Status.PASSING.name().toLowerCase())
 
         return Publishers.just(HttpStatus.OK)
     }
@@ -179,7 +192,7 @@ class MockConsulServer implements ConsulOperations {
 
     @Override
     Publisher<List<HealthEntry>> getHealthyServices(
-            @NotNull String service, Optional<Boolean> passing, Optional<String> tag, Optional<String> dc) {
+            @NotNull String service, @Nullable Boolean passing, @Nullable String tag, @Nullable String dc) {
         ServiceEntry serviceEntry = services.get(service)
         List<HealthEntry> healthEntries = []
         if(serviceEntry != null) {
@@ -206,6 +219,24 @@ class MockConsulServer implements ConsulOperations {
     Publisher<Map<String, List<String>>> getServiceNames() {
         return Publishers.just(services.collectEntries { String key, ServiceEntry entry ->
               return [(key): entry.tags]
+        })
+    }
+
+    @Override
+    Publisher<List<MemberEntry>> getMembers() {
+        return Publishers.just([agent])
+    }
+
+    @Override
+    Publisher<LocalAgentConfiguration> getSelf() {
+        return Publishers.just(new LocalAgentConfiguration().tap {
+            configuration = [
+                Datacenter: 'dc1',
+                NodeName: 'foobar',
+                NodeId: '9d754d17-d864-b1d3-e758-f3fe25a9874f'
+            ]
+            member = agent
+            metadata = [ "os_version": "ubuntu_16.04" ]
         })
     }
 }

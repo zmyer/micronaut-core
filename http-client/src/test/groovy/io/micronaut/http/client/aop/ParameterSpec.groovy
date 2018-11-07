@@ -16,10 +16,10 @@
 package io.micronaut.http.client.aop
 
 import io.micronaut.context.ApplicationContext
-import io.micronaut.context.annotation.Parameter
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
-import io.micronaut.http.client.Client
+import io.micronaut.http.annotation.QueryValue
+import io.micronaut.http.client.annotation.Client
 import io.micronaut.runtime.server.EmbeddedServer
 import spock.lang.AutoCleanup
 import spock.lang.Shared
@@ -65,12 +65,12 @@ class ParameterSpec extends Specification {
     static class UserController implements MyApi {
 
         @Override
-        User get(@Parameter('X-username') String username) {
+        User get(@QueryValue('X-username') String username) {
             return new User(username:username, age: 10)
         }
 
         @Override
-        User findByAge(@Parameter('userAge') Integer age) {
+        User findByAge(@QueryValue('userAge') Integer age) {
             return new User(username:"John", age: 18)
         }
     }
@@ -78,10 +78,10 @@ class ParameterSpec extends Specification {
     static interface MyApi {
 
         @Get('/user/{X-username}')
-        User get(@Parameter('X-username') String username)
+        User get(@QueryValue('X-username') String username)
 
         @Get('/user/age/{userAge}')
-        User findByAge(@Parameter('userAge') Integer age)
+        User findByAge(@QueryValue('userAge') Integer age)
     }
 
     static class User {

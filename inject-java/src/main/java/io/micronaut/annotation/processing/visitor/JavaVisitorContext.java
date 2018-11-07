@@ -16,11 +16,25 @@
 
 package io.micronaut.annotation.processing.visitor;
 
+import io.micronaut.annotation.processing.AnnotationProcessingOutputVisitor;
+import io.micronaut.annotation.processing.AnnotationUtils;
+import io.micronaut.annotation.processing.ModelUtils;
+import io.micronaut.core.convert.value.MutableConvertibleValuesMap;
+import io.micronaut.core.util.StringUtils;
+import io.micronaut.inject.ast.ClassElement;
 import io.micronaut.inject.visitor.VisitorContext;
+import io.micronaut.inject.writer.GeneratedFile;
 
+import javax.annotation.Nullable;
+import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
+import java.util.Collections;
+import java.util.Optional;
 
 /**
  * The visitor context when visiting Java code.
@@ -28,26 +42,126 @@ import javax.tools.Diagnostic;
  * @author James Kleeh
  * @since 1.0
  */
-public class JavaVisitorContext implements VisitorContext {
+public class JavaVisitorContext extends MutableConvertibleValuesMap<Object> implements VisitorContext {
 
     private final Messager messager;
+    private final Elements elements;
+    private final AnnotationUtils annotationUtils;
+    private final Types types;
+    private final ModelUtils modelUtils;
+    private final AnnotationProcessingOutputVisitor outputVisitor;
 
     /**
-     * @param messager The {@link Messager}
+     * The default constructor.
+     *  @param messager The messager
+     * @param elements The elements
+     * @param annotationUtils The annotation utils
+     * @param types Type types
+     * @param modelUtils The model utils
+     * @param filer The filer
      */
-    public JavaVisitorContext(Messager messager) {
+    public JavaVisitorContext(Messager messager, Elements elements, AnnotationUtils annotationUtils, Types types, ModelUtils modelUtils, Filer filer) {
         this.messager = messager;
+        this.elements = elements;
+        this.annotationUtils = annotationUtils;
+        this.types = types;
+        this.modelUtils = modelUtils;
+        this.outputVisitor = new AnnotationProcessingOutputVisitor(filer);
     }
 
     @Override
-    public void fail(String message, io.micronaut.inject.visitor.Element element) {
-        Element el = (Element) element.getNativeType();
-        messager.printMessage(Diagnostic.Kind.ERROR, message, el);
+    public Optional<ClassElement> getClassElement(String name) {
+        TypeElement typeElement = elements.getTypeElement(name);
+        return Optional.ofNullable(typeElement).map(typeElement1 ->
+                new JavaClassElement(typeElement1, annotationUtils.getAnnotationMetadata(typeElement1), this, Collections.emptyList())
+        );
     }
 
     @Override
-    public void warn(String message, io.micronaut.inject.visitor.Element element) {
-        Element el = (Element) element.getNativeType();
-        messager.printMessage(Diagnostic.Kind.WARNING, message, el);
+    public void info(String message, @Nullable io.micronaut.inject.ast.Element element) {
+        printMessage(message, Diagnostic.Kind.NOTE, element);
+    }
+
+    @Override
+    public void info(String message) {
+        if (StringUtils.isNotEmpty(message)) {
+            messager.printMessage(Diagnostic.Kind.NOTE, message);
+        }
+    }
+
+    @Override
+    public void fail(String message, @Nullable io.micronaut.inject.ast.Element element) {
+        printMessage(message, Diagnostic.Kind.ERROR, element);
+    }
+
+    @Override
+    public void warn(String message, @Nullable io.micronaut.inject.ast.Element element) {
+        printMessage(message, Diagnostic.Kind.WARNING, element);
+    }
+
+    private void printMessage(String message, Diagnostic.Kind kind, @Nullable io.micronaut.inject.ast.Element element) {
+        if (StringUtils.isNotEmpty(message)) {
+            if (element != null) {
+                Element el = (Element) element.getNativeType();
+                messager.printMessage(kind, message, el);
+            } else {
+                messager.printMessage(kind, message);
+            }
+        }
+    }
+
+    @Override
+    public Optional<GeneratedFile> visitMetaInfFile(String path) {
+        return outputVisitor.visitMetaInfFile(path);
+    }
+
+    @Override
+    public Optional<GeneratedFile> visitGeneratedFile(String path) {
+        return outputVisitor.visitGeneratedFile(path);
+    }
+
+    /**
+     * The messager.
+     *
+     * @return The messager
+     */
+    public Messager getMessager() {
+        return messager;
+    }
+
+    /**
+     * The model utils.
+     *
+     * @return The model utils
+     */
+    public ModelUtils getModelUtils() {
+        return modelUtils;
+    }
+
+    /**
+     * The elements.
+     *
+     * @return The elements
+     */
+    public Elements getElements() {
+        return elements;
+    }
+
+    /**
+     * The annotation utils.
+     *
+     * @return The annotation utils
+     */
+    public AnnotationUtils getAnnotationUtils() {
+        return annotationUtils;
+    }
+
+    /**
+     * The types.
+     *
+     * @return The types
+     */
+    public Types getTypes() {
+        return types;
     }
 }

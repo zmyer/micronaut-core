@@ -18,11 +18,15 @@ package io.micronaut.scheduling.processor;
 
 import io.micronaut.context.BeanContext;
 import io.micronaut.context.processor.ExecutableMethodProcessor;
+import io.micronaut.core.annotation.AnnotationValue;
 import io.micronaut.core.convert.ConversionService;
+import io.micronaut.core.type.Argument;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.inject.BeanDefinition;
 import io.micronaut.inject.ExecutableMethod;
 import io.micronaut.inject.qualifiers.Qualifiers;
+import io.micronaut.scheduling.TaskExceptionHandler;
+import io.micronaut.scheduling.TaskExecutors;
 import io.micronaut.scheduling.TaskScheduler;
 import io.micronaut.scheduling.annotation.Scheduled;
 import io.micronaut.scheduling.exceptions.SchedulerConfigurationException;
@@ -32,8 +36,9 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Qualifier;
 import javax.inject.Singleton;
 import java.io.Closeable;
-import java.io.IOException;
 import java.time.Duration;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -49,29 +54,37 @@ import java.util.concurrent.ScheduledFuture;
 public class ScheduledMethodProcessor implements ExecutableMethodProcessor<Scheduled>, Closeable {
 
     private static final Logger LOG = LoggerFactory.getLogger(TaskScheduler.class);
+    private static final String MEMBER_FIXED_RATE = "fixedRate";
+    private static final String MEMBER_INITIAL_DELAY = "initialDelay";
+    private static final String MEMBER_CRON = "cron";
+    private static final String MEMBER_FIXED_DELAY = "fixedDelay";
+    private static final String MEMBER_SCHEDULER = "scheduler";
 
     private final BeanContext beanContext;
     private final ConversionService<?> conversionService;
     private final Queue<ScheduledFuture<?>> scheduledTasks = new ConcurrentLinkedDeque<>();
+    private final TaskExceptionHandler<?, ?> taskExceptionHandler;
 
     /**
      * @param beanContext       The bean context for DI of beans annotated with {@link javax.inject.Inject}
      * @param conversionService To convert one type to another
+     * @param taskExceptionHandler The default task exception handler
      */
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    public ScheduledMethodProcessor(BeanContext beanContext, Optional<ConversionService<?>> conversionService) {
+    public ScheduledMethodProcessor(BeanContext beanContext, Optional<ConversionService<?>> conversionService, TaskExceptionHandler<?, ?> taskExceptionHandler) {
         this.beanContext = beanContext;
         this.conversionService = conversionService.orElse(ConversionService.SHARED);
+        this.taskExceptionHandler = taskExceptionHandler;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void process(BeanDefinition<?> beanDefinition, ExecutableMethod<?, ?> method) {
-        Scheduled[] scheduledAnnotations = method.getAnnotationsByType(Scheduled.class);
-        for (Scheduled scheduledAnnotation : scheduledAnnotations) {
-            String fixedRate = scheduledAnnotation.fixedRate();
+        List<AnnotationValue<Scheduled>> scheduledAnnotations = method.getAnnotationValuesByType(Scheduled.class);
+        for (AnnotationValue<Scheduled> scheduledAnnotation : scheduledAnnotations) {
+            String fixedRate = scheduledAnnotation.get(MEMBER_FIXED_RATE, String.class).orElse(null);
 
-            String initialDelayStr = scheduledAnnotation.initialDelay();
+            String initialDelayStr = scheduledAnnotation.get(MEMBER_INITIAL_DELAY, String.class).orElse(null);
             Duration initialDelay = null;
             if (StringUtils.hasText(initialDelayStr)) {
                 initialDelay = conversionService.convert(initialDelayStr, Duration.class).orElseThrow(() ->
@@ -79,9 +92,10 @@ public class ScheduledMethodProcessor implements ExecutableMethodProcessor<Sched
                 );
             }
 
+            String scheduler = scheduledAnnotation.get(MEMBER_SCHEDULER, String.class).orElse(TaskExecutors.SCHEDULED);
             TaskScheduler taskScheduler = beanContext
-                .findBean(TaskScheduler.class, Qualifiers.byName(scheduledAnnotation.scheduler()))
-                .orElseThrow(() -> new SchedulerConfigurationException(method, "No scheduler of type TaskScheduler configured for name: " + scheduledAnnotation.scheduler()));
+                .findBean(TaskScheduler.class, Qualifiers.byName(scheduler))
+                .orElseThrow(() -> new SchedulerConfigurationException(method, "No scheduler of type TaskScheduler configured for name: " + scheduler));
 
             Runnable task = () -> {
                 io.micronaut.context.Qualifier<Object> qualifer = beanDefinition
@@ -91,12 +105,27 @@ public class ScheduledMethodProcessor implements ExecutableMethodProcessor<Sched
 
                 Class<Object> beanType = (Class<Object>) beanDefinition.getBeanType();
                 Object bean = beanContext.getBean(beanType, qualifer);
-                if (method.getArguments().length == 0) {
-                    ((ExecutableMethod) method).invoke(bean);
+                try {
+                    if (method.getArguments().length == 0) {
+                        ((ExecutableMethod) method).invoke(bean);
+                    }
+                } catch (Throwable e) {
+                    io.micronaut.context.Qualifier<TaskExceptionHandler> qualifier = Qualifiers.byTypeArguments(beanType, e.getClass());
+                    Collection<BeanDefinition<TaskExceptionHandler>> definitions = beanContext.getBeanDefinitions(TaskExceptionHandler.class, qualifier);
+                    Optional<BeanDefinition<TaskExceptionHandler>> mostSpecific = definitions.stream().filter(def -> {
+                        List<Argument<?>> typeArguments = def.getTypeArguments(TaskExceptionHandler.class);
+                        if (typeArguments.size() == 2) {
+                            return typeArguments.get(0).getType() == beanType && typeArguments.get(1).getType() == e.getClass();
+                        }
+                        return false;
+                    }).findFirst();
+
+                    TaskExceptionHandler finalHandler = mostSpecific.map(bd -> beanContext.getBean(bd.getBeanType(), qualifier)).orElse(this.taskExceptionHandler);
+                    finalHandler.handle(bean, e);
                 }
             };
 
-            String cronExpr = scheduledAnnotation.cron();
+            String cronExpr = scheduledAnnotation.get(MEMBER_CRON, String.class, null);
             if (StringUtils.isNotEmpty(cronExpr)) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Scheduling cron task [{}] for method: {}", cronExpr, method);
@@ -115,7 +144,7 @@ public class ScheduledMethodProcessor implements ExecutableMethodProcessor<Sched
                 ScheduledFuture<?> scheduledFuture = taskScheduler.scheduleAtFixedRate(initialDelay, duration, task);
                 scheduledTasks.add(scheduledFuture);
             } else {
-                String fixedDelay = scheduledAnnotation.fixedDelay();
+                String fixedDelay = scheduledAnnotation.get(MEMBER_FIXED_DELAY, String.class).orElse(null);
                 if (StringUtils.isNotEmpty(fixedDelay)) {
                     Optional<Duration> converted = conversionService.convert(fixedDelay, Duration.class);
                     Duration duration = converted.orElseThrow(() ->
@@ -135,7 +164,7 @@ public class ScheduledMethodProcessor implements ExecutableMethodProcessor<Sched
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         for (ScheduledFuture<?> scheduledTask : scheduledTasks) {
             if (!scheduledTask.isCancelled()) {
                 scheduledTask.cancel(false);

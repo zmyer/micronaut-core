@@ -5,8 +5,8 @@ To run your function as a web application as described in this section, you will
 ----
 dependencies {
     ...
-    runtime "io.micronaut:function-web"
-    runtime "io.micronaut:http-server-netty" //<1>
+    runtime "io.micronaut:micronaut-function-web"
+    runtime "io.micronaut:micronaut-http-server-netty" //<1>
     ...
 }
 ----
@@ -33,17 +33,17 @@ The URI mapped to is defined by the either the value of the ann:function.Functio
 
 .Function URI Mapping with @FunctionBean
 |===
-|Annotation|Dependency
+|Annotation|URI
 
 |`@FunctionBean("hello")` | `/hello`
-|`@FunctionBean("helloWorld")` | `/hello-world`
+|`@FunctionBean("helloWorld")` | `/helloWorld`
 |`@FunctionBean("hello-world")` | `/hello-world`
 
 |===
 
 .Function URI Mapping with Groovy Function Script
 |===
-|Method Name|Dependency
+|Method Name|URI
 
 |`hello` | `/hello`
 |`helloWorld` | `/hello-world`
@@ -65,8 +65,8 @@ Functions can also be run as part of the Micronaut application context for ease 
 ----
 dependencies {
     ...
-    testRuntime "io.micronaut:function-web"
-    testRuntime "io.micronaut:http-server-netty" //<1>
+    testRuntime "io.micronaut:micronaut-function-web"
+    testRuntime "io.micronaut:micronaut-http-server-netty" //<1>
     ...
 }
 ----

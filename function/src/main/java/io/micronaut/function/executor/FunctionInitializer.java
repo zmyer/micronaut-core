@@ -36,7 +36,6 @@ import java.util.function.Function;
  */
 public class FunctionInitializer extends AbstractExecutor implements Closeable, AutoCloseable {
 
-    protected final ApplicationContext applicationContext;
     protected final boolean closeContext;
     private FunctionExitHandler functionExitHandler = new DefaultFunctionExitHandler();
 
@@ -45,7 +44,6 @@ public class FunctionInitializer extends AbstractExecutor implements Closeable, 
      */
     public FunctionInitializer() {
         ApplicationContext applicationContext = buildApplicationContext(null);
-        this.applicationContext = applicationContext;
         startThis(applicationContext);
         injectThis(applicationContext);
         this.closeContext = true;
@@ -152,25 +150,31 @@ public class FunctionInitializer extends AbstractExecutor implements Closeable, 
          * @return Type
          */
         public final <T> T get(Class<T> type) {
-            if (data == null) {
-                functionExitHandler.exitWithNoData();
-                return null;
+            if (ClassUtils.isJavaLangType(type)) {
+                return applicationContext
+                    .getConversionService()
+                    .convert(data, type).orElseThrow(() -> newIllegalArgument(type, data));
             } else {
-                if (ClassUtils.isJavaLangType(type)) {
-                    return applicationContext
-                        .getConversionService()
-                        .convert(data, type).orElseThrow(() -> newIllegalArgument(type, data));
-                } else {
-                    MediaTypeCodecRegistry codecRegistry = applicationContext.getBean(MediaTypeCodecRegistry.class);
-                    return codecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
-                        .map(codec -> codec.decode(type, data))
-                        .orElseThrow(() -> newIllegalArgument(type, data));
-                }
+                MediaTypeCodecRegistry codecRegistry = applicationContext.getBean(MediaTypeCodecRegistry.class);
+                return codecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
+                    .map(codec -> {
+                        if (data != null) {
+                            return codec.decode(type, data);
+                        } else {
+                            // try System.in
+                            return codec.decode(type, System.in);
+                        }
+                    })
+                    .orElseThrow(() -> newIllegalArgument(type, data));
             }
         }
 
         private <T> IllegalArgumentException newIllegalArgument(Class<T> dataType, String data) {
-            return new IllegalArgumentException("Passed data [" + data + "] cannot be converted to type: " + dataType);
+            if (data != null) {
+                return new IllegalArgumentException("Passed data [" + data + "] cannot be converted to type: " + dataType);
+            } else {
+                return new IllegalArgumentException("Input data cannot be converted to type: " + dataType);
+            }
         }
     }
 }

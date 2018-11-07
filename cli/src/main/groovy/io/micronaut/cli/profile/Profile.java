@@ -79,7 +79,7 @@ public interface Profile {
     /**
      * @return The oneOf features for this profile
      */
-    Iterable<OneOfFeature> getOneOfFeatures();
+    Iterable<OneOfFeatureGroup> getOneOfFeatures();
 
     /**
      * @return The required features for this profile
@@ -102,6 +102,11 @@ public interface Profile {
      * @return The dependency definitions for this profile
      */
     List<Dependency> getDependencies();
+
+    /**
+     * @return The JVM args
+     */
+    List<String> getJvmArgs();
 
     /**
      * @return The profiles configuration
@@ -193,4 +198,9 @@ public interface Profile {
      * @return A list of paths to exclude from the skeleton. Used in ant fileset exclude:
      */
     List<String> getSkeletonExcludes();
+
+    /**
+     * @return True if the profile is not designed for direct use
+     */
+    boolean isAbstract();
 }

@@ -21,13 +21,12 @@ import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Patch
 import io.micronaut.http.annotation.Post
-import io.micronaut.http.client.Client
+import io.micronaut.http.client.annotation.Client
 import io.micronaut.runtime.server.EmbeddedServer
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 
-import javax.inject.Singleton
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicLong
 
@@ -145,13 +144,13 @@ class CompletableFutureCrudSpec extends Specification {
         @Get("/{id}")
         CompletableFuture<Book> get(Long id)
 
-        @Get('/')
+        @Get
         CompletableFuture<List<Book>> list()
 
         @Delete("/{id}")
         CompletableFuture<Book> delete(Long id)
 
-        @Post('/')
+        @Post
         CompletableFuture<Book> save(String title)
 
         @Patch("/{id}")

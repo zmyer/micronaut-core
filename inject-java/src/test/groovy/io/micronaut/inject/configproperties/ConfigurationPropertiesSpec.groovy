@@ -22,12 +22,52 @@ import spock.lang.Specification
 
 class ConfigurationPropertiesSpec extends Specification {
 
+    void "test submap with generics binding"() {
+        given:
+        ApplicationContext ctx = ApplicationContext.run(
+                'foo.bar.map.key1.key2.property':10,
+                'foo.bar.map.key1.key2.property2.property':10
+        )
+
+        expect:
+        ctx.getBean(MyConfig).map.containsKey('key1')
+        ctx.getBean(MyConfig).map.get("key1") instanceof Map
+        ctx.getBean(MyConfig).map.get("key1").get("key2") instanceof MyConfig.Value
+        ctx.getBean(MyConfig).map.get("key1").get("key2").property == 10
+        ctx.getBean(MyConfig).map.get("key1").get("key2").property2
+        ctx.getBean(MyConfig).map.get("key1").get("key2").property2.property == 10
+
+        cleanup:
+        ctx.close()
+    }
+
+    void "test submap with generics binding and conversion"() {
+        given:
+        ApplicationContext ctx = ApplicationContext.run(
+                'foo.bar.map.key1.key2.property':'10',
+                'foo.bar.map.key1.key2.property2.property':'10'
+        )
+
+        expect:
+        ctx.getBean(MyConfig).map.containsKey('key1')
+        ctx.getBean(MyConfig).map.get("key1") instanceof Map
+        ctx.getBean(MyConfig).map.get("key1").get("key2") instanceof MyConfig.Value
+        ctx.getBean(MyConfig).map.get("key1").get("key2").property == 10
+        ctx.getBean(MyConfig).map.get("key1").get("key2").property2
+        ctx.getBean(MyConfig).map.get("key1").get("key2").property2.property == 10
+
+        cleanup:
+        ctx.close()
+    }
+
     void "test configuration properties binding"() {
         given:
         ApplicationContext applicationContext = new DefaultApplicationContext("test")
         applicationContext.environment.addPropertySource(PropertySource.of(
             'test',
             ['foo.bar.port':'8080',
+             'foo.bar.max-size':'1MB',
+             'foo.bar.another-size':'1MB',
             'foo.bar.anotherPort':'9090',
             'foo.bar.intList':"1,2,3",
             'foo.bar.stringList':"1,2",
@@ -44,7 +84,8 @@ class ConfigurationPropertiesSpec extends Specification {
 
         expect:
         config.port == 8080
-
+        config.maxSize == 1048576
+        config.anotherSize == 1048576
         config.anotherPort == 9090
         config.intList == [1,2,3]
         config.flags == [one:1, two:2]

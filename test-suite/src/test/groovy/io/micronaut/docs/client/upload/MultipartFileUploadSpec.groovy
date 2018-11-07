@@ -176,7 +176,7 @@ class MultipartFileUploadSpec extends Specification {
         def newFile = new File(uploadDir, "Walking The Himalayas.txt")
 
         then:
-        body == "Uploaded 9 bytes"
+        body == "Uploaded 9 bytes. File size: 9"
         newFile.exists()
         newFile.text == file.text
 
@@ -205,7 +205,7 @@ class MultipartFileUploadSpec extends Specification {
         def newFile = new File(uploadDir, "Walking The Himalayas.txt")
 
         then:
-        body == "Uploaded ${file.length()} bytes"
+        body == "Uploaded ${file.length()} bytes. File size: ${file.length()}"
         newFile.exists()
         newFile.text == file.text
 
@@ -235,7 +235,7 @@ class MultipartFileUploadSpec extends Specification {
         def newFile = new File(uploadDir, "Walking The Himalayas.txt")
 
         then:
-        body == "Uploaded ${file.length()} bytes"
+        body == "Uploaded ${file.length()} bytes. File size: ${file.length()}"
         newFile.exists()
         newFile.text == file.text
 
@@ -246,20 +246,20 @@ class MultipartFileUploadSpec extends Specification {
     static class MultipartController {
 
 
-        @Post(uri = '/upload', consumes = MediaType.MULTIPART_FORM_DATA)
+        @Post(value = '/upload', consumes = MediaType.MULTIPART_FORM_DATA)
         HttpResponse<String> upload(byte[] data) {
             return HttpResponse.ok("Uploaded " + data.length + " bytes")
         }
 
-        @Post(consumes = MediaType.MULTIPART_FORM_DATA)
+        @Post(value = '/complete-file-upload', consumes = MediaType.MULTIPART_FORM_DATA)
         Publisher<HttpResponse> completeFileUpload(CompletedFileUpload data, String title) {
             File newFile = new File(uploadDir, title + ".txt")
             newFile.createNewFile()
             newFile.append(data.getInputStream())
-            return Flowable.just(HttpResponse.ok("Uploaded ${newFile.length()} bytes"))
+            return Flowable.just(HttpResponse.ok("Uploaded ${newFile.length()} bytes. File size: ${data.getSize()}"))
         }
 
-        @Post(consumes = MediaType.MULTIPART_FORM_DATA)
+        @Post(value = '/stream-file-upload', consumes = MediaType.MULTIPART_FORM_DATA)
         Publisher<HttpResponse> streamFileUpload(StreamingFileUpload data, String title) {
             return Flowable.fromPublisher(data.transferTo(new File(uploadDir, title + ".txt"))).map ({success->
                 success ? HttpResponse.ok("Uploaded") :

@@ -84,6 +84,18 @@ public interface BeanDefinitionRegistry {
      */
     <T> Optional<BeanDefinition<T>> findBeanDefinition(Class<T> beanType, Qualifier<T> qualifier);
 
+
+    /**
+     * Obtain a {@link BeanDefinition} for the given bean.
+     *
+     * @param bean The bean
+     * @param <T>       The concrete type
+     * @return An {@link Optional} of the bean definition
+     * @throws io.micronaut.context.exceptions.NonUniqueBeanException When multiple possible bean definitions exist
+     *                                                                for the given type
+     */
+    <T> Optional<BeanRegistration<T>> findBeanRegistration(T bean);
+
     /**
      * Obtain a {@link BeanDefinition} for the given type.
      *
@@ -94,6 +106,19 @@ public interface BeanDefinitionRegistry {
      *                                                                for the given type
      */
     <T> Collection<BeanDefinition<T>> getBeanDefinitions(Class<T> beanType);
+
+    /**
+     * Obtain a {@link BeanDefinition} for the given type.
+     *
+     * @param beanType The type
+     * @param qualifier The qualifier
+     * @param <T>      The concrete type
+     * @return An {@link Optional} of the bean definition
+     * @throws io.micronaut.context.exceptions.NonUniqueBeanException When multiple possible bean definitions exist
+     *                                                                for the given type
+     */
+    <T> Collection<BeanDefinition<T>> getBeanDefinitions(Class<T> beanType, Qualifier<T> qualifier);
+
 
     /**
      * Get all of the {@link BeanDefinition} for the given qualifier.
@@ -116,10 +141,19 @@ public interface BeanDefinitionRegistry {
      * @param qualifier The qualifier
      * @return The beans
      */
-    Collection<BeanRegistration<?>> getBeanRegistrations(Qualifier<?> qualifier);
+    Collection<BeanRegistration<?>> getActiveBeanRegistrations(Qualifier<?> qualifier);
 
     /**
      * Find active {@link javax.inject.Singleton} beans for the given bean type.
+     *
+     * @param beanType The bean type
+     * @param <T>      The concrete type
+     * @return The beans
+     */
+    <T> Collection<BeanRegistration<T>> getActiveBeanRegistrations(Class<T> beanType);
+
+    /**
+     * Find and if necessary initialize {@link javax.inject.Singleton} beans for the given bean type, returning all the active registrations.
      *
      * @param beanType The bean type
      * @param <T>      The concrete type
@@ -137,7 +171,19 @@ public interface BeanDefinitionRegistry {
      * @throws io.micronaut.context.exceptions.NonUniqueBeanException When multiple possible bean definitions exist
      *                                                                for the given type
      */
-    <T> Optional<BeanDefinition<T>> findProxiedBeanDefinition(Class<T> beanType, Qualifier<T> qualifier);
+    <T> Optional<BeanDefinition<T>> findProxyTargetBeanDefinition(Class<T> beanType, Qualifier<T> qualifier);
+
+    /**
+     * Obtain the original {@link BeanDefinition} for a {@link io.micronaut.inject.ProxyBeanDefinition}.
+     *
+     * @param beanType  The type
+     * @param qualifier The qualifier
+     * @param <T>       The concrete type
+     * @return An {@link Optional} of the bean definition
+     * @throws io.micronaut.context.exceptions.NonUniqueBeanException When multiple possible bean definitions exist
+     *                                                                for the given type
+     */
+    <T> Optional<BeanDefinition<T>> findProxyBeanDefinition(Class<T> beanType, Qualifier<T> qualifier);
 
     /**
      * <p>Registers a new singleton bean at runtime. This method expects that the bean definition data will have been
@@ -209,8 +255,8 @@ public interface BeanDefinitionRegistry {
      *                                                                for the given type
      * @throws NoSuchBeanException                                    If the bean cannot be found
      */
-    default <T> BeanDefinition<T> getProxiedBeanDefinition(Class<T> beanType, Qualifier<T> qualifier) {
-        return findProxiedBeanDefinition(beanType, qualifier).orElseThrow(() -> new NoSuchBeanException(beanType, qualifier));
+    default <T> BeanDefinition<T> getProxyTargetBeanDefinition(Class<T> beanType, Qualifier<T> qualifier) {
+        return findProxyTargetBeanDefinition(beanType, qualifier).orElseThrow(() -> new NoSuchBeanException(beanType, qualifier));
     }
 
     /**

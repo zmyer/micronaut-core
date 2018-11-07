@@ -19,6 +19,7 @@ package io.micronaut.http;
 import io.micronaut.core.util.ArrayUtils;
 import io.micronaut.http.cookie.Cookie;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -41,11 +42,22 @@ public interface MutableHttpRequest<B> extends HttpRequest<B>, MutableHttpMessag
      */
     MutableHttpRequest<B> cookie(Cookie cookie);
 
+    /**
+     * Sets the uri on the request.
+     *
+     * @param uri The uri to call
+     * @return The http request
+     */
+    MutableHttpRequest<B> uri(URI uri);
+
     @Override
     MutableHttpRequest<B> body(B body);
 
     @Override
     MutableHttpHeaders getHeaders();
+
+    @Override
+    MutableHttpParameters getParameters();
 
     /**
      * Sets the acceptable {@link MediaType} instances via the {@link HttpHeaders#ACCEPT} header.
@@ -74,6 +86,11 @@ public interface MutableHttpRequest<B> extends HttpRequest<B>, MutableHttpMessag
     @Override
     default MutableHttpRequest<B> basicAuth(CharSequence username, CharSequence password) {
         return (MutableHttpRequest<B>) MutableHttpMessage.super.basicAuth(username, password);
+    }
+
+    @Override
+    default MutableHttpRequest<B> bearerAuth(CharSequence token) {
+        return (MutableHttpRequest<B>) MutableHttpMessage.super.bearerAuth(token);
     }
 
     @Override

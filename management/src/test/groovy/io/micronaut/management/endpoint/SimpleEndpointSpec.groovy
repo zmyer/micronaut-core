@@ -16,12 +16,17 @@
 package io.micronaut.management.endpoint
 
 import io.micronaut.context.ApplicationContext
+import io.micronaut.context.env.Environment
 import io.micronaut.core.util.Toggleable
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.client.RxHttpClient
 import io.micronaut.http.client.exceptions.HttpClientResponseException
+import io.micronaut.management.endpoint.annotation.Endpoint
+import io.micronaut.management.endpoint.annotation.Read
+import io.micronaut.management.endpoint.annotation.Selector
+import io.micronaut.management.endpoint.annotation.Write
 import io.micronaut.runtime.server.EmbeddedServer
 import spock.lang.Specification
 
@@ -34,7 +39,7 @@ class SimpleEndpointSpec extends Specification {
     void "test read simple endpoint"() {
         given:
         EmbeddedServer server = ApplicationContext.run(EmbeddedServer,
-                ['endpoints.simple.myValue':'foo'], 'test')
+                ['endpoints.simple.myValue':'foo'], Environment.TEST)
         RxHttpClient rxClient = server.applicationContext.createBean(RxHttpClient, server.getURL())
 
         when:
@@ -133,7 +138,7 @@ class Simple implements Toggleable {
     }
 
     @Read
-    String named(String name) {
+    String named(@Selector String name) {
         "test $name"
     }
 

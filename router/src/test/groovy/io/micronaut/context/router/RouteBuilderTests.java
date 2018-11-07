@@ -17,22 +17,19 @@ package io.micronaut.context.router;
 
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.DefaultApplicationContext;
+import io.micronaut.context.annotation.Executable;
 import io.micronaut.http.HttpMethod;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Controller;
 import org.junit.Test;
-import io.micronaut.context.ApplicationContext;
-import io.micronaut.context.DefaultApplicationContext;
-import io.micronaut.http.HttpMethod;
-import io.micronaut.http.HttpStatus;
-import io.micronaut.http.MediaType;
 import io.micronaut.web.router.*;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import java.util.List;
 
-import static io.micronaut.http.MediaType.*;
 import static org.junit.Assert.*;
 /**
  * @author Graeme Rocher
@@ -131,6 +128,8 @@ public class RouteBuilderTests {
         }
     }
 
+    @Singleton
+    @Executable
     static class BookController {
         String hello(String message) {
             return "Hello " + message;
@@ -153,6 +152,8 @@ public class RouteBuilderTests {
         }
     }
 
+    @Singleton
+    @Executable
     static class AuthorController {
         String hello(String message) {
             return "Hello " + message;

@@ -24,15 +24,13 @@ import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Patch
 import io.micronaut.http.annotation.Post
-import io.micronaut.http.client.Client
+import io.micronaut.http.client.annotation.Client
 import io.micronaut.retry.annotation.Fallback
 import io.micronaut.runtime.server.EmbeddedServer
 import org.reactivestreams.Publisher
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
-
-import javax.inject.Singleton
 
 /**
  * @author graemerocher
@@ -181,7 +179,7 @@ class RxJavaFallbackSpec extends Specification{
         @Get("/{id}")
         Maybe<Book> get(Long id)
 
-        @Get('/')
+        @Get
         Single<List<Book>> list()
 
         @Get('/stream')
@@ -190,7 +188,7 @@ class RxJavaFallbackSpec extends Specification{
         @Delete("/{id}")
         Maybe<Book> delete(Long id)
 
-        @Post('/')
+        @Post
         Single<Book> save(String title)
 
         @Patch("/{id}")

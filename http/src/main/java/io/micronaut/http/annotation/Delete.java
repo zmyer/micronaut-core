@@ -41,13 +41,13 @@ public @interface Delete {
      * @return The URI of the DELETE route if not specified inferred from the method name and arguments
      */
     @AliasFor(annotation = HttpMethodMapping.class, member = "value")
-    String value() default "";
+    String value() default HttpMethodMapping.DEFAULT_URI;
 
     /**
      * @return The URI of the DELETE route if not specified inferred from the method name and arguments
      */
     @AliasFor(annotation = HttpMethodMapping.class, member = "value")
-    String uri() default "";
+    String uri() default HttpMethodMapping.DEFAULT_URI;
 
     /**
      * @return The default consumes, otherwise override from controller
@@ -60,4 +60,23 @@ public @interface Delete {
      */
     @AliasFor(annotation = Produces.class, member = "value")
     String[] produces() default {};
+
+    /**
+     * Shortcut that allows setting both the {@link #consumes()} and {@link #produces()} settings to the same media type.
+     *
+     * @return The media type this method processes
+     */
+    @AliasFor(annotation = Produces.class, member = "value")
+    @AliasFor(annotation = Consumes.class, member = "value")
+    String[] processes() default {};
+
+    /**
+     * Shortcut that allows setting both the {@link Consumes} and {@link Produces} single settings.
+     *
+     * @return Whether a single or multiple items are produced/consumed
+     */
+    @AliasFor(annotation = Produces.class, member = "single")
+    @AliasFor(annotation = Consumes.class, member = "single")
+    boolean single() default false;
+
 }

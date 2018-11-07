@@ -16,8 +16,9 @@
 
 package io.micronaut.http.client.docs.annotation.headers;
 
+import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Header;
-import io.micronaut.http.client.Client;
+import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.docs.annotation.Pet;
 import io.micronaut.http.client.docs.annotation.PetOperations;
 import io.reactivex.Single;
@@ -33,5 +34,8 @@ public interface PetClient extends PetOperations {
 
     @Override
     Single<Pet> save(String name, int age);
+
+    @Get("/{name}")
+    Single<Pet> get(String name);
 }
 // end::class[]

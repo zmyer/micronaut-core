@@ -23,8 +23,8 @@ import io.micronaut.core.convert.value.MutableConvertibleValues;
 import io.micronaut.core.convert.value.MutableConvertibleValuesMap;
 import io.micronaut.core.type.Argument;
 import io.micronaut.core.util.StringUtils;
-import io.micronaut.http.HttpParameters;
 import io.micronaut.http.MutableHttpHeaders;
+import io.micronaut.http.MutableHttpParameters;
 import io.micronaut.http.MutableHttpRequest;
 import io.micronaut.http.cookie.Cookie;
 import io.micronaut.http.cookie.Cookies;
@@ -42,7 +42,6 @@ import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.cookie.ClientCookieEncoder;
 import org.reactivestreams.Publisher;
 
-import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
@@ -58,12 +57,10 @@ import java.util.Optional;
 @Internal
 class NettyClientHttpRequest<B> implements MutableHttpRequest<B> {
 
-    private static final int DEFAULT_HTTP_PORT = 80;
-
     private final NettyHttpHeaders headers = new NettyHttpHeaders();
     private final MutableConvertibleValues<Object> attributes = new MutableConvertibleValuesMap<>();
     private final io.micronaut.http.HttpMethod httpMethod;
-    private final URI uri;
+    private URI uri;
     private B body;
     private NettyHttpParameters httpParameters;
 
@@ -108,6 +105,12 @@ class NettyClientHttpRequest<B> implements MutableHttpRequest<B> {
     }
 
     @Override
+    public MutableHttpRequest<B> uri(URI uri) {
+        this.uri = uri;
+        return this;
+    }
+
+    @Override
     public Optional<B> getBody() {
         return Optional.ofNullable(body);
     }
@@ -134,7 +137,7 @@ class NettyClientHttpRequest<B> implements MutableHttpRequest<B> {
     }
 
     @Override
-    public HttpParameters getParameters() {
+    public MutableHttpParameters getParameters() {
         NettyHttpParameters httpParameters = this.httpParameters;
         if (httpParameters == null) {
             synchronized (this) { // double check
@@ -156,34 +159,6 @@ class NettyClientHttpRequest<B> implements MutableHttpRequest<B> {
     @Override
     public URI getUri() {
         return uri;
-    }
-
-    @Override
-    public String getPath() {
-        return uri.getPath();
-    }
-
-    @Override
-    public InetSocketAddress getRemoteAddress() {
-        return getServerAddress();
-    }
-
-    @Override
-    public InetSocketAddress getServerAddress() {
-        String host = uri.getHost();
-        int port = uri.getPort();
-        return new InetSocketAddress(host != null ? host : "localhost", port > -1 ? port : DEFAULT_HTTP_PORT);
-    }
-
-    @Override
-    public String getServerName() {
-        return uri.getHost();
-    }
-
-    @Override
-    public boolean isSecure() {
-        String scheme = getUri().getScheme();
-        return scheme != null && scheme.equals("https");
     }
 
     private NettyHttpParameters decodeParameters(String uri) {
@@ -237,5 +212,10 @@ class NettyClientHttpRequest<B> implements MutableHttpRequest<B> {
             }
         }
         return uri.toString();
+    }
+
+    @Override
+    public String toString() {
+        return getMethod() + " " + uri;
     }
 }

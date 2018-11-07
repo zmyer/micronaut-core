@@ -26,6 +26,8 @@ import io.micronaut.core.type.Argument;
 import io.micronaut.inject.BeanDefinition;
 import io.micronaut.inject.ParametrizedBeanFactory;
 
+import javax.annotation.Nullable;
+import javax.inject.Qualifier;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collections;
@@ -86,15 +88,19 @@ public abstract class AbstractParametrizedBeanDefinition<T> extends AbstractBean
         requiredArgumentValues = requiredArgumentValues != null ? new LinkedHashMap<>(requiredArgumentValues) : Collections.emptyMap();
         Argument<?>[] requiredArguments = getRequiredArguments();
         for (Argument<?> requiredArgument : requiredArguments) {
+            if (requiredArgument.getType() == BeanResolutionContext.class) {
+                requiredArgumentValues.put(requiredArgument.getName(), resolutionContext);
+            }
+
             BeanResolutionContext.Path path = resolutionContext.getPath();
             try {
                 path.pushConstructorResolve(this, requiredArgument);
                 String argumentName = requiredArgument.getName();
-                if (!requiredArgumentValues.containsKey(argumentName)) {
-                    throw new BeanInstantiationException(resolutionContext, "Missing argument value: " + argumentName);
+                if (!requiredArgumentValues.containsKey(argumentName) && !requiredArgument.isAnnotationPresent(Nullable.class)) {
+                    throw new BeanInstantiationException(resolutionContext, "Missing bean argument value: " + argumentName);
                 }
                 Object value = requiredArgumentValues.get(argumentName);
-                boolean requiresConversion = !requiredArgument.getType().isInstance(value);
+                boolean requiresConversion = value != null && !requiredArgument.getType().isInstance(value);
                 if (requiresConversion) {
                     Optional<?> converted = ConversionService.SHARED.convert(value, requiredArgument.getType(), ConversionContext.of(requiredArgument));
                     Object finalValue = value;
@@ -120,8 +126,8 @@ public abstract class AbstractParametrizedBeanDefinition<T> extends AbstractBean
     private Argument[] resolveRequiredArguments() {
         return Arrays.stream(getConstructor().getArguments())
             .filter(arg -> {
-                Annotation qualifier = arg.getQualifier();
-                return qualifier != null && qualifier.annotationType() == Parameter.class;
+                Optional<Class<? extends Annotation>> qualifierType = arg.getAnnotationMetadata().getAnnotationTypeByStereotype(Qualifier.class);
+                return qualifierType.isPresent() && qualifierType.get() == Parameter.class;
             })
             .toArray(Argument[]::new);
     }

@@ -18,7 +18,8 @@ package io.micronaut.docs.signandencrypt
 import com.nimbusds.jwt.EncryptedJWT
 import com.nimbusds.jwt.JWTParser
 import io.micronaut.context.ApplicationContext
-import io.micronaut.docs.YamlAsciidocTagCleaner
+import io.micronaut.context.env.Environment
+import io.micronaut.testutils.YamlAsciidocTagCleaner
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.client.RxHttpClient
 import io.micronaut.http.client.exceptions.HttpClientResponseException
@@ -49,7 +50,8 @@ micronaut:
         signatures:
           secret:
             generator: 
-              secret: qrD6h8K6S9503Q06Y6Rfk21TErImPYqa #<1>
+              secret: pleaseChangeThisSecretForANewOne #<1>
+              jws-algorithm: HS256 # <2>
 #end::yamlconfig[]
 """
 
@@ -67,7 +69,8 @@ micronaut:
                                         'signatures': [
                                                 'secret': [
                                                         'generator': [
-                                                                'secret': 'qrD6h8K6S9503Q06Y6Rfk21TErImPYqa'
+                                                                'secret': 'pleaseChangeThisSecretForANewOne',
+                                                                'jws-algorithm': 'HS256'
                                                         ]
                                                 ]
                                         ]
@@ -85,7 +88,7 @@ micronaut:
             'endpoints.beans.enabled': true,
             'endpoints.beans.sensitive': true,
             'pem.path': pemFile.absolutePath,
-    ] << flatten(configMap), "test")
+    ] << flatten(configMap), Environment.TEST)
 
     @Shared
     @AutoCleanup

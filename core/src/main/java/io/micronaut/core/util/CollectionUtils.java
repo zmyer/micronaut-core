@@ -16,24 +16,13 @@
 
 package io.micronaut.core.util;
 
+import io.micronaut.core.annotation.UsedByGeneratedCode;
 import io.micronaut.core.convert.ConversionService;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>Utility methods for working with {@link java.util.Collection} types</p>.
@@ -119,6 +108,7 @@ public class CollectionUtils {
      * @param values The values
      * @return The created map
      */
+    @UsedByGeneratedCode
     public static Map mapOf(Object... values) {
         int len = values.length;
         if (len % 2 != 0) {
@@ -210,5 +200,47 @@ public class CollectionUtils {
             }
         }
         return builder.toString();
+    }
+
+    /**
+     * Converts an {@link Iterable} to a {@link List}.
+     *
+     * @param iterable The iterable
+     * @param <T>      The generic type
+     * @return The list
+     */
+    public static <T> List<T> iterableToList(Iterable<T> iterable) {
+        if (iterable == null) {
+            return Collections.emptyList();
+        } else {
+            if (iterable instanceof List) {
+                return (List<T>) iterable;
+            } else {
+                Iterator<T> i = iterable.iterator();
+                if (i.hasNext()) {
+                    List<T> list = new ArrayList<>();
+                    while (i.hasNext()) {
+                        list.add(i.next());
+                    }
+                    return list;
+                } else {
+                    return Collections.emptyList();
+                }
+            }
+        }
+    }
+
+    /**
+     * Null safe version of {@link Collections#unmodifiableList(List)}.
+     *
+     * @param list The list
+     * @param <T> The generic type
+     * @return A non-null unmodifiable list
+     */
+    public static @Nonnull <T> List<T> unmodifiableList(@Nullable List<T> list) {
+        if (isEmpty(list)) {
+            return Collections.emptyList();
+        }
+        return Collections.unmodifiableList(list);
     }
 }

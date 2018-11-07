@@ -15,10 +15,9 @@
  */
 
 /**
- * JWT token validator.
+ * Support classes for JWT validation.
  *
- * @author Sergio del Amo
+ * @author graemerocher
  * @since 1.0
  */
 package io.micronaut.security.token.jwt.validator;
-

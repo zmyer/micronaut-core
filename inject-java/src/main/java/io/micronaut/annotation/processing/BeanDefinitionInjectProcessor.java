@@ -17,7 +17,6 @@
 package io.micronaut.annotation.processing;
 
 import static javax.lang.model.element.ElementKind.ANNOTATION_TYPE;
-import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.ElementKind.CONSTRUCTOR;
 import static javax.lang.model.element.ElementKind.FIELD;
 import static javax.lang.model.type.TypeKind.ARRAY;
@@ -35,6 +34,7 @@ import io.micronaut.core.util.ArrayUtils;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.core.value.OptionalValues;
+import io.micronaut.inject.annotation.AbstractAnnotationMetadataBuilder;
 import io.micronaut.inject.annotation.AnnotationMetadataReference;
 import io.micronaut.inject.annotation.DefaultAnnotationMetadata;
 import io.micronaut.inject.configuration.ConfigurationMetadata;
@@ -54,7 +54,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Scope;
-import javax.lang.model.SourceVersion;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
@@ -128,7 +127,7 @@ public class BeanDefinitionInjectProcessor extends AbstractInjectAnnotationProce
         annotations = annotations
                 .stream()
                 .filter(ann -> !ann.getQualifiedName().toString().equals(AnnotationUtil.KOTLIN_METADATA))
-                .filter(ann -> annotationUtils.hasStereotype(ann, ANNOTATION_STEREOTYPES))
+                .filter(ann -> annotationUtils.hasStereotype(ann, ANNOTATION_STEREOTYPES) || AbstractAnnotationMetadataBuilder.isAnnotationMapped(((TypeElement) ann).getQualifiedName().toString()))
                 .collect(Collectors.toSet());
 
         if (!annotations.isEmpty()) {
@@ -559,7 +558,8 @@ public class BeanDefinitionInjectProcessor extends AbstractInjectAnnotationProce
             if (!writer.isValidated() && annotationUtils.hasStereotype(method, "javax.validation.Constraint")) {
                 writer.setValidated(true);
             }
-            TypeMirror valueType = method.getParameters().get(0).asType();
+            VariableElement parameter = method.getParameters().get(0);
+            TypeMirror valueType = parameter.asType();
             Object fieldType = modelUtils.resolveTypeReference(valueType);
             Map<String, Object> genericTypes = Collections.emptyMap();
             TypeKind typeKind = valueType.getKind();
@@ -569,46 +569,73 @@ public class BeanDefinitionInjectProcessor extends AbstractInjectAnnotationProce
 
             TypeElement declaringClass = modelUtils.classElementFor(method);
 
-            String docComment = elementUtils.getDocComment(method);
-            String setterName = method.getSimpleName().toString();
-            PropertyMetadata propertyMetadata = metadataBuilder.visitProperty(
-                    concreteClass,
-                    declaringClass,
-                    getPropertyMetadataTypeReference(valueType),
-                    NameUtils.getPropertyNameForSetter(setterName),
-                    docComment,
-                    null
-            );
+            AnnotationMetadata methodAnnotationMetadata = annotationUtils.getAnnotationMetadata(method);
+            if (methodAnnotationMetadata.hasStereotype(ConfigurationBuilder.class)) {
+                writer.visitConfigBuilderMethod(
+                        fieldType,
+                        NameUtils.getterNameFor(parameter.getSimpleName().toString()),
+                        methodAnnotationMetadata,
+                        metadataBuilder);
+                try {
+                    visitConfigurationBuilder(method, valueType, writer);
+                } finally {
+                    writer.visitConfigBuilderEnd();
+                }
+            } else {
+                String docComment = elementUtils.getDocComment(method);
+                String setterName = method.getSimpleName().toString();
+                PropertyMetadata propertyMetadata = metadataBuilder.visitProperty(
+                        concreteClass,
+                        declaringClass,
+                        getPropertyMetadataTypeReference(valueType),
+                        NameUtils.getPropertyNameForSetter(setterName),
+                        docComment,
+                        null
+                );
 
-            AnnotationMetadata annotationMetadata = DefaultAnnotationMetadata.mutateMember(
-                    AnnotationMetadata.EMPTY_METADATA,
-                    PropertySource.class.getName(),
-                    AnnotationMetadata.VALUE_MEMBER,
-                    Collections.singletonList(
-                            new io.micronaut.core.annotation.AnnotationValue(
-                                    Property.class.getName(),
-                                    Collections.singletonMap(
-                                            "name",
-                                            propertyMetadata.getPath()
-                                    )
-                            )
-                    )
-            );
-            writer.visitSetterValue(
-                    modelUtils.resolveTypeReference(declaringClass),
-                    annotationMetadata,
-                    modelUtils.isPrivate(method),
-                    fieldType,
-                    setterName,
-                    genericTypes,
-                    annotationUtils.getAnnotationMetadata(method.getParameters().get(0)),
-                    true);
+                AnnotationMetadata annotationMetadata = DefaultAnnotationMetadata.mutateMember(
+                        AnnotationMetadata.EMPTY_METADATA,
+                        PropertySource.class.getName(),
+                        AnnotationMetadata.VALUE_MEMBER,
+                        Collections.singletonList(
+                                new io.micronaut.core.annotation.AnnotationValue(
+                                        Property.class.getName(),
+                                        Collections.singletonMap(
+                                                "name",
+                                                propertyMetadata.getPath()
+                                        )
+                                )
+                        )
+                );
+
+                boolean requiresReflection = modelUtils.isPrivate(method);
+
+                if (!requiresReflection && modelUtils.isProtected(method)) {
+                    PackageElement declaringPackage = elementUtils.getPackageOf(declaringClass);
+                    PackageElement concretePackage = elementUtils.getPackageOf(this.concreteClass);
+                    requiresReflection = !declaringPackage.getQualifiedName().equals(concretePackage.getQualifiedName());
+                }
+
+                writer.visitSetterValue(
+                        modelUtils.resolveTypeReference(declaringClass),
+                        annotationMetadata,
+                        requiresReflection,
+                        fieldType,
+                        setterName,
+                        genericTypes,
+                        annotationUtils.getAnnotationMetadata(method.getParameters().get(0)),
+                        true);
+            }
         }
 
         /**
          * @param beanMethod The {@link ExecutableElement}
          */
         void visitBeanFactoryMethod(ExecutableElement beanMethod) {
+            if (isFactoryType && annotationUtils.hasStereotype(concreteClass, AROUND_TYPE)) {
+                visitExecutableMethod(beanMethod, annotationUtils.getAnnotationMetadata(beanMethod));
+            }
+
             TypeMirror returnType = beanMethod.getReturnType();
             ExecutableElementParamInfo beanMethodParams = populateParameterData(beanMethod);
 

@@ -60,7 +60,6 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.reactivestreams.Publisher;
 
 import javax.annotation.Nullable;
-import javax.lang.model.element.TypeElement;
 import javax.validation.constraints.*;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -544,6 +543,9 @@ abstract class AbstractOpenApiVisitor  {
 
                 if (type instanceof EnumElement) {
                     schema = new Schema();
+                    schema.setName(schemaName);
+                    schemas.put(schemaName, schema);
+
                     schema.setType("string");
                     schema.setEnum(((EnumElement) type).values());
                 } else {
@@ -569,10 +571,11 @@ abstract class AbstractOpenApiVisitor  {
                         schema = new Schema();
                     }
                     schema.setType("object");
+                    schema.setName(schemaName);
+                    schemas.put(schemaName, schema);
+
                     populateSchemaProperties(mediaType, openAPI, context, type, schema);
                 }
-                schema.setName(schemaName);
-                schemas.put(schemaName, schema);
             }
         }
         if (schema != null) {

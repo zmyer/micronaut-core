@@ -858,6 +858,18 @@ public class DefaultBeanContext implements BeanContext {
         return (Collection<BeanDefinition<?>>) Collections.EMPTY_MAP;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Collection<BeanDefinitionReference<?>> getBeanDefinitionReferences() {
+        if (!beanDefinitionsClasses.isEmpty()) {
+            final List refs = beanDefinitionsClasses.stream().filter(ref -> ref.isEnabled(this))
+                    .collect(Collectors.toList());
+
+            return (Collection<BeanDefinitionReference<?>>) Collections.unmodifiableList(refs);
+        }
+        return Collections.emptyList();
+    }
+
     /**
      * Get a bean of the given type.
      *
@@ -1001,7 +1013,14 @@ public class DefaultBeanContext implements BeanContext {
      * @return The bean definition classes
      */
     protected Iterable<BeanConfiguration> resolveBeanConfigurations() {
-        return ServiceLoader.load(BeanConfiguration.class, classLoader);
+        final SoftServiceLoader<BeanConfiguration> definitions = SoftServiceLoader.load(BeanConfiguration.class, classLoader);
+        List<BeanConfiguration> list = new ArrayList<>(20);
+        for (ServiceDefinition<BeanConfiguration> definition : definitions) {
+            if (definition.isPresent()) {
+                list.add(definition.load());
+            }
+        }
+        return list;
     }
 
     /**

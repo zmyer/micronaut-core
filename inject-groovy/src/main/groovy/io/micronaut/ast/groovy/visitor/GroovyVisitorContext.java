@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.ast.groovy.visitor;
 
 import groovy.lang.GroovyClassLoader;
 import io.micronaut.ast.groovy.utils.AstAnnotationUtils;
+import io.micronaut.ast.groovy.utils.InMemoryByteCodeGroovyClassLoader;
 import io.micronaut.core.convert.ArgumentConversionContext;
 import io.micronaut.core.convert.value.MutableConvertibleValues;
 import io.micronaut.core.convert.value.MutableConvertibleValuesMap;
+import io.micronaut.core.io.scan.ClassPathAnnotationScanner;
 import io.micronaut.core.reflect.ClassUtils;
+import io.micronaut.core.util.ArgumentUtils;
+import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.inject.ast.ClassElement;
 import io.micronaut.inject.ast.Element;
 import io.micronaut.inject.visitor.VisitorContext;
@@ -39,12 +42,14 @@ import org.codehaus.groovy.control.messages.SimpleMessage;
 import org.codehaus.groovy.control.messages.SyntaxErrorMessage;
 import org.codehaus.groovy.syntax.SyntaxException;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URL;
+import java.util.*;
 
 /**
  * The visitor context when visiting Groovy code.
@@ -54,7 +59,7 @@ import java.util.Set;
  * @since 1.0
  */
 public class GroovyVisitorContext implements VisitorContext {
-    private static final String ATTR_VISITOR_ATTRIBUTES = "micronaut.visitor.attributes";
+    private static final MutableConvertibleValues<Object> VISITOR_ATTRIBUTES = new MutableConvertibleValuesMap<>();
     private final ErrorCollector errorCollector;
     private final SourceUnit sourceUnit;
     private final MutableConvertibleValues<Object> attributes;
@@ -65,16 +70,17 @@ public class GroovyVisitorContext implements VisitorContext {
     public GroovyVisitorContext(SourceUnit sourceUnit) {
         this.sourceUnit = sourceUnit;
         this.errorCollector = sourceUnit.getErrorCollector();
-        final ModuleNode ast = sourceUnit.getAST();
-        final boolean hasModule = ast != null;
-        final Object attrs = hasModule ? ast.getNodeMetaData(ATTR_VISITOR_ATTRIBUTES) : null;
-        if (attrs instanceof MutableConvertibleValues) {
-            this.attributes = (MutableConvertibleValues<Object>) attrs;
-        } else {
-            this.attributes = new MutableConvertibleValuesMap<>();
-            if (hasModule) {
-                ast.putNodeMetaData(ATTR_VISITOR_ATTRIBUTES, this.attributes);
-            }
+        this.attributes = VISITOR_ATTRIBUTES;
+    }
+
+    @Nonnull
+    @Override
+    public Iterable<URL> getClasspathResources(@Nonnull String path) {
+        try {
+            final Enumeration<URL> resources = sourceUnit.getClassLoader().getResources(path);
+            return CollectionUtils.enumerationToIterable(resources);
+        } catch (IOException e) {
+            return Collections.emptyList();
         }
     }
 
@@ -83,21 +89,44 @@ public class GroovyVisitorContext implements VisitorContext {
         if (name == null) {
             return Optional.empty();
         }
-        List<ClassNode> classes = sourceUnit.getAST().getClasses();
-        for (ClassNode aClass : classes) {
-            if (name.equals(aClass.getName())) {
-                return Optional.of(new GroovyClassElement(sourceUnit, aClass, AstAnnotationUtils.getAnnotationMetadata(sourceUnit, aClass)));
+
+        if (sourceUnit != null) {
+            ModuleNode ast = sourceUnit.getAST();
+            if (ast != null) {
+                List<ClassNode> classes = ast.getClasses();
+                for (ClassNode aClass : classes) {
+                    if (name.equals(aClass.getName())) {
+                        return Optional.of(new GroovyClassElement(sourceUnit, aClass, AstAnnotationUtils.getAnnotationMetadata(sourceUnit, aClass)));
+                    }
+                }
+            }
+
+            GroovyClassLoader classLoader = sourceUnit.getClassLoader();
+            if (classLoader != null) {
+                return ClassUtils.forName(name, classLoader).map(aClass -> {
+                    ClassNode cn = ClassHelper.make(aClass);
+                    return new GroovyClassElement(sourceUnit, cn, AstAnnotationUtils.getAnnotationMetadata(sourceUnit, cn));
+                });
             }
         }
+        return Optional.empty();
+    }
 
-        GroovyClassLoader classLoader = sourceUnit.getClassLoader();
-        if (classLoader != null) {
-            return ClassUtils.forName(name, classLoader).map(aClass -> {
-                ClassNode cn = ClassHelper.make(aClass);
-                return new GroovyClassElement(sourceUnit, cn, AstAnnotationUtils.getAnnotationMetadata(sourceUnit, cn));
+    @Nonnull
+    @Override
+    public ClassElement[] getClassElements(@Nonnull String aPackage, @Nonnull String... stereotypes) {
+        ArgumentUtils.requireNonNull("aPackage", aPackage);
+        ArgumentUtils.requireNonNull("stereotypes", stereotypes);
+
+        ClassPathAnnotationScanner scanner = new ClassPathAnnotationScanner(sourceUnit.getClassLoader());
+        List<ClassElement> classElements = new ArrayList<>();
+        for (String s : stereotypes) {
+            scanner.scan(s, aPackage).forEach(aClass -> {
+                final ClassNode classNode = ClassHelper.make(aClass);
+                classElements.add(new GroovyClassElement(sourceUnit, classNode, AstAnnotationUtils.getAnnotationMetadata(sourceUnit, classNode)));
             });
         }
-        return Optional.empty();
+        return classElements.toArray(new ClassElement[0]);
     }
 
     @Override
@@ -140,6 +169,49 @@ public class GroovyVisitorContext implements VisitorContext {
     }
 
     @Override
+    public OutputStream visitClass(String classname) throws IOException {
+        File classesDir = sourceUnit.getConfiguration().getTargetDirectory();
+        if (classesDir != null) {
+
+            DirectoryClassWriterOutputVisitor outputVisitor = new DirectoryClassWriterOutputVisitor(
+                    classesDir
+            );
+            return outputVisitor.visitClass(classname);
+        } else {
+            // should only arrive here in testing scenarios
+            if (sourceUnit.getClassLoader() instanceof InMemoryByteCodeGroovyClassLoader) {
+                return new OutputStream() {
+                    @Override
+                    public void write(int b) {
+                        // no-op
+                    }
+
+                    @Override
+                    public void write(byte[] b) {
+                        ((InMemoryByteCodeGroovyClassLoader) sourceUnit.getClassLoader()).addClass(classname, b);
+                    }
+                };
+            } else {
+                return new ByteArrayOutputStream(); // in-memory, mock or unit tests situation?
+            }
+        }
+
+    }
+
+    @Override
+    public void visitServiceDescriptor(String type, String classname) {
+        File classesDir = sourceUnit.getConfiguration().getTargetDirectory();
+        if (classesDir != null) {
+
+            DirectoryClassWriterOutputVisitor outputVisitor = new DirectoryClassWriterOutputVisitor(
+                    classesDir
+            );
+            outputVisitor.visitServiceDescriptor(type, classname);
+            outputVisitor.finish();
+        }
+    }
+
+    @Override
     public Optional<GeneratedFile> visitMetaInfFile(String path) {
         File classesDir = sourceUnit.getConfiguration().getTargetDirectory();
         if (classesDir != null) {
@@ -165,6 +237,11 @@ public class GroovyVisitorContext implements VisitorContext {
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public void finish() {
+        // no-op
     }
 
     /**

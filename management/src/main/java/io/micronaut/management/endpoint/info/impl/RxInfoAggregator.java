@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.management.endpoint.info.impl;
 
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.env.EmptyPropertySource;
 import io.micronaut.context.env.PropertySource;
 import io.micronaut.context.env.PropertySourcePropertyResolver;
+import io.micronaut.core.convert.format.MapFormat;
+import io.micronaut.core.naming.conventions.StringConvention;
 import io.micronaut.management.endpoint.info.InfoAggregator;
 import io.micronaut.management.endpoint.info.InfoEndpoint;
 import io.micronaut.management.endpoint.info.InfoSource;
@@ -51,7 +52,7 @@ public class RxInfoAggregator implements InfoAggregator<Map<String, Object>> {
             list.stream()
                 .sorted((e1, e2) -> Integer.compare(e2.getKey(), e1.getKey()))
                 .forEach((entry) -> resolver.addPropertySource(entry.getValue()));
-            return resolver.getAllProperties();
+            return resolver.getAllProperties(StringConvention.RAW, MapFormat.MapTransformation.NESTED);
         }).toFlowable();
     }
 

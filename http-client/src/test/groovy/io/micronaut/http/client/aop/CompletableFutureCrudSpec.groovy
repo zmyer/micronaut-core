@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CompletionStage
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -41,7 +42,6 @@ class CompletableFutureCrudSpec extends Specification {
     ApplicationContext context = ApplicationContext.run()
 
     @Shared
-    @AutoCleanup
     EmbeddedServer embeddedServer = context.getBean(EmbeddedServer).start()
 
     void "test it is possible to implement CRUD operations with CompletableFuture"() {
@@ -106,7 +106,7 @@ class CompletableFutureCrudSpec extends Specification {
         AtomicLong currentId = new AtomicLong(0)
 
         @Override
-        CompletableFuture<Book> get(Long id) {
+        CompletionStage<Book> get(Long id) {
             Book book = books.get(id)
             return CompletableFuture.completedFuture(book)
         }
@@ -142,7 +142,7 @@ class CompletableFutureCrudSpec extends Specification {
     static interface BookApi {
 
         @Get("/{id}")
-        CompletableFuture<Book> get(Long id)
+        CompletionStage<Book> get(Long id)
 
         @Get
         CompletableFuture<List<Book>> list()

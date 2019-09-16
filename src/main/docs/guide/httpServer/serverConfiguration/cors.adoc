@@ -54,7 +54,7 @@ micronaut:
                 web:
                     allowedOrigins:
                         - http://foo.com
-                        - ^http(|s)://www\.google\.com$
+                        - ^http(|s):\/\/www\.google\.com$
 ----
 
 == Allowed Methods
@@ -145,4 +145,16 @@ micronaut:
             configurations:
                 web:
                     maxAge: 3600 # 1 hour
+----
+
+== Multiple Header Values
+
+By default when a header has multiple values, multiple headers will be sent each with a single value. It is possible to change the behavior to send a single header with the list of values comma separated by setting a configuration option.
+
+[source,yaml]
+----
+micronaut:
+    server:
+        cors:
+            single-header: true
 ----

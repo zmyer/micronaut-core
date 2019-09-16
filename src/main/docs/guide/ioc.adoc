@@ -1,10 +1,10 @@
 When most developers think of Inversion of Control (also known as Dependency Injection and referred to as such from this point onwards) the Spring Framework comes to mind.
 
-Micronaut takes heavy inspiration from Spring, and in fact, the core developers of Micronaut are former SpringSource/Pivotal engineers now working for https://objectcomputing.com[OCI].
+Micronaut takes inspiration from Spring, and in fact, the core developers of Micronaut are former SpringSource/Pivotal engineers now working for https://objectcomputing.com[OCI].
 
-Unlike Spring which relies exclusively on runtime reflection and proxies, Micronaut, on the other hand, uses compile time data to implement dependency injection.
+Unlike Spring which relies exclusively on runtime reflection and proxies, Micronaut uses compile time data to implement dependency injection.
 
-This is a similar approach taken by tools such as Google's https://google.github.io/dagger/[Dagger], which is designed primarily with Android in mind. Micronaut, on the other hand, is designed for building server-side microservices and provides many of the same tools and utilities as Spring does but without using reflection or caching excessive amounts of reflection metadata.
+This is a similar approach taken by tools such as Google's https://google.github.io/dagger/[Dagger], which is designed primarily with Android in mind. Micronaut, on the other hand, is designed for building server-side microservices and provides many of the same tools and utilities as Spring but without using reflection or caching excessive amounts of reflection metadata.
 
 The goals of the Micronaut IoC container are summarized as:
 
@@ -28,14 +28,17 @@ dependencies {
     annotationProcessor "io.micronaut:micronaut-inject-java:{version}" // <2>
     compile "io.micronaut:micronaut-inject:{version}"
     ...
+    testAnnotationProcessor "io.micronaut:micronaut-inject-java:{version}" // <3>
+    ...
 }
 
 ----
 
 <1> Apply the Annotation Processing plugin
 <2> Include the minimal dependencies required to perform dependency injection
+<3> This is necessary to create beans in the `test` directory
 
-NOTE: For the Groovy language you should include `micronaut-inject-groovy` in the `compileOnly` scope.
+NOTE: For the Groovy language you should include `micronaut-inject-groovy` in the `compileOnly` and `testCompileOnly` scopes.
 
 The entry point for IoC is then the api:context.ApplicationContext[] interface, which includes a `run` method. The following example demonstrates using it:
 
@@ -47,6 +50,7 @@ try (ApplicationContext context = ApplicationContext.run()) { // <1>
     // do something with your bean
 }
 ----
+// TODO should this be converted? The commentary is calling out a specific language's feature
 
 <1> Run the api:context.ApplicationContext[]
 <2> Retrieve a bean that has been dependency injected

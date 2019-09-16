@@ -38,7 +38,7 @@ consul:
         defaultZone: "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
 ----
 
-Once you have enabled distributed configuration you need to store the configuration you wish the share in Consul's Key/Value store.
+Once you have enabled distributed configuration you need to store the configuration you wish to share in Consul's Key/Value store.
 
 There are a number of different ways to do that.
 
@@ -117,7 +117,7 @@ Another option popular option is https://github.com/breser/git2consul[git2consul
 
 You can setup a Git repository that contains files like `application.yml`, `hello-world-test.json` etc. and the contents of these files are cloned to Consul.
 
-In this case each key in consul represents a file with an extension. For example `/config/application.yml` and you must configure the `FILES` format:
+In this case each key in consul represents a file with an extension. For example `/config/application.yml` and you must configure the `FILE` format:
 
 .application.yml
 [source,yaml]
@@ -125,5 +125,5 @@ In this case each key in consul represents a file with an extension. For example
 consul:
     client:
         config:
-            format: FILES
+            format: FILE
 ----

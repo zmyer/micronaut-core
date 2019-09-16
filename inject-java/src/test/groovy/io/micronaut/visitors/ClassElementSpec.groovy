@@ -1,7 +1,24 @@
+/*
+ * Copyright 2017-2019 original authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.micronaut.visitors
 
 import io.micronaut.inject.AbstractTypeElementSpec
 import io.micronaut.inject.ast.EnumElement
+
+import java.util.function.Supplier
 
 class ClassElementSpec extends AbstractTypeElementSpec {
 
@@ -114,6 +131,31 @@ class Foo {}
         AllElementsVisitor.VISITED_METHOD_ELEMENTS[0].parameters[0].type.name == 'test.Foo'
     }
 
+    void "test resolve generic type using getTypeArguments"() {
+        buildBeanDefinition('test.TestController', '''
+package test;
+
+import io.micronaut.http.annotation.*;
+import javax.inject.Inject;
+
+@Controller("/test")
+public class TestController implements java.util.function.Supplier<String> {
+    
+    @Get("/getMethod")
+    public String get() {
+        return null;
+    }
+    
+
+}
+
+''')
+        expect:
+        AllElementsVisitor.VISITED_CLASS_ELEMENTS.size() == 1
+        AllElementsVisitor.VISITED_METHOD_ELEMENTS.size() == 1
+        AllElementsVisitor.VISITED_CLASS_ELEMENTS[0].getTypeArguments(Supplier).get("T").name == String.name
+    }
+
     void "test array generic types at type level"() {
         buildBeanDefinition('test.TestController', '''
 package test;
@@ -180,10 +222,10 @@ import io.micronaut.http.annotation.*;
 import javax.inject.Inject;
 
 @Controller("/test")
-public class TestController<T extends Foo> {
+public class TestController<MT extends Foo> {
     
     @Get("/getMethod")
-    public java.util.List<T> getMethod(java.util.Set<T> argument) {
+    public java.util.List<MT> getMethod(java.util.Set<MT> argument) {
         return null;
     }
     

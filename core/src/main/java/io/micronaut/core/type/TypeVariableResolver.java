@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.core.type;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,15 +31,16 @@ public interface TypeVariableResolver {
     /**
      * @return Obtain a map of the type parameters for the argument
      */
-    Map<String, Argument<?>> getTypeVariables();
+    default Map<String, Argument<?>> getTypeVariables() {
+        return Collections.emptyMap();
+    }
 
     /**
      * @return The type parameters as an array
      */
-    @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
     default Argument[] getTypeParameters() {
         Collection<Argument<?>> values = getTypeVariables().values();
-        return values.toArray(new Argument[values.size()]);
+        return values.toArray(Argument.ZERO_ARGUMENTS);
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.ast.groovy
 
 import groovy.transform.CompileStatic
+import io.micronaut.ast.groovy.utils.AstAnnotationUtils
 import io.micronaut.ast.groovy.utils.AstMessageUtils
 import io.micronaut.ast.groovy.visitor.GroovyVisitorContext
 import io.micronaut.ast.groovy.visitor.LoadedVisitor
+import io.micronaut.core.order.OrderUtil
+import io.micronaut.inject.annotation.AbstractAnnotationMetadataBuilder
 import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.control.CompilePhase
 import org.codehaus.groovy.control.SourceUnit
@@ -33,7 +35,7 @@ import org.codehaus.groovy.transform.GroovyASTTransformation
  * @since 1.0
  */
 @CompileStatic
-@GroovyASTTransformation(phase = CompilePhase.OUTPUT)
+@GroovyASTTransformation(phase = CompilePhase.CLASS_GENERATION)
 class TypeElementVisitorEnd implements ASTTransformation {
 
     @Override
@@ -41,7 +43,9 @@ class TypeElementVisitorEnd implements ASTTransformation {
         Map<String, LoadedVisitor> loadedVisitors = TypeElementVisitorTransform.loadedVisitors
 
         if (loadedVisitors != null) {
-            for(loadedVisitor in loadedVisitors.values()) {
+            List<LoadedVisitor> values = new ArrayList<>(loadedVisitors.values())
+            OrderUtil.reverseSort(values)
+            for(loadedVisitor in values) {
                 try {
                     loadedVisitor.finish(new GroovyVisitorContext(source))
                 } catch (Throwable e) {
@@ -54,5 +58,7 @@ class TypeElementVisitorEnd implements ASTTransformation {
         }
 
         TypeElementVisitorTransform.loadedVisitors = null
+        AstAnnotationUtils.invalidateCache()
+        AbstractAnnotationMetadataBuilder.clearMutated()
     }
 }

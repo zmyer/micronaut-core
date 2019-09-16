@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,18 @@
 package io.micronaut.ast.groovy.annotation
 
 import groovy.transform.CompileStatic
+import io.micronaut.ast.groovy.utils.AstMessageUtils
 import io.micronaut.ast.groovy.utils.ExtendedParameter
 import io.micronaut.ast.groovy.visitor.GroovyVisitorContext
 import io.micronaut.core.annotation.AnnotationClassValue
 import io.micronaut.core.convert.ConversionService
+import io.micronaut.core.io.service.ServiceDefinition
+import io.micronaut.core.io.service.SoftServiceLoader
 import io.micronaut.core.reflect.ClassUtils
 import io.micronaut.core.util.StringUtils
 import io.micronaut.core.value.OptionalValues
 import io.micronaut.inject.annotation.AbstractAnnotationMetadataBuilder
+import io.micronaut.inject.annotation.AnnotatedElementValidator
 import io.micronaut.inject.visitor.VisitorContext
 import org.codehaus.groovy.ast.AnnotatedNode
 import org.codehaus.groovy.ast.AnnotationNode
@@ -37,10 +41,13 @@ import org.codehaus.groovy.ast.expr.ConstantExpression
 import org.codehaus.groovy.ast.expr.Expression
 import org.codehaus.groovy.ast.expr.ListExpression
 import org.codehaus.groovy.ast.expr.PropertyExpression
+import org.codehaus.groovy.ast.stmt.ExpressionStatement
 import org.codehaus.groovy.ast.stmt.ReturnStatement
 import org.codehaus.groovy.ast.stmt.Statement
 import org.codehaus.groovy.control.SourceUnit
 
+import javax.annotation.Nonnull
+import java.lang.annotation.Annotation
 import java.lang.annotation.Repeatable
 import java.lang.reflect.Array
 
@@ -54,11 +61,64 @@ import java.lang.reflect.Array
 class GroovyAnnotationMetadataBuilder extends AbstractAnnotationMetadataBuilder<AnnotatedNode, AnnotationNode> {
     public static Map<String, Map<? extends AnnotatedNode, Expression>> ANNOTATION_DEFAULTS = new LinkedHashMap<>()
     public static final ClassNode ANN_OVERRIDE = ClassHelper.make(Override.class)
+    public static final String VALIDATOR_KEY = "io.micronaut.VALIDATOR"
 
     final SourceUnit sourceUnit
+    final AnnotatedElementValidator elementValidator
 
     GroovyAnnotationMetadataBuilder(SourceUnit sourceUnit) {
         this.sourceUnit = sourceUnit
+        def ast = sourceUnit?.getAST()
+        if (ast != null) {
+            def validator = ast.getNodeMetaData(VALIDATOR_KEY)
+            if (validator instanceof AnnotatedElementValidator) {
+                elementValidator = (AnnotatedElementValidator) validator
+            } else {
+                final SoftServiceLoader<AnnotatedElementValidator> validators = SoftServiceLoader.load(AnnotatedElementValidator.class)
+                final Iterator<ServiceDefinition<AnnotatedElementValidator>> i = validators.iterator()
+                AnnotatedElementValidator elementValidator = null
+                while (i.hasNext()) {
+                    final ServiceDefinition<AnnotatedElementValidator> v = i.next()
+                    if (v.isPresent()) {
+                        elementValidator = v.load()
+                        break
+                    }
+                }
+                this.elementValidator = elementValidator
+                ast.putNodeMetaData(VALIDATOR_KEY, elementValidator)
+            }
+        } else {
+            this.elementValidator = null
+        }
+
+    }
+
+    @Override
+    protected AnnotatedElementValidator getElementValidator() {
+        return this.elementValidator
+    }
+
+    @Override
+    protected void addError(@Nonnull AnnotatedNode originatingElement, @Nonnull String error) {
+        AstMessageUtils.error(sourceUnit, originatingElement, error)
+    }
+
+    @Override
+    protected boolean isMethodOrClassElement(AnnotatedNode element) {
+        return element instanceof ClassNode || element instanceof MethodNode
+    }
+
+    @Override
+    protected String getDeclaringType(@Nonnull AnnotatedNode element) {
+        if (element instanceof ClassNode) {
+            return element.name
+        }
+        return element.declaringClass?.name
+    }
+
+    @Override
+    protected boolean hasAnnotation(AnnotatedNode element, Class<? extends Annotation> annotation) {
+        return !element.getAnnotations(ClassHelper.makeCached(annotation)).isEmpty()
     }
 
     @Override
@@ -91,7 +151,11 @@ class GroovyAnnotationMetadataBuilder extends AbstractAnnotationMetadataBuilder<
     @Override
     protected Optional<AnnotatedNode> getAnnotationMirror(String annotationName) {
         ClassNode cn = ClassUtils.forName(annotationName, GroovyAnnotationMetadataBuilder.classLoader).map({ Class cls -> ClassHelper.make(cls)}).orElseGet({->ClassHelper.make(annotationName)})
-        return Optional.of((AnnotatedNode)cn)
+        if (cn.name != ClassHelper.OBJECT) {
+            return Optional.of((AnnotatedNode)cn)
+        } else {
+            return Optional.empty()
+        }
     }
 
     @Override
@@ -105,8 +169,10 @@ class GroovyAnnotationMetadataBuilder extends AbstractAnnotationMetadataBuilder<
     }
 
     @Override
-    protected List<AnnotatedNode> buildHierarchy(AnnotatedNode element, boolean inheritTypeAnnotations) {
-        if (element instanceof ClassNode) {
+    protected List<AnnotatedNode> buildHierarchy(AnnotatedNode element, boolean inheritTypeAnnotations, boolean declaredOnly) {
+        if (declaredOnly) {
+            return Collections.singletonList(element)
+        } else if (element instanceof ClassNode) {
             List<AnnotatedNode> hierarchy = new ArrayList<>()
             ClassNode cn = (ClassNode) element
             hierarchy.add(cn)
@@ -116,7 +182,7 @@ class GroovyAnnotationMetadataBuilder extends AbstractAnnotationMetadataBuilder<
             MethodNode mn = (MethodNode) element
             List<AnnotatedNode> hierarchy
             if (inheritTypeAnnotations) {
-                hierarchy = buildHierarchy(mn.getDeclaringClass(), false)
+                hierarchy = buildHierarchy(mn.getDeclaringClass(), false, declaredOnly)
             } else {
                 hierarchy = []
             }
@@ -138,15 +204,26 @@ class GroovyAnnotationMetadataBuilder extends AbstractAnnotationMetadataBuilder<
             hierarchy.add(p)
             return hierarchy
         } else {
-            return Collections.singletonList(element)
+            if (element == null) {
+                return []
+            } else {
+                return [element] as List<AnnotatedNode>
+            }
         }
     }
 
     @Override
-    protected void readAnnotationRawValues(String memberName, Object annotationValue, Map<CharSequence, Object> annotationValues) {
+    protected void readAnnotationRawValues(
+            AnnotatedNode originatingElement,
+            String annotationName,
+            AnnotatedNode member,
+            String memberName,
+            Object annotationValue,
+            Map<CharSequence, Object> annotationValues) {
         if (!annotationValues.containsKey(memberName)) {
-            def v = readAnnotationValue(memberName, annotationValue)
+            def v = readAnnotationValue(originatingElement, memberName, annotationValue)
             if (v != null) {
+                validateAnnotationValue(originatingElement, annotationName, member, memberName, v)
                 annotationValues.put(memberName, v)
             }
         }
@@ -167,37 +244,45 @@ class GroovyAnnotationMetadataBuilder extends AbstractAnnotationMetadataBuilder<
                 if (classNode.isResolved()) {
                     Class resolved = classNode.getTypeClass()
                     for (MethodNode method: methods) {
-                        def defaultValue = resolved.getDeclaredMethod(method.getName()).defaultValue
-                        if (defaultValue != null) {
-                            if (defaultValue instanceof Class) {
-                                defaultValues.put(method, new ClassExpression(ClassHelper.makeCached((Class)defaultValue)))
-                            } else {
-                                if (defaultValue instanceof String) {
-                                    if (StringUtils.isNotEmpty((String)defaultValue)) {
+                        try {
+                            def defaultValue = resolved.getDeclaredMethod(method.getName()).defaultValue
+                            if (defaultValue != null) {
+                                if (defaultValue instanceof Class) {
+                                    defaultValues.put(method, new ClassExpression(ClassHelper.makeCached((Class)defaultValue)))
+                                } else {
+                                    if (defaultValue instanceof String) {
+                                        if (StringUtils.isNotEmpty((String)defaultValue)) {
+                                            defaultValues.put(method, new ConstantExpression(defaultValue))
+                                        }
+                                    } else {
                                         defaultValues.put(method, new ConstantExpression(defaultValue))
                                     }
-                                } else {
-                                    defaultValues.put(method, new ConstantExpression(defaultValue))
                                 }
                             }
+                        } catch (NoSuchMethodError e) {
+                            // method no longer exists alias annotation
+                            // ignore and continue
                         }
                     }
                 } else {
                     for (MethodNode method: methods) {
                         Statement stmt = method.code
+                        def expression = null
                         if (stmt instanceof ReturnStatement) {
-                            def expression = ((ReturnStatement) stmt).expression
-                            if (expression instanceof ConstantExpression) {
-                                ConstantExpression ce = (ConstantExpression) expression
-                                def v = ce.value
-                                if (v != null) {
-                                    if (v instanceof String) {
-                                        if (StringUtils.isNotEmpty((String)v)) {
-                                            defaultValues.put(method, new ConstantExpression(v))
-                                        }
-                                    } else {
-                                        defaultValues.put(method, (Expression)expression)
+                            expression = ((ReturnStatement) stmt).expression
+                        } else if (stmt instanceof ExpressionStatement) {
+                            expression = ((ExpressionStatement) stmt).expression
+                        }
+                        if (expression instanceof ConstantExpression) {
+                            ConstantExpression ce = (ConstantExpression) expression
+                            def v = ce.value
+                            if (v != null) {
+                                if (v instanceof String) {
+                                    if (StringUtils.isNotEmpty((String)v)) {
+                                        defaultValues.put(method, new ConstantExpression(v))
                                     }
+                                } else {
+                                    defaultValues.put(method, (Expression)expression)
                                 }
                             }
                         }
@@ -219,12 +304,12 @@ class GroovyAnnotationMetadataBuilder extends AbstractAnnotationMetadataBuilder<
     }
 
     @Override
-    protected Object readAnnotationValue(String memberName, Object annotationValue) {
+    protected Object readAnnotationValue(AnnotatedNode originatingElement, String memberName, Object annotationValue) {
         if (annotationValue instanceof ConstantExpression) {
             if (annotationValue instanceof AnnotationConstantExpression) {
                 AnnotationConstantExpression ann = (AnnotationConstantExpression) annotationValue
                 AnnotationNode value = (AnnotationNode) ann.getValue()
-                return readNestedAnnotationValue(value)
+                return readNestedAnnotationValue(originatingElement, value)
             } else {
                 return ((ConstantExpression) annotationValue).value
             }
@@ -233,15 +318,20 @@ class GroovyAnnotationMetadataBuilder extends AbstractAnnotationMetadataBuilder<
             PropertyExpression pe = (PropertyExpression) annotationValue
             if (pe.objectExpression instanceof ClassExpression) {
                 ClassExpression ce = (ClassExpression) pe.objectExpression
-                if (ce.type.isResolved()) {
-                    Class typeClass = ce.type.typeClass
-                    try {
-                        def value = typeClass[pe.propertyAsString]
-                        if (value != null) {
-                            return value
+                ClassNode propertyType = ce.type
+                if (propertyType.isEnum()) {
+                    return pe.getPropertyAsString()
+                } else {
+                    if (propertyType.isResolved()) {
+                        Class typeClass = propertyType.typeClass
+                        try {
+                            def value = typeClass[pe.propertyAsString]
+                            if (value != null) {
+                                return value
+                            }
+                        } catch (e) {
+                            // ignore
                         }
-                    } catch (e) {
-                        // ignore
                     }
                 }
             }
@@ -256,7 +346,7 @@ class GroovyAnnotationMetadataBuilder extends AbstractAnnotationMetadataBuilder<
                     arrayType = io.micronaut.core.annotation.AnnotationValue
                     AnnotationConstantExpression ann = (AnnotationConstantExpression) exp
                     AnnotationNode value = (AnnotationNode) ann.getValue()
-                    converted.add(readNestedAnnotationValue(value))
+                    converted.add(readNestedAnnotationValue(originatingElement, value))
                 } else if (exp instanceof ConstantExpression) {
                     Object value = ((ConstantExpression) exp).value
                     if(value != null) {
@@ -289,14 +379,14 @@ class GroovyAnnotationMetadataBuilder extends AbstractAnnotationMetadataBuilder<
     }
 
     @Override
-    protected OptionalValues<?> getAnnotationValues(AnnotatedNode member, Class<?> annotationType) {
+    protected OptionalValues<?> getAnnotationValues(AnnotatedNode originatingElement, AnnotatedNode member, Class<?> annotationType) {
         if (member != null) {
             def anns = member.getAnnotations(ClassHelper.make(annotationType))
             if (!anns.isEmpty()) {
                 AnnotationNode ann = anns[0]
                 Map<CharSequence, Object> converted = new LinkedHashMap<>();
                 for (annMember in ann.members) {
-                    readAnnotationRawValues(annMember.key, annMember.value, converted)
+                    readAnnotationRawValues(originatingElement, annotationType.name, member, annMember.key, annMember.value, converted)
                 }
                 return OptionalValues.of(Object.class, converted)
             }

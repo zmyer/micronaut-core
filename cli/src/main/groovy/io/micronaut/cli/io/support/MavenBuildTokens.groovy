@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,9 +35,13 @@ class MavenBuildTokens extends BuildTokens {
 
     static {
         scopeConversions.put("compile", "compile")
+        scopeConversions.put("implementation", "compile")
+        scopeConversions.put("provided", "provided")
         scopeConversions.put("runtime", "runtime")
+        scopeConversions.put("runtimeOnly", "runtime")
         scopeConversions.put("compileOnly", "provided")
         scopeConversions.put("testRuntime", "test")
+        scopeConversions.put("testImplementation", "test")
         scopeConversions.put("testCompile", "test")
         scopeConversions.put("testCompileOnly", "test")
     }
@@ -80,15 +84,7 @@ class MavenBuildTokens extends BuildTokens {
             }
         }
 
-        List<Dependency> profileDependencies = profile.dependencies
-        List<Dependency> dependencies = profileDependencies.findAll() { Dependency dep ->
-            dep.scope != 'build'
-        }
-
-        for (Feature f in features) {
-            dependencies.addAll f.dependencies.findAll() { Dependency dep -> dep.scope != 'build' }
-        }
-
+        List<Dependency> dependencies = materializeDependencies(profile, features)
         List<Dependency> annotationProcessors = dependencies
                 .unique()
                 .findAll( { it.scope == 'annotationProcessor' || it.scope == 'kapt' })
@@ -148,7 +144,11 @@ class MavenBuildTokens extends BuildTokens {
                 groupId(artifact.groupId)
                 artifactId(artifact.artifactId)
                 if (artifact.groupId.startsWith("io.micronaut")) {
-                    version("\${micronaut.version}")
+                    if (!artifact.version || artifact.version == 'BOM') {
+                        version("\${micronaut.version}")
+                    } else {
+                        version(artifact.version)
+                    }
                 } else {
                     version(artifact.version)
                 }
@@ -156,6 +156,7 @@ class MavenBuildTokens extends BuildTokens {
         }
 
 
+        tokens.put("jarPath", "target/$appname-*.jar" )
         tokens.put("arguments", prettyPrint(jvmArgsWriter.toString(), 12))
         tokens.put("dependencies", prettyPrint(dependenciesWriter.toString(), 4))
         tokens.put("repositories", prettyPrint(repositoriesWriter.toString(), 4))

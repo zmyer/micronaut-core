@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.tracing.instrument.util;
 
 import io.micronaut.core.async.publisher.Publishers;
@@ -39,6 +38,7 @@ import static io.micronaut.tracing.interceptor.TraceInterceptor.logError;
  * @author graemerocher
  * @since 1.0
  */
+@SuppressWarnings("PublisherImplementation")
 public class TracingPublisher<T> implements Publisher<T> {
 
     private final Publisher<T> publisher;
@@ -103,18 +103,22 @@ public class TracingPublisher<T> implements Publisher<T> {
     @Override
     public void subscribe(Subscriber<? super T> actual) {
         Span span;
+        boolean finishOnClose;
         if (spanBuilder != null) {
             span = spanBuilder.start();
+            finishOnClose = true;
         } else {
             span = parentSpan;
+            finishOnClose = false;
         }
         if (span != null) {
-            try (Scope ignored = tracer.scopeManager().activate(span, false)) {
+            try (Scope ignored = tracer.scopeManager().activate(span)) {
+                //noinspection SubscriberImplementation
                 publisher.subscribe(new Subscriber<T>() {
                     boolean finished = false;
                     @Override
                     public void onSubscribe(Subscription s) {
-                        try (Scope ignored = tracer.scopeManager().activate(span, false)) {
+                        try (Scope ignored = tracer.scopeManager().activate(span)) {
                             TracingPublisher.this.doOnSubscribe(span);
                             actual.onSubscribe(s);
                         }
@@ -122,7 +126,8 @@ public class TracingPublisher<T> implements Publisher<T> {
 
                     @Override
                     public void onNext(T object) {
-                        try (Scope ignored = tracer.scopeManager().activate(span, isSingle)) {
+                        boolean finishAfterNext = isSingle && finishOnClose;
+                        try (Scope ignored = tracer.scopeManager().activate(span)) {
                             if (object instanceof MutableHttpResponse) {
                                 MutableHttpResponse response = (MutableHttpResponse) object;
                                 Optional<?> body = response.getBody();
@@ -143,25 +148,38 @@ public class TracingPublisher<T> implements Publisher<T> {
                                 finished = true;
                                 TracingPublisher.this.doOnFinish(span);
                             }
+                        } finally {
+                            if (finishAfterNext) {
+                                span.finish();
+                            }
                         }
                     }
 
                     @Override
                     public void onError(Throwable t) {
-                        try (Scope ignored = tracer.scopeManager().activate(span, true)) {
+                        try (Scope ignored = tracer.scopeManager().activate(span)) {
                             TracingPublisher.this.onError(t, span);
                             actual.onError(t);
                             finished = true;
+                        } finally {
+                            if (finishOnClose) {
+                                span.finish();
+                            }
                         }
                     }
 
                     @Override
                     public void onComplete() {
                         if (!finished) {
-                            try (Scope ignored = tracer.scopeManager().activate(span, true)) {
+                            try (Scope ignored = tracer.scopeManager().activate(span)) {
                                 actual.onComplete();
                                 TracingPublisher.this.doOnFinish(span);
+                            } finally {
+                                if (finishOnClose) {
+                                    span.finish();
+                                }
                             }
+
                         } else {
                             actual.onComplete();
                         }
@@ -179,7 +197,6 @@ public class TracingPublisher<T> implements Publisher<T> {
      * @param object The object
      * @param span The span
      */
-    @SuppressWarnings("WeakerAccess")
     protected void doOnNext(@Nonnull T object, @Nonnull Span span) {
         // no-op
     }
@@ -189,7 +206,6 @@ public class TracingPublisher<T> implements Publisher<T> {
      *
      * @param span The span
      */
-    @SuppressWarnings("WeakerAccess")
     protected void doOnSubscribe(@Nonnull Span span) {
         // no-op
     }
@@ -211,7 +227,6 @@ public class TracingPublisher<T> implements Publisher<T> {
      * @param throwable The error
      * @param span The span
      */
-    @SuppressWarnings("WeakerAccess")
     protected void doOnError(@Nonnull Throwable throwable, @Nonnull Span span) {
         // no-op
     }

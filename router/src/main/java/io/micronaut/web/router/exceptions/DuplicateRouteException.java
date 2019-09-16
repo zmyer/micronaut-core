@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.web.router.exceptions;
 
 import io.micronaut.web.router.UriRouteMatch;
@@ -30,6 +29,7 @@ import java.util.stream.Collectors;
 public class DuplicateRouteException extends RoutingException {
 
     private final String uri;
+    private final List<UriRouteMatch<Object, Object>> uriRoutes;
 
     /**
      * @param uri The URI
@@ -38,6 +38,7 @@ public class DuplicateRouteException extends RoutingException {
     public DuplicateRouteException(String uri, List<UriRouteMatch<Object, Object>> uriRoutes) {
         super(buildMessage(uri, uriRoutes));
         this.uri = uri;
+        this.uriRoutes = uriRoutes;
     }
 
     /**
@@ -45,6 +46,14 @@ public class DuplicateRouteException extends RoutingException {
      */
     public String getUri() {
         return uri;
+    }
+
+    /**
+     *
+     * @return The routes which caused this exception
+     */
+    public List<UriRouteMatch<Object, Object>> getUriRoutes() {
+        return this.uriRoutes;
     }
 
     private static String buildMessage(String uri, List<UriRouteMatch<Object, Object>> uriRoutes) {

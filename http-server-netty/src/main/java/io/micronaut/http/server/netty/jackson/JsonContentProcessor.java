@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.server.netty.jackson;
 
 import com.fasterxml.jackson.core.JsonFactory;
@@ -23,6 +22,7 @@ import io.micronaut.core.async.publisher.Publishers;
 import io.micronaut.core.async.subscriber.CompletionAwareSubscriber;
 import io.micronaut.core.async.subscriber.TypedSubscriber;
 import io.micronaut.core.type.Argument;
+import io.micronaut.http.MediaType;
 import io.micronaut.http.server.HttpServerConfiguration;
 import io.micronaut.http.server.netty.AbstractHttpContentProcessor;
 import io.micronaut.http.server.netty.NettyHttpRequest;
@@ -65,6 +65,12 @@ public class JsonContentProcessor extends AbstractHttpContentProcessor<JsonNode>
             return;
         }
 
+        boolean streamArray = false;
+
+        boolean isJsonStream = nettyHttpRequest.getContentType()
+                .map(mediaType -> mediaType.equals(MediaType.APPLICATION_JSON_STREAM_TYPE))
+                .orElse(false);
+
         if (subscriber instanceof TypedSubscriber) {
             TypedSubscriber typedSubscriber = (TypedSubscriber) subscriber;
             Argument typeArgument = typedSubscriber.getTypeArgument();
@@ -72,17 +78,14 @@ public class JsonContentProcessor extends AbstractHttpContentProcessor<JsonNode>
             Class targetType = typeArgument.getType();
             if (Publishers.isConvertibleToPublisher(targetType) && !Publishers.isSingle(targetType)) {
                 Optional<Argument<?>> genericArgument = typeArgument.getFirstTypeVariable();
-                if (genericArgument.isPresent() && !Iterable.class.isAssignableFrom(genericArgument.get().getType())) {
+                if (genericArgument.isPresent() && !Iterable.class.isAssignableFrom(genericArgument.get().getType()) && !isJsonStream) {
                     // if the generic argument is not a iterable type them stream the array into the publisher
-                    this.jacksonProcessor = new JacksonProcessor(jsonFactory, true);
-                } else {
-                    this.jacksonProcessor = new JacksonProcessor(jsonFactory);
+                    streamArray = true;
                 }
             }
-        } else {
-            this.jacksonProcessor = new JacksonProcessor(jsonFactory);
         }
 
+        this.jacksonProcessor = new JacksonProcessor(jsonFactory, streamArray);
         this.jacksonProcessor.subscribe(new CompletionAwareSubscriber<JsonNode>() {
 
             @Override

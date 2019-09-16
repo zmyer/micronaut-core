@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,10 @@ import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Controller
-import io.micronaut.http.hateos.JsonError
+import io.micronaut.http.hateoas.JsonError
 import io.micronaut.http.server.netty.AbstractMicronautSpec
 import io.micronaut.http.annotation.Get
+import io.reactivex.Single
 
 /**
  * Tests for different kinds of errors and the expected responses
@@ -44,6 +45,19 @@ class ErrorSpec extends AbstractMicronautSpec {
         response.code() == HttpStatus.INTERNAL_SERVER_ERROR.code
         response.header(HttpHeaders.CONTENT_TYPE) == MediaType.APPLICATION_JSON
         response.getBody(JsonError).get().message == 'Internal Server Error: bad'
+    }
+
+    void "test 500 server error IOException"() {
+        given:
+        def response = rxClient.exchange(
+                HttpRequest.GET('/errors/io-error')
+
+        ).onErrorReturn({ t -> t.response.getBody(JsonError); return t.response } ).blockingFirst()
+
+        expect:
+        response.code() == HttpStatus.INTERNAL_SERVER_ERROR.code
+        response.header(HttpHeaders.CONTENT_TYPE) == MediaType.APPLICATION_JSON
+        response.getBody(JsonError).get().message == 'Internal Server Error: null'
     }
 
     void "test 404 error"() {
@@ -80,7 +94,7 @@ class ErrorSpec extends AbstractMicronautSpec {
         def json = new JsonSlurper().parseText(response.getBody(String).orElse(null))
 
         then:
-        json.message == 'Method [POST] not allowed. Allowed methods: [GET]'
+        json.message.matches('Method \\[POST\\] not allowed for URI \\[/errors/server-error\\]. Allowed methods: \\[(GET|HEAD), (GET|HEAD)\\]')
         json._links.self.href == '/errors/server-error'
     }
 
@@ -90,6 +104,13 @@ class ErrorSpec extends AbstractMicronautSpec {
         @Get('/server-error')
         String serverError() {
             throw new RuntimeException("bad")
+        }
+
+        @Get("/io-error")
+        Single<String> ioError() {
+            return Single.create({ emitter ->
+                emitter.onError(new IOException())
+            })
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,35 @@ import java.time.Duration
 class StreamRequestSpec extends Specification {
     @Shared @AutoCleanup EmbeddedServer embeddedServer =
             ApplicationContext.run(EmbeddedServer)
+
+    void "test stream post request with numbers"() {
+        given:
+        RxHttpClient client = RxHttpClient.create(embeddedServer.getURL())
+
+        when:
+        int i = 0
+        HttpResponse<List> result = client.exchange(HttpRequest.POST('/stream/request/numbers', Flowable.create( new FlowableOnSubscribe<Object>() {
+            @Override
+            void subscribe(@NonNull FlowableEmitter<Object> emitter) throws Exception {
+                while(i < 5) {
+                    emitter.onNext(i++)
+                }
+                emitter.onComplete()
+
+
+            }
+        }, BackpressureStrategy.BUFFER
+
+        )).contentType(MediaType.APPLICATION_JSON_TYPE), List).blockingFirst()
+
+        then:
+        result.body().size() == 5
+        result.body() == [0, 1, 2, 3, 4]
+
+        cleanup:
+        client.stop()
+        client.close()
+   }
 
     void "test stream post request with strings"() {
         given:
@@ -222,6 +251,12 @@ class StreamRequestSpec extends Specification {
     }
     @Controller('/stream/request')
     static class StreamController {
+
+        @Post("/numbers")
+        Single<List<Long>> numbers(@Header MediaType contentType, @Body Single<List<Long>> numbers) {
+            assert contentType == MediaType.APPLICATION_JSON_TYPE
+            numbers
+        }
 
         @Post(uri = "/strings", consumes = MediaType.TEXT_PLAIN)
         Single<List<String>> strings(@Body Flowable<String> strings) {

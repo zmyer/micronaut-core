@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,11 +57,12 @@ class MyBean {
         !beanDefinition.isAbstract()
         beanDefinition != null
         beanDefinition.injectedFields.size() == 0
-        beanDefinition.constructor.arguments.size() == 3
+        beanDefinition.constructor.arguments.size() == 4
         beanDefinition.constructor.arguments[0].name == 'val'
         beanDefinition.constructor.arguments[1].name == 'beanContext'
-        beanDefinition.constructor.arguments[2].name == 'interceptors'
-        beanDefinition.constructor.arguments[2].synthesize(Type.class).value()[0] == Mutating
+        beanDefinition.constructor.arguments[2].name == 'qualifier'
+        beanDefinition.constructor.arguments[3].name == 'interceptors'
+        beanDefinition.constructor.arguments[3].synthesize(Type.class).value()[0] == Mutating
 
         when:
         def context = ApplicationContext.run('foo.bar':'test')

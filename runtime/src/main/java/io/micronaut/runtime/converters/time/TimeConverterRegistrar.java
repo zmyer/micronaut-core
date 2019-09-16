@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.runtime.converters.time;
 
+import io.micronaut.context.annotation.BootstrapContextCompatible;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.env.Environment;
+import io.micronaut.core.annotation.TypeHint;
 import io.micronaut.core.convert.ConversionContext;
 import io.micronaut.core.convert.ConversionService;
 import io.micronaut.core.convert.TypeConverter;
@@ -26,10 +27,7 @@ import io.micronaut.core.convert.format.Format;
 import io.micronaut.core.util.StringUtils;
 
 import javax.inject.Singleton;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
@@ -46,6 +44,25 @@ import java.util.regex.Pattern;
 @Singleton
 // Android doesn't support java.time
 @Requires(notEnv = Environment.ANDROID)
+@BootstrapContextCompatible
+@TypeHint(
+        value = {
+                Duration.class,
+                Instant.class,
+                LocalDate.class,
+                LocalDateTime.class,
+                MonthDay.class,
+                OffsetDateTime.class,
+                OffsetTime.class,
+                Period.class,
+                Year.class,
+                YearMonth.class,
+                ZonedDateTime.class,
+                ZoneId.class,
+                ZoneOffset.class
+        },
+        accessType = TypeHint.AccessType.ALL_PUBLIC
+)
 public class TimeConverterRegistrar implements TypeConverterRegistrar {
 
     private static final Pattern DURATION_MATCHER = Pattern.compile("^(-?\\d+)([unsmhd])(s?)$");
@@ -172,10 +189,26 @@ public class TimeConverterRegistrar implements TypeConverterRegistrar {
                 }
             }
         );
+
+        // CharSequence -> OffsetDateTime
+        conversionService.addConverter(
+                CharSequence.class,
+                OffsetDateTime.class,
+                (object, targetType, context) -> {
+                    try {
+                        DateTimeFormatter formatter = resolveFormatter(context);
+                        OffsetDateTime result = OffsetDateTime.parse(object, formatter);
+                        return Optional.of(result);
+                    } catch (DateTimeParseException e) {
+                        context.reject(object, e);
+                        return Optional.empty();
+                    }
+                }
+        );
     }
 
     private DateTimeFormatter resolveFormatter(ConversionContext context) {
-        Optional<String> format = context.getAnnotationMetadata().getValue(Format.class, String.class);
+        Optional<String> format = context.getAnnotationMetadata().stringValue(Format.class);
         return format
             .map((pattern) -> DateTimeFormatter.ofPattern(pattern, context.getLocale()))
             .orElse(DateTimeFormatter.RFC_1123_DATE_TIME);

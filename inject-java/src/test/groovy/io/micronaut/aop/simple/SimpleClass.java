@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package io.micronaut.aop.simple;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 import java.util.Collections;
 import java.util.List;
@@ -27,10 +28,20 @@ import java.util.List;
 public class SimpleClass<A extends CharSequence> {
 
     private Bar bar;
+    private boolean postConstructInvoked;
 
     public SimpleClass(Bar bar) {
         this.bar = bar;
         assert bar != null;
+    }
+
+    @PostConstruct
+    void onCreate() {
+        this.postConstructInvoked = true;
+    }
+
+    public boolean isPostConstructInvoked() {
+        return postConstructInvoked;
     }
 
     @Mutating("name")

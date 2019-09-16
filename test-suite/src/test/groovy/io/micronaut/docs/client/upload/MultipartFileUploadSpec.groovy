@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,6 @@ class MultipartFileUploadSpec extends Specification {
     @AutoCleanup
     ApplicationContext context = ApplicationContext.run()
 
-    @AutoCleanup
     @Shared
     EmbeddedServer embeddedServer = context.getBean(EmbeddedServer).start()
 
@@ -63,6 +62,11 @@ class MultipartFileUploadSpec extends Specification {
     HttpClient client = context.createBean(HttpClient, embeddedServer.getURL())
 
     static final File uploadDir = File.createTempDir()
+
+    void setupSpec() {
+        uploadDir.mkdir()
+        assert uploadDir.exists() && uploadDir.canWrite()
+    }
 
     void cleanup() {
         uploadDir.listFiles()*.delete()
@@ -211,7 +215,6 @@ class MultipartFileUploadSpec extends Specification {
 
     }
 
-
     void "test upload InputStream without ContentType"() {
         given:
         File file = new File(uploadDir, "walkingthehimalayas.txt")
@@ -240,7 +243,6 @@ class MultipartFileUploadSpec extends Specification {
         newFile.text == file.text
 
     }
-
 
     @Controller('/multipart')
     static class MultipartController {

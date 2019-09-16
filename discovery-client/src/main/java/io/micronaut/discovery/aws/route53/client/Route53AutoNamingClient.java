@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.discovery.aws.route53.client;
 
 import com.amazonaws.services.servicediscovery.AWSServiceDiscoveryAsync;
@@ -29,7 +28,6 @@ import io.micronaut.discovery.aws.route53.AWSServiceDiscoveryResolver;
 import io.micronaut.discovery.aws.route53.Route53ClientDiscoveryConfiguration;
 import io.micronaut.discovery.aws.route53.Route53DiscoveryConfiguration;
 import io.micronaut.discovery.aws.route53.registration.EC2ServiceInstance;
-import io.micronaut.http.client.annotation.Client;
 import io.reactivex.Flowable;
 import org.reactivestreams.Publisher;
 import javax.inject.Singleton;
@@ -47,7 +45,6 @@ import java.util.concurrent.Future;
  * @since 1.0
  */
 @Singleton
-@Client(id = Route53ClientDiscoveryConfiguration.SERVICE_ID, path = "/", configuration = Route53ClientDiscoveryConfiguration.class)
 @Requires(classes = {AWSServiceDiscoveryAsync.class, AWSClientConfiguration.class})
 @Requires(env = Environment.AMAZON_EC2)
 @Requires(beans = Route53DiscoveryConfiguration.class)

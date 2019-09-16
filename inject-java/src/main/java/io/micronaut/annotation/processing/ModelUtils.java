@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.annotation.processing;
 
 import static javax.lang.model.element.Modifier.ABSTRACT;
@@ -27,6 +26,8 @@ import static javax.lang.model.type.TypeKind.ERROR;
 import static javax.lang.model.type.TypeKind.NONE;
 import static javax.lang.model.type.TypeKind.VOID;
 
+import io.micronaut.core.annotation.AnnotationMetadata;
+import io.micronaut.core.annotation.Creator;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.naming.NameUtils;
 import io.micronaut.core.reflect.ClassUtils;
@@ -34,18 +35,12 @@ import io.micronaut.inject.processing.JavaModelUtils;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.Modifier;
-import javax.lang.model.element.Name;
-import javax.lang.model.element.PackageElement;
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -84,11 +79,14 @@ public class ModelUtils {
      * @param element The element
      * @return The {@link TypeElement}
      */
-    final TypeElement classElementFor(Element element) {
-        while (!(JavaModelUtils.isClass(element) || JavaModelUtils.isInterface(element))) {
+    @Nullable public final TypeElement classElementFor(Element element) {
+        while (element != null && !(JavaModelUtils.isClassOrInterface(element) || JavaModelUtils.isEnum(element))) {
             element = element.getEnclosingElement();
         }
-        return (TypeElement) element;
+        if (element instanceof  TypeElement) {
+            return (TypeElement) element;
+        }
+        return null;
     }
 
     /**
@@ -111,12 +109,53 @@ public class ModelUtils {
      * @param field The field
      * @return An optional setter method
      */
+    Optional<ExecutableElement> findGetterMethodFor(Element field) {
+        String getterName = getterNameFor(field);
+        // FIXME refine this to discover one of possible overloaded methods with correct signature (i.e. single arg of field type)
+        TypeElement typeElement = classElementFor(field);
+        if (typeElement == null) {
+            return Optional.empty();
+        }
+
+        List<? extends Element> elements = typeElement.getEnclosedElements();
+        List<ExecutableElement> methods = ElementFilter.methodsIn(elements);
+        return methods.stream()
+                .filter(method -> {
+                    String methodName = method.getSimpleName().toString();
+                    if (getterName.equals(methodName)) {
+                        Set<Modifier> modifiers = method.getModifiers();
+                        return
+                                // it's not static
+                                !modifiers.contains(STATIC)
+                                        // it's either public or package visibility
+                                        && modifiers.contains(PUBLIC)
+                                        || !(modifiers.contains(PRIVATE) || modifiers.contains(PROTECTED));
+                    }
+                    return false;
+                })
+                .findFirst();
+    }
+
+    /**
+     * Resolves a setter method for a field.
+     *
+     * @param field The field
+     * @return An optional setter method
+     */
     Optional<ExecutableElement> findSetterMethodFor(Element field) {
         String name = field.getSimpleName().toString();
-        name = name.replaceFirst("^(is).+", "");
+        if (field.asType().getKind() == TypeKind.BOOLEAN) {
+            if (name.length() > 2 && Character.isUpperCase(name.charAt(2))) {
+                name = name.replaceFirst("^(is)(.+)", "$2");
+            }
+        }
         String setterName = setterNameFor(name);
         // FIXME refine this to discover one of possible overloaded methods with correct signature (i.e. single arg of field type)
         TypeElement typeElement = classElementFor(field);
+        if (typeElement == null) {
+            return Optional.empty();
+        }
+
         List<? extends Element> elements = typeElement.getEnclosedElements();
         List<ExecutableElement> methods = ElementFilter.methodsIn(elements);
         return methods.stream()
@@ -137,6 +176,20 @@ public class ModelUtils {
     }
 
     /**
+     * The name of a getter for the given field.
+     *
+     * @param field The field in question
+     * @return The getter name
+     */
+    String getterNameFor(Element field) {
+        String methodNamePrefix = "get";
+        if (field.asType().getKind() == TypeKind.BOOLEAN) {
+            methodNamePrefix = "is";
+        }
+        return methodNamePrefix + NameUtils.capitalize(field.getSimpleName().toString());
+    }
+
+    /**
      * The name of a setter for the given field name.
      *
      * @param fieldName The field name
@@ -150,10 +203,11 @@ public class ModelUtils {
      * The constructor inject for the given class element.
      *
      * @param classElement The class element
+     * @param annotationUtils The annotation utilities
      * @return The constructor
      */
     @Nullable
-    ExecutableElement concreteConstructorFor(TypeElement classElement) {
+    public ExecutableElement concreteConstructorFor(TypeElement classElement, AnnotationUtils annotationUtils) {
         List<ExecutableElement> constructors = findNonPrivateConstructors(classElement);
         if (constructors.isEmpty()) {
             return null;
@@ -161,8 +215,11 @@ public class ModelUtils {
         if (constructors.size() == 1) {
             return constructors.get(0);
         }
-        Optional<ExecutableElement> element = constructors.stream().filter(ctor ->
-            Objects.nonNull(ctor.getAnnotation(Inject.class))
+
+        Optional<ExecutableElement> element = constructors.stream().filter(ctor -> {
+                    final AnnotationMetadata annotationMetadata = annotationUtils.getAnnotationMetadata(ctor);
+                    return annotationMetadata.hasStereotype(Inject.class) || annotationMetadata.hasStereotype(Creator.class);
+                }
         ).findFirst();
         if (!element.isPresent()) {
             element = constructors.stream().filter(ctor ->
@@ -185,6 +242,19 @@ public class ModelUtils {
     }
 
     /**
+     * Finds a no argument method of the given name.
+     * 
+     * @param classElement The class element
+     * @param methodName The method name
+     * @return The executable element
+     */
+    Optional<ExecutableElement> findAccessibleNoArgumentInstanceMethod(TypeElement classElement, String methodName) {
+        return ElementFilter.methodsIn(elementUtils.getAllMembers(classElement))
+                .stream().filter(m -> m.getSimpleName().toString().equals(methodName) && !isPrivate(m) && !isStatic(m))
+                .findFirst();
+    }
+
+    /**
      * Obtains the class for a given primitive type name.
      *
      * @param primitiveType The primitive type name
@@ -201,32 +271,8 @@ public class ModelUtils {
      * @return The class
      */
     Class<?> classOfPrimitiveArrayFor(String primitiveType) {
-        try {
-
-            switch (primitiveType) {
-                case "byte":
-                    return Class.forName("[B");
-                case "int":
-                    return Class.forName("[I");
-                case "short":
-                    return Class.forName("[S");
-                case "long":
-                    return Class.forName("[J");
-                case "float":
-                    return Class.forName("[F");
-                case "double":
-                    return Class.forName("[D");
-                case "char":
-                    return Class.forName("[C");
-                case "boolean":
-                    return Class.forName("[Z");
-                default:
-                    // this can never occur
-                    throw new IllegalArgumentException("Unsupported primitive type " + primitiveType);
-            }
-        } catch (ClassNotFoundException e) {
-            throw new IllegalStateException(e);
-        }
+        return ClassUtils.arrayTypeForPrimitive(primitiveType)
+                    .orElseThrow(() -> new IllegalArgumentException("Unsupported primitive type " + primitiveType));
     }
 
     /**
@@ -379,14 +425,23 @@ public class ModelUtils {
      *
      * @param overridden   the candidate overridden method
      * @param classElement the type element that may contain the overriding method, either directly or in a subclass
+     * @param strict       Whether to use strict checks for overriding and not include logic to handle method overloading 
      * @return the overriding method
      */
-    Optional<ExecutableElement> overridingOrHidingMethod(ExecutableElement overridden, TypeElement classElement) {
+    Optional<ExecutableElement> overridingOrHidingMethod(ExecutableElement overridden, TypeElement classElement, boolean strict) {
         List<ExecutableElement> methods = ElementFilter.methodsIn(elementUtils.getAllMembers(classElement));
         for (ExecutableElement method : methods) {
-            if (!method.equals(overridden) && method.getSimpleName().equals(overridden.getSimpleName())) {
-                return Optional.of(method);
+            if (strict) {
+                if (elementUtils.overrides(method, overridden, classElement)) {
+                    return Optional.of(method);
+                }
+            } else {
+                if (!method.equals(overridden) &&
+                        method.getSimpleName().equals(overridden.getSimpleName())) {
+                    return Optional.of(method);
+                }
             }
+
         }
         // might be looking for a package private & packages differ method in a superclass
         // that is not visible to the most concrete subclass, really!
@@ -394,7 +449,7 @@ public class ModelUtils {
         // check the superclass until we reach Object, then bail out with empty if necessary.
         TypeElement superClass = superClassFor(classElement);
         if (superClass != null && !isObjectClass(superClass)) {
-            return overridingOrHidingMethod(overridden, superClass);
+            return overridingOrHidingMethod(overridden, superClass, strict);
         }
         return Optional.empty();
     }
@@ -506,5 +561,41 @@ public class ModelUtils {
             }
         }
         return result;
+    }
+
+    /**
+     * The Java APT throws an internal exception {code com.sun.tools.javac.code.Symbol$CompletionFailure} if a class is missing from the classpath and {@link Element#getKind()} is called. This method
+     * handles exceptions when calling the getKind() method to avoid this scenario and should be used instead of {@link Element#getKind()}.
+     *
+     * @param element The element
+     * @param expected The expected kind
+     * @return The kind if it is resolvable and matches the expected kind
+     */
+    public Optional<ElementKind> resolveKind(Element element, ElementKind expected) {
+        final Optional<ElementKind> elementKind = resolveKind(element);
+        if (elementKind.isPresent() && elementKind.get() == expected) {
+            return elementKind;
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * The Java APT throws an internal exception {code com.sun.tools.javac.code.Symbol$CompletionFailure} if a class is missing from the classpath and {@link Element#getKind()} is called. This method
+     * handles exceptions when calling the getKind() method to avoid this scenario and should be used instead of {@link Element#getKind()}.
+     *
+     * @param element The element
+     * @return The kind if it is resolvable
+     */
+    public Optional<ElementKind> resolveKind(Element element) {
+        if (element != null) {
+
+            try {
+                final ElementKind kind = element.getKind();
+                return Optional.of(kind);
+            } catch (Exception e) {
+                // ignore and fall through to empty
+            }
+        }
+        return Optional.empty();
     }
 }

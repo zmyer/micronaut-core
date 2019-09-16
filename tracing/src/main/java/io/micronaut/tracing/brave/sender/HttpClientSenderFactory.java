@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.tracing.brave.sender;
 
-import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.http.client.LoadBalancerResolver;
@@ -50,7 +48,6 @@ public class HttpClientSenderFactory {
      * @param loadBalancerResolver A resolver capable of resolving references to services into a concrete loadbalance
      * @return The {@link Sender}
      */
-    @Bean
     @Singleton
     @Requires(missingBeans = Sender.class)
     Sender zipkinSender(Provider<LoadBalancerResolver> loadBalancerResolver) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.core.async.publisher;
 
 import org.reactivestreams.Publisher;
@@ -73,23 +72,27 @@ class CompletableFuturePublisher<T> implements Publisher<T> {
                     IllegalArgumentException ex = new IllegalArgumentException("Cannot request a negative number");
                     subscriber.onError(ex);
                 } else {
-                    CompletableFuture<T> future = futureSupplier.get();
-                    if (future == null) {
-                        subscriber.onComplete();
-                    } else {
-                        this.future = future;
-                        future.whenComplete((s, throwable) -> {
-                            if (completed.compareAndSet(false, true)) {
-                                if (throwable != null) {
-                                    subscriber.onError(throwable);
-                                } else {
-                                    if (s != null) {
-                                        subscriber.onNext(s);
+                    try {
+                        CompletableFuture<T> future = futureSupplier.get();
+                        if (future == null) {
+                            subscriber.onComplete();
+                        } else {
+                            this.future = future;
+                            future.whenComplete((s, throwable) -> {
+                                if (completed.compareAndSet(false, true)) {
+                                    if (throwable != null) {
+                                        subscriber.onError(throwable);
+                                    } else {
+                                        if (s != null) {
+                                            subscriber.onNext(s);
+                                        }
+                                        subscriber.onComplete();
                                     }
-                                    subscriber.onComplete();
                                 }
-                            }
-                        });
+                            });
+                        }
+                    } catch (Throwable e) {
+                        subscriber.onError(e);
                     }
                 }
             }

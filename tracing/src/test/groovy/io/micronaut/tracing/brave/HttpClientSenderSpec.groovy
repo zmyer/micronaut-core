@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,8 +46,6 @@ class HttpClientSenderSpec extends Specification {
         )
         EmbeddedServer embeddedServer = context.getBean(EmbeddedServer).start()
         HttpClient client = context.createBean(HttpClient, embeddedServer.getURL())
-
-
 
         when:
         PollingConditions conditions = new PollingConditions(timeout: 10)

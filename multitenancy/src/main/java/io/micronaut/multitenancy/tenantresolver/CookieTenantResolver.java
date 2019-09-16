@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.multitenancy.tenantresolver;
 
 import io.micronaut.context.annotation.Requires;
+import io.micronaut.core.util.StringUtils;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.context.ServerRequestContext;
 import io.micronaut.http.cookie.Cookie;
@@ -34,7 +34,7 @@ import java.util.Optional;
  */
 @Singleton
 @Requires(beans = CookieTenantResolverConfiguration.class)
-@Requires(property = CookieTenantResolverConfigurationProperties.PREFIX + ".enabled")
+@Requires(property = CookieTenantResolverConfigurationProperties.PREFIX + ".enabled", value = StringUtils.TRUE, defaultValue = StringUtils.FALSE)
 public class CookieTenantResolver implements TenantResolver {
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.client.docs.annotation;
 
 import io.micronaut.context.ApplicationContext;
@@ -22,6 +21,8 @@ import io.micronaut.runtime.server.EmbeddedServer;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import javax.validation.ConstraintViolationException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -57,8 +58,8 @@ public class PetControllerTest {
         PetClient client = embeddedServer.getApplicationContext().getBean(PetClient.class);
 
         // tag::error[]
-        thrown.expect(HttpClientResponseException.class);
-        thrown.expectMessage("age: must be greater than or equal to 1");
+        thrown.expect(ConstraintViolationException.class);
+        thrown.expectMessage("save.age: must be greater than or equal to 1");
         client.save("Fred", -1).blockingGet();
         // end::error[]
 

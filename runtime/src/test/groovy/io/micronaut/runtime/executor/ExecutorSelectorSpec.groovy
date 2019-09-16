@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import spock.lang.Unroll
 
 import javax.inject.Singleton
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CompletionStage
 import java.util.concurrent.ExecutorService
 
 /**
@@ -56,6 +57,7 @@ class ExecutorSelectorSpec extends Specification {
         "someNonBlockingMethod" | false
         "someReactiveMethod"    | false
         "someFutureMethod"      | false
+        "someStageMethod"       | false
     }
 
 
@@ -78,5 +80,7 @@ class MyService {
     Single someReactiveMethod() {}
 
     CompletableFuture someFutureMethod() {}
+
+    CompletionStage someStageMethod() {}
 }
 

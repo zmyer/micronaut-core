@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.core.convert.value;
 
 import io.micronaut.core.convert.ConversionContext;
@@ -82,6 +81,17 @@ public interface ConvertibleMultiValues<V> extends ConvertibleValues<List<V>> {
             for (V value : values) {
                 action.accept(headerName, value);
             }
+        }
+    }
+
+    @Override
+    default void forEach(BiConsumer<String, List<V>> action) {
+        Objects.requireNonNull(action, "Consumer cannot be null");
+
+        Collection<String> names = names();
+        for (String headerName : names) {
+            List<V> values = getAll(headerName);
+            action.accept(headerName, values);
         }
     }
 

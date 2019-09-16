@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import brave.http.HttpServerHandler
 import brave.http.HttpTracing
 import io.micronaut.context.ApplicationContext
 import io.micronaut.tracing.brave.sender.HttpClientSender
+import io.opentracing.Span
 import io.opentracing.Tracer
 import io.opentracing.noop.NoopTracer
 import spock.lang.Specification
@@ -39,10 +40,11 @@ class BraveTracerFactorySpec extends Specification {
         when:"The tracer is obtained"
         Tracer tracer = context.getBean(Tracer)
 
-
         then:"It is present"
         tracer instanceof NoopTracer
 
+        cleanup:
+        context.close()
     }
 
     void "test brave tracer configuration"() {
@@ -59,6 +61,9 @@ class BraveTracerFactorySpec extends Specification {
         context.getBean(HttpTracing)
         context.getBean(HttpClientHandler)
         context.getBean(HttpServerHandler)
+
+        cleanup:
+        context.close()
     }
 
     void "test brave tracer configuration no endpoint"() {
@@ -74,6 +79,9 @@ class BraveTracerFactorySpec extends Specification {
         context.getBean(HttpTracing)
         context.getBean(HttpClientHandler)
         context.getBean(HttpServerHandler)
+
+        cleanup:
+        context.close()
     }
 
     void "test brace tracer report spans"() {
@@ -88,12 +96,18 @@ class BraveTracerFactorySpec extends Specification {
 
         when:
         Tracer tracer = context.getBean(Tracer)
-        def scope = tracer.buildSpan("test").startActive(true)
+        def span = tracer.buildSpan("test").start()
+        def scope = tracer.activateSpan(span)
+
+        span.finish()
         scope.close()
 
         then:
         reporter.spans.size() == 1
         reporter.spans[0].name() == "test"
+
+        cleanup:
+        context.close()
     }
 
 

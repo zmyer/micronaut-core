@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.annotation.processing.visitor;
 
 import io.micronaut.annotation.processing.GenericUtils;
 import io.micronaut.core.annotation.AnnotationMetadata;
 import io.micronaut.core.annotation.Internal;
+import io.micronaut.core.order.Ordered;
 import io.micronaut.core.reflect.GenericTypeUtils;
 import io.micronaut.inject.processing.JavaModelUtils;
 import io.micronaut.inject.visitor.TypeElementVisitor;
 
+import javax.annotation.Nullable;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,12 +38,13 @@ import java.util.List;
  * @since 1.0
  */
 @Internal
-public class LoadedVisitor {
+public class LoadedVisitor implements Ordered {
 
     private final TypeElementVisitor visitor;
     private final String classAnnotation;
     private final String elementAnnotation;
     private final JavaVisitorContext visitorContext;
+    private JavaClassElement rootClassElement;
 
     /**
      * @param visitor               The {@link TypeElementVisitor}
@@ -74,6 +75,11 @@ public class LoadedVisitor {
                 elementAnnotation = Object.class.getName();
             }
         }
+    }
+
+    @Override
+    public int getOrder() {
+        return visitor.getOrder();
     }
 
     /**
@@ -111,55 +117,74 @@ public class LoadedVisitor {
      *
      * @param element            The element to visit
      * @param annotationMetadata The annotation data for the node
+     *
+     * @return The element if one was created or null
      */
-    public void visit(Element element, AnnotationMetadata annotationMetadata) {
+    public @Nullable io.micronaut.inject.ast.Element visit(
+            Element element, AnnotationMetadata annotationMetadata) {
         if (element instanceof VariableElement) {
+            final JavaFieldElement e = new JavaFieldElement(
+                    (VariableElement) element,
+                    annotationMetadata,
+                    visitorContext);
             visitor.visitField(
-                    new JavaFieldElement(
-                            (VariableElement) element,
-                            annotationMetadata,
-                            visitorContext),
+                    e,
                     visitorContext
             );
+            return e;
         } else if (element instanceof ExecutableElement) {
             ExecutableElement executableElement = (ExecutableElement) element;
-            if (executableElement.getSimpleName().toString().equals("<init>")) {
-                visitor.visitConstructor(
-                        new JavaConstructorElement(
-                                executableElement,
-                                annotationMetadata, visitorContext),
-                        visitorContext
-                );
-            } else {
-                visitor.visitMethod(
-                        new JavaMethodElement(
-                                executableElement,
-                                annotationMetadata, visitorContext),
-                        visitorContext
-                );
+            if (rootClassElement != null) {
+
+                if (executableElement.getSimpleName().toString().equals("<init>")) {
+                    final JavaConstructorElement e = new JavaConstructorElement(
+                            rootClassElement,
+                            executableElement,
+                            annotationMetadata,
+                            visitorContext);
+                    visitor.visitConstructor(
+                            e,
+                            visitorContext
+                    );
+                    return e;
+                } else {
+                    final JavaMethodElement e = new JavaMethodElement(
+                            rootClassElement,
+                            executableElement,
+                            annotationMetadata, visitorContext);
+                    visitor.visitMethod(
+                            e,
+                            visitorContext
+                    );
+                    return e;
+                }
             }
         } else if (element instanceof TypeElement) {
             TypeElement typeElement = (TypeElement) element;
             boolean isEnum = JavaModelUtils.resolveKind(typeElement, ElementKind.ENUM).isPresent();
             if (isEnum) {
+                this.rootClassElement = new JavaEnumElement(
+                        typeElement,
+                        annotationMetadata,
+                        visitorContext);
                 visitor.visitClass(
-                        new JavaEnumElement(
-                                typeElement,
-                                annotationMetadata,
-                                visitorContext,
-                                Collections.emptyList()),
+                        rootClassElement,
                         visitorContext
                 );
+                return rootClassElement;
             } else {
+                this.rootClassElement =  new JavaClassElement(
+                        typeElement,
+                        annotationMetadata,
+                        visitorContext);
                 visitor.visitClass(
-                        new JavaClassElement(
-                                typeElement,
-                                annotationMetadata,
-                                visitorContext),
+                        rootClassElement,
                         visitorContext
                 );
+                return rootClassElement;
             }
         }
+        return null;
     }
 
     @Override

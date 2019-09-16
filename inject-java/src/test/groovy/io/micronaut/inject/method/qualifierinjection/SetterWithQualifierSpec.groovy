@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import javax.inject.Singleton;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+@Singleton
 class MyBean {
     private A a;
     private A a2;

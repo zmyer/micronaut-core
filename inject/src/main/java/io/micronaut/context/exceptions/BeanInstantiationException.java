@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.context.exceptions;
 
 import io.micronaut.context.BeanResolutionContext;
 import io.micronaut.inject.BeanType;
+
+import java.util.Optional;
 
 /**
  * Thrown when no such beans exists.
@@ -27,12 +28,15 @@ import io.micronaut.inject.BeanType;
  */
 public class BeanInstantiationException extends BeanContextException {
 
+    private final BeanType rootBeanType;
+
     /**
      * @param message The message
      * @param cause   The throwable
      */
     public BeanInstantiationException(String message, Throwable cause) {
         super(message, cause);
+        rootBeanType = null;
     }
 
     /**
@@ -40,6 +44,7 @@ public class BeanInstantiationException extends BeanContextException {
      */
     public BeanInstantiationException(String message) {
         super(message);
+        rootBeanType = null;
     }
 
     /**
@@ -48,6 +53,7 @@ public class BeanInstantiationException extends BeanContextException {
      */
     public BeanInstantiationException(BeanResolutionContext resolutionContext, Throwable cause) {
         super(MessageUtils.buildMessage(resolutionContext, cause.getMessage()), cause);
+        rootBeanType = resolveRootBeanDefinition(resolutionContext);
     }
 
     /**
@@ -56,6 +62,7 @@ public class BeanInstantiationException extends BeanContextException {
      */
     public BeanInstantiationException(BeanResolutionContext resolutionContext, String message) {
         super(MessageUtils.buildMessage(resolutionContext, message));
+        rootBeanType = resolveRootBeanDefinition(resolutionContext);
     }
 
     /**
@@ -65,6 +72,7 @@ public class BeanInstantiationException extends BeanContextException {
      */
     public <T> BeanInstantiationException(BeanType<T> beanDefinition, Throwable cause) {
         super("Error instantiating bean of type [" + beanDefinition.getName() + "]: " + cause.getMessage(), cause);
+        rootBeanType = beanDefinition;
     }
 
     /**
@@ -74,5 +82,31 @@ public class BeanInstantiationException extends BeanContextException {
      */
     public <T> BeanInstantiationException(BeanType<T> beanDefinition, String message) {
         super("Error instantiating bean of type [" + beanDefinition.getName() + "]: " + message);
+        rootBeanType = beanDefinition;
+    }
+
+    /**
+     * @return The reference to the root bean.
+     */
+    public Optional<BeanType> getRootBeanType() {
+        return Optional.ofNullable(rootBeanType);
+    }
+
+    /**
+     * @param resolutionContext The resolution context
+     * @return The reference of the root bean throwing the exception
+     */
+    private BeanType resolveRootBeanDefinition(BeanResolutionContext resolutionContext) {
+        BeanType rootBeanType = null;
+        if (resolutionContext != null) {
+            BeanResolutionContext.Path path = resolutionContext.getPath();
+            if (!path.isEmpty()) {
+                BeanResolutionContext.Segment segment = path.peek();
+                rootBeanType = segment.getDeclaringType();
+            } else {
+                rootBeanType = resolutionContext.getRootDefinition();
+            }
+        }
+        return rootBeanType;
     }
 }

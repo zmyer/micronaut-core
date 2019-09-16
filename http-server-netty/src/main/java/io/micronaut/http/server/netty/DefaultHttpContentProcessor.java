@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.server.netty;
 
 import io.micronaut.core.annotation.Internal;
@@ -46,7 +45,6 @@ public class DefaultHttpContentProcessor extends SingleThreadedBufferingProcesso
     protected final long requestMaxSize;
     protected final StreamedHttpMessage streamedHttpMessage;
     protected final AtomicLong receivedLength = new AtomicLong();
-    private final long partMaxSize;
 
     /**
      * @param nettyHttpRequest The {@link NettyHttpRequest}
@@ -63,7 +61,6 @@ public class DefaultHttpContentProcessor extends SingleThreadedBufferingProcesso
         this.requestMaxSize = configuration.getMaxRequestSize();
         this.ctx = nettyHttpRequest.getChannelHandlerContext();
         this.advertisedLength = nettyHttpRequest.getContentLength();
-        this.partMaxSize = configuration.getMultipart().getMaxFileSize();
     }
 
     @Override
@@ -77,23 +74,13 @@ public class DefaultHttpContentProcessor extends SingleThreadedBufferingProcesso
     protected void onUpstreamMessage(ByteBufHolder message) {
         long receivedLength = this.receivedLength.addAndGet(resolveLength(message));
 
-        if ((advertisedLength != -1 && receivedLength > advertisedLength) || (receivedLength > requestMaxSize)) {
-            fireExceedsLength(receivedLength, advertisedLength == -1 ? requestMaxSize : advertisedLength);
+        if (advertisedLength > requestMaxSize) {
+            fireExceedsLength(advertisedLength, requestMaxSize);
+        } else if (receivedLength > requestMaxSize) {
+            fireExceedsLength(receivedLength, requestMaxSize);
         } else {
-            if (verifyPartDefinedSize(message)) {
-                publishVerifiedContent(message);
-            }
+            publishVerifiedContent(message);
         }
-    }
-
-    private boolean verifyPartDefinedSize(ByteBufHolder message) {
-        long partLength = message instanceof HttpData ? ((HttpData) message).definedLength() : -1;
-        boolean validPart = partLength > partMaxSize;
-        if (validPart) {
-            fireExceedsLength(partLength, partMaxSize);
-            return false;
-        }
-        return true;
     }
 
     private long resolveLength(ByteBufHolder message) {

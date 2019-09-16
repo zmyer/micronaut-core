@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.context;
 
 import io.micronaut.context.exceptions.CircularDependencyException;
@@ -32,12 +31,13 @@ import java.util.*;
  * @since 1.0
  */
 @Internal
-public class DefaultBeanResolutionContext extends LinkedHashMap<String, Object> implements BeanResolutionContext {
+public final class DefaultBeanResolutionContext implements BeanResolutionContext {
 
     private final BeanContext context;
     private final BeanDefinition rootDefinition;
     private final Path path;
     private final Map<BeanIdentifier, Object> inFlightBeans = new HashMap<>(2);
+    private final Map<CharSequence, Object> attributes = new LinkedHashMap<>(2);
 
     /**
      * @param context        The bean context
@@ -66,6 +66,27 @@ public class DefaultBeanResolutionContext extends LinkedHashMap<String, Object> 
     }
 
     @Override
+    public Object setAttribute(CharSequence key, Object value) {
+        return attributes.put(key, value);
+    }
+
+    /**
+     * @param key The key
+     * @return The attribute value
+     */
+    @Override
+    public Object getAttribute(CharSequence key) {
+        return attributes.get(key);
+    }
+
+    @Override
+    public void removeAttribute(CharSequence key) {
+        if (key != null) {
+            attributes.remove(key);
+        }
+    }
+
+    @Override
     public <T> void addInFlightBean(BeanIdentifier beanIdentifier, T instance) {
         inFlightBeans.put(beanIdentifier, instance);
     }
@@ -79,8 +100,17 @@ public class DefaultBeanResolutionContext extends LinkedHashMap<String, Object> 
 
     @Override
     public <T> Optional<T> get(CharSequence name, ArgumentConversionContext<T> conversionContext) {
-        Object value = get(name);
+        Object value = attributes.get(name);
         if (value != null && conversionContext.getArgument().getType().isInstance(value)) {
+            return Optional.of((T) value);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public <T> Optional<T> get(CharSequence name, Class<T> requiredType) {
+        Object value = attributes.get(name);
+        if (requiredType.isInstance(value)) {
             return Optional.of((T) value);
         }
         return Optional.empty();

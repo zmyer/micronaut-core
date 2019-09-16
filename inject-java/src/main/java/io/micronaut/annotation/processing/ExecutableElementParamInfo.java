@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.annotation.processing;
 
 import io.micronaut.core.annotation.AnnotationMetadata;
@@ -32,6 +31,7 @@ class ExecutableElementParamInfo {
     private boolean requiresReflection;
     private AnnotationMetadata metadata;
     private Map<String, Object> parameters = new LinkedHashMap<>();
+    private Map<String, Object> genericParameters = new LinkedHashMap<>();
     private Map<String, AnnotationMetadata> annotationMetadata = new LinkedHashMap<>();
     private Map<String, Map<String, Object>> genericTypes = new LinkedHashMap<>();
 
@@ -49,9 +49,11 @@ class ExecutableElementParamInfo {
      *
      * @param paramName The parameter name
      * @param type      The type reference
+     * @param genericType The generic parameter type
      */
-    void addParameter(String paramName, Object type) {
+    void addParameter(String paramName, Object type, Object genericType) {
         parameters.put(paramName, type);
+        genericParameters.put(paramName, genericType);
     }
 
     /**
@@ -79,6 +81,13 @@ class ExecutableElementParamInfo {
      */
     Map<String, Object> getParameters() {
         return Collections.unmodifiableMap(parameters);
+    }
+
+    /**
+     * @return The generic parameters
+     */
+    Map<String, Object> getGenericParameters() {
+        return Collections.unmodifiableMap(genericParameters);
     }
 
     /**

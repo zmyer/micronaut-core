@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.client;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.EachProperty;
 import io.micronaut.context.annotation.Parameter;
 import io.micronaut.core.util.CollectionUtils;
+import io.micronaut.http.ssl.SslConfiguration;
 import io.micronaut.runtime.ApplicationConfiguration;
 
+import javax.annotation.Nullable;
 import java.net.URI;
 import java.time.Duration;
 import java.util.Collections;
@@ -75,15 +76,24 @@ public class ServiceHttpClientConfiguration extends HttpClientConfiguration {
      *
      * @param serviceId The service id
      * @param connectionPoolConfiguration The connection pool configuration
+     * @param sslConfiguration The SSL configuration
      * @param applicationConfiguration The application configuration
      */
     public ServiceHttpClientConfiguration(
             @Parameter String serviceId,
-            ServiceConnectionPoolConfiguration connectionPoolConfiguration,
+            @Nullable ServiceConnectionPoolConfiguration connectionPoolConfiguration,
+            @Nullable ServiceSslClientConfiguration sslConfiguration,
             ApplicationConfiguration applicationConfiguration) {
         super(applicationConfiguration);
         this.serviceId = serviceId;
-        this.connectionPoolConfiguration = connectionPoolConfiguration;
+        if (sslConfiguration != null) {
+            setSslConfiguration(sslConfiguration);
+        }
+        if (connectionPoolConfiguration != null) {
+            this.connectionPoolConfiguration = connectionPoolConfiguration;
+        } else {
+            this.connectionPoolConfiguration = new ServiceConnectionPoolConfiguration();
+        }
     }
 
     /**
@@ -211,4 +221,67 @@ public class ServiceHttpClientConfiguration extends HttpClientConfiguration {
     public static class ServiceConnectionPoolConfiguration extends ConnectionPoolConfiguration {
     }
 
+    /**
+     * The default connection pool configuration.
+     */
+    @ConfigurationProperties("ssl")
+    public static class ServiceSslClientConfiguration extends SslConfiguration {
+
+        /**
+         * Sets the key configuration.
+         *
+         * @param keyConfiguration The key configuration.
+         */
+        void setKey(@Nullable DefaultKeyConfiguration keyConfiguration) {
+            if (keyConfiguration != null) {
+                super.setKey(keyConfiguration);
+            }
+        }
+
+        /**
+         * Sets the key store.
+         *
+         * @param keyStoreConfiguration The key store configuration
+         */
+        void setKeyStore(@Nullable DefaultKeyStoreConfiguration keyStoreConfiguration) {
+            if (keyStoreConfiguration != null) {
+                super.setKeyStore(keyStoreConfiguration);
+            }
+        }
+
+        /**
+         * Sets trust store configuration.
+         *
+         * @param trustStore The trust store configuration
+         */
+        void setTrustStore(@Nullable DefaultTrustStoreConfiguration trustStore) {
+            if (trustStore != null) {
+                super.setTrustStore(trustStore);
+            }
+        }
+
+        /**
+         * The default {@link io.micronaut.http.ssl.SslConfiguration.KeyConfiguration}.
+         */
+        @SuppressWarnings("WeakerAccess")
+        @ConfigurationProperties(SslConfiguration.KeyConfiguration.PREFIX)
+        public static class DefaultKeyConfiguration extends SslConfiguration.KeyConfiguration {
+        }
+
+        /**
+         * The default {@link io.micronaut.http.ssl.SslConfiguration.KeyStoreConfiguration}.
+         */
+        @SuppressWarnings("WeakerAccess")
+        @ConfigurationProperties(SslConfiguration.KeyStoreConfiguration.PREFIX)
+        public static class DefaultKeyStoreConfiguration extends SslConfiguration.KeyStoreConfiguration {
+        }
+
+        /**
+         * The default {@link io.micronaut.http.ssl.SslConfiguration.TrustStoreConfiguration}.
+         */
+        @SuppressWarnings("WeakerAccess")
+        @ConfigurationProperties(SslConfiguration.TrustStoreConfiguration.PREFIX)
+        public static class DefaultTrustStoreConfiguration extends SslConfiguration.TrustStoreConfiguration {
+        }
+    }
 }

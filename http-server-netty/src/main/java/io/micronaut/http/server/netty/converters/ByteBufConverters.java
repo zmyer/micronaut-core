@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.server.netty.converters;
 
-import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.convert.TypeConverter;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.CompositeByteBuf;
+import io.netty.buffer.Unpooled;
 
 import javax.inject.Singleton;
 import java.util.Optional;
@@ -42,7 +41,6 @@ public class ByteBufConverters {
      * @return A converter that converts bytebufs to strings
      */
     @Singleton
-    @Bean
     TypeConverter<ByteBuf, CharSequence> byteBufCharSequenceTypeConverter() {
         return (object, targetType, context) -> Optional.of(object.toString(context.getCharset()));
     }
@@ -51,7 +49,6 @@ public class ByteBufConverters {
      * @return A converter that converts composite bytebufs to strings
      */
     @Singleton
-    @Bean
     TypeConverter<CompositeByteBuf, CharSequence> compositeByteBufCharSequenceTypeConverter() {
         return (object, targetType, context) -> Optional.of(object.toString(context.getCharset()));
     }
@@ -60,16 +57,22 @@ public class ByteBufConverters {
      * @return A converter that converts bytebufs to byte arrays
      */
     @Singleton
-    @Bean
     TypeConverter<ByteBuf, byte[]> byteBufToArrayTypeConverter() {
         return (object, targetType, context) -> Optional.of(ByteBufUtil.getBytes(object));
+    }
+
+    /**
+     * @return A converter that converts bytebufs to byte arrays
+     */
+    @Singleton
+    TypeConverter<byte[], ByteBuf> byteArrayToByteBuffTypeConverter() {
+        return (object, targetType, context) -> Optional.of(Unpooled.wrappedBuffer(object));
     }
 
     /**
      * @return A converter that converts composite bytebufs to byte arrays
      */
     @Singleton
-    @Bean
     TypeConverter<CompositeByteBuf, byte[]> compositeByteBufTypeConverter() {
         return (object, targetType, context) -> Optional.of(ByteBufUtil.getBytes(object));
     }

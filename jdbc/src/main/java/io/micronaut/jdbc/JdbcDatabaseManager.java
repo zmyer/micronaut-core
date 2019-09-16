@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.jdbc;
 
 import io.micronaut.core.reflect.ClassUtils;
@@ -68,7 +67,7 @@ public class JdbcDatabaseManager {
     public static Optional<JdbcDatabase> findDatabase(String jdbcUrl) {
         if (StringUtils.isNotEmpty(jdbcUrl)) {
             if (!jdbcUrl.startsWith("jdbc")) {
-                throw new IllegalArgumentException("JDBC URLs must start with 'jdbc'");
+                throw new IllegalArgumentException("Invalid JDBC URL [" + jdbcUrl + "]. JDBC URLs must start with 'jdbc'.");
             }
             String partialUrl = jdbcUrl.substring(5);
             String prefix = partialUrl.substring(0, partialUrl.indexOf(':')).toLowerCase();

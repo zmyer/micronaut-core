@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.core.convert;
 
 import io.micronaut.core.annotation.AnnotationMetadataProvider;
 import io.micronaut.core.type.Argument;
 import io.micronaut.core.type.TypeVariableResolver;
+import io.micronaut.core.util.ArgumentUtils;
 import io.micronaut.core.util.ArrayUtils;
 
 import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A conversion context is a context object supplied to a {@link TypeConverter} that allows more accurate conversion.
@@ -111,6 +108,11 @@ public interface ConversionContext extends AnnotationMetadataProvider, TypeVaria
             public Iterator<ConversionError> iterator() {
                 return thisContext.iterator();
             }
+
+            @Override
+            public Optional<ConversionError> getLastError() {
+                return thisContext.getLastError();
+            }
         };
     }
 
@@ -151,6 +153,7 @@ public interface ConversionContext extends AnnotationMetadataProvider, TypeVaria
      * @return The conversion context
      */
     static <T> ArgumentConversionContext<T> of(Class<T> argument) {
+        ArgumentUtils.requireNonNull("argument", argument);
         return of(Argument.of(argument), null, null);
     }
 
@@ -176,6 +179,7 @@ public interface ConversionContext extends AnnotationMetadataProvider, TypeVaria
      * @return The conversion context
      */
     static <T> ArgumentConversionContext<T> of(Argument<T> argument, @Nullable Locale locale, @Nullable Charset charset) {
+        ArgumentUtils.requireNonNull("argument", argument);
         Charset finalCharset = charset != null ? charset : StandardCharsets.UTF_8;
         Locale finalLocale = locale != null ? locale : Locale.getDefault();
         return new DefaultArgumentConversionContext<>(argument, finalLocale, finalCharset);

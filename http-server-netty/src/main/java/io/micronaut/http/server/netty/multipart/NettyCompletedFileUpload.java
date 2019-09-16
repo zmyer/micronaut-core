@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.server.netty.multipart;
 
 import io.micronaut.core.annotation.Internal;
@@ -33,19 +32,31 @@ import java.util.Optional;
  * A Netty implementation of {@link CompletedFileUpload}.
  *
  * @author Zachary Klein
- * @since 1.0
+ * @since 1.0.0
  */
 @Internal
 public class NettyCompletedFileUpload implements CompletedFileUpload {
 
     private final FileUpload fileUpload;
+    private final boolean controlRelease;
 
     /**
      * @param fileUpload The file upload
      */
     public NettyCompletedFileUpload(FileUpload fileUpload) {
+        this(fileUpload, true);
+    }
+
+    /**
+     * @param fileUpload The file upload
+     * @param controlRelease If true, release after retrieving the data
+     */
+    public NettyCompletedFileUpload(FileUpload fileUpload, boolean controlRelease) {
         this.fileUpload = fileUpload;
-        fileUpload.retain();
+        this.controlRelease = controlRelease;
+        if (controlRelease) {
+            fileUpload.retain();
+        }
     }
 
     /**
@@ -59,7 +70,7 @@ public class NettyCompletedFileUpload implements CompletedFileUpload {
      */
     @Override
     public InputStream getInputStream() throws IOException {
-        return new ByteBufInputStream(fileUpload.getByteBuf(), true);
+        return new ByteBufInputStream(fileUpload.getByteBuf(), controlRelease);
     }
 
     /**
@@ -77,7 +88,9 @@ public class NettyCompletedFileUpload implements CompletedFileUpload {
         try {
             return ByteBufUtil.getBytes(byteBuf);
         } finally {
-            byteBuf.release();
+            if (controlRelease) {
+                byteBuf.release();
+            }
         }
     }
 
@@ -96,7 +109,9 @@ public class NettyCompletedFileUpload implements CompletedFileUpload {
         try {
             return byteBuf.nioBuffer();
         } finally {
-            byteBuf.release();
+            if (controlRelease) {
+                byteBuf.release();
+            }
         }
     }
 
@@ -118,6 +133,11 @@ public class NettyCompletedFileUpload implements CompletedFileUpload {
     @Override
     public long getSize() {
         return fileUpload.length();
+    }
+
+    @Override
+    public long getDefinedSize() {
+        return fileUpload.definedLength();
     }
 
     @Override

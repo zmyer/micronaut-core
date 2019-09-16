@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.client;
 
 import io.micronaut.core.annotation.Internal;
@@ -73,6 +72,11 @@ public class NettyClientHttpRequestFactory implements HttpRequestFactory {
     @Override
     public <T> MutableHttpRequest<T> create(HttpMethod httpMethod, String uri) {
         return new NettyClientHttpRequest<>(httpMethod, uri);
+    }
+
+    @Override
+    public <T> MutableHttpRequest<T> create(HttpMethod httpMethod, String uri, String httpMethodName) {
+        return new NettyClientHttpRequest<>(httpMethod, uri, httpMethodName);
     }
 
     @SuppressWarnings("unchecked")

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.jackson.convert;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -21,6 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micronaut.core.convert.ConversionContext;
 import io.micronaut.core.convert.TypeConverter;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.util.Optional;
 
@@ -33,19 +34,29 @@ import java.util.Optional;
 @Singleton
 public class ObjectToJsonNodeConverter implements TypeConverter<Object, JsonNode> {
 
-    private final ObjectMapper objectMapper;
+    private final Provider<ObjectMapper> objectMapper;
 
     /**
      * @param objectMapper To read/write JSON
+     * @deprecated Use {@link #ObjectToJsonNodeConverter(Provider)} instead
      */
+    @Deprecated
     public ObjectToJsonNodeConverter(ObjectMapper objectMapper) {
+        this(() -> objectMapper);
+    }
+
+    /**
+     * @param objectMapper The object mapper provider to read/write JSON
+     */
+    @Inject
+    public ObjectToJsonNodeConverter(Provider<ObjectMapper> objectMapper) {
         this.objectMapper = objectMapper;
     }
 
     @Override
     public Optional<JsonNode> convert(Object object, Class<JsonNode> targetType, ConversionContext context) {
         try {
-            return Optional.of(objectMapper.valueToTree(object));
+            return Optional.of(objectMapper.get().valueToTree(object));
         } catch (IllegalArgumentException e) {
             context.reject(e);
             return Optional.empty();

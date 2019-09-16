@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -116,12 +116,12 @@ class CustomStaticMappingGlobalSpec extends AbstractMicronautSpec {
         }
 
         @Error(status = HttpStatus.BAD_REQUEST, global = true)
-        HttpResponse badHandler() {
+        HttpResponse badHandler(HttpRequest request) {
             HttpResponse.status(HttpStatus.BAD_REQUEST, "You sent me bad stuff - from Test2Controller.badHandler()")
         }
 
         @Error(status = HttpStatus.NOT_FOUND, global = true)
-        HttpResponse notFoundHandler() {
+        HttpResponse notFoundHandler(HttpRequest request) {
             HttpResponse.status(HttpStatus.NOT_FOUND, "We cannot find anything - from Test2Controller.notFoundHandler()")
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.inject.processing;
 
 import javax.lang.model.element.*;
@@ -81,6 +80,16 @@ public class JavaModelUtils {
      */
     public static boolean isClass(Element element) {
         return resolveKind(element, ElementKind.CLASS).isPresent();
+    }
+
+    /**
+     * Whether the given element is an enum.
+     *
+     * @param element The element
+     * @return True if it is
+     */
+    public static boolean isEnum(Element element) {
+        return resolveKind(element, ElementKind.ENUM).isPresent();
     }
 
     /**

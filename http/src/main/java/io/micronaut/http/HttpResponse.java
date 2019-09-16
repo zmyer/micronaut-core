@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http;
 
 import io.micronaut.http.exceptions.UriSyntaxException;
@@ -176,8 +175,19 @@ public interface HttpResponse<B> extends HttpMessage<B> {
      * @return The response
      */
     static <T> MutableHttpResponse<T> notAllowed(Set<HttpMethod> allowed) {
+        return notAllowedGeneric(allowed);
+    }
+
+    /**
+     * Return an {@link io.micronaut.http.HttpStatus#METHOD_NOT_ALLOWED} response with an empty body.
+     *
+     * @param allowed Allowed Http Methods
+     * @param <T>     The response type
+     * @return The response
+     */
+    static <T> MutableHttpResponse<T> notAllowedGeneric(Set<? extends CharSequence> allowed) {
         return HttpResponseFactory.INSTANCE.<T>status(HttpStatus.METHOD_NOT_ALLOWED)
-            .headers((headers) -> headers.allow(allowed));
+                .headers((headers) -> headers.allowGeneric(allowed));
     }
 
     /**

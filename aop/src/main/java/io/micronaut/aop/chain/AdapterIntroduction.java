@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.aop.chain;
 
 import io.micronaut.aop.Adapter;
@@ -26,9 +25,7 @@ import io.micronaut.inject.ExecutableMethod;
 import io.micronaut.inject.ExecutionHandle;
 import io.micronaut.inject.qualifiers.Qualifiers;
 
-import static io.micronaut.aop.Adapter.InternalAttributes.ADAPTED_BEAN;
-import static io.micronaut.aop.Adapter.InternalAttributes.ADAPTED_METHOD;
-import static io.micronaut.aop.Adapter.InternalAttributes.ADAPTED_QUALIFIER;
+import static io.micronaut.aop.Adapter.InternalAttributes.*;
 
 /**
  * Internal class that implements introduction advice for the {@link io.micronaut.aop.Adapter} annotation.
@@ -48,31 +45,33 @@ final class AdapterIntroduction implements MethodInterceptor<Object, Object> {
      * @param method The target method
      */
     AdapterIntroduction(BeanContext beanContext, ExecutableMethod<?, ?> method) {
-        Class<?> beanType = method.getValue(Adapter.class, ADAPTED_BEAN, Class.class).orElse(null);
-        String beanMethod  = method.getValue(Adapter.class, ADAPTED_METHOD, String.class).orElse(null);
-        String beanQualifier  = method.getValue(Adapter.class, ADAPTED_QUALIFIER, String.class).orElse(null);
+        Class<?> beanType = method.classValue(Adapter.class, ADAPTED_BEAN).orElse(null);
+        String beanMethod  = method.stringValue(Adapter.class, ADAPTED_METHOD).orElse(null);
+        String beanQualifier  = method.stringValue(Adapter.class, ADAPTED_QUALIFIER).orElse(null);
+        Class[] argumentTypes = method.classValues(Adapter.class, ADAPTED_ARGUMENT_TYPES);
 
         if (beanType == null) {
             throw new IllegalStateException("No bean type to adapt found in Adapter configuration for method: " + method);
         }
 
         if (StringUtils.isEmpty(beanMethod)) {
-            throw new IllegalStateException("No bean bean method to adapt found in Adapter configuration for method: " + method);
+            throw new IllegalStateException("No bean method to adapt found in Adapter configuration for method: " + method);
         }
 
+        Class[] methodArgumentTypes = method.getArgumentTypes();
         if (StringUtils.isNotEmpty(beanQualifier)) {
             this.executionHandle = beanContext.findExecutionHandle(
                     beanType,
                     Qualifiers.byName(beanQualifier),
                     beanMethod,
-                    method.getArgumentTypes()
+                    argumentTypes.length == methodArgumentTypes.length ? argumentTypes : methodArgumentTypes
             ).orElseThrow(() -> new IllegalStateException("Cannot adapt method [" + method + "]. Target method [" + beanMethod + "] not found on bean " + beanType));
 
         } else {
             this.executionHandle = beanContext.findExecutionHandle(
                     beanType,
                     beanMethod,
-                    method.getArgumentTypes()
+                    argumentTypes.length == methodArgumentTypes.length  ? argumentTypes : methodArgumentTypes
             ).orElseThrow(() -> new IllegalStateException("Cannot adapt method [" + method + "]. Target method [" + beanMethod + "] not found on bean " + beanType));
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.discovery.client;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  *  Helpers to reduce redundant code between different Client implementations.
@@ -29,13 +26,14 @@ public class ClientUtil {
      * Calculates property source names. This is used across several clients to make naming consistent.
      * @param prefix fullName or prefix to the environment, or application specific configuration
      * @param activeNames active environments which configurations can be created for
+     * @param separator The separator string
      * @return Set of names to be used for each PropertySource
      */
-    public static Set<String> calcPropertySourceNames(String prefix, Set<String> activeNames) {
+    public static Set<String> calcPropertySourceNames(String prefix, Collection<String> activeNames, String separator) {
         Set<String> propertySourceNames;
-        if (prefix.indexOf('_') > -1) {
+        if (prefix.contains(separator)) {
 
-            String[] tokens = prefix.split("_");
+            String[] tokens = prefix.split(separator);
             if (tokens.length == 1) {
                 propertySourceNames = Collections.singleton(tokens[0]);
             } else {
@@ -54,6 +52,25 @@ public class ClientUtil {
             propertySourceNames = Collections.singleton(prefix);
         }
         return propertySourceNames;
+    }
+
+    /**
+     * Resolves the environment from a property source name created
+     * by {@link #calcPropertySourceNames(String, Collection, String)}.
+     *
+     * @param fileName The property source name
+     * @param activeNames The active environments
+     * @return The environment name
+     */
+    public static String resolveEnvironment(String fileName, Collection<String> activeNames) {
+        if (fileName.endsWith("]")) {
+            int envIdx = fileName.indexOf('[') + 1;
+            String envName = fileName.substring(envIdx, fileName.length() - 1);
+            if (activeNames.contains(envName)) {
+                return envName;
+            }
+        }
+        return null;
     }
 
 }

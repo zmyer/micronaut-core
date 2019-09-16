@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.inject.ast;
 
 import io.micronaut.core.naming.NameUtils;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import io.micronaut.core.util.ArgumentUtils;
+import javax.annotation.Nonnull;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Stores data about an element that references a class.
@@ -42,6 +39,24 @@ public interface ClassElement extends TypedElement {
     boolean isAssignable(String type);
 
     /**
+     * Whether this element is an enum.
+     * @return True if it is an enum
+     */
+    default boolean isEnum() {
+        return this instanceof EnumElement;
+    }
+
+    /**
+     * Find and return a single primary constructor. If more than constructor candidate exists, then return empty unless a
+     * constructor is found that is annotated with either {@link io.micronaut.core.annotation.Creator} or {@link javax.inject.Inject}.
+     *
+     * @return The primary constructor if one is present
+     */
+    default @Nonnull Optional<ConstructorElement> getPrimaryConstructor() {
+        return Optional.empty();
+    }
+
+    /**
      * Returns the super type of this element or empty if the element has no super type.
      *
      * @return An optional of the super type
@@ -50,7 +65,7 @@ public interface ClassElement extends TypedElement {
         return Optional.empty();
     }
 
-    @Nullable
+    @Nonnull
     @Override
     default ClassElement getType() {
         return this;
@@ -85,6 +100,25 @@ public interface ClassElement extends TypedElement {
     }
 
     /**
+     * Return all the fields of this class element.
+     *
+     * @return The fields
+     */
+    default List<FieldElement> getFields() {
+        return getFields((modifiers) -> true);
+    }
+
+    /**
+     * Return fields contained with the given modifiers include / exclude rules.
+     *
+     * @param modifierFilter Can be used to filter fields by modifier
+     * @return The fields
+     */
+    default List<FieldElement> getFields(@Nonnull Predicate<Set<ElementModifier>> modifierFilter) {
+        return Collections.emptyList();
+    }
+
+    /**
      * @return Whether the class element is abstract
      */
     default boolean isAbstract() {
@@ -103,6 +137,7 @@ public interface ClassElement extends TypedElement {
      *
      * @return True if this class element is an array
      */
+    @Override
     default boolean isArray() {
         return false;
     }
@@ -115,9 +150,31 @@ public interface ClassElement extends TypedElement {
     }
 
     /**
+     * Get the type arguments for the given type name.
+     *
+     * @param type The type to retrieve type arguments for
+     * @return The type arguments for this class element
+     * @since 1.1.1
+     */
+    default @Nonnull Map<String, ClassElement> getTypeArguments(@Nonnull String type) {
+        return Collections.emptyMap();
+    }
+
+    /**
+     * Get the type arguments for the given type name.
+     *
+     * @param type The type to retrieve type arguments for
      * @return The type arguments for this class element
      */
-    default Map<String, ClassElement> getTypeArguments() {
+    default @Nonnull Map<String, ClassElement> getTypeArguments(@Nonnull Class<?> type) {
+        ArgumentUtils.requireNonNull("type", type);
+        return getTypeArguments(type.getName());
+    }
+
+    /**
+     * @return The type arguments for this class element
+     */
+    default @Nonnull Map<String, ClassElement> getTypeArguments() {
         return Collections.emptyMap();
     }
 
@@ -137,4 +194,5 @@ public interface ClassElement extends TypedElement {
     default boolean isAssignable(Class<?> type) {
         return isAssignable(type.getName());
     }
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -130,7 +130,21 @@ class ExecutorServiceConfigSpec extends Specification {
         then:
         executorServices.size() == 4
         moreConfigs.size() == 4
-        configs.size() == 4
+        configs.size() == 2
+
+        when:
+        if(invalidateCache) {
+            ctx.invalidateCaches()
+        }
+
+        def secondResolveExecutors = ctx.getBeansOfType(ExecutorService.class)
+        def secondResolveExecutorConfig = ctx.getBeansOfType(ExecutorConfiguration.class)
+
+        then:
+        secondResolveExecutors.size() == executorServices.size()
+        secondResolveExecutorConfig.size() == moreConfigs.size()
+        executorServices.containsAll(secondResolveExecutors)
+        moreConfigs.containsAll(secondResolveExecutorConfig)
 
         where:
         invalidateCache | environment
@@ -167,7 +181,7 @@ class ExecutorServiceConfigSpec extends Specification {
         then:
         executorServices.size() == 3
         moreConfigs.size() == 3
-        configs.size() == 3
+        configs.size() == 2
 
         where:
         invalidateCache | environment

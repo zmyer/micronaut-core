@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.server.cors;
 
 import io.micronaut.core.convert.ConversionContext;
@@ -24,7 +23,6 @@ import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpMethod;
 
 import javax.inject.Singleton;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -53,19 +51,19 @@ public class CorsOriginConverter implements TypeConverter<Object, CorsOriginConf
             ConvertibleValues<Object> convertibleValues = new ConvertibleValuesMap<>(mapConfig);
 
             convertibleValues
-                .get(ALLOWED_ORIGINS, Argument.of(List.class, String.class))
+                .get(ALLOWED_ORIGINS, Argument.listOf(String.class))
                 .ifPresent(configuration::setAllowedOrigins);
 
             convertibleValues
-                .get(ALLOWED_METHODS, Argument.of(List.class, HttpMethod.class))
+                .get(ALLOWED_METHODS, Argument.listOf(HttpMethod.class))
                 .ifPresent(configuration::setAllowedMethods);
 
             convertibleValues
-                .get(ALLOWED_HEADERS, Argument.of(List.class, String.class))
+                .get(ALLOWED_HEADERS, Argument.listOf(String.class))
                 .ifPresent(configuration::setAllowedHeaders);
 
             convertibleValues
-                .get(EXPOSED_HEADERS, Argument.of(List.class, String.class))
+                .get(EXPOSED_HEADERS, Argument.listOf(String.class))
                 .ifPresent(configuration::setExposedHeaders);
 
             convertibleValues

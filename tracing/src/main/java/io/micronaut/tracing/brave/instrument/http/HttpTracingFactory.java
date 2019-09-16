@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.tracing.brave.instrument.http;
 
 import brave.Tracing;
 import brave.http.*;
-import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.http.HttpAttributes;
@@ -48,7 +46,6 @@ public class HttpTracingFactory {
      * @param tracing The {@link Tracing} bean
      * @return The {@link HttpTracing} bean
      */
-    @Bean
     @Singleton
     @Requires(missingBeans = HttpTracing.class)
     HttpTracing httpTracing(Tracing tracing) {
@@ -61,13 +58,12 @@ public class HttpTracingFactory {
      * @param httpTracing The {@link HttpTracing} bean
      * @return The {@link HttpClientHandler} bean
      */
-    @Bean
     @Singleton
     HttpClientHandler<HttpRequest<?>, HttpResponse<?>> httpClientHandler(HttpTracing httpTracing) {
         return HttpClientHandler.create(httpTracing, new HttpClientAdapter<HttpRequest<?>, HttpResponse<?>>() {
             @Override
             public String method(HttpRequest<?> request) {
-                return request.getMethod().name();
+                return request.getMethodName();
             }
 
             @Override
@@ -111,13 +107,12 @@ public class HttpTracingFactory {
      * @param httpTracing The {@link HttpTracing} bean
      * @return The {@link HttpServerHandler} bean
      */
-    @Bean
     @Singleton
     HttpServerHandler<HttpRequest<?>, HttpResponse<?>> httpServerHandler(HttpTracing httpTracing) {
         return HttpServerHandler.create(httpTracing, new HttpServerAdapter<HttpRequest<?>, HttpResponse<?>>() {
             @Override
             public String method(HttpRequest<?> request) {
-                return request.getMethod().name();
+                return request.getMethodName();
             }
 
             @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,18 +61,22 @@ class HttpStatusSpec extends Specification {
         uri                          | status              | description
         "/status/simple"             | HttpStatus.OK       | '200 status is returned by default'
         "/status"                    | HttpStatus.CREATED  | 'It is possible to control the status with @Status'
-        "/httpResponseStatus"        | HttpStatus.CREATED   | 'You can specify status with HttpResponse.status'
+        "/httpResponseStatus"        | HttpStatus.CREATED  | 'You can specify status with HttpResponse.status'
     }
 
     @Issue("https://github.com/micronaut-projects/micronaut-core/issues/866")
     void "Verify a controller can be annotated with @Status and void return"() {
-        given:
-        String uri = "/status/voidreturn"
         when:
         HttpResponse response = client.toBlocking().exchange(HttpRequest.GET(uri))
 
         then:
-        response.status == HttpStatus.CREATED
+        response.status == status
+
+        where:
+        uri                          | status
+        "/status/voidreturn"         | HttpStatus.CREATED
+        "/status/completableVoid"    | HttpStatus.CREATED
+        "/status/maybeVoid"          | HttpStatus.CREATED
     }
 
     void "Verify a controller can return HttpStatus"() {

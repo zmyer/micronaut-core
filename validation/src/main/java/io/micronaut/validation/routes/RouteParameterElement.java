@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.validation.routes;
 
 import io.micronaut.core.annotation.AnnotationMetadata;
@@ -22,7 +21,7 @@ import io.micronaut.core.bind.annotation.Bindable;
 import io.micronaut.inject.ast.ClassElement;
 import io.micronaut.inject.ast.ParameterElement;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * Models a route parameter.
@@ -41,7 +40,7 @@ class RouteParameterElement implements ParameterElement, AnnotationMetadataDeleg
      */
     RouteParameterElement(ParameterElement delegate) {
         this.delegate = delegate;
-        this.name = delegate.findAnnotation(Bindable.class).flatMap(av -> av.getValue(String.class)).orElse(delegate.getName());
+        this.name = delegate.stringValue(Bindable.class).orElse(delegate.getName());
     }
 
     @Override
@@ -49,7 +48,7 @@ class RouteParameterElement implements ParameterElement, AnnotationMetadataDeleg
         return delegate;
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public ClassElement getType() {
         return delegate.getType();

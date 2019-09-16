@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.multitenancy.tenantresolver;
 
 import io.micronaut.context.annotation.Requires;
+import io.micronaut.core.util.StringUtils;
 import io.micronaut.multitenancy.exceptions.TenantNotFoundException;
 
 import javax.inject.Singleton;
@@ -29,7 +29,7 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @Requires(beans = FixedTenantResolverConfiguration.class)
-@Requires(property = FixedTenantResolverConfigurationProperties.PREFIX + ".enabled")
+@Requires(property = FixedTenantResolverConfigurationProperties.PREFIX + ".enabled", value = StringUtils.TRUE, defaultValue = StringUtils.FALSE)
 @Singleton
 public class FixedTenantResolver implements TenantResolver {
 

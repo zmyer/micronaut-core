@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.runtime.context.scope.refresh;
 
 import io.micronaut.aop.InterceptedProxy;
@@ -23,6 +22,8 @@ import io.micronaut.context.BeanResolutionContext;
 import io.micronaut.context.LifeCycle;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.ConfigurationReader;
+import io.micronaut.context.annotation.Requires;
+import io.micronaut.context.env.Environment;
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.context.scope.CustomScope;
 import io.micronaut.core.util.ArrayUtils;
@@ -36,9 +37,7 @@ import io.micronaut.scheduling.TaskExecutors;
 import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -58,6 +57,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @since 1.0
  */
 @Singleton
+@Requires(notEnv = {Environment.FUNCTION, Environment.ANDROID})
 public class RefreshScope implements CustomScope<Refreshable>, LifeCycle<RefreshScope>, ApplicationEventListener<RefreshEvent> {
 
     private final Map<String, BeanRegistration> refreshableBeans = new ConcurrentHashMap<>(10);
@@ -165,7 +165,7 @@ public class RefreshScope implements CustomScope<Refreshable>, LifeCycle<Refresh
             beanContext.getActiveBeanRegistrations(Qualifiers.byStereotype(ConfigurationProperties.class));
         for (BeanRegistration<?> registration : registrations) {
             BeanDefinition<?> definition = registration.getBeanDefinition();
-            Optional<String> value = definition.getValue(ConfigurationReader.class, "prefix", String.class);
+            Optional<String> value = definition.stringValue(ConfigurationReader.class, "prefix");
             if (value.isPresent()) {
                 String configPrefix = value.get();
                 if (keySet.stream().anyMatch(key -> key.startsWith(configPrefix))) {
@@ -187,20 +187,14 @@ public class RefreshScope implements CustomScope<Refreshable>, LifeCycle<Refresh
         for (String beanKey : refreshableBeans.keySet()) {
             BeanRegistration beanRegistration = refreshableBeans.get(beanKey);
             BeanDefinition definition = beanRegistration.getBeanDefinition();
-            Optional<String[]> opt = definition.getValue(Refreshable.class, String[].class);
-            if (opt.isPresent()) {
-                String[] strings = opt.get();
-                if (!ArrayUtils.isEmpty(strings)) {
-                    List<String> prefixes = Arrays.asList(strings);
-                    for (String prefix : prefixes) {
-                        for (String k : keys) {
-                            if (k.startsWith(prefix)) {
-                                disposeOfBean(beanKey);
-                            }
+            String[] strings = definition.stringValues(Refreshable.class);
+            if (!ArrayUtils.isEmpty(strings)) {
+                for (String prefix : strings) {
+                    for (String k : keys) {
+                        if (k.startsWith(prefix)) {
+                            disposeOfBean(beanKey);
                         }
                     }
-                } else {
-                    disposeOfBean(beanKey);
                 }
             } else {
                 disposeOfBean(beanKey);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -228,6 +228,8 @@ interface A {
         metadata != null
         !metadata.hasDeclaredAnnotation(Scope)
         metadata.hasDeclaredAnnotation(Singleton)
+        metadata.hasSimpleDeclaredAnnotation("Singleton")
+        metadata.hasSimpleAnnotation("Singleton")
         metadata.hasStereotype(Singleton)
         metadata.hasStereotype(Scope)
         metadata.getAnnotationNameByStereotype(Singleton).get() == 'javax.inject.Singleton'

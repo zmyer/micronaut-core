@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.discovery;
 
 import io.micronaut.core.naming.NameUtils;
 import io.micronaut.core.util.ArrayUtils;
 import io.reactivex.Flowable;
-import io.reactivex.Maybe;
+import io.reactivex.Single;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * A composite implementation combining all registered {@link DiscoveryClient} instances.
@@ -52,6 +51,14 @@ public abstract class CompositeDiscoveryClient implements DiscoveryClient {
         return toString();
     }
 
+    /**
+     * The underlying clients.
+     * @return The clients
+     */
+    public DiscoveryClient[] getDiscoveryClients() {
+        return discoveryClients;
+    }
+
     @Override
     public Flowable<List<ServiceInstance>> getInstances(String serviceId) {
         serviceId = NameUtils.hyphenate(serviceId);
@@ -59,11 +66,12 @@ public abstract class CompositeDiscoveryClient implements DiscoveryClient {
             return Flowable.just(Collections.emptyList());
         }
         String finalServiceId = serviceId;
-        Stream<Flowable<List<ServiceInstance>>> flowableStream = Arrays.stream(discoveryClients).map(client -> Flowable.fromPublisher(client.getInstances(finalServiceId)));
-        Maybe<List<ServiceInstance>> reduced = Flowable.merge(flowableStream.collect(Collectors.toList())).reduce((instances, otherInstances) -> {
-            instances.addAll(otherInstances);
-            return instances;
-        });
+        Single<List<ServiceInstance>> reduced = Flowable.fromArray(discoveryClients)
+                .flatMap(client -> client.getInstances(finalServiceId))
+                .reduce(new ArrayList<>(), (instances, otherInstances) -> {
+                    instances.addAll(otherInstances);
+                    return instances;
+                });
         return reduced.toFlowable();
     }
 
@@ -72,11 +80,12 @@ public abstract class CompositeDiscoveryClient implements DiscoveryClient {
         if (ArrayUtils.isEmpty(discoveryClients)) {
             return Flowable.just(Collections.emptyList());
         }
-        Stream<Flowable<List<String>>> flowableStream = Arrays.stream(discoveryClients).map(client -> Flowable.fromPublisher(client.getServiceIds()));
-        Maybe<List<String>> reduced = Flowable.merge(flowableStream.collect(Collectors.toList())).reduce((strings, strings2) -> {
-            strings.addAll(strings2);
-            return strings;
-        });
+        Single<List<String>> reduced = Flowable.fromArray(discoveryClients)
+                .flatMap(DiscoveryClient::getServiceIds)
+                .reduce(new ArrayList<>(), (serviceIds, otherServiceIds) -> {
+                    serviceIds.addAll(otherServiceIds);
+                    return serviceIds;
+                });
         return reduced.toFlowable();
     }
 

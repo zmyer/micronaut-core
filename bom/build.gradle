@@ -7,9 +7,8 @@ publishing {
                 def profiles = new Properties()
                 profiles.load(new StringReader(new File("$projectDir/profiles.properties").text))
 
-                def configurations = new Properties()
-                configurations.load(new StringReader(new File("$projectDir/configurations.properties").text))
-
+                boolean micronautSnapshot = rootProject.version.toString().endsWith("-SNAPSHOT")
+                
                 xml.children().last() + {
                     def mkp = delegate
 
@@ -17,7 +16,7 @@ publishing {
                     mkp.properties {
                         for(dep in dependencyVersions) {
                             def v = dep.value.version
-                            if(!v.toString().endsWith("-SNAPSHOT")) {
+                            if(!v.toString().endsWith("-SNAPSHOT") || micronautSnapshot) {
                                 mkp."${dep.key}.version"(v)
                             }
                         }
@@ -38,18 +37,6 @@ publishing {
                                 }
                             }
 
-                            for (configuration in configurations) {
-                                mkp.dependency {
-                                    mkp.groupId 'io.micronaut.configuration'
-                                    mkp.artifactId "micronaut-${configuration.key}"
-                                    def version = configuration.value
-                                    if (!isBuildSnapshot && version.toString().endsWith("-SNAPSHOT")) {
-                                        throw new RuntimeException("Cannot have a snapshot dependency on a configuration [$configuration.key] for a release!")
-                                    }
-                                    mkp.version(version)
-                                }
-                            }
-
                             for (Project p : rootProject.subprojects) {
                                 if (!p.subprojects.empty) continue
                                 if (p.name == "bom") continue
@@ -65,7 +52,7 @@ publishing {
                             for (dep in dependencyVersions) {
                                 def info = dep.value
                                 // don't include snapshots
-                                if(info.version.toString().endsWith("-SNAPSHOT")) {
+                                if(info.version.toString().endsWith("-SNAPSHOT") && !micronautSnapshot) {
                                     continue
                                 }
 

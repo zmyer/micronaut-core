@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.context;
 
 import io.micronaut.context.env.Environment;
@@ -46,6 +45,7 @@ public abstract class AbstractExecutableMethod extends AbstractExecutable implem
 
     private final ReturnType returnType;
     private final Argument<?> genericReturnType;
+    private final int hashCode;
     private Environment environment;
     private AnnotationMetadata methodAnnotationMetadata;
 
@@ -63,7 +63,9 @@ public abstract class AbstractExecutableMethod extends AbstractExecutable implem
         super(declaringType, methodName, arguments);
         this.genericReturnType = genericReturnType;
         this.returnType = new ReturnTypeImpl();
-
+        int result = Objects.hash(declaringType, methodName);
+        result = 31 * result + Arrays.hashCode(argTypes);
+        this.hashCode = result;
     }
 
     /**
@@ -108,9 +110,7 @@ public abstract class AbstractExecutableMethod extends AbstractExecutable implem
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(declaringType, methodName);
-        result = 31 * result + Arrays.hashCode(argTypes);
-        return result;
+        return hashCode;
     }
 
     @Override

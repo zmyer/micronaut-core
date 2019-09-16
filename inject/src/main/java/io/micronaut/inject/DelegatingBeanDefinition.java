@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.inject;
 
 import io.micronaut.context.BeanContext;
 import io.micronaut.context.BeanResolutionContext;
 import io.micronaut.core.annotation.AnnotationMetadata;
+import io.micronaut.core.type.Argument;
 
+import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -153,5 +155,15 @@ public interface DelegatingBeanDefinition<T> extends BeanDefinition<T> {
     @Override
     default boolean isEnabled(BeanContext context) {
         return getTarget().isEnabled(context);
+    }
+
+    @Override
+    default Optional<Class<?>> getDeclaringType() {
+        return getTarget().getDeclaringType();
+    }
+
+    @Override
+    default @Nonnull List<Argument<?>> getTypeArguments(String type) {
+        return getTarget().getTypeArguments(type);
     }
 }

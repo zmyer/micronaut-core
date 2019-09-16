@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,20 +37,21 @@ import javax.inject.Singleton
  */
 @Retry
 class ClientScopeSpec extends Specification {
+
     @Shared int port = SocketUtils.findAvailableTcpPort()
 
     @Shared
     @AutoCleanup
     ApplicationContext context = ApplicationContext.run(
+            'from.config': '/',
             'micronaut.server.port':port,
-            'micronaut.http.clients.myService.url': "http://localhost:$port"
+            'micronaut.http.services.my-service.url': "http://localhost:$port"
     )
 
-    @AutoCleanup
     @Shared
     EmbeddedServer embeddedServer = context.getBean(EmbeddedServer).start()
 
-    void "test client scope annotation"() {
+    void "test client scope annotation method injection"() {
         given:
         MyService myService = context.getBean(MyService)
 
@@ -62,6 +63,39 @@ class ClientScopeSpec extends Specification {
         myJavaService.rxHttpClient == myService.rxHttpClient
     }
 
+    void "test client scope annotation field injection"() {
+        given:
+        MyServiceField myService = context.getBean(MyServiceField)
+
+        MyJavaService myJavaService = context.getBean(MyJavaService)
+
+        expect:
+        myService.get() == 'success'
+        myJavaService.client == myService.client
+        myJavaService.rxHttpClient == myService.rxHttpClient
+    }
+
+    void "test client scope annotation constructor injection"() {
+        given:
+        MyServiceConstructor myService = context.getBean(MyServiceConstructor)
+
+        MyJavaService myJavaService = context.getBean(MyJavaService)
+
+        expect:
+        myService.get() == 'success'
+        myJavaService.client == myService.client
+        myJavaService.rxHttpClient == myService.rxHttpClient
+    }
+
+    void "test client scope with path in annotation"() {
+        given:
+        MyService myService = context.getBean(MyService)
+        MyServiceField myServiceField = context.getBean(MyServiceField)
+
+        expect:
+        myService.getPath() == 'success'
+        myServiceField.getPath() == 'success'
+    }
 
     @Controller('/scope')
     static class ScopeController {
@@ -73,12 +107,63 @@ class ClientScopeSpec extends Specification {
 
     @Singleton
     static class MyService {
-        @Inject @Client('/')
+
+        @Inject @Client('${from.config}')
         HttpClient client
 
-        @Inject @Client('/')
+        @Inject @Client('${from.config}')
         RxHttpClient rxHttpClient
 
+        @Inject @Client(id = 'myService', path = '/scope')
+        RxHttpClient pathClient
+
+        String get() {
+            rxHttpClient != null
+            client.toBlocking().retrieve(
+                    HttpRequest.GET('/scope'), String
+            )
+        }
+
+        String getPath() {
+            pathClient.toBlocking().retrieve("/", String)
+        }
+    }
+
+    @Singleton
+    static class MyServiceField {
+
+        @Inject @Client('${from.config}')
+        protected HttpClient client
+
+        @Inject @Client('${from.config}')
+        protected RxHttpClient rxHttpClient
+
+        @Inject @Client(id = 'myService', path = '/scope')
+        protected RxHttpClient pathClient
+
+        String get() {
+            rxHttpClient != null
+            client.toBlocking().retrieve(
+                    HttpRequest.GET('/scope'), String
+            )
+        }
+
+        String getPath() {
+            pathClient.toBlocking().retrieve("/", String)
+        }
+    }
+
+    @Singleton
+    static class MyServiceConstructor {
+
+        private final HttpClient client
+        private final RxHttpClient rxHttpClient
+
+        MyServiceConstructor(@Client('${from.config}')HttpClient client,
+                             @Client('${from.config}') RxHttpClient rxHttpClient) {
+            this.rxHttpClient = rxHttpClient
+            this.client = client
+        }
 
         String get() {
             rxHttpClient != null
@@ -87,5 +172,4 @@ class ClientScopeSpec extends Specification {
             )
         }
     }
-
 }

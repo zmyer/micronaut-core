@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,6 +46,24 @@ class MediaTypeSpec extends Specification {
         "application/hal+xml"       | null  | null       | "application/hal+xml"  | 'xml'       | [:]                | 1.0     | 'hal+xml'  | "application"
         "application/json"          | null  | null       | "application/json"     | 'json'      | [:]                | 1.0     | 'json'     | "application"
         "text/html;charset=utf-8"   | null  | null       | "text/html"            | 'html'      | [charset: "utf-8"] | 1.0     | 'html'     | "text"
+    }
+
+    void "test equals case insensitive"() {
+        given:
+        MediaType mediaType1 = new MediaType("application/json")
+        MediaType mediaType2 = new MediaType("application/JSON")
+
+        expect:
+        mediaType1 == mediaType2
+    }
+
+    void "test equals ignores params"() {
+        given:
+        MediaType mediaType1 = new MediaType("application/json")
+        MediaType mediaType2 = new MediaType("application/json;charset=utf-8")
+
+        expect:
+        mediaType1 == mediaType2
     }
 
     @Unroll

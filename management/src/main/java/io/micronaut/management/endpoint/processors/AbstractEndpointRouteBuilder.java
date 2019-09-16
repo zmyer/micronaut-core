@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.management.endpoint.processors;
 
 import io.micronaut.context.ApplicationContext;
@@ -24,6 +23,7 @@ import io.micronaut.core.convert.ConversionService;
 import io.micronaut.core.naming.NameUtils;
 import io.micronaut.core.reflect.ClassLoadingReporter;
 import io.micronaut.core.type.Argument;
+import io.micronaut.core.util.StringUtils;
 import io.micronaut.http.uri.UriTemplate;
 import io.micronaut.inject.BeanDefinition;
 import io.micronaut.inject.ExecutableMethod;
@@ -119,7 +119,7 @@ abstract class AbstractEndpointRouteBuilder extends DefaultRouteBuilder implemen
             if (opt.isPresent()) {
                 BeanDefinition<?> beanDefinition = opt.get();
                 if (beanDefinition.hasStereotype(Endpoint.class)) {
-                    String id = beanDefinition.getValue(Endpoint.class, String.class).orElse(null);
+                    String id = beanDefinition.stringValue(Endpoint.class).orElse(null);
                     if (id == null || !ENDPOINT_ID_PATTERN.matcher(id).matches()) {
                         id = NameUtils.hyphenate(beanDefinition.getName());
                     }
@@ -149,17 +149,14 @@ abstract class AbstractEndpointRouteBuilder extends DefaultRouteBuilder implemen
 
     /**
      * @param id The route id
-     * @return {@link EndpointDefaultConfiguration#path} + resolved Uri based on UriNamingStrategy
+     * @return {@link EndpointDefaultConfiguration#getPath()} + resolved Uri based on UriNamingStrategy
      */
     String resolveUriByRouteId(String id) {
-        String uri = uriNamingStrategy.resolveUri(id);
-        if (endpointDefaultConfiguration.getPath().equals("/") && uri.charAt(0) == '/') {
-            return uri;
+        String path = StringUtils.prependUri(endpointDefaultConfiguration.getPath(), id);
+        if (path.charAt(0) == '/') {
+            path = path.substring(1);
         }
-        StringBuilder sb = new StringBuilder();
-        sb.append(endpointDefaultConfiguration.getPath());
-        sb.append(uri);
-        return sb.toString();
+        return uriNamingStrategy.resolveUri(path);
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.management.endpoint;
 
 import io.micronaut.context.processor.ExecutableMethodProcessor;
@@ -61,7 +60,7 @@ public class EndpointSensitivityProcessor implements ExecutableMethodProcessor<E
 
     @Override
     public void process(BeanDefinition<?> beanDefinition, ExecutableMethod<?, ?> method) {
-        Optional<String> optionalId = beanDefinition.getValue(Endpoint.class, String.class);
+        Optional<String> optionalId = beanDefinition.stringValue(Endpoint.class);
         optionalId.ifPresent((id) -> {
 
             EndpointConfiguration configuration = endpointConfigurations.stream()
@@ -71,9 +70,9 @@ public class EndpointSensitivityProcessor implements ExecutableMethodProcessor<E
 
             boolean sensitive = configuration
                 .isSensitive()
-                .orElseGet(() -> beanDefinition
-                    .getValue(Endpoint.class, "defaultSensitive", Boolean.class)
-                    .orElse(Endpoint.SENSITIVE));
+                .orElseGet(() -> beanDefinition.booleanValue(Endpoint.class, "defaultSensitive").orElseGet(() ->
+                        beanDefinition.getDefaultValue(Endpoint.class, "defaultSensitive", Boolean.class).orElse(Endpoint.SENSITIVE)
+                ));
 
             endpointMethods.put(method, sensitive);
         });

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.discovery.cloud.aws;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -32,12 +31,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
+import java.util.regex.Pattern;
 
-import static io.micronaut.discovery.cloud.ComputeInstanceMetadataResolverUtils.readMetadataUrl;
-
+import static io.micronaut.discovery.cloud.ComputeInstanceMetadataResolverUtils.*;
 /**
  * Resolves {@link ComputeInstanceMetadata} for Amazon EC2.
  *
@@ -52,6 +52,8 @@ public class AmazonComputeInstanceMetadataResolver implements ComputeInstanceMet
     private static final Logger LOG = LoggerFactory.getLogger(AmazonComputeInstanceMetadataResolver.class);
     private static final int READ_TIMEOUT_IN_MILLS = 5000;
     private static final int CONNECTION_TIMEOUT_IN_MILLS = 5000;
+
+    private static final Pattern DRIVE_LETTER_PATTERN = Pattern.compile("^\\/*[a-zA-z]:.*$");
 
     private final ObjectMapper objectMapper;
     private final AmazonMetadataConfiguration configuration;
@@ -92,23 +94,27 @@ public class AmazonComputeInstanceMetadataResolver implements ComputeInstanceMet
             String ec2InstanceMetadataURL = configuration.getMetadataUrl();
             JsonNode metadataJson = readMetadataUrl(new URL(ec2InstanceIdentityDocURL), CONNECTION_TIMEOUT_IN_MILLS, READ_TIMEOUT_IN_MILLS, objectMapper, new HashMap<>());
             if (metadataJson != null) {
-                ec2InstanceMetadata.setAccount(metadataJson.findValue(EC2MetadataKeys.accountId.name()).textValue());
-                ec2InstanceMetadata.setAvailabilityZone(metadataJson.findValue(EC2MetadataKeys.availabilityZone.name()).textValue());
-                ec2InstanceMetadata.setInstanceId(metadataJson.findValue(EC2MetadataKeys.instanceId.name()).textValue());
-                ec2InstanceMetadata.setMachineType(metadataJson.findValue(EC2MetadataKeys.instanceType.name()).textValue());
-                ec2InstanceMetadata.setRegion(metadataJson.findValue(EC2MetadataKeys.region.name()).textValue());
-                ec2InstanceMetadata.setPrivateIpV4(metadataJson.findValue("privateIp").textValue());
-                ec2InstanceMetadata.setImageId(metadataJson.findValue("imageId").textValue());
+                stringValue(metadataJson, EC2MetadataKeys.instanceId.name()).ifPresent(ec2InstanceMetadata::setInstanceId);
+                stringValue(metadataJson, EC2MetadataKeys.accountId.name()).ifPresent(ec2InstanceMetadata::setAccount);
+                stringValue(metadataJson, EC2MetadataKeys.availabilityZone.name()).ifPresent(ec2InstanceMetadata::setAvailabilityZone);
+                stringValue(metadataJson, EC2MetadataKeys.instanceType.name()).ifPresent(ec2InstanceMetadata::setMachineType);
+                stringValue(metadataJson, EC2MetadataKeys.region.name()).ifPresent(ec2InstanceMetadata::setRegion);
+                stringValue(metadataJson, "privateIp").ifPresent(ec2InstanceMetadata::setPrivateIpV4);
+                stringValue(metadataJson, "imageId").ifPresent(ec2InstanceMetadata::setImageId);
             }
             try {
                 ec2InstanceMetadata.setLocalHostname(readEc2MetadataUrl(new URL(ec2InstanceMetadataURL + EC2MetadataKeys.localHostname.getName()), CONNECTION_TIMEOUT_IN_MILLS, READ_TIMEOUT_IN_MILLS));
             } catch (IOException e) {
-                LOG.error("Error getting local hostname from url:" + ec2InstanceMetadataURL + EC2MetadataKeys.localHostname.name(), e);
+                if (LOG.isErrorEnabled()) {
+                    LOG.error("Error getting local hostname from url:" + ec2InstanceMetadataURL + EC2MetadataKeys.localHostname.name(), e);
+                }
             }
             try {
                 ec2InstanceMetadata.setPublicHostname(readEc2MetadataUrl(new URL(ec2InstanceMetadataURL + EC2MetadataKeys.publicHostname.getName()), CONNECTION_TIMEOUT_IN_MILLS, READ_TIMEOUT_IN_MILLS));
             } catch (IOException e) {
-                LOG.error("error getting public host name from:" + ec2InstanceMetadataURL + EC2MetadataKeys.publicHostname.name(), e);
+                if (LOG.isErrorEnabled()) {
+                    LOG.error("error getting public host name from:" + ec2InstanceMetadataURL + EC2MetadataKeys.publicHostname.name(), e);
+                }
             }
             // build up network info
             try {
@@ -130,7 +136,8 @@ public class AmazonComputeInstanceMetadataResolver implements ComputeInstanceMet
                 LOG.error("error getting public host name from:" + ec2InstanceMetadataURL + EC2MetadataKeys.publicHostname.getName(), e);
             }
 
-            ec2InstanceMetadata.setMetadata(objectMapper.convertValue(ec2InstanceMetadata, Map.class));
+            Map<?, ?> metadata = objectMapper.convertValue(ec2InstanceMetadata, Map.class);
+            populateMetadata(ec2InstanceMetadata, metadata);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("EC2 Metadata found:" + ec2InstanceMetadata.getMetadata().toString());
             }
@@ -166,22 +173,18 @@ public class AmazonComputeInstanceMetadataResolver implements ComputeInstanceMet
      * @return AWS EC2 metadata information
      * @throws IOException Signals that an I/O exception of some sort has occurred
      */
-    protected String readEc2MetadataUrl(URL url, int connectionTimeoutMs, int readTimeoutMs) throws IOException {
-
-        URLConnection urlConnection = url.openConnection();
+    private String readEc2MetadataUrl(URL url, int connectionTimeoutMs, int readTimeoutMs) throws IOException {
 
         if (url.getProtocol().equalsIgnoreCase("file")) {
-            if (url.getPath().indexOf(':') != -1) {
-                //rebuild url path because windows can't have paths with colons
-                url = new URL(url.getProtocol(), url.getHost(), url.getFile().replace(':', '_'));
-                urlConnection = url.openConnection();
-            }
+            url = rewriteUrl(url);
+            URLConnection urlConnection = url.openConnection();
             urlConnection.connect();
             try (BufferedReader in = new BufferedReader(
                 new InputStreamReader(urlConnection.getInputStream()))) {
                 return IOUtils.readText(in);
             }
         } else {
+            URLConnection urlConnection = url.openConnection();
             HttpURLConnection uc = (HttpURLConnection) urlConnection;
 
             uc.setConnectTimeout(connectionTimeoutMs);
@@ -194,5 +197,18 @@ public class AmazonComputeInstanceMetadataResolver implements ComputeInstanceMet
                 return IOUtils.readText(in);
             }
         }
+    }
+
+    private URL rewriteUrl(URL url) throws MalformedURLException {
+        String path = url.getPath();
+        if (path.indexOf(':') != -1) {
+            boolean driveLetterFound = DRIVE_LETTER_PATTERN.matcher(path).matches();
+            path = path.replace(':', '_');
+            if (driveLetterFound) {
+                path = path.replaceFirst("_", ":");
+            }
+            url = new URL(url.getProtocol(), url.getHost(), path);
+        }
+        return url;
     }
 }

@@ -1,36 +1,11 @@
-apply plugin: 'com.github.johnrengelman.plugin-shadow'
-shadowJar {
-    dependencies {
-        for(dep in project.configurations.shadowCompile.dependencies) {
-            exclude(dep)
-        }
-        exclude(project(":inject"))
-        exclude(project(":core"))
-
-        exclude(dependency(dependencyVersion("slf4j")))
-        exclude(dependency(group: 'javax.inject', name: 'javax.inject', version: '1'))
-        exclude(dependency('org.ow2.asm:.*:.*'))
-        exclude(dependency('org.reactivestreams:.*:.*'))
-        exclude(dependency('com.google.code.findbugs:.*:.*'))
-        exclude(dependency('com.github.ben-manes.caffeine:.*:.*'))
-    }
-
-    relocate "org.objectweb.asm", "io.micronaut.asm"
-    relocate "com.github.benmanes.caffeine", "io.micronaut.caffeine"
-}
-
-tasks.withType(com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation) { t ->
-    t.enabled = false
-}
-
 dependencies {
-    shadowCompile project(":inject")
     compile project(":inject")
     compile project(":aop")
 
     compileOnly files(org.gradle.internal.jvm.Jvm.current().toolsJar)
     compileOnly dependencyVersion("validation")
 
+    testCompile 'com.github.spotbugs:spotbugs-annotations:3.1.12'
     testCompile project(":aop")
     testCompile project(":runtime")
     testCompile dependencyVersion("rxjava2")
@@ -44,6 +19,7 @@ dependencies {
     testCompile dependencyModuleVersion("groovy", "groovy-json")
     testCompile files(org.gradle.internal.jvm.Jvm.current().toolsJar)
     testRuntime 'org.glassfish:javax.el:3.0.1-b08'
+    testCompile dependencyVersion("micrometer")
 }
 
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.tracing.brave;
 
 import brave.CurrentSpanCustomizer;
 import brave.SpanCustomizer;
 import brave.Tracing;
 import brave.opentracing.BraveTracer;
-import io.micronaut.context.annotation.Bean;
-import io.micronaut.context.annotation.Factory;
-import io.micronaut.context.annotation.Primary;
-import io.micronaut.context.annotation.Requires;
+import io.micronaut.context.annotation.*;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
 import zipkin2.Span;
@@ -92,7 +88,6 @@ public class BraveTracerFactory {
      * @param tracing The {@link Tracing} bean
      * @return The Open Tracing {@link Tracer} bean
      */
-    @Bean
     @Singleton
     @Requires(classes = {BraveTracer.class, Tracer.class})
     @Primary
@@ -110,7 +105,7 @@ public class BraveTracerFactory {
      * @param configuration The configuration
      * @return The {@link AsyncReporter} bean
      */
-    @Bean
+    @Prototype
     @Requires(beans = AsyncReporterConfiguration.class)
     @Requires(missingBeans = Reporter.class)
     AsyncReporter<Span> asyncReporter(AsyncReporterConfiguration configuration) {

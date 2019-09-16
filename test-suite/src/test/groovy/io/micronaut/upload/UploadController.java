@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,19 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.MutableHttpResponse;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Part;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.multipart.CompletedFileUpload;
+import io.micronaut.http.multipart.CompletedPart;
 import io.micronaut.http.multipart.PartData;
 import io.micronaut.http.multipart.StreamingFileUpload;
+import io.micronaut.http.server.multipart.MultipartBody;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
+import io.reactivex.exceptions.Exceptions;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.ReplaySubject;
@@ -37,6 +41,7 @@ import org.reactivestreams.Subscription;
 
 import javax.inject.Singleton;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -68,8 +73,9 @@ public class UploadController {
 
     @Post(value = "/receive-file-upload", consumes = MediaType.MULTIPART_FORM_DATA)
     public Publisher<HttpResponse> receiveFileUpload(StreamingFileUpload data, String title) {
+        long size = data.getDefinedSize();
         return Flowable.fromPublisher(data.transferTo(title + ".json"))
-                       .map(success -> success ? HttpResponse.ok( "Uploaded " + data.getSize()  ) : HttpResponse.status(HttpStatus.INTERNAL_SERVER_ERROR, "Something bad happened"));
+                       .map(success -> success ? HttpResponse.ok( "Uploaded " + size  ) : HttpResponse.status(HttpStatus.INTERNAL_SERVER_ERROR, "Something bad happened"));
     }
 
     @Post(value = "/receive-completed-file-upload", consumes = MediaType.MULTIPART_FORM_DATA)
@@ -101,17 +107,52 @@ public class UploadController {
         );
     }
 
-    @Post(value = "/receive-flow-data", consumes = MediaType.MULTIPART_FORM_DATA)
+    @Post(value = "/receive-flow-parts", consumes = MediaType.MULTIPART_FORM_DATA)
+    public Single<HttpResponse> receiveFlowParts(Flowable<PartData> data) {
+        return data.toList().doOnSuccess(parts -> {
+            for (PartData part : parts) {
+                part.getBytes(); //intentionally releasing the parts after all data has been received
+            }
+        }).map(parts -> HttpResponse.ok());
+    }
+
+    @Post(value = "/receive-flow-data", consumes = MediaType.MULTIPART_FORM_DATA, produces = MediaType.TEXT_PLAIN)
     public Publisher<HttpResponse> receiveFlowData(Data data) {
         return Flowable.just(HttpResponse.ok(data.toString()));
     }
 
-    @Post(value = "/receive-multiple-flow-data", consumes = MediaType.MULTIPART_FORM_DATA)
+    @Post(value = "/receive-multiple-flow-data", consumes = MediaType.MULTIPART_FORM_DATA, produces = MediaType.TEXT_PLAIN)
     public Single<HttpResponse> receiveMultipleFlowData(Publisher<Data> data) {
-        return Flowable.fromPublisher(data).toList().map(list -> HttpResponse.ok(list.toString()));
+        return Single.create(emitter -> {
+           data.subscribe(new Subscriber<Data>() {
+               private Subscription s;
+               List<Data> datas = new ArrayList<>();
+               @Override
+               public void onSubscribe(Subscription s) {
+                   this.s = s;
+                   s.request(1);
+               }
+
+               @Override
+               public void onNext(Data data) {
+                   datas.add(data);
+                   s.request(1);
+               }
+
+               @Override
+               public void onError(Throwable t) {
+                    emitter.onError(t);
+               }
+
+               @Override
+               public void onComplete() {
+                    emitter.onSuccess(HttpResponse.ok(datas.toString()));
+               }
+           });
+        });
     }
 
-    @Post(value = "/receive-two-flow-parts", consumes = MediaType.MULTIPART_FORM_DATA)
+    @Post(value = "/receive-two-flow-parts", consumes = MediaType.MULTIPART_FORM_DATA, produces = MediaType.TEXT_PLAIN)
     public Publisher<HttpResponse> receiveTwoFlowParts(
             @Part("data") Flowable<String> dataPublisher,
             @Part("title") Flowable<String> titlePublisher) {
@@ -164,7 +205,14 @@ public class UploadController {
     public Single<HttpResponse> receiveMultipleStreaming(
             Flowable<StreamingFileUpload> data) {
         return data.subscribeOn(Schedulers.io()).flatMap((StreamingFileUpload upload) -> {
-            return Flowable.fromPublisher(upload).map(PartData::getBytes);
+            return Flowable.fromPublisher(upload)
+                    .map((pd) -> {
+                        try {
+                            return pd.getBytes();
+                        } catch (IOException e) {
+                            throw Exceptions.propagate(e);
+                        }
+                    });
         }).collect(LongAdder::new, (adder, bytes) -> adder.add((long)bytes.length))
                 .map((adder) -> {
                     return HttpResponse.ok(adder.longValue());
@@ -175,7 +223,13 @@ public class UploadController {
     public Single<HttpResponse> receivePartdata(
             Flowable<PartData> data) {
         return data.subscribeOn(Schedulers.io())
-                .map(PartData::getBytes)
+                .map((pd) -> {
+                    try {
+                        return pd.getBytes();
+                    } catch (IOException e) {
+                        throw Exceptions.propagate(e);
+                    }
+                })
                 .collect(LongAdder::new, (adder, bytes) -> adder.add((long)bytes.length))
                 .map((adder) -> {
                     return HttpResponse.ok(adder.longValue());
@@ -190,6 +244,109 @@ public class UploadController {
                 .map((adder) -> {
                     return HttpResponse.ok(adder.longValue());
                 });
+    }
+
+    @Post(value =  "/receive-flow-control", consumes = MediaType.MULTIPART_FORM_DATA, produces = MediaType.TEXT_PLAIN)
+    Single<String> go(Map json, Flowable<byte[]> file) {
+        return Single.create(singleEmitter -> {
+            file.subscribe(new Subscriber<byte[]>() {
+                private Subscription subscription;
+                private LongAdder longAdder = new LongAdder();
+                @Override
+                public void onSubscribe(Subscription subscription) {
+                    this.subscription = subscription;
+                    subscription.request(1);
+                }
+
+                @Override
+                public void onNext(byte[] bytes) {
+                    longAdder.add(bytes.length);
+                    subscription.request(1);
+                }
+
+                @Override
+                public void onError(Throwable throwable) {
+                    singleEmitter.onError(throwable);
+                }
+
+                @Override
+                public void onComplete() {
+                    singleEmitter.onSuccess(Long.toString(longAdder.longValue()));
+                }
+            });
+        });
+    }
+
+    @Post(value = "/receive-big-attribute", consumes = MediaType.MULTIPART_FORM_DATA, produces = MediaType.TEXT_PLAIN)
+    public Single<HttpResponse> receiveBigAttribute(Publisher<PartData> data) {
+        return Single.create(emitter -> {
+            data.subscribe(new Subscriber<PartData>() {
+                private Subscription s;
+                List<String> datas = new ArrayList<>();
+                @Override
+                public void onSubscribe(Subscription s) {
+                    this.s = s;
+                    s.request(1);
+                }
+
+                @Override
+                public void onNext(PartData data) {
+                    try {
+                        datas.add(new String(data.getBytes(), StandardCharsets.UTF_8));
+                        s.request(1);
+                    } catch (IOException e) {
+                        s.cancel();
+                        emitter.onError(e);
+                    }
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    emitter.onError(t);
+                }
+
+                @Override
+                public void onComplete() {
+                    emitter.onSuccess(HttpResponse.ok(String.join("", datas)));
+                }
+            });
+        });
+    }
+
+    @Post(value =  "/receive-multipart-body", consumes = MediaType.MULTIPART_FORM_DATA, produces = MediaType.TEXT_PLAIN)
+    Single<String> go(@Body MultipartBody multipartBody) {
+        return Single.create(emitter -> {
+            multipartBody.subscribe(new Subscriber<CompletedPart>() {
+                private Subscription s;
+                List<String> datas = new ArrayList<>();
+                @Override
+                public void onSubscribe(Subscription s) {
+                    this.s = s;
+                    s.request(1);
+                }
+
+                @Override
+                public void onNext(CompletedPart data) {
+                    try {
+                        datas.add(new String(data.getBytes(), StandardCharsets.UTF_8));
+                        s.request(1);
+                    } catch (IOException e) {
+                        s.cancel();
+                        emitter.onError(e);
+                    }
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    emitter.onError(t);
+                }
+
+                @Override
+                public void onComplete() {
+                    emitter.onSuccess(String.join("|", datas));
+                }
+            });
+        });
     }
 
     public static class Data {

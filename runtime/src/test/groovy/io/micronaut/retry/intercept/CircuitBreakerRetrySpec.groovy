@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,14 @@
  */
 package io.micronaut.retry.intercept
 
+import io.micronaut.context.ApplicationContext
 import io.micronaut.retry.CircuitState
+import io.micronaut.retry.annotation.CircuitBreaker
+import io.reactivex.Single
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
 
+import javax.inject.Singleton
 import java.time.Duration
 
 /**
@@ -26,7 +30,6 @@ import java.time.Duration
  * @since 1.0
  */
 class CircuitBreakerRetrySpec extends Specification {
-
 
     void "test circuit breaker retry"() {
         when:"A retry is constructed"
@@ -105,4 +108,121 @@ class CircuitBreakerRetrySpec extends Specification {
         retry.canRetry(new RuntimeException("bad"))
 
     }
+
+    void "test circuit breaker with includes"() {
+        given:
+        ApplicationContext context = ApplicationContext.run()
+        CounterService counterService = context.getBean(CounterService)
+
+        when:
+        counterService.getCountIncludes(false)
+
+        then: "the circuit is open so the original exception is thrown"
+        noExceptionThrown()
+        counterService.countIncludes == counterService.countThreshold
+
+        when:
+        counterService.countIncludes = 0
+        counterService.getCountIncludes(true)
+
+        then: "retry didn't kick in because the exception thrown doesn't match includes"
+        thrown(IllegalStateException)
+        counterService.countIncludes == 1
+
+        when:
+        counterService.getCountIncludes(false)
+
+        then: "the circuit is open so the original exception is thrown"
+        thrown(IllegalStateException)
+        counterService.countIncludes == 1
+
+        cleanup:
+        context.stop()
+    }
+
+    void "test circuit breaker with excludes"() {
+        given:
+        ApplicationContext context = ApplicationContext.run()
+        CounterService counterService = context.getBean(CounterService)
+
+        when:
+        counterService.getCountExcludes(true)
+
+        then: "retry kicks in because the exception thrown doesn't match excludes"
+        noExceptionThrown()
+        counterService.countExcludes == counterService.countThreshold
+
+        when:
+        counterService.countExcludes = 0
+        counterService.getCountExcludes(false)
+
+        then: "retry didn't kick in because the exception thrown matches excludes"
+        thrown(MyCustomException)
+        counterService.countExcludes == 1
+
+        when:
+        counterService.getCountExcludes(true)
+
+        then: "the circuit is open so the original exception is thrown"
+        thrown(MyCustomException)
+        counterService.countExcludes == 1
+
+        cleanup:
+        context.stop()
+    }
+
+    void "test circuit breaker with a single"() {
+        given:
+        ApplicationContext context = ApplicationContext.run()
+        CounterService counterService = context.getBean(CounterService)
+
+        when:
+        counterService.getCount().onErrorReturnItem(1).blockingGet() //to trigger the state
+        counterService.getCount()
+
+        then:
+        noExceptionThrown()
+
+        cleanup:
+        context.stop()
+    }
+
+    @Singleton
+    static class CounterService {
+        int countIncludes = 0
+        int countExcludes = 0
+        int countThreshold = 3
+
+        @CircuitBreaker(attempts = '5', delay = '5ms', includes = MyCustomException.class)
+        Integer getCountIncludes(boolean illegalState) {
+            countIncludes++
+            if(countIncludes < countThreshold) {
+                if (illegalState) {
+                    throw new IllegalStateException("Bad count")
+                } else {
+                    throw new MyCustomException()
+                }
+            }
+            return countIncludes
+        }
+
+        @CircuitBreaker(attempts = '5', delay = '5ms', excludes = MyCustomException.class)
+        Integer getCountExcludes(boolean illegalState) {
+            countExcludes++
+            if(countExcludes < countThreshold) {
+                if (illegalState) {
+                    throw new IllegalStateException("Bad count")
+                } else {
+                    throw new MyCustomException()
+                }
+            }
+            return countExcludes
+        }
+
+        @CircuitBreaker(attempts = '1', delay = '0ms')
+        Single<Integer> getCount() {
+            Single.error(new IllegalStateException("Bad count"))
+        }
+    }
+
 }

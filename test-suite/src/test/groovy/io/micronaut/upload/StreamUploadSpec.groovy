@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package io.micronaut.upload
 
+
 import io.micronaut.AbstractMicronautSpec
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
@@ -24,8 +25,8 @@ import io.micronaut.http.client.multipart.MultipartBody
 import io.reactivex.Flowable
 
 /**
- * @author Graeme Rocher
- * @since 1.0
+ * Any changes or additions to this test should also be done
+ * in {@link DiskUploadSpec} and {@link MixedUploadSpec}
  */
 class StreamUploadSpec extends AbstractMicronautSpec {
 
@@ -33,10 +34,9 @@ class StreamUploadSpec extends AbstractMicronautSpec {
         given:
         def data = '{"title":"Test"}'
         MultipartBody requestBody = MultipartBody.builder()
-                .addPart("title", "bar")
+                .addPart("title", "bar-stream")
                 .addPart("data", "data.json", MediaType.APPLICATION_JSON_TYPE, data.bytes)
                 .build()
-
 
         when:
         Flowable<HttpResponse<String>> flowable = Flowable.fromPublisher(client.exchange(
@@ -46,10 +46,49 @@ class StreamUploadSpec extends AbstractMicronautSpec {
         ))
         HttpResponse<String> response = flowable.blockingFirst()
         def result = response.getBody().get()
+        File file = new File(uploadDir, "bar-stream.json")
+        file.deleteOnExit()
 
         then:
         response.code() == HttpStatus.OK.code
         result == "Uploaded ${data.size()}"
+        file.exists()
+        file.length() == data.size()
+    }
+
+    void "test upload on a validated controller"() {
+        given:
+        def data = '{"title":"Test"}'
+        MultipartBody requestBody = MultipartBody.builder()
+                .addPart("data", "data.json", MediaType.APPLICATION_JSON_TYPE, data.bytes)
+                .build()
+
+        when:
+        Flowable<HttpResponse<String>> flowable = Flowable.fromPublisher(client.exchange(
+                HttpRequest.POST("/upload/validated/receive-file-upload", requestBody)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .accept(MediaType.TEXT_PLAIN_TYPE), String
+        ))
+        HttpResponse<String> response = flowable.blockingFirst()
+
+        then:
+        response.code() == HttpStatus.OK.code
+    }
+
+    void "test releasing part datas late"() {
+        given:
+        MultipartBody requestBody = MultipartBody.builder()
+                .addPart("data", "data.pdf", new MediaType("application/pdf"), new byte[3000])
+                .build()
+
+        when:
+        HttpResponse response = client.toBlocking().exchange(
+                HttpRequest.POST("/upload/receive-flow-parts", requestBody)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .accept(MediaType.TEXT_PLAIN_TYPE), Boolean)
+
+        then:
+        response.code() == HttpStatus.OK.code
     }
 
     void "test upload big FileUpload object via transferTo"() {
@@ -63,7 +102,6 @@ class StreamUploadSpec extends AbstractMicronautSpec {
                 .addPart("data", "data.json", MediaType.APPLICATION_JSON_TYPE, data.bytes)
                 .build()
 
-
         when:
         Flowable<HttpResponse<String>> flowable = Flowable.fromPublisher(client.exchange(
                 HttpRequest.POST("/upload/receive-file-upload", requestBody)
@@ -76,6 +114,7 @@ class StreamUploadSpec extends AbstractMicronautSpec {
         def result = response.getBody().get()
 
         def file = new File(uploadDir, "bar.json")
+        file.deleteOnExit()
 
         then:
         response.code() == HttpStatus.OK.code
@@ -230,7 +269,7 @@ class StreamUploadSpec extends AbstractMicronautSpec {
         response.getBody().get() == '[Data{title=\'Test\'}, Data{title=\'Test2\'}]'
 
         when: "a large document with partial data is uploaded"
-        def val = 'xxxx' * 200
+        def val = 'xxxx' * 20000
         data = '{"title":"Big ' + val + '"}'
         data2 = '{"title":"Big2 ' + val + '"}'
         requestBody = MultipartBody.builder()
@@ -315,6 +354,97 @@ class StreamUploadSpec extends AbstractMicronautSpec {
         then:
         response.code() == HttpStatus.OK.code
         response.body() == (val.length * 2).toString()
+    }
+
+    void "test receiving a flowable that controls flow with a large file"() {
+        def val = ('Big ' + 'xxxx' * 200000).bytes
+        MultipartBody requestBody = MultipartBody.builder()
+                .addPart("json", "abc.json", MediaType.TEXT_JSON_TYPE, '{"hello": "world"}'.bytes)
+                .addPart("file", "def.txt", MediaType.TEXT_PLAIN_TYPE, val)
+                .addPart("title", "bar")
+                .build()
+
+        when:
+        Flowable<HttpResponse<String>> flowable = Flowable.fromPublisher(client.exchange(
+                HttpRequest.POST("/upload/receive-flow-control", requestBody)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .accept(MediaType.TEXT_PLAIN_TYPE),
+                String
+        ))
+        HttpResponse<String> response = flowable.blockingFirst()
+
+        then:
+        response.code() == HttpStatus.OK.code
+        response.body() == (val.length).toString()
+    }
+
+    void "test receiving a flowable that controls flow with a large attribute"() {
+        def val = ('Big ' + 'xxxx' * 200000)
+        MultipartBody requestBody = MultipartBody.builder()
+                .addPart("data", val)
+                .build()
+
+        when:
+        Flowable<HttpResponse<String>> flowable = Flowable.fromPublisher(client.exchange(
+                HttpRequest.POST("/upload/receive-big-attribute", requestBody)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .accept(MediaType.TEXT_PLAIN_TYPE),
+                String
+        ))
+        HttpResponse<String> response = flowable.blockingFirst()
+
+        then:
+        response.code() == HttpStatus.OK.code
+        response.body() == val
+    }
+
+    void "test whole multipart body"() {
+        given:
+        def data = '{"title":"Test"}'
+        def data2 = '{"title":"Test2"}'
+        MultipartBody requestBody = MultipartBody.builder()
+                .addPart("data", "data.json", MediaType.APPLICATION_JSON_TYPE, data.bytes)
+                .addPart("data", "data2.json", MediaType.APPLICATION_JSON_TYPE, data2.bytes)
+                .addPart("title", "bar")
+                .build()
+
+        when:
+        Flowable<HttpResponse<String>> flowable = Flowable.fromPublisher(client.exchange(
+                HttpRequest.POST("/upload/receive-multipart-body", requestBody)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .accept(MediaType.APPLICATION_JSON_TYPE),
+                String
+        ))
+        HttpResponse<String> response = flowable.blockingFirst()
+
+        then:
+        response.code() == HttpStatus.OK.code
+        response.getBody().get() == '{"title":"Test"}|{"title":"Test2"}|bar'
+    }
+
+    void "test whole multipart body with large parts"() {
+        when: "a large document with partial data is uploaded"
+        def val = 'xxxx' * 20000
+        def data = '{"title":"Big ' + val + '"}'
+        def data2 = '{"title":"Big2 ' + val + '"}'
+        def requestBody = MultipartBody.builder()
+                .addPart("data", "data.json", MediaType.APPLICATION_JSON_TYPE,data.bytes)
+                .addPart("data", "data2.json", MediaType.APPLICATION_JSON_TYPE,data2.bytes)
+                .addPart("title", "bar")
+                .build()
+        def flowable = Flowable.fromPublisher(client.exchange(
+                HttpRequest.POST("/upload/receive-multipart-body", requestBody)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .accept(MediaType.APPLICATION_JSON_TYPE.TEXT_PLAIN_TYPE),
+                String
+        ))
+        def response = flowable.blockingFirst()
+
+        then:
+        response.code() == HttpStatus.OK.code
+        response.body().contains('"title":"Big xx')
+        response.body().contains('"title":"Big2 xx')
+        response.body().contains('bar')
     }
 
     Map<String, Object> getConfiguration() {

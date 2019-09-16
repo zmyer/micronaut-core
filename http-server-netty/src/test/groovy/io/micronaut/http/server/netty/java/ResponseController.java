@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package io.micronaut.http.server.netty.java;
 import io.micronaut.http.*;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
+
+import java.util.Optional;
 
 /**
  * @author Graeme Rocher
@@ -87,5 +89,14 @@ public class ResponseController {
     @Get("/custom-headers")
     public HttpResponse customHeaders() {
        return HttpResponse.ok("abc").contentType("text/plain").contentLength(7);
+    }
+
+    @Get("/optional-response/{empty}")
+    public Optional<HttpResponse> optionalResponse(Boolean empty) {
+        if (empty) {
+            return Optional.empty();
+        } else {
+            return Optional.of(HttpResponse.ok());
+        }
     }
 }

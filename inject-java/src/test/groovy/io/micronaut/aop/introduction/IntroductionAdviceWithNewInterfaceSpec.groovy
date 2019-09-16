@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ class MyBean  {
         context.start()
         def instance = ((BeanFactory)beanDefinition).build(context, beanDefinition)
         ListenerAdviceInterceptor listenerAdviceInterceptor= context.getBean(ListenerAdviceInterceptor)
-
+        listenerAdviceInterceptor.recievedMessages.clear()
         then:"the methods are invocable"
         listenerAdviceInterceptor.recievedMessages.isEmpty()
         instance.getFoo() == "good"
@@ -99,7 +99,7 @@ abstract class MyBean  {
         context.start()
         def instance = ((BeanFactory)beanDefinition).build(context, beanDefinition)
         ListenerAdviceInterceptor listenerAdviceInterceptor= context.getBean(ListenerAdviceInterceptor)
-
+        listenerAdviceInterceptor.recievedMessages.clear()
         then:"the methods are invocable"
         listenerAdviceInterceptor.recievedMessages.isEmpty()
         instance.getFoo() == "good"
@@ -143,6 +143,7 @@ interface MyBean  {
         context.start()
         def instance = ((BeanFactory)beanDefinition).build(context, beanDefinition)
         ListenerAdviceInterceptor listenerAdviceInterceptor= context.getBean(ListenerAdviceInterceptor)
+        listenerAdviceInterceptor.recievedMessages.clear()
 
         then:"the methods are invocable"
         listenerAdviceInterceptor.recievedMessages.isEmpty()

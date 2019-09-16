@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.server.websocket;
 
 import io.micronaut.context.ExecutionHandleLocator;
@@ -64,7 +63,7 @@ public class ServerWebSocketProcessor extends DefaultRouteBuilder implements Exe
 
         if (method.isAnnotationPresent(OnMessage.class) || method.isAnnotationPresent(OnOpen.class)) {
             mappedWebSockets.add(beanType);
-            String uri = beanDefinition.getValue(ServerWebSocket.class, String.class).orElse("/ws");
+            String uri = beanDefinition.stringValue(ServerWebSocket.class).orElse("/ws");
 
             UriRoute route = GET(uri, method);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,24 @@ class SimpleEndpointSpec extends Specification {
         then:
         response.code() == HttpStatus.OK.code
         response.body() == 'test foo'
+
+        cleanup:
+        rxClient.close()
+        server.close()
+    }
+
+    void "test read simple endpoint with HEAD"() {
+        given:
+        EmbeddedServer server = ApplicationContext.run(EmbeddedServer,
+                ['endpoints.simple.myValue':'foo'], Environment.TEST)
+        RxHttpClient rxClient = server.applicationContext.createBean(RxHttpClient, server.getURL())
+
+        when:
+        def response = rxClient.exchange(HttpRequest.HEAD("/simple"), String).blockingFirst()
+
+        then:
+        response.code() == HttpStatus.OK.code
+        response.body() == null
 
         cleanup:
         rxClient.close()

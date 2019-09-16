@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.annotation.processing.visitor;
 
 import io.micronaut.core.annotation.AnnotationMetadata;
@@ -21,8 +20,10 @@ import io.micronaut.core.annotation.Internal;
 import io.micronaut.inject.ast.ClassElement;
 import io.micronaut.inject.ast.ParameterElement;
 
+import javax.annotation.Nonnull;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
+import java.util.Map;
 
 /**
  * Implementation of the {@link ParameterElement} interface for Java.
@@ -34,23 +35,35 @@ import javax.lang.model.type.TypeMirror;
 class JavaParameterElement extends AbstractJavaElement implements ParameterElement {
 
     private final JavaVisitorContext visitorContext;
+    private final JavaClassElement declaringClass;
 
     /**
      * Default constructor.
      *
-     * @param element The variable element
+     * @param declaringClass     The declaring class
+     * @param element            The variable element
      * @param annotationMetadata The annotation metadata
-     * @param visitorContext The visitor context
+     * @param visitorContext     The visitor context
      */
-    JavaParameterElement(VariableElement element, AnnotationMetadata annotationMetadata, JavaVisitorContext visitorContext) {
-        super(element, annotationMetadata);
+    JavaParameterElement(JavaClassElement declaringClass, VariableElement element, AnnotationMetadata annotationMetadata, JavaVisitorContext visitorContext) {
+        super(element, annotationMetadata, visitorContext);
+        this.declaringClass = declaringClass;
         this.visitorContext = visitorContext;
     }
 
     @Override
+    @Nonnull
     public ClassElement getType() {
+        TypeMirror parameterType = getNativeType().asType();
+        return mirrorToClassElement(parameterType, visitorContext);
+    }
+
+    @Nonnull
+    @Override
+    public ClassElement getGenericType() {
         TypeMirror returnType = getNativeType().asType();
-        return mirrorToClassElement(returnType, visitorContext);
+        Map<String, Map<String, TypeMirror>> declaredGenericInfo = declaringClass.getGenericTypeInfo();
+        return parameterizedClassElement(returnType, visitorContext, declaredGenericInfo);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.cli.profile.commands
 
 import groovy.transform.CompileStatic
 import io.micronaut.cli.profile.Command
+import io.micronaut.cli.profile.ResetableCommand
 import jline.console.completer.ArgumentCompleter
 import jline.console.completer.Completer
 import picocli.AutoComplete
@@ -52,4 +52,5 @@ abstract class ArgumentCompletingCommand implements Command, Completer {
     int complete(String buffer, int cursor, List<CharSequence> candidates) {
         return new PicocliCompleter(commandSpec).complete(buffer, cursor, candidates)
     }
+
 }

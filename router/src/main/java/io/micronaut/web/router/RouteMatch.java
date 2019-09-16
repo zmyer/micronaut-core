@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.web.router;
 
 import io.micronaut.core.annotation.AnnotationMetadataProvider;
@@ -159,6 +158,16 @@ public interface RouteMatch<R> extends Callable<R>, Predicate<HttpRequest>, Anno
      * @return True if it is
      */
     boolean accept(@Nullable MediaType contentType);
+
+    /**
+     * Whether the specified content type is explicitly an accepted type.
+     *
+     * @param contentType The content type
+     * @return True if it is
+     */
+    default boolean explicitAccept(@Nullable MediaType contentType) {
+        return false;
+    }
 
     /**
      * Is the given input satisfied.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.multipart;
 
+import io.micronaut.core.annotation.Internal;
 import io.micronaut.http.MediaType;
 
 import java.util.Optional;
@@ -26,6 +26,7 @@ import java.util.Optional;
  * @author Graeme Rocher
  * @since 1.0
  */
+@Internal
 public interface FileUpload {
 
     /**
@@ -55,6 +56,13 @@ public interface FileUpload {
      * @return The size of this part, in bytes.
      */
     long getSize();
+
+    /**
+     * Returns the defined content length of the part.
+     *
+     * @return The content length of this part, in bytes.
+     */
+    long getDefinedSize();
 
     /**
      * Returns whether the {@link FileUpload} has been fully uploaded or is in a partial state.

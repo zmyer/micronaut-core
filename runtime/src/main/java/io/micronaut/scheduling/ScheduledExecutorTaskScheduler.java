@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.scheduling;
 
 import static io.micronaut.core.util.ArgumentUtils.check;
@@ -24,13 +23,11 @@ import io.micronaut.scheduling.cron.CronExpression;
 
 import javax.inject.Named;
 import java.time.Duration;
-import java.time.ZonedDateTime;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 /**
  * Simple abstraction over {@link ScheduledExecutorService}.
@@ -61,7 +58,7 @@ public class ScheduledExecutorTaskScheduler implements TaskScheduler {
         }
         check("command", command).notNull();
 
-        Supplier<Duration> delaySupplier = buildCronDelaySupplier(cron);
+        NextFireTime delaySupplier = new NextFireTime(CronExpression.create(cron));
         return new ReschedulingTask<>(() -> {
             command.run();
             return null;
@@ -75,7 +72,7 @@ public class ScheduledExecutorTaskScheduler implements TaskScheduler {
         }
         check("command", command).notNull();
 
-        Supplier<Duration> delaySupplier = buildCronDelaySupplier(cron);
+        NextFireTime delaySupplier = new NextFireTime(CronExpression.create(cron));
         return new ReschedulingTask<>(command, this, delaySupplier);
     }
 
@@ -128,14 +125,4 @@ public class ScheduledExecutorTaskScheduler implements TaskScheduler {
         );
     }
 
-    private Supplier<Duration> buildCronDelaySupplier(String cron) {
-        CronExpression cronExpression = CronExpression.create(cron);
-        return () -> {
-            ZonedDateTime now = ZonedDateTime.now();
-            ZonedDateTime zonedDateTime = cronExpression.nextTimeAfter(now);
-            return Duration.ofMillis(
-                zonedDateTime.toInstant().toEpochMilli() - ZonedDateTime.now().toInstant().toEpochMilli()
-            );
-        };
-    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.server.netty.configuration;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
@@ -27,7 +26,6 @@ import javax.inject.Inject;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 /**
  * Allows configuring Netty within {@link io.micronaut.http.server.netty.NettyHttpServer}.
@@ -37,6 +35,12 @@ import java.util.OptionalInt;
  */
 @ConfigurationProperties("netty")
 public class NettyHttpServerConfiguration extends HttpServerConfiguration {
+
+    /**
+     * The default use netty's native transport flag.
+     */
+    @SuppressWarnings("WeakerAccess")
+    public static final boolean DEFAULT_USE_NATIVE_TRANSPORT = false;
 
     /**
      * The default max initial line length.
@@ -74,6 +78,18 @@ public class NettyHttpServerConfiguration extends HttpServerConfiguration {
     @SuppressWarnings("WeakerAccess")
     public static final int DEFAULT_INITIALBUFFERSIZE = 128;
 
+    /**
+     * The default compression threshold.
+     */
+    @SuppressWarnings("WeakerAccess")
+    public static final int DEFAULT_COMPRESSIONTHRESHOLD = 1024;
+
+    /**
+     * The default compression level.
+     */
+    @SuppressWarnings("WeakerAccess")
+    public static final int DEFAULT_COMPRESSIONLEVEL = 6;
+
     private Map<ChannelOption, Object> childOptions = Collections.emptyMap();
     private Map<ChannelOption, Object> options = Collections.emptyMap();
     private Worker worker;
@@ -85,6 +101,9 @@ public class NettyHttpServerConfiguration extends HttpServerConfiguration {
     private boolean validateHeaders = DEFAULT_VALIDATEHEADERS;
     private int initialBufferSize = DEFAULT_INITIALBUFFERSIZE;
     private LogLevel logLevel;
+    private int compressionThreshold = DEFAULT_COMPRESSIONTHRESHOLD;
+    private int compressionLevel = DEFAULT_COMPRESSIONLEVEL;
+    private boolean useNativeTransport = DEFAULT_USE_NATIVE_TRANSPORT;
 
     /**
      * Default empty constructor.
@@ -146,6 +165,15 @@ public class NettyHttpServerConfiguration extends HttpServerConfiguration {
     }
 
     /**
+     * Whether to use netty's native transport (epoll or kqueue) if available.
+     *
+     * @return To use netty's native transport (epoll or kqueue) if available.
+     */
+    public boolean isUseNativeTransport() {
+        return useNativeTransport;
+    }
+
+    /**
      * Whether to validate headers.
      *
      * @return Whether to validate headers
@@ -161,6 +189,24 @@ public class NettyHttpServerConfiguration extends HttpServerConfiguration {
      */
     public int getInitialBufferSize() {
         return initialBufferSize;
+    }
+
+    /**
+     * The default compression threshold. Defaults to 1024.
+     *
+     * @return The compression threshold.
+     */
+    public int getCompressionThreshold() {
+        return compressionThreshold;
+    }
+
+    /**
+     * The default compression level. Default value ({@value #DEFAULT_COMPRESSIONLEVEL}).
+     *
+     * @return The compression level.
+     */
+    public int getCompressionLevel() {
+        return compressionLevel;
     }
 
     /**
@@ -259,6 +305,14 @@ public class NettyHttpServerConfiguration extends HttpServerConfiguration {
     }
 
     /**
+     * Sets whether to use netty's native transport (epoll or kqueue) if available . Default value ({@value #DEFAULT_USE_NATIVE_TRANSPORT}).
+     * @param useNativeTransport True if netty's native transport should be use if available.
+     */
+    public void setUseNativeTransport(boolean useNativeTransport) {
+        this.useNativeTransport = useNativeTransport;
+    }
+
+    /**
      * Sets whether to validate incoming headers. Default value ({@value #DEFAULT_VALIDATEHEADERS}).
      * @param validateHeaders True if headers should be validated.
      */
@@ -280,6 +334,23 @@ public class NettyHttpServerConfiguration extends HttpServerConfiguration {
      */
     public void setLogLevel(LogLevel logLevel) {
         this.logLevel = logLevel;
+    }
+
+    /**
+     * Sets the minimum size of a request body must be in order to be compressed. Default value ({@value #DEFAULT_COMPRESSIONTHRESHOLD}).
+     * @param compressionThreshold The size request bodies must be in order to be a candidate for compression.
+     */
+    public void setCompressionThreshold(@ReadableBytes int compressionThreshold) {
+        this.compressionThreshold = compressionThreshold;
+    }
+
+    /**
+     * Sets the compression level (0-9). Default value ({@value #DEFAULT_COMPRESSIONLEVEL}).
+     *
+     * @param compressionLevel The compression level.
+     */
+    public void setCompressionLevel(@ReadableBytes int compressionLevel) {
+        this.compressionLevel = compressionLevel;
     }
 
     /**
@@ -338,11 +409,11 @@ public class NettyHttpServerConfiguration extends HttpServerConfiguration {
         /**
          * @return The I/O ratio to use
          */
-        public OptionalInt getIoRatio() {
+        public Optional<Integer> getIoRatio() {
             if (ioRatio != null) {
-                return OptionalInt.of(ioRatio);
+                return Optional.of(ioRatio);
             }
-            return OptionalInt.empty();
+            return Optional.empty();
         }
 
         /**

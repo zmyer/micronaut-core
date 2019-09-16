@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.session;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
@@ -31,12 +30,18 @@ import java.util.OptionalInt;
 public class SessionConfiguration {
 
     /**
-     * The default max inactive interval in seconds.
+     * @deprecated Use {@link #DEFAULT_MAXINACTIVEINTERVAL_MINUTES} instead.
      */
-    @SuppressWarnings("WeakerAccess")
+    @Deprecated
     public static final int DEFAULT_MAXINACTIVEINTERVAL_SECONDS = 30;
 
-    private Duration maxInactiveInterval = Duration.ofMinutes(DEFAULT_MAXINACTIVEINTERVAL_SECONDS);
+    /**
+     * The default max inactive interval in minutes.
+     */
+    @SuppressWarnings("WeakerAccess")
+    public static final int DEFAULT_MAXINACTIVEINTERVAL_MINUTES = 30;
+
+    private Duration maxInactiveInterval = Duration.ofMinutes(DEFAULT_MAXINACTIVEINTERVAL_MINUTES);
     private Integer maxActiveSessions;
 
     /**
@@ -47,7 +52,7 @@ public class SessionConfiguration {
     }
 
     /**
-     * Sets the maximum number of active sessions. Default value ({@value #DEFAULT_MAXINACTIVEINTERVAL_SECONDS} seconds).
+     * Sets the maximum number of active sessions.
      *
      * @param maxActiveSessions The max active sessions
      */
@@ -56,14 +61,14 @@ public class SessionConfiguration {
     }
 
     /**
-     * @return The default max inactive interval
+     * @return The maximum inactive interval
      */
     public Duration getMaxInactiveInterval() {
         return maxInactiveInterval;
     }
 
     /**
-     * Set the max active sessions.
+     * Set the maximum inactive interval. Default value ({@value #DEFAULT_MAXINACTIVEINTERVAL_MINUTES} minutes).
      *
      * @param maxInactiveInterval The max inactive interval
      */

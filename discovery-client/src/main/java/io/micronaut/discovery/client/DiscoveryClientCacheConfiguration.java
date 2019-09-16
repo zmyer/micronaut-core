@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.discovery.client;
 
 import static io.micronaut.discovery.client.DiscoveryClientCacheConfiguration.CACHE_NAME;
@@ -35,7 +34,7 @@ import java.time.Duration;
  * @since 1.0
  */
 @Named(CACHE_NAME)
-@ConfigurationProperties(CACHE_NAME)
+@ConfigurationProperties(CacheConfiguration.PREFIX + "." + CACHE_NAME)
 @Requires(property = DiscoveryClientCacheConfiguration.SETTING_ENABLED, notEquals = StringUtils.FALSE)
 public class DiscoveryClientCacheConfiguration extends CacheConfiguration implements Toggleable {
 

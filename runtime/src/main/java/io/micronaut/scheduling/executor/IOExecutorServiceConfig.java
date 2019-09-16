@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.scheduling.executor;
 
-import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.scheduling.TaskExecutors;
@@ -38,7 +36,6 @@ public class IOExecutorServiceConfig {
      * @return The default thread pool configurations
      */
     @Singleton
-    @Bean
     @Named(TaskExecutors.IO)
     ExecutorConfiguration configuration() {
         return UserExecutorConfiguration.of(ExecutorType.CACHED);

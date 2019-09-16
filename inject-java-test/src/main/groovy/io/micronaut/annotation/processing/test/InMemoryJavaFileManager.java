@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Google, Inc.
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.annotation.processing.test;
 
 import com.google.common.base.MoreObjects;
@@ -62,6 +61,15 @@ final class InMemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileMa
     private static URI uriForJavaFileObject(Location location, String className, Kind kind) {
         return URI.create(
                 "mem:///" + location.getName() + '/' + className.replace('.', '/') + kind.extension);
+    }
+
+    /**
+     * Obtain the path for a file.
+     * @param name The name
+     * @return The path
+     */
+    public String getMetaInfPath(String name) {
+        return uriForFileObject(StandardLocation.CLASS_OUTPUT, "META-INF", name).getPath();
     }
 
     @Override

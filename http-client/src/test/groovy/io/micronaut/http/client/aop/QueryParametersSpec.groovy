@@ -1,6 +1,22 @@
+/*
+ * Copyright 2017-2019 original authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.micronaut.http.client.aop
 
 import io.micronaut.context.ApplicationContext
+import io.micronaut.core.annotation.Introspected
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Controller
@@ -79,6 +95,16 @@ class QueryParametersSpec extends Specification {
     void "test client mappping URL parameters appended through a POJO with a list (served through #flavour)"() {
         expect:
         client.searchExplodedPojo(flavour, new SearchParamsAsList(term: ["Tool", "Agnes Obel"])).albums.size() == 4
+
+        where:
+        flavour << [ "pojo", "list", "map" ]
+    }
+
+    @Unroll
+    void "test client mappping URL parameters appended through an introspected POJO with a list"() {
+        expect:
+        client.searchExplodedIntrospectedPojo(flavour, new IntrospectedSearchParamsAsList(term: ["Tool", "Agnes Obel"])).albums.size() == 4
+
         where:
         flavour << [ "pojo", "list", "map" ]
     }
@@ -121,12 +147,18 @@ class QueryParametersSpec extends Specification {
         List<String> term // POJO parameters can bind request params to list fields
     }
 
+    @Introspected
+    static class IntrospectedSearchParamsAsList {
+        List<String> term // POJO parameters can bind request params to list fields
+    }
+
     static class SearchParams {
         String term // Now, POJO parameters can bind request params to simple fields, too.
     }
 
     @Controller('/itunes')
     static class ItunesController {
+
         Map<String, List<String>> artists = [
                 Riverside:["Out of Myself", "Second Life Syndrome"],
                 Tool:["Undertow"],
@@ -207,6 +239,9 @@ class QueryParametersSpec extends Specification {
 
         @Get("/search-exploded/{flavour}{?params*}")
         SearchResult searchExplodedPojo(String flavour, SearchParamsAsList params)
+
+        @Get("/search-exploded/{flavour}{?params*}")
+        SearchResult searchExplodedIntrospectedPojo(String flavour, IntrospectedSearchParamsAsList params)
 
         @Get("/search-default")
         SearchResult searchDefault(@QueryValue(defaultValue = "Tool") String term)

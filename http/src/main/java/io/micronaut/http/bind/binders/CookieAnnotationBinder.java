@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.bind.binders;
 
 import io.micronaut.core.annotation.AnnotationMetadata;
@@ -52,7 +51,7 @@ public class CookieAnnotationBinder<T> extends AbstractAnnotatedArgumentBinder<C
     public BindingResult<T> bind(ArgumentConversionContext<T> argument, HttpRequest<?> source) {
         ConvertibleValues<io.micronaut.http.cookie.Cookie> parameters = source.getCookies();
         AnnotationMetadata annotationMetadata = argument.getAnnotationMetadata();
-        String parameterName = annotationMetadata.getValue(CookieValue.class, String.class)
+        String parameterName = annotationMetadata.stringValue(CookieValue.class)
                                                  .orElse(argument.getArgument().getName());
         return doBind(argument, parameters, parameterName);
     }

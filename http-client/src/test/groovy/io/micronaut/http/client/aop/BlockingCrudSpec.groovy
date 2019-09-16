@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import io.micronaut.http.annotation.Patch
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.runtime.server.EmbeddedServer
+import io.reactivex.Flowable
+import io.reactivex.Single
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
@@ -44,7 +46,6 @@ class BlockingCrudSpec extends Specification {
     ApplicationContext context = ApplicationContext.run()
 
     @Shared
-    @AutoCleanup
     EmbeddedServer embeddedServer = context.getBean(EmbeddedServer).start()
 
     void "test configured client"() {
@@ -64,10 +65,12 @@ class BlockingCrudSpec extends Specification {
 
         when:
         Book book = client.get(99)
+        Optional<Book> opt = client.getOptional(99)
         List<Book> books = client.list()
 
         then:
         book == null
+        !opt.isPresent()
         books.size() == 0
 
         when:
@@ -80,11 +83,14 @@ class BlockingCrudSpec extends Specification {
 
         when:
         book = client.get(book.id)
+        opt = client.getOptional(book.id)
 
         then:
         book != null
         book.title == "The Stand"
         book.id == 1
+        opt.isPresent()
+        opt.get().title == book.title
 
         when:'the full response is resolved'
         HttpResponse<Book> bookAndResponse = client.getResponse(book.id)
@@ -93,14 +99,23 @@ class BlockingCrudSpec extends Specification {
         bookAndResponse.status() == HttpStatus.OK
         bookAndResponse.body().title == "The Stand"
 
+        when:'the full response returns 404'
+        bookAndResponse = client.getResponse(-1)
+
+        then:
+        noExceptionThrown()
+        bookAndResponse.status() == HttpStatus.NOT_FOUND
 
         when:
         book = client.update(book.id, "The Shining")
+        books = client.list()
 
         then:
         book != null
         book.title == "The Shining"
         book.id == 1
+        books.size() == 1
+        books.first() instanceof Book
 
         when:
         client.delete(book.id)
@@ -153,6 +168,17 @@ class BlockingCrudSpec extends Specification {
         thrown(IllegalArgumentException)
     }
 
+    void "test a declarative client void method and 404 response"() {
+        given:
+        VoidNotFoundClient client = context.getBean(VoidNotFoundClient)
+
+        when:
+        client.call()
+
+        then:
+        noExceptionThrown()
+    }
+
     @Client('/blocking/books')
     static interface BookClient extends BookApi {
     }
@@ -170,6 +196,11 @@ class BlockingCrudSpec extends Specification {
         @Override
         Book get(Long id) {
             return books.get(id)
+        }
+
+        @Override
+        Optional<Book> getOptional(Long id) {
+            return Optional.ofNullable(get(id))
         }
 
         @Override
@@ -213,6 +244,9 @@ class BlockingCrudSpec extends Specification {
         @Get("/{id}")
         Book get(Long id)
 
+        @Get("/optional/{id}")
+        Optional<Book> getOptional(Long id)
+
         @Get("/res/{id}")
         HttpResponse<Book> getResponse(Long id)
 
@@ -234,4 +268,12 @@ class BlockingCrudSpec extends Specification {
         Long id
         String title
     }
+
+    @Client("/void/404")
+    static interface VoidNotFoundClient {
+
+        @Get
+        void call()
+    }
+
 }

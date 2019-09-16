@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,9 @@ package io.micronaut.http.server.netty.binding
 import io.micronaut.context.ApplicationContext
 import io.micronaut.context.env.Environment
 import io.micronaut.context.env.PropertySource
+import io.micronaut.context.event.StartupEvent
 import io.micronaut.core.io.socket.SocketUtils
-import io.micronaut.http.HttpHeaders
-import io.micronaut.http.HttpMethod
-import io.micronaut.http.HttpRequest
-import io.micronaut.http.HttpResponse
-import io.micronaut.http.HttpStatus
+import io.micronaut.http.*
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Put
@@ -32,18 +29,23 @@ import io.micronaut.http.client.RxHttpClient
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.http.server.exceptions.ServerStartupException
 import io.micronaut.runtime.Micronaut
+import io.micronaut.runtime.event.annotation.EventListener
 import io.micronaut.runtime.server.EmbeddedServer
+import spock.lang.Retry
 import spock.lang.Specification
 import spock.lang.Stepwise
 
+import javax.inject.Singleton
 import java.time.Duration
 import java.time.temporal.ChronoUnit
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * @author Graeme Rocher
  * @since 1.0
  */
 @Stepwise
+@Retry // sometimes fails to bind port on Travis
 class NettyHttpServerSpec extends Specification {
 
     void "test Micronaut server running"() {
@@ -57,10 +59,8 @@ class NettyHttpServerSpec extends Specification {
         response.body() == "Person Named Fred"
 
         cleanup:
-        applicationContext?.stop()
-        applicationContext?.close()
-        embeddedServer?.stop()
-        embeddedServer?.close()
+        client.stop()
+        applicationContext.stop()
     }
 
     void "test run Micronaut server on same port as another server"() {
@@ -83,8 +83,8 @@ class NettyHttpServerSpec extends Specification {
         e.cause instanceof BindException
 
         cleanup:
-        embeddedServer?.stop()
-        embeddedServer?.close()
+        client.stop()
+        embeddedServer.applicationContext.stop()
     }
 
     void "test Micronaut server running again"() {
@@ -98,11 +98,8 @@ class NettyHttpServerSpec extends Specification {
         response.body() == "Person Named Fred"
 
         cleanup:
-        applicationContext?.stop()
-        applicationContext?.close()
-
-        embeddedServer?.stop()
-        embeddedServer?.close()
+        client.stop()
+        applicationContext.stop()
     }
 
     void "test Micronaut server on different port"() {
@@ -118,11 +115,8 @@ class NettyHttpServerSpec extends Specification {
         response.body() == "Person Named Fred"
 
         cleanup:
-        applicationContext?.stop()
-        applicationContext?.close()
-
-        embeddedServer?.stop()
-        embeddedServer?.close()
+        client.stop()
+        applicationContext.stop()
     }
 
     void "test bind method argument from request parameter"() {
@@ -138,11 +132,8 @@ class NettyHttpServerSpec extends Specification {
         response.body() == "JOB ID 10"
 
         cleanup:
-        applicationContext?.stop()
-        applicationContext?.close()
-
-        embeddedServer?.stop()
-        embeddedServer?.close()
+        client.stop()
+        applicationContext.stop()
     }
 
     void "test bind method argument from request parameter when parameter missing"() {
@@ -159,11 +150,8 @@ class NettyHttpServerSpec extends Specification {
         e.status == HttpStatus.BAD_REQUEST
 
         cleanup:
-        applicationContext?.stop()
-        applicationContext?.close()
-
-        embeddedServer?.stop()
-        embeddedServer?.close()
+        client.stop()
+        applicationContext.stop()
     }
 
     void "test allowed methods handling"() {
@@ -181,11 +169,8 @@ class NettyHttpServerSpec extends Specification {
         e.response.header(HttpHeaders.ALLOW) == 'PUT'
 
         cleanup:
-        applicationContext?.stop()
-        applicationContext?.close()
-
-        embeddedServer?.stop()
-        embeddedServer?.close()
+        client.stop()
+        applicationContext.stop()
     }
 
     void "test expected connection persistence"() {
@@ -207,10 +192,101 @@ class NettyHttpServerSpec extends Specification {
         response.header(HttpHeaders.CONNECTION) == 'keep-alive'
 
         cleanup:
-        applicationContext?.stop()
-        applicationContext?.close()
-        embeddedServer?.stop()
-        embeddedServer?.close()
+        client.stop()
+        applicationContext.stop()
+    }
+
+    void "test run Micronaut server when enabling both http and https"() {
+        when:
+        int httpPort = SocketUtils.findAvailableTcpPort()
+        PropertySource propertySource = PropertySource.of(
+                'micronaut.server.port':httpPort,
+                'micronaut.ssl.enabled': true,
+                'micronaut.ssl.buildSelfSigned': true,
+                'micronaut.server.dualProtocol':true
+        )
+        EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer, propertySource, Environment.TEST)
+
+        def secureUrl = embeddedServer.getURL()
+        RxHttpClient httpsClient = embeddedServer.applicationContext.createBean(RxHttpClient, secureUrl)
+        RxHttpClient httpClient = embeddedServer.applicationContext.createBean(RxHttpClient, new URL("http://localhost:$httpPort"))
+        HttpResponse httpsResponse = httpsClient.exchange('/person/Fred', String).blockingFirst()
+        HttpResponse httpResponse = httpClient.exchange('/person/Fred', String).blockingFirst()
+
+        then:
+        httpsResponse.body() == "Person Named Fred"
+        httpResponse.body() == "Person Named Fred"
+
+        cleanup:
+        httpsClient.stop()
+        embeddedServer.applicationContext.stop()
+    }
+
+    void "test dual protocol is using https by default when grabbing values from server"() {
+        def securePort = SocketUtils.findAvailableTcpPort()
+        def unsecurePort = SocketUtils.findAvailableTcpPort()
+        when:
+        PropertySource propertySource = PropertySource.of(
+                'micronaut.server.port': unsecurePort,
+                'micronaut.ssl.port': securePort,
+                'micronaut.ssl.enabled': true,
+                'micronaut.ssl.buildSelfSigned': true,
+                'micronaut.server.dualProtocol':true
+        )
+        EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer, propertySource, Environment.TEST)
+
+        then:
+        embeddedServer.getPort() == securePort
+        embeddedServer.getScheme() == "https"
+        embeddedServer.getURL().toString() == "https://localhost:$securePort"
+
+        cleanup:
+        embeddedServer.applicationContext.stop()
+    }
+
+    void "test non dual protocol Micronaut server only fires startup event once"() {
+        when:
+        PropertySource propertySource = PropertySource.of(
+                'micronaut.server.port': SocketUtils.findAvailableTcpPort(),
+                'micronaut.server.dualProtocol':false
+        )
+        EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer, propertySource)
+
+        then:
+        EventCounter eventCounter = embeddedServer.applicationContext.getBean(EventCounter)
+        eventCounter.count as Integer == 1
+
+        cleanup:
+        embeddedServer.applicationContext.stop()
+    }
+
+    void "test dual protocol only fires startup event once"() {
+        when:
+        PropertySource propertySource = PropertySource.of(
+                'micronaut.server.port': SocketUtils.findAvailableTcpPort(),
+                'micronaut.ssl.port': SocketUtils.findAvailableTcpPort(),
+                'micronaut.ssl.enabled': true,
+                'micronaut.ssl.buildSelfSigned': true,
+                'micronaut.server.dualProtocol':true
+        )
+        EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer, propertySource)
+
+        then:
+        EventCounter eventCounter = embeddedServer.applicationContext.getBean(EventCounter)
+        eventCounter.count as Integer == 1
+
+        cleanup:
+        embeddedServer.applicationContext.stop()
+    }
+
+    @Singleton
+    static class EventCounter {
+        AtomicInteger count = new AtomicInteger(0)
+
+        @EventListener
+        void receive(StartupEvent event) {
+            count.incrementAndGet()
+        }
     }
 
     @Controller("/person")

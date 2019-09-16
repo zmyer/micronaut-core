@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,11 @@ package io.micronaut
 
 import groovy.transform.CompileStatic
 import io.micronaut.ast.groovy.utils.ExtendedParameter
+import io.micronaut.context.ApplicationContext
+import io.micronaut.context.DefaultApplicationContext
+import io.micronaut.core.beans.BeanIntrospection
+import io.micronaut.core.io.scan.ClassPathResourceLoader
+import io.micronaut.inject.BeanDefinitionReference
 import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.ast.ClassNode
 import org.codehaus.groovy.ast.MethodNode
@@ -45,6 +50,12 @@ abstract class AbstractBeanDefinitionSpec extends Specification {
         def classLoader = new InMemoryByteCodeGroovyClassLoader()
         classLoader.parseClass(classStr)
         return (BeanDefinition)classLoader.loadClass(beanFullName).newInstance()
+    }
+
+    InMemoryByteCodeGroovyClassLoader buildClassLoader(String classStr) {
+        def classLoader = new InMemoryByteCodeGroovyClassLoader()
+        classLoader.parseClass(classStr)
+        return classLoader
     }
 
     AnnotationMetadata buildTypeAnnotationMetadata(String cls, String source) {
@@ -83,7 +94,7 @@ abstract class AbstractBeanDefinitionSpec extends Specification {
 
     protected AnnotationMetadata writeAndLoadMetadata(String className, AnnotationMetadata toWrite) {
         def stream = new ByteArrayOutputStream()
-        new AnnotationMetadataWriter(className, toWrite)
+        new AnnotationMetadataWriter(className, toWrite, true)
                 .writeTo(stream)
         className = className + AnnotationMetadata.CLASS_NAME_SUFFIX
         ClassLoader classLoader = new ClassLoader() {
@@ -99,5 +110,35 @@ abstract class AbstractBeanDefinitionSpec extends Specification {
 
         AnnotationMetadata metadata = (AnnotationMetadata) classLoader.loadClass(className).newInstance()
         return metadata
+    }
+
+    /**
+     * Build and return a {@link io.micronaut.core.beans.BeanIntrospection} for the given class name and class data.
+     *
+     * @return the introspection if it is correct
+     **/
+    protected BeanIntrospection buildBeanIntrospection(String className, String cls) {
+        def beanDefName= '$' + NameUtils.getSimpleName(className) + '$Introspection'
+        def packageName = NameUtils.getPackageName(className)
+        String beanFullName = "${packageName}.${beanDefName}"
+
+        ClassLoader classLoader = buildClassLoader(cls)
+        return (BeanIntrospection)classLoader.loadClass(beanFullName).newInstance()
+    }
+
+    protected ApplicationContext buildContext(String className, String cls) {
+        InMemoryByteCodeGroovyClassLoader classLoader = buildClassLoader(cls)
+
+        return new DefaultApplicationContext(
+                ClassPathResourceLoader.defaultLoader(classLoader),"test") {
+            @Override
+            protected List<BeanDefinitionReference> resolveBeanDefinitionReferences() {
+                return classLoader.generatedClasses.keySet().findAll {
+                    it.endsWith("DefinitionClass")
+                }.collect {
+                    classLoader.loadClass(it).newInstance()
+                }
+            }
+        }.start()
     }
 }

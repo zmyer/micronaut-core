@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.management.endpoint.processors;
 
 import io.micronaut.context.ApplicationContext;
@@ -59,7 +58,11 @@ public class ReadEndpointRouteBuilder extends AbstractEndpointRouteBuilder {
     protected void registerRoute(ExecutableMethod<?, ?> method, String id) {
         Class<?> declaringType = method.getDeclaringType();
         UriTemplate template = buildUriTemplate(method, id);
-        final UriRoute uriRoute = GET(template.toString(), declaringType, method.getMethodName(), method.getArgumentTypes());
+        UriRoute uriRoute = GET(template.toString(), declaringType, method.getMethodName(), method.getArgumentTypes());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Created Route to @Endpoint {}: {}", method.getDeclaringType().getName(), uriRoute);
+        }
+        uriRoute = HEAD(template.toString(), declaringType, method.getMethodName(), method.getArgumentTypes());
         if (LOG.isDebugEnabled()) {
             LOG.debug("Created Route to @Endpoint {}: {}", method.getDeclaringType().getName(), uriRoute);
         }

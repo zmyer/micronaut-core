@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.server.netty;
 
 import io.micronaut.core.annotation.Internal;
-import io.micronaut.http.MediaType;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpContentCompressor;
-import io.netty.handler.codec.http.HttpHeaderNames;
-import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpResponse;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -38,39 +33,34 @@ import java.util.List;
 @Internal
 public class SmartHttpContentCompressor extends HttpContentCompressor {
 
-    private static final int LENGTH_1KB = 1024;
+    private final HttpCompressionStrategy httpCompressionStrategy;
     private boolean skipEncoding = false;
 
     /**
-     * Determines if encoding should occur based on the content type and length.
+     * Creates a SmartHttpContentCompressor with the given compression logic.
      *
-     * @param contentType   The content type
-     * @param contentLength The content length
-     * @return True if the content is compressible and larger than 1KB
+     * @param httpCompressionStrategy The compression strategy
      */
-    public static boolean shouldSkip(@Nullable String contentType, @Nullable Integer contentLength) {
-        if (contentType == null) {
-            return true;
-        }
-        return !MediaType.isTextBased(contentType) || (contentLength != null && contentLength >= 0 && contentLength < LENGTH_1KB);
+    SmartHttpContentCompressor(HttpCompressionStrategy httpCompressionStrategy) {
+        super(httpCompressionStrategy.getCompressionLevel());
+        this.httpCompressionStrategy = httpCompressionStrategy;
     }
 
     /**
-     * Determines if encoding should occur based on the content type and length.
+     * Determines if encoding should occur based on the response.
      *
-     * @param headers The headers that contain the content type and length
-     * @return True if the content is compressible and larger than 1KB
+     * @param response The response
+     * @return True if the content should not be compressed
      */
-    public static boolean shouldSkip(HttpHeaders headers) {
-        return shouldSkip(headers.get(HttpHeaderNames.CONTENT_TYPE), headers.getInt(HttpHeaderNames.CONTENT_LENGTH));
+    public boolean shouldSkip(HttpResponse response) {
+        return !httpCompressionStrategy.shouldCompress(response);
     }
 
     @Override
     protected void encode(ChannelHandlerContext ctx, HttpObject msg, List<Object> out) throws Exception {
         if (msg instanceof HttpResponse) {
             HttpResponse res = (HttpResponse) msg;
-            HttpHeaders headers = res.headers();
-            skipEncoding = shouldSkip(headers);
+            skipEncoding = shouldSkip(res);
         }
         super.encode(ctx, msg, out);
     }

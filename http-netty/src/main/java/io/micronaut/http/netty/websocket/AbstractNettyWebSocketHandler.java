@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.netty.websocket;
 
 import io.micronaut.buffer.netty.NettyByteBufferFactory;
@@ -256,6 +255,11 @@ public abstract class AbstractNettyWebSocketHandler extends SimpleChannelInbound
         }
     }
 
+    @Override
+    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+        handleCloseReason(ctx, CloseReason.ABNORMAL_CLOSURE);
+    }
+
     /**
      * Subclasses should implement to create the actual {@link NettyRxWebSocketSession}.
      *
@@ -320,7 +324,7 @@ public abstract class AbstractNettyWebSocketHandler extends SimpleChannelInbound
                 NettyRxWebSocketSession currentSession = getSession();
 
                 if (!converted.isPresent()) {
-                    MediaType mediaType = messageHandler.getValue(Consumes.class, MediaType.class).orElse(MediaType.APPLICATION_JSON_TYPE);
+                    MediaType mediaType = messageHandler.stringValue(Consumes.class).map(MediaType::new).orElse(MediaType.APPLICATION_JSON_TYPE);
                     try {
                         converted = mediaTypeCodecRegistry.findCodec(mediaType).map(codec -> codec.decode(bodyArgument, new NettyByteBufferFactory(ctx.alloc()).wrap(msg.content())));
                     } catch (CodecException e) {
@@ -425,7 +429,7 @@ public abstract class AbstractNettyWebSocketHandler extends SimpleChannelInbound
      * @param cr The reason
      */
     private void handleCloseReason(ChannelHandlerContext ctx, CloseReason cr) {
-        if (getSession().isOpen()) {
+        if (closed.compareAndSet(false, true)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Closing WebSocket session {} with reason {}", getSession(), cr);
             }
@@ -455,10 +459,8 @@ public abstract class AbstractNettyWebSocketHandler extends SimpleChannelInbound
     }
 
     private void handleCloseFrame(ChannelHandlerContext ctx, CloseWebSocketFrame cwsf) {
-        if (closed.compareAndSet(false, true)) {
-            CloseReason cr = new CloseReason(cwsf.statusCode(), cwsf.reasonText());
-            handleCloseReason(ctx, cr);
-        }
+        CloseReason cr = new CloseReason(cwsf.statusCode(), cwsf.reasonText());
+        handleCloseReason(ctx, cr);
     }
 
     private void invokeAndClose(ChannelHandlerContext ctx, Object target, BoundExecutable boundExecutable, MethodExecutionHandle<?, ?> methodExecutionHandle, boolean isClose) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.inject.ast;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
 
 /**
  * Represents a parameter to a method or constructor.
@@ -29,6 +30,8 @@ public interface ParameterElement extends TypedElement {
     /**
      * @return The type of the parameter
      */
+    @NotNull
     @Override
-    @Nullable ClassElement getType();
+    @Nonnull
+    ClassElement getType();
 }

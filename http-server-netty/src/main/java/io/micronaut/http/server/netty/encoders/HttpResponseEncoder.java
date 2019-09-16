@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.server.netty.encoders;
 
 import io.micronaut.buffer.netty.NettyByteBufferFactory;
@@ -31,6 +30,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.handler.codec.MessageToMessageEncoder;
 import io.netty.handler.codec.http.*;
 import org.slf4j.Logger;
@@ -49,6 +49,7 @@ import java.util.Optional;
  * @since 1.0
  */
 @Internal
+@Sharable
 public class HttpResponseEncoder extends MessageToMessageEncoder<MutableHttpResponse<?>> {
     public static final String ID = "micronaut-http-encoder";
     private static final Logger LOG = LoggerFactory.getLogger(HttpResponseEncoder.class);

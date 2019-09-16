@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ abstract class PublicAbstractMethodVisitor extends PublicMethodVisitor {
 
     @Override
     protected boolean isAcceptable(MethodNode node) {
-        if (!node.isAbstract()) {
+        if (!isAcceptableMethod(node)) {
             return false
         }
         if (current != null) {
@@ -54,5 +54,14 @@ abstract class PublicAbstractMethodVisitor extends PublicMethodVisitor {
             }
         }
         return super.isAcceptable(node)
+    }
+
+    /**
+     * Return whether the given executable element is acceptable. By default just checks if the method is abstract.
+     * @param executableElement The method
+     * @return True if it is
+     */
+    protected boolean isAcceptableMethod(MethodNode node) {
+        return node.isAbstract()
     }
 }

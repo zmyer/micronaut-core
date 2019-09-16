@@ -1,3 +1,18 @@
+/*
+ * Copyright 2017-2019 original authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.micronaut.visitors
 
 import io.micronaut.http.annotation.Get
@@ -9,13 +24,12 @@ import javax.validation.constraints.NotBlank
 
 class PropertyElementSpec extends AbstractTypeElementSpec {
 
-
     void "test simple bean properties"() {
         buildBeanDefinition('test.TestController', '''
 package test;
 
-import io.micronaut.http.annotation.*;
-import javax.inject.Inject;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
 
 @Controller("/test")
 public class TestController {
@@ -23,7 +37,8 @@ public class TestController {
     private int age;
     @javax.annotation.Nullable
     private String name;
-    
+    @javax.annotation.Nullable
+    private String description;
     
     /**
      * The age
@@ -31,8 +46,7 @@ public class TestController {
     @Get("/getMethod")
     public int getAge() {
         return age;
-    }
-    
+    }    
         
     /**
      * The age
@@ -50,11 +64,23 @@ public class TestController {
     public void setName(@javax.validation.constraints.NotBlank String n) {
         name = n;
     }
+
+    /**
+     * The Description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(@javax.validation.constraints.NotBlank  String description) {
+        this.description = description;
+    }
 }
 ''')
         expect:
         AllElementsVisitor.VISITED_CLASS_ELEMENTS.size() == 1
-        AllElementsVisitor.VISITED_CLASS_ELEMENTS[0].beanProperties.size() == 2
+        AllElementsVisitor.VISITED_CLASS_ELEMENTS[0].beanProperties.size() == 3
+        AllElementsVisitor.VISITED_CLASS_ELEMENTS[0].beanProperties.size() == 3
         AllElementsVisitor.VISITED_CLASS_ELEMENTS[0].beanProperties[0].name == 'age'
         AllElementsVisitor.VISITED_CLASS_ELEMENTS[0].beanProperties[0].isAnnotationPresent(Get)
         AllElementsVisitor.VISITED_CLASS_ELEMENTS[0].beanProperties[0].type.name == 'int'
@@ -62,6 +88,10 @@ public class TestController {
         AllElementsVisitor.VISITED_CLASS_ELEMENTS[0].beanProperties[1].name == 'name'
         AllElementsVisitor.VISITED_CLASS_ELEMENTS[0].beanProperties[1].isAnnotationPresent(Nullable)
         AllElementsVisitor.VISITED_CLASS_ELEMENTS[0].beanProperties[1].type.name == 'java.lang.String'
+        AllElementsVisitor.VISITED_CLASS_ELEMENTS[0].beanProperties[2].name == 'description'
+        AllElementsVisitor.VISITED_CLASS_ELEMENTS[0].beanProperties[2].isAnnotationPresent(Nullable)
+        AllElementsVisitor.VISITED_CLASS_ELEMENTS[0].beanProperties[2].type.name == 'java.lang.String'
+        AllElementsVisitor
         !AllElementsVisitor.VISITED_CLASS_ELEMENTS[0].beanProperties[1].isReadOnly()
     }
 

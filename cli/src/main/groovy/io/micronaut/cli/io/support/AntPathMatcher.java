@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.cli.io.support;
 
 import org.codehaus.groovy.runtime.StringGroovyMethods;
@@ -230,7 +229,7 @@ public class AntPathMatcher {
 
     private String[] tokenize(String pattern) {
         List<String> list = StringGroovyMethods.tokenize((CharSequence) pattern, (CharSequence) pathSeparator);
-        return list.toArray(new String[list.size()]);
+        return list.toArray(new String[0]);
     }
 
     /**
@@ -448,7 +447,7 @@ public class AntPathMatcher {
         private final Map<String, String> uriTemplateVariables;
 
         /**
-         * Construct a new instance of the <code>AntPatchStringMatcher</code>.
+         * Construct a new instance of the <code>AntPathStringMatcher</code>.
          *
          * @param pattern              The pattern
          * @param str                  The string

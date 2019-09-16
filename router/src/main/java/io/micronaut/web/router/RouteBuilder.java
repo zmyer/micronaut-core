@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.web.router;
 
+import io.micronaut.core.annotation.Indexed;
 import io.micronaut.core.naming.NameUtils;
 import io.micronaut.core.naming.conventions.MethodConvention;
 import io.micronaut.core.naming.conventions.PropertyConvention;
@@ -42,6 +42,7 @@ import java.util.function.Supplier;
  * @since 1.0
  */
 @SuppressWarnings("MethodName")
+@Indexed(RouteBuilder.class)
 public interface RouteBuilder {
 
     /**
@@ -1167,8 +1168,8 @@ public interface RouteBuilder {
          */
         default @Nonnull
         String resolveUri(BeanDefinition<?> beanDefinition) {
-            String uri = beanDefinition.getValue(UriMapping.class, String.class).orElseGet(() ->
-                    beanDefinition.getValue(Controller.class, String.class).orElse(UriMapping.DEFAULT_URI)
+            String uri = beanDefinition.stringValue(UriMapping.class).orElseGet(() ->
+                    beanDefinition.stringValue(Controller.class).orElse(UriMapping.DEFAULT_URI)
             );
             uri = normalizeUri(uri);
             if (uri != null) {
@@ -1214,7 +1215,11 @@ public interface RouteBuilder {
         }
 
         /**
-         * Normalizes a URI, ensuring the first character starts with a /.
+         * Normalizes a URI.
+         *
+         * Ensures the string:
+         * 1) Does not end with a /
+         * 2) Starts with a /
          *
          * @param uri The URI
          * @return The normalized URI or null
@@ -1222,11 +1227,11 @@ public interface RouteBuilder {
         default String normalizeUri(@Nullable String uri) {
             if (uri != null) {
                 int len = uri.length();
-                if (len == 1 && uri.charAt(0) == '/') {
-                    return "";
+                if (len > 0 && uri.charAt(0) != '/') {
+                    uri = '/' + uri;
                 }
-                if (len > 0 && uri.charAt(uri.length() - 1) == '/') {
-                    return uri.substring(0, uri.length() - 1);
+                if (len > 1 && uri.charAt(uri.length() - 1) == '/') {
+                    uri = uri.substring(0, uri.length() - 1);
                 }
                 if (len > 0) {
                     return uri;

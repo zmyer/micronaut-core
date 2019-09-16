@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.cli.profile.commands
 
 import io.micronaut.cli.console.logging.MicronautConsole
@@ -24,6 +23,7 @@ import io.micronaut.cli.profile.ProfileRepository
 import io.micronaut.cli.profile.ProfileRepositoryAware
 import io.micronaut.cli.profile.ProjectContext
 import io.micronaut.cli.profile.ProjectContextAware
+import io.micronaut.cli.profile.ResetableCommand
 import picocli.CommandLine
 import picocli.CommandLine.Model.CommandSpec
 
@@ -52,7 +52,7 @@ class HelpCommand implements ProfileCommand, ProjectContextAware, ProfileReposit
 
     @CommandLine.Parameters(paramLabel = "COMMAND",
             description = "The COMMAND to display the usage help message for.")
-    private String[] commands = new String[0];
+    private String[] commands = new String[0]
 
     private CommandLine self
     private PrintStream out
@@ -111,4 +111,5 @@ class HelpCommand implements ProfileCommand, ProjectContextAware, ProfileReposit
     boolean handle(ExecutionContext executionContext) {
         run()
     }
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.inject.writer;
-
-import static io.micronaut.inject.writer.BeanDefinitionWriter.buildArgumentWithGenerics;
-import static io.micronaut.inject.writer.BeanDefinitionWriter.pushBuildArgumentsForMethod;
 
 import io.micronaut.context.AbstractExecutableMethod;
 import io.micronaut.core.annotation.AnnotationMetadata;
@@ -26,11 +22,13 @@ import io.micronaut.core.reflect.ReflectionUtils;
 import io.micronaut.core.type.Argument;
 import io.micronaut.inject.annotation.AnnotationMetadataReference;
 import io.micronaut.inject.annotation.AnnotationMetadataWriter;
+import io.micronaut.inject.annotation.DefaultAnnotationMetadata;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.GeneratorAdapter;
+import org.objectweb.asm.commons.Method;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -53,6 +51,11 @@ public class ExecutableMethodWriter extends AbstractAnnotationMetadataWriter imp
 
     protected static final org.objectweb.asm.commons.Method METHOD_INVOKE_INTERNAL = org.objectweb.asm.commons.Method.getMethod(
         ReflectionUtils.getRequiredInternalMethod(AbstractExecutableMethod.class, "invokeInternal", Object.class, Object[].class));
+    protected static final Method METHOD_GET_TARGET = Method.getMethod("java.lang.reflect.Method resolveTargetMethod()");
+    private  static final Type TYPE_REFLECTION_UTILS = Type.getType(ReflectionUtils.class);
+    private static final org.objectweb.asm.commons.Method METHOD_GET_REQUIRED_METHOD = org.objectweb.asm.commons.Method.getMethod(
+            ReflectionUtils.getRequiredInternalMethod(ReflectionUtils.class, "getRequiredMethod", Class.class, String.class, Class[].class));
+
     protected final Type methodType;
 
     private final ClassWriter classWriter;
@@ -61,6 +64,7 @@ public class ExecutableMethodWriter extends AbstractAnnotationMetadataWriter imp
     private final String beanFullClassName;
     private final String methodProxyShortName;
     private final boolean isInterface;
+    private final boolean isAbstract;
     private String outerClassName = null;
     private boolean isStatic = false;
     private final Map<String, GeneratorAdapter> loadTypeMethods = new HashMap<>();
@@ -72,8 +76,13 @@ public class ExecutableMethodWriter extends AbstractAnnotationMetadataWriter imp
      * @param isInterface          Whether is an interface
      * @param annotationMetadata   The annotation metadata
      */
-    public ExecutableMethodWriter(String beanFullClassName, String methodClassName, String methodProxyShortName, boolean isInterface, AnnotationMetadata annotationMetadata) {
-        super(methodClassName, annotationMetadata, false);
+    public ExecutableMethodWriter(
+            String beanFullClassName,
+            String methodClassName,
+            String methodProxyShortName,
+            boolean isInterface,
+            AnnotationMetadata annotationMetadata) {
+        super(methodClassName, annotationMetadata, true);
         this.classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
         this.beanFullClassName = beanFullClassName;
         this.methodProxyShortName = methodProxyShortName;
@@ -81,6 +90,41 @@ public class ExecutableMethodWriter extends AbstractAnnotationMetadataWriter imp
         this.internalName = getInternalName(methodClassName);
         this.methodType = getObjectType(methodClassName);
         this.isInterface = isInterface;
+        this.isAbstract = isInterface;
+    }
+
+
+    /**
+     * @param beanFullClassName    The bean full class name
+     * @param methodClassName      The method class name
+     * @param methodProxyShortName The method proxy short name
+     * @param isInterface          Whether is an interface
+     * @param isAbstract           Whether the method is abstract
+     * @param annotationMetadata   The annotation metadata
+     */
+    public ExecutableMethodWriter(
+            String beanFullClassName,
+            String methodClassName,
+            String methodProxyShortName,
+            boolean isInterface,
+            boolean isAbstract,
+            AnnotationMetadata annotationMetadata) {
+        super(methodClassName, annotationMetadata, true);
+        this.classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+        this.beanFullClassName = beanFullClassName;
+        this.methodProxyShortName = methodProxyShortName;
+        this.className = methodClassName;
+        this.internalName = getInternalName(methodClassName);
+        this.methodType = getObjectType(methodClassName);
+        this.isInterface = isInterface;
+        this.isAbstract = isInterface || isAbstract;
+    }
+
+    /**
+     * @return Is the method abstract.
+     */
+    public boolean isAbstract() {
+        return isAbstract;
     }
 
     /**
@@ -113,13 +157,13 @@ public class ExecutableMethodWriter extends AbstractAnnotationMetadataWriter imp
 
     /**
      * Write the method.
-     *
-     * @param declaringType              The declaring type
+     *  @param declaringType              The declaring type
      * @param returnType                 The return type
      * @param genericReturnType          The generic return type
      * @param returnTypeGenericTypes     The return type generics
      * @param methodName                 The method name
      * @param argumentTypes              The argument types
+     * @param genericArgumentTypes       The generic argument types
      * @param argumentAnnotationMetadata The argument annotation metadata
      * @param genericTypes               The generic types
      */
@@ -129,13 +173,14 @@ public class ExecutableMethodWriter extends AbstractAnnotationMetadataWriter imp
                             Map<String, Object> returnTypeGenericTypes,
                             String methodName,
                             Map<String, Object> argumentTypes,
+                            Map<String, Object> genericArgumentTypes,
                             Map<String, AnnotationMetadata> argumentAnnotationMetadata,
                             Map<String, Map<String, Object>> genericTypes) {
         Type declaringTypeObject = getTypeReference(declaringType);
         boolean hasArgs = !argumentTypes.isEmpty();
         Collection<Object> argumentTypeClasses = hasArgs ? argumentTypes.values() : Collections.emptyList();
 
-        int modifiers = isStatic ? ACC_PUBLIC | ACC_STATIC : ACC_PUBLIC;
+        int modifiers = isStatic ? ACC_SYNTHETIC | ACC_STATIC : ACC_SYNTHETIC;
         classWriter.visit(V1_8, modifiers,
             internalName,
             null,
@@ -207,10 +252,14 @@ public class ExecutableMethodWriter extends AbstractAnnotationMetadataWriter imp
                 getTypeReferenceForName(getClassName()),
                 classWriter,
                 constructorWriter,
-                argumentTypes,
+                genericArgumentTypes,
                 argumentAnnotationMetadata,
                 genericTypes,
                 loadTypeMethods);
+
+            for (AnnotationMetadata value : argumentAnnotationMetadata.values()) {
+                DefaultAnnotationMetadata.contributeDefaults(this.annotationMetadata, value);
+            }
             // now invoke super(..) if no arg constructor
             invokeConstructor(
                 executorMethodConstructor,
@@ -246,53 +295,12 @@ public class ExecutableMethodWriter extends AbstractAnnotationMetadataWriter imp
 
         buildInvokeMethod(declaringTypeObject, methodName, returnType, argumentTypeClasses, invokeMethod);
 
+        buildResolveTargetMethod(methodName, declaringTypeObject, hasArgs, argumentTypeClasses);
+
         for (GeneratorAdapter method : loadTypeMethods.values()) {
             method.visitMaxs(3, 1);
             method.visitEnd();
         }
-    }
-
-    /**
-     * @param declaringTypeObject The declaring object type
-     * @param methodName          The method name
-     * @param returnType          The return type
-     * @param argumentTypes       The argument types
-     * @param invokeMethodVisitor The invoke method visitor
-     */
-    protected void buildInvokeMethod(Type declaringTypeObject, String methodName, Object returnType, Collection<Object> argumentTypes, GeneratorAdapter invokeMethodVisitor) {
-        Type returnTypeObject = getTypeReference(returnType);
-        invokeMethodVisitor.visitVarInsn(ALOAD, 1);
-        pushCastToType(invokeMethodVisitor, beanFullClassName);
-        boolean hasArgs = !argumentTypes.isEmpty();
-        String methodDescriptor;
-        if (hasArgs) {
-            methodDescriptor = getMethodDescriptor(returnType, argumentTypes);
-            int argCount = argumentTypes.size();
-            Iterator<Object> argIterator = argumentTypes.iterator();
-            for (int i = 0; i < argCount; i++) {
-                invokeMethodVisitor.visitVarInsn(ALOAD, 2);
-                invokeMethodVisitor.push(i);
-                invokeMethodVisitor.visitInsn(AALOAD);
-                // cast the return value to the correct type
-                pushCastToType(invokeMethodVisitor, argIterator.next());
-            }
-        } else {
-            methodDescriptor = getMethodDescriptor(returnType, Collections.emptyList());
-        }
-
-        invokeMethodVisitor.visitMethodInsn(isInterface ? INVOKEINTERFACE : INVOKEVIRTUAL,
-            declaringTypeObject.getInternalName(), methodName,
-            methodDescriptor, isInterface);
-
-        if (returnTypeObject.equals(Type.VOID_TYPE)) {
-            invokeMethodVisitor.visitInsn(ACONST_NULL);
-        } else {
-            pushBoxPrimitiveIfNecessary(returnType, invokeMethodVisitor);
-        }
-        invokeMethodVisitor.visitInsn(ARETURN);
-
-        invokeMethodVisitor.visitMaxs(DEFAULT_MAX_STACK, 1);
-        invokeMethodVisitor.visitEnd();
     }
 
     /**
@@ -319,5 +327,92 @@ public class ExecutableMethodWriter extends AbstractAnnotationMetadataWriter imp
     @Override
     protected final GeneratorAdapter beginAnnotationMetadataMethod(ClassWriter classWriter) {
         return startProtectedMethod(classWriter, "resolveAnnotationMetadata", AnnotationMetadata.class.getName());
+    }
+
+    /**
+     * @param declaringTypeObject The declaring object type
+     * @param methodName          The method name
+     * @param returnType          The return type
+     * @param argumentTypes       The argument types
+     * @param invokeMethodVisitor The invoke method visitor
+     */
+    protected void buildInvokeMethod(
+            Type declaringTypeObject,
+            String methodName,
+            Object returnType,
+            Collection<Object> argumentTypes,
+            GeneratorAdapter invokeMethodVisitor) {
+        Type returnTypeObject = getTypeReference(returnType);
+        invokeMethodVisitor.visitVarInsn(ALOAD, 1);
+        pushCastToType(invokeMethodVisitor, beanFullClassName);
+        boolean hasArgs = !argumentTypes.isEmpty();
+        String methodDescriptor;
+        if (hasArgs) {
+            methodDescriptor = getMethodDescriptor(returnType, argumentTypes);
+            int argCount = argumentTypes.size();
+            Iterator<Object> argIterator = argumentTypes.iterator();
+            for (int i = 0; i < argCount; i++) {
+                invokeMethodVisitor.visitVarInsn(ALOAD, 2);
+                invokeMethodVisitor.push(i);
+                invokeMethodVisitor.visitInsn(AALOAD);
+                // cast the return value to the correct type
+                pushCastToType(invokeMethodVisitor, argIterator.next());
+            }
+        } else {
+            methodDescriptor = getMethodDescriptor(returnType, Collections.emptyList());
+        }
+
+        invokeMethodVisitor.visitMethodInsn(isInterface ? INVOKEINTERFACE : INVOKEVIRTUAL,
+                declaringTypeObject.getInternalName(), methodName,
+                methodDescriptor, isInterface);
+
+        if (returnTypeObject.equals(Type.VOID_TYPE)) {
+            invokeMethodVisitor.visitInsn(ACONST_NULL);
+        } else {
+            pushBoxPrimitiveIfNecessary(returnType, invokeMethodVisitor);
+        }
+        invokeMethodVisitor.visitInsn(ARETURN);
+
+        invokeMethodVisitor.visitMaxs(DEFAULT_MAX_STACK, 1);
+        invokeMethodVisitor.visitEnd();
+    }
+
+    private void buildResolveTargetMethod(String methodName, Type declaringTypeObject, boolean hasArgs, Collection<Object> argumentTypeClasses) {
+        String targetMethodInternalName = METHOD_GET_TARGET.getName();
+        String targetMethodDescriptor = METHOD_GET_TARGET.getDescriptor();
+        GeneratorAdapter getTargetMethod = new GeneratorAdapter(classWriter.visitMethod(
+                ACC_PUBLIC | ACC_FINAL,
+                targetMethodInternalName,
+                targetMethodDescriptor,
+                null,
+                null),
+                ACC_PUBLIC | ACC_FINAL,
+                targetMethodInternalName,
+                targetMethodDescriptor
+        );
+
+        getTargetMethod.push(declaringTypeObject);
+        getTargetMethod.push(methodName);
+        if (hasArgs) {
+            int len = argumentTypeClasses.size();
+            Iterator<Object> iter = argumentTypeClasses.iterator();
+            pushNewArray(getTargetMethod, Class.class, len);
+            for (int i = 0; i < len; i++) {
+                Object type = iter.next();
+                pushStoreInArray(
+                        getTargetMethod,
+                        i,
+                        len,
+                        () -> getTargetMethod.push(getTypeReference(type))
+                );
+
+            }
+        } else {
+            getTargetMethod.getStatic(TYPE_REFLECTION_UTILS, "EMPTY_CLASS_ARRAY", Type.getType(Class[].class));
+        }
+        getTargetMethod.invokeStatic(TYPE_REFLECTION_UTILS, METHOD_GET_REQUIRED_METHOD);
+        getTargetMethod.returnValue();
+        getTargetMethod.visitMaxs(1, 1);
+        getTargetMethod.endMethod();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.client.exceptions;
 
 import io.micronaut.http.exceptions.HttpException;
@@ -39,5 +38,17 @@ public class HttpClientException extends HttpException {
      */
     public HttpClientException(String message, Throwable cause) {
         super(message, cause);
+    }
+
+    /**
+     * @param message The message
+     * @param cause   The throwable
+     * @param shared Shared instance
+     */
+    public HttpClientException(String message, Throwable cause, boolean shared) {
+        super(message, cause, false, true);
+        if (!shared) {
+            throw new IllegalArgumentException("shared must be true");
+        }
     }
 }

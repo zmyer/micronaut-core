@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.context;
 
 import io.micronaut.context.annotation.EachProperty;
@@ -29,9 +28,7 @@ import io.micronaut.core.value.ValueResolver;
 import io.micronaut.inject.*;
 import io.micronaut.inject.qualifiers.Qualifiers;
 
-import java.lang.annotation.Annotation;
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * A delegate bean definition.
@@ -46,23 +43,10 @@ class BeanDefinitionDelegate<T> extends AbstractBeanContextConditional implement
     static final String PRIMARY_ATTRIBUTE = Primary.class.getName();
 
     protected final BeanDefinition<T> definition;
-    protected final Map<String, Object> attributes = new HashMap<>();
+    protected final Map<String, Object> attributes = new HashMap<>(2);
 
     private BeanDefinitionDelegate(BeanDefinition<T> definition) {
-        if (!(definition instanceof BeanFactory)) {
-            throw new IllegalArgumentException("Delegate can only be used for bean factories");
-        }
         this.definition = definition;
-    }
-
-    @Override
-    public boolean isAbstract() {
-        return definition.isAbstract();
-    }
-
-    @Override
-    public boolean isProxy() {
-        return definition.isProxy();
     }
 
     /**
@@ -73,23 +57,13 @@ class BeanDefinitionDelegate<T> extends AbstractBeanContextConditional implement
     }
 
     @Override
-    public Optional<Class<? extends Annotation>> getScope() {
-        return definition.getScope();
-    }
-
-    @Override
-    public boolean isSingleton() {
-        return definition.isSingleton();
-    }
-
-    @Override
-    public boolean isProvided() {
-        return definition.isProvided();
+    public boolean isProxy() {
+        return definition.isProxy();
     }
 
     @Override
     public boolean isIterable() {
-        return get(EachProperty.class.getName(), Class.class) != null || definition.isIterable();
+        return classValue(EachProperty.class.getName()).isPresent() || definition.isIterable();
     }
 
     @Override
@@ -98,85 +72,26 @@ class BeanDefinitionDelegate<T> extends AbstractBeanContextConditional implement
     }
 
     @Override
-    public Class<T> getBeanType() {
-        return definition.getBeanType();
-    }
-
-    @Override
-    public Optional<Class<?>> getDeclaringType() {
-        return definition.getDeclaringType();
-    }
-
-    @Override
-    public ConstructorInjectionPoint<T> getConstructor() {
-        return definition.getConstructor();
-    }
-
-    @Override
-    public Collection<Class> getRequiredComponents() {
-        return definition.getRequiredComponents();
-    }
-
-    @Override
-    public Collection<MethodInjectionPoint> getInjectedMethods() {
-        return definition.getInjectedMethods();
-    }
-
-    @Override
-    public Collection<FieldInjectionPoint> getInjectedFields() {
-        return definition.getInjectedFields();
-    }
-
-    @Override
-    public Collection<MethodInjectionPoint> getPostConstructMethods() {
-        return definition.getPostConstructMethods();
-    }
-
-    @Override
-    public Collection<MethodInjectionPoint> getPreDestroyMethods() {
-        return definition.getPreDestroyMethods();
-    }
-
-    @Override
-    public String getName() {
-        return definition.getName();
-    }
-
-    @Override
-    public <R> Optional<ExecutableMethod<T, R>> findMethod(String name, Class[] argumentTypes) {
-        return definition.findMethod(name, argumentTypes);
-    }
-
-    @Override
-    public <R> Stream<ExecutableMethod<T, R>> findPossibleMethods(String name) {
-        return definition.findPossibleMethods(name);
-    }
-
-    @Override
-    public T inject(BeanContext context, T bean) {
-        return definition.inject(context, bean);
-    }
-
-    @Override
-    public T inject(BeanResolutionContext resolutionContext, BeanContext context, T bean) {
-        return definition.inject(resolutionContext, context, bean);
-    }
-
-    @Override
-    public Collection<ExecutableMethod<T, ?>> getExecutableMethods() {
-        return definition.getExecutableMethods();
-    }
-
-    @Override
     public T build(BeanResolutionContext resolutionContext, BeanContext context, BeanDefinition<T> definition) throws BeanInstantiationException {
-        resolutionContext.putAll(attributes);
+        LinkedHashMap<String, Object> oldAttributes = null;
+        if (!attributes.isEmpty()) {
+            LinkedHashMap<String, Object> oldAttrs = new LinkedHashMap<>(attributes.size());
+            attributes.forEach((key, value) -> {
+                Object previous = resolutionContext.setAttribute(key, value);
+                if (previous != null) {
+                    oldAttrs.put(key, previous);
+                }
+            });
+            oldAttributes = oldAttrs;
+        }
+
         try {
             if (this.definition instanceof ParametrizedBeanFactory) {
                 ParametrizedBeanFactory<T> parametrizedBeanFactory = (ParametrizedBeanFactory<T>) this.definition;
                 Argument[] requiredArguments = parametrizedBeanFactory.getRequiredArguments();
                 Object named = attributes.get(Named.class.getName());
                 if (named != null) {
-                    Map<String, Object> fulfilled = new LinkedHashMap<>();
+                    Map<String, Object> fulfilled = new LinkedHashMap<>(requiredArguments.length);
                     for (Argument argument : requiredArguments) {
                         Class argumentType = argument.getType();
                         Optional result = ConversionService.SHARED.convert(named, argumentType);
@@ -194,10 +109,17 @@ class BeanDefinitionDelegate<T> extends AbstractBeanContextConditional implement
                     return parametrizedBeanFactory.build(resolutionContext, context, definition, fulfilled);
                 }
             }
-            return ((BeanFactory<T>) this.definition).build(resolutionContext, context, definition);
+            if (this.definition instanceof BeanFactory) {
+                return ((BeanFactory<T>) this.definition).build(resolutionContext, context, definition);
+            } else {
+                throw new IllegalStateException("Cannot construct a dynamically registered singleton");
+            }
         } finally {
             for (String key : attributes.keySet()) {
-                resolutionContext.remove(key);
+                resolutionContext.removeAttribute(key);
+            }
+            if (oldAttributes != null) {
+                oldAttributes.forEach(resolutionContext::setAttribute);
             }
         }
     }

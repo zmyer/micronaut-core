@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.multitenancy.tenantresolver;
 
 import io.micronaut.context.annotation.Requires;
+import io.micronaut.core.util.StringUtils;
+import io.micronaut.http.HttpAttributes;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.context.ServerRequestContext;
 import io.micronaut.multitenancy.exceptions.TenantNotFoundException;
-import io.micronaut.security.filters.SecurityFilter;
 
 import javax.inject.Singleton;
 import java.io.Serializable;
@@ -31,10 +31,10 @@ import java.util.Optional;
  * A tenant resolver that resolves the tenant from the authenticated principal.
  *
  * @author Sergio del Amo
- * @since 6.0
+ * @since 1.0.0
  */
 @Singleton
-@Requires(property = PrincipalTenantResolverConfigurationProperties.PREFIX + ".enabled")
+@Requires(property = PrincipalTenantResolverConfigurationProperties.PREFIX + ".enabled", value = StringUtils.TRUE, defaultValue = StringUtils.FALSE)
 public class PrincipalTenantResolver implements TenantResolver {
 
     @Override
@@ -50,11 +50,9 @@ public class PrincipalTenantResolver implements TenantResolver {
      * @throws TenantNotFoundException if tenant not found
      */
     protected Serializable resolveTenantIdentifierAtRequest(HttpRequest<Object> request) throws TenantNotFoundException {
-        return request.getAttribute(SecurityFilter.AUTHENTICATION).map(objAuthentication -> {
-           if (objAuthentication instanceof Principal) {
-               return ((Principal) objAuthentication).getName();
-           }
-           throw new TenantNotFoundException("Tenant could not be resolved because authentication object is not java.security.Principal");
-        }).orElseThrow(() -> new TenantNotFoundException("Tenant could not be resolved because " + SecurityFilter.AUTHENTICATION + " attribute was not found"));
+        return request.getUserPrincipal().map(Principal::getName)
+                      .orElseThrow(() ->
+                              new TenantNotFoundException("Tenant could not be resolved because " + HttpAttributes.PRINCIPAL + " attribute was not found")
+                      );
     }
 }

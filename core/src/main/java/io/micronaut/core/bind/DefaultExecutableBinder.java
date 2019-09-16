@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.core.bind;
 
 import io.micronaut.core.bind.exceptions.UnsatisfiedArgumentException;
 import io.micronaut.core.convert.ArgumentConversionContext;
 import io.micronaut.core.convert.ConversionContext;
+import io.micronaut.core.convert.ConversionError;
+import io.micronaut.core.convert.exceptions.ConversionErrorException;
 import io.micronaut.core.type.Argument;
 import io.micronaut.core.type.Executable;
 
@@ -77,10 +78,15 @@ public class DefaultExecutableBinder<S> implements ExecutableBinder<S> {
                     );
 
                     if (!bindingResult.isPresentAndSatisfied()) {
-                        if (argument.getAnnotationMetadata().hasAnnotation(Nullable.class)) {
+                        if (argument.isNullable()) {
                             boundArguments[i] = null;
                         } else {
-                            throw new UnsatisfiedArgumentException(argument);
+                            final Optional<ConversionError> lastError = conversionContext.getLastError();
+                            if (lastError.isPresent()) {
+                                throw new ConversionErrorException(argument, lastError.get());
+                            } else {
+                                throw new UnsatisfiedArgumentException(argument);
+                            }
                         }
                     } else {
                         boundArguments[i] = bindingResult.get();
@@ -137,7 +143,7 @@ public class DefaultExecutableBinder<S> implements ExecutableBinder<S> {
                     );
 
                     if (!bindingResult.isPresentAndSatisfied()) {
-                        if (argument.getAnnotationMetadata().hasAnnotation(Nullable.class)) {
+                        if (argument.isNullable()) {
                             boundArguments[i] = null;
                         } else {
                             boundArguments[i] = null;

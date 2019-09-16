@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package io.micronaut.inject.factory.factorydefinition;
 
-import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
+import io.micronaut.context.annotation.Prototype;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -69,7 +69,7 @@ public class BFactory {
         return b;
     }
 
-    @Bean
+    @Prototype
     public C buildC(B b) {
         C c = new C();
         c.setB(b);

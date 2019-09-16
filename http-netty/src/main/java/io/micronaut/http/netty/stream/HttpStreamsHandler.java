@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.netty.stream;
 
 import io.micronaut.core.annotation.Internal;
@@ -183,9 +182,6 @@ abstract class HttpStreamsHandler<In extends HttpMessage, Out extends HttpMessag
             if (inMsg instanceof FullHttpMessage) {
 
                 // Forward as is
-                FullHttpMessage message = (FullHttpMessage) inMsg;
-                // will be released by fireChannelRead
-                message.retain();
                 ctx.fireChannelRead(inMsg);
                 consumedInMessage(ctx);
 
@@ -240,24 +236,13 @@ abstract class HttpStreamsHandler<In extends HttpMessage, Out extends HttpMessag
 
     private void handleReadHttpContent(ChannelHandlerContext ctx, HttpContent content) {
         if (!ignoreBodyRead) {
+            ctx.fireChannelRead(content);
+
             if (content instanceof LastHttpContent) {
-
-                if (content.content().readableBytes() > 0 ||
-                    !((LastHttpContent) content).trailingHeaders().isEmpty()) {
-                    // It has data or trailing headers, send them
-                    ctx.fireChannelRead(content);
-                } else {
-                    ReferenceCountUtil.release(content);
-                }
-
                 removeHandlerIfActive(ctx, ctx.name() + "-body-publisher");
                 currentlyStreamedMessage = null;
                 consumedInMessage(ctx);
-
-            } else {
-                ctx.fireChannelRead(content);
             }
-
         } else {
             ReferenceCountUtil.release(content);
             if (content instanceof LastHttpContent) {

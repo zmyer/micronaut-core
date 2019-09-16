@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.annotation;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -38,14 +37,14 @@ import java.lang.annotation.Target;
 public @interface Head {
 
     /**
-     * @return The URI of the HEAD route if not specified inferred from the method name and arguments
+     * @return The URI of the HEAD route
      */
     @AliasFor(annotation = HttpMethodMapping.class, member = "value")
     @AliasFor(annotation = UriMapping.class, member = "value")
     String value() default UriMapping.DEFAULT_URI;
 
     /**
-     * @return The URI of the HEAD route if not specified inferred from the method name and arguments
+     * @return The URI of the HEAD route
      */
     @AliasFor(annotation = HttpMethodMapping.class, member = "value")
     @AliasFor(annotation = UriMapping.class, member = "value")

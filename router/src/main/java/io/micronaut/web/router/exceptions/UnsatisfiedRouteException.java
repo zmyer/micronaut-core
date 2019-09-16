@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.web.router.exceptions;
 
+import io.micronaut.core.bind.annotation.Bindable;
 import io.micronaut.core.type.Argument;
+
+import java.lang.annotation.Annotation;
+import java.util.Optional;
 
 /**
  * An exception thrown when the an {@link Argument} to a {@link io.micronaut.web.router.Route} cannot be satisfied.
@@ -44,6 +47,19 @@ public class UnsatisfiedRouteException extends RoutingException {
     }
 
     private static String buildMessage(Argument<?> argument) {
+
+        Optional<Class<? extends Annotation>> classOptional = argument.getAnnotationMetadata().getAnnotationTypeByStereotype(Bindable.class);
+
+        if (classOptional.isPresent()) {
+            Class<? extends Annotation> clazz = classOptional.get();
+            Optional<Object> valOptional = argument.getAnnotationMetadata().getValue(clazz);
+            if (valOptional.isPresent()) {
+                return "Required " + clazz.getSimpleName() + " [" + valOptional.get().toString() + "] not specified";
+            } else {
+                return "Required " + clazz.getSimpleName() + " [" + argument + "] not specified";
+            }
+        }
+
         return "Required argument [" + argument + "] not specified";
     }
 }

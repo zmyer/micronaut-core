@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.context.exceptions;
 
 import io.micronaut.context.Qualifier;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Thrown when no such beans exists.
@@ -30,7 +30,7 @@ public class NoSuchBeanException extends BeanContextException {
      * @param beanType The bean type
      */
     public NoSuchBeanException(Class beanType) {
-        super("No bean of type [" + beanType.getName() + "] exists. Ensure the class is declared a bean and if you are using Java or Kotlin make sure you have enabled annotation processing.");
+        super("No bean of type [" + beanType.getName() + "] exists." + additionalMessage());
     }
 
     /**
@@ -39,7 +39,7 @@ public class NoSuchBeanException extends BeanContextException {
      * @param <T>       The type
      */
     public <T> NoSuchBeanException(Class<T> beanType, Qualifier<T> qualifier) {
-        super("No bean of type [" + beanType.getName() + "] exists" + (qualifier != null ? " for the given qualifier: " + qualifier : "") + ". Ensure the class is declared a bean and if you are using Java or Kotlin make sure you have enabled annotation processing.");
+        super("No bean of type [" + beanType.getName() + "] exists" + (qualifier != null ? " for the given qualifier: " + qualifier : "") + "." + additionalMessage());
     }
 
     /**
@@ -47,5 +47,10 @@ public class NoSuchBeanException extends BeanContextException {
      */
     protected NoSuchBeanException(String message) {
         super(message);
+    }
+
+    @NotNull
+    private static String additionalMessage() {
+        return " Make sure the bean is not disabled by bean requirements (enable trace logging for 'io.micronaut.context.condition' to check) and if the bean is enabled then ensure the class is declared a bean and annotation processing is enabled (for Java and Kotlin the 'micronaut-inject-java' dependency should be configured as an annotation processor).";
     }
 }

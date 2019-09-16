@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.server.netty;
 
 import io.micronaut.core.annotation.Internal;
@@ -36,11 +35,12 @@ import java.util.concurrent.atomic.AtomicLong;
 @Internal
 public abstract class AbstractHttpContentProcessor<T> extends SingleSubscriberProcessor<ByteBufHolder, T> implements HttpContentProcessor<T> {
 
-    protected final NettyHttpRequest nettyHttpRequest;
+    protected final NettyHttpRequest<?> nettyHttpRequest;
     protected final long advertisedLength;
     protected final long requestMaxSize;
     protected final AtomicLong receivedLength = new AtomicLong();
     protected final HttpServerConfiguration configuration;
+
 
     /**
      * @param nettyHttpRequest The {@link NettyHttpRequest}
@@ -70,19 +70,20 @@ public abstract class AbstractHttpContentProcessor<T> extends SingleSubscriberPr
     protected final void doOnNext(ByteBufHolder message) {
         long receivedLength = this.receivedLength.addAndGet(message.content().readableBytes());
 
-        if ((advertisedLength != -1 && receivedLength > advertisedLength) || (receivedLength > requestMaxSize)) {
-            fireExceedsLength(receivedLength, advertisedLength == -1 ? requestMaxSize : advertisedLength);
+        if (advertisedLength > requestMaxSize) {
+            fireExceedsLength(advertisedLength, requestMaxSize);
+        } else if (receivedLength > requestMaxSize) {
+            fireExceedsLength(receivedLength, requestMaxSize);
         } else {
-            long serverMax = configuration.getMultipart().getMaxFileSize();
-            if (receivedLength > serverMax) {
-                fireExceedsLength(receivedLength, serverMax);
-            } else {
-                onData(message);
-            }
+            onData(message);
         }
     }
 
-    private void fireExceedsLength(long receivedLength, long expected) {
+    /**
+     * @param receivedLength The length of the content received
+     * @param expected The expected length of the content
+     */
+    protected void fireExceedsLength(long receivedLength, long expected) {
         try {
             onError(new ContentLengthExceededException(expected, receivedLength));
         } finally {

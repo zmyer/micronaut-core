@@ -93,28 +93,16 @@ publishing {
         maven(MavenPublication) { publication ->
             artifactId( "micronaut-" + project.name.substring(project.name.indexOf('/') + 1) )
             def shadowJar = tasks.findByName("shadowJar")
-            if(shadowJar) {
+            if(shadowJar && shadowJar.enabled) {
                 artifact(project.tasks.shadowJar) {
                     classifier = null
                 }
                 pom.withXml { xml ->
                     def xmlNode = xml.asNode()
                     def dependenciesNode = xmlNode.appendNode('dependencies')
-
-                    project.configurations.shadow.allDependencies.each {
-                        if (! (it instanceof SelfResolvingDependency)) {
-                            def dependencyNode = dependenciesNode.appendNode('dependency')
-                            dependencyNode.appendNode('groupId', it.group)
-                            if (it.group.startsWith('io.micronaut')) {
-                                dependencyNode.appendNode('artifactId', "micronaut-$it.name")
-                            } else {
-                                dependencyNode.appendNode('artifactId', it.name)
-                            }
-                            dependencyNode.appendNode('version', it.version)
-                            dependencyNode.appendNode('scope', 'runtime')
-                        }
-                    }
-                    project.configurations.shadowCompile.allDependencies.each {
+                    Set<Dependency> visited = new HashSet<>()
+                    
+                    project.configurations.compile.allDependencies.each {
                         if (! (it instanceof SelfResolvingDependency)) {
                             def dependencyNode = dependenciesNode.appendNode('dependency')
                             dependencyNode.appendNode('groupId', it.group)
@@ -128,10 +116,13 @@ publishing {
                             dependencyNode.appendNode('artifactId', "micronaut-$it.name")
                             dependencyNode.appendNode('version', project.version)
                             dependencyNode.appendNode('scope', 'compile')
-
                         }
+                        visited.add(it)
                     }
-                    project.configurations.shadowRuntime.allDependencies.each {
+                    project.configurations.runtime.allDependencies.each {
+                        if (visited.contains(it)) {
+                            return
+                        }
                         if (! (it instanceof SelfResolvingDependency)) {
                             def dependencyNode = dependenciesNode.appendNode('dependency')
                             dependencyNode.appendNode('groupId', it.group)
@@ -147,6 +138,7 @@ publishing {
                             dependencyNode.appendNode('scope', 'runtime')
 
                         }
+                        visited.add(it)
                     }
                     xmlNode.children().last() + pomInfo
                 }
@@ -182,7 +174,6 @@ def bintrayUser = System.getenv("BINTRAY_USER") ?: project.hasProperty("bintrayU
 def bintrayKey = System.getenv("BINTRAY_KEY") ?: project.hasProperty("bintrayKey") ? project.bintrayKey : ''
 def ossUser = System.getenv("SONATYPE_USERNAME") ?: project.hasProperty("sonatypeOssUsername") ? project.sonatypeOssUsername : ''
 def ossPass = System.getenv("SONATYPE_PASSWORD") ?: project.hasProperty("sonatypeOssPassword") ? project.sonatypeOssPassword : ''
-
 
 bintray {
 
@@ -224,29 +215,40 @@ Synchronizing with Maven central. This may take a few minutes ...
 If this fails, log on to http://oss.sonatype.org/ using the centralUser credentials
 and progress through process manually -> Close -> Publish ... under staging repositories
 """
-        try {
+        List<String> versions = [projectVersion]
+
+        for(v in versions) {
             try {
-                def mavenClent = new RESTClient("https://repo.maven.apache.org/maven2/")
-                mavenClent.get(path:"${project.group.replace('.','/')}/micronaut-$project.name/$projectVersion/micronaut-$project.name-${projectVersion}.jar")
-            } catch(groovyx.net.http.HttpResponseException e) {
-                // doesn't exist.. try sync
-                def client = new RESTClient('https://api.bintray.com/maven_central_sync/micronaut/core-releases-local/')
-                client.headers['Authorization'] = 'Basic ' + "$bintrayUser:$bintrayKey".getBytes('iso-8859-1').encodeBase64()
-                def body = /{}/
-                def resp = client.post(
-                        path: "$bintray.pkg.name/versions/$projectVersion",
-                        body: body,
-                        requestContentType: JSON
-                )
-                assert resp.status == 200
-                println resp.data.status
-                println resp.data.messages.join('\n')
+                try {
+                    def mavenClent = new RESTClient("https://repo.maven.apache.org/maven2/")
+                    mavenClent.get(path:"${project.group.replace('.','/')}/micronaut-$project.name/$v/micronaut-$project.name-${v}.jar")
+                } catch(groovyx.net.http.HttpResponseException e) {
+                    // doesn't exist.. try sync
+                    def client = new RESTClient('https://api.bintray.com/maven_central_sync/micronaut/core-releases-local/')
+                    client.headers['Authorization'] = 'Basic ' + "$bintrayUser:$bintrayKey".getBytes('iso-8859-1').encodeBase64()
+                    def body = /{}/
+                    def resp = client.post(
+                            path: "$bintray.pkg.name/versions/$v",
+                            body: body,
+                            requestContentType: JSON
+                    )
+                    assert resp.status == 200
+                    println resp.data.status
+                    println resp.data.messages.join('\n')
+                }
+            } catch (groovyx.net.http.HttpResponseException e) {
+                println "Error: $e"
+                println "Message: $e.message"
+                println "Body: $e.response.data"
+                throw e
             }
-        } catch (groovyx.net.http.HttpResponseException e) {
-            println "Error: $e"
-            println "Message: $e.message"
-            println "Body: $e.response.data"
-            throw e
         }
+
     }
+}
+
+def fetch(addr, params = [:]) {
+    def auth = "<personal api token>"
+    def json = new groovy.json.JsonSlurper()
+    return json.parse(addr.toURL().newReader(requestProperties: ["Authorization": "token ${System.getenv("GH_TOKEN")}".toString(), "Accept": "application/json"]))
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.function.executor;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Graeme Rocher
@@ -31,7 +32,10 @@ public class FunctionInitializerSpec   {
 
     @Test
     public void testFunctionInitializer() {
-        Assert.assertEquals(new MathFunction().round(1.6f) , 2);
+        MathFunction mathFunction = new MathFunction();
+        Assert.assertEquals(1, MathFunction.initCount.get());
+        Assert.assertEquals(1, MathFunction.injectCount.get());
+        Assert.assertEquals(2, mathFunction.round(1.6f));
     }
 
     @Singleton
@@ -41,9 +45,24 @@ public class FunctionInitializerSpec   {
         }
     }
 
+    @Singleton
     public static class MathFunction extends FunctionInitializer {
+        static AtomicInteger initCount = new AtomicInteger(0);
+        static AtomicInteger injectCount = new AtomicInteger(0);
+
+
+        private MathService mathService;
+
         @Inject
-        MathService mathService;
+        public void setMathService(MathService mathService) {
+            this.mathService = mathService;
+            injectCount.incrementAndGet();
+        }
+
+        @PostConstruct
+        public void init() {
+            initCount.incrementAndGet();
+        }
 
         int round(float input) {
             return mathService.round(input);

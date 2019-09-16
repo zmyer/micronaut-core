@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.tracing.instrument.util;
 
 import io.opentracing.Scope;
@@ -50,26 +49,17 @@ public class TracingCallable<V> implements Callable<V> {
 
     @Override
     public V call() throws Exception {
-        Scope scope = null;
-        if (span != null) {
-            scope = tracer.scopeManager().activate(span, false);
-        }
-        try {
+        if (span == null) {
             return callable.call();
-        } finally {
-            if (scope != null) {
-                scope.close();
+        } else {
+            try (Scope ignored = tracer.scopeManager().activate(span)) {
+                return callable.call();
             }
         }
     }
 
     private Span getSpan(Tracer tracer) {
-        Scope active = tracer.scopeManager().active();
-        if (active != null) {
-            return active.span();
-        } else {
-            return tracer.activeSpan();
-        }
+        return tracer.scopeManager().activeSpan();
     }
 
 }

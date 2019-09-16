@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.tracing.instrument.util;
 
 import io.opentracing.Scope;
@@ -54,32 +53,32 @@ public class ScopePropagationPublisher<T> implements Publisher<T> {
     public void subscribe(Subscriber<? super T> actual) {
         Span span = parentSpan;
         if (span != null) {
-            try (Scope ignored = tracer.scopeManager().activate(span, false)) {
+            try (Scope ignored = tracer.scopeManager().activate(span)) {
                 publisher.subscribe(new Subscriber<T>() {
                     @Override
                     public void onSubscribe(Subscription s) {
-                        try (Scope ignored = tracer.scopeManager().activate(span, false)) {
+                        try (Scope ignored = tracer.scopeManager().activate(span)) {
                             actual.onSubscribe(s);
                         }
                     }
 
                     @Override
                     public void onNext(T object) {
-                        try (Scope ignored = tracer.scopeManager().activate(span, false)) {
+                        try (Scope ignored = tracer.scopeManager().activate(span)) {
                             actual.onNext(object);
                         }
                     }
 
                     @Override
                     public void onError(Throwable t) {
-                        try (Scope ignored = tracer.scopeManager().activate(span, false)) {
+                        try (Scope ignored = tracer.scopeManager().activate(span)) {
                             actual.onError(t);
                         }
                     }
 
                     @Override
                     public void onComplete() {
-                        try (Scope ignored = tracer.scopeManager().activate(span, false)) {
+                        try (Scope ignored = tracer.scopeManager().activate(span)) {
                             actual.onComplete();
                         }
                     }

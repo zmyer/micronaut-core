@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.web.router;
 
 import io.micronaut.core.annotation.AnnotationMetadata;
@@ -36,7 +35,6 @@ import io.micronaut.inject.MethodExecutionHandle;
 import io.micronaut.web.router.exceptions.UnsatisfiedRouteException;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -266,7 +264,7 @@ abstract class AbstractRouteMatch<T, R> implements MethodBasedRouteMatch<T, R> {
                             argumentList.add(resolveValueOrError(argument, conversionContext, result));
                         }
                     } else {
-                        if (argument.isAnnotationPresent(Nullable.class)) {
+                        if (argument.isNullable()) {
                             argumentList.add(null);
                             continue;
                         } else {
@@ -299,7 +297,12 @@ abstract class AbstractRouteMatch<T, R> implements MethodBasedRouteMatch<T, R> {
 
     @Override
     public boolean accept(MediaType contentType) {
-        return acceptedMediaTypes.isEmpty() || contentType == null || acceptedMediaTypes.contains(MediaType.ALL_TYPE) || acceptedMediaTypes.contains(contentType);
+        return acceptedMediaTypes.isEmpty() || contentType == null || acceptedMediaTypes.contains(MediaType.ALL_TYPE) || explicitAccept(contentType);
+    }
+
+    @Override
+    public boolean explicitAccept(MediaType contentType) {
+        return acceptedMediaTypes.contains(contentType);
     }
 
     @Override
@@ -348,7 +351,7 @@ abstract class AbstractRouteMatch<T, R> implements MethodBasedRouteMatch<T, R> {
     protected Object resolveValueOrError(Argument argument, ConversionContext conversionContext, Optional<?> result) {
         if (!result.isPresent()) {
             Optional<ConversionError> lastError = conversionContext.getLastError();
-            if (!lastError.isPresent() && argument.isAnnotationPresent(Nullable.class)) {
+            if (!lastError.isPresent() && argument.isDeclaredNullable()) {
                 return null;
             }
             throw lastError.map(conversionError ->
@@ -367,7 +370,7 @@ abstract class AbstractRouteMatch<T, R> implements MethodBasedRouteMatch<T, R> {
     protected abstract RouteMatch<R> newFulfilled(Map<String, Object> newVariables, List<Argument> requiredArguments);
 
     private String resolveInputName(Argument requiredArgument) {
-        String inputName = requiredArgument.getAnnotationMetadata().getValue(Bindable.class, String.class).orElse(null);
+        String inputName = requiredArgument.getAnnotationMetadata().stringValue(Bindable.class).orElse(null);
         if (StringUtils.isEmpty(inputName)) {
             inputName = requiredArgument.getName();
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,10 @@
  */
 package io.micronaut.context.env
 
+import io.micronaut.context.ApplicationContext
 import io.micronaut.context.exceptions.ConfigurationException
+import io.micronaut.core.convert.format.MapFormat
+import io.micronaut.core.naming.conventions.StringConvention
 import io.micronaut.core.value.MapPropertyResolver
 import io.micronaut.core.value.PropertyResolver
 import org.junit.Rule
@@ -73,13 +76,21 @@ class PropertySourcePropertyResolverSpec extends Specification {
         where:
         property                      | value | key                           | type   | expected
         'TWITTER_OAUTH2_ACCESS_TOKEN' | 'xxx' | 'twitter.oauth2-access-token' | String | 'xxx'
-        'TWITTER_OAUTH2_ACCESS_TOKEN' | 'xxx' | 'twitter.oauth2.access.token' | String | 'xxx'
         'TWITTER_OAUTH2_ACCESS_TOKEN' | 'xxx' | 'twitter.oauth2.access-token' | String | 'xxx'
-        'MY_APP_MY_STUFF'             | 'xxx' | 'my-app.my-stuff'             | String | 'xxx'
+        'TWITTER_OAUTH2_ACCESS_TOKEN' | 'xxx' | 'twitter.oauth2.access.token' | String | 'xxx'
+        'TWITTER_OAUTH2_ACCESS_TOKEN' | 'xxx' | 'twitter.oauth2-access.token' | String | 'xxx'
+        'TWITTER_OAUTH2_ACCESS_TOKEN' | 'xxx' | 'twitter-oauth2.access.token' | String | 'xxx'
+        'TWITTER_OAUTH2_ACCESS_TOKEN' | 'xxx' | 'twitter-oauth2-access-token' | String | 'xxx'
+        'TWITTER_OAUTH2_ACCESS_TOKEN' | 'xxx' | 'twitter-oauth2.access-token' | String | 'xxx'
+        'TWITTER_OAUTH2_ACCESS_TOKEN' | 'xxx' | 'twitter-oauth2-access.token' | String | 'xxx'
         'MY_APP_MY_STUFF'             | 'xxx' | 'my.app.my.stuff'             | String | 'xxx'
         'MY_APP_MY_STUFF'             | 'xxx' | 'my.app.my-stuff'             | String | 'xxx'
+        'MY_APP_MY_STUFF'             | 'xxx' | 'my.app-my.stuff'             | String | 'xxx'
+        'MY_APP_MY_STUFF'             | 'xxx' | 'my.app-my-stuff'             | String | 'xxx'
+        'MY_APP_MY_STUFF'             | 'xxx' | 'my-app.my.stuff'             | String | 'xxx'
+        'MY_APP_MY_STUFF'             | 'xxx' | 'my-app.my-stuff'             | String | 'xxx'
+        'MY_APP_MY_STUFF'             | 'xxx' | 'my-app-my.stuff'             | String | 'xxx'
         'MY_APP_MY_STUFF'             | 'xxx' | 'my-app-my-stuff'             | String | 'xxx'
-
     }
 
     @Unroll
@@ -146,13 +157,13 @@ class PropertySourcePropertyResolverSpec extends Specification {
     void "test resolve placeholders for lists of map"() {
         given:
         def values = [
-                'foo.bar' : '10',
-                'foo.bar.list' : [
+                'foo.bar'     : '10',
+                'foo.bar.list': [
                         [
-                                'foo' : '${foo.bar}'
+                                'foo': '${foo.bar}'
                         ],
                         [
-                                'bar' : 'baz'
+                                'bar': 'baz'
                         ]
                 ]
         ]
@@ -192,15 +203,21 @@ class PropertySourcePropertyResolverSpec extends Specification {
         Map<String, Object> parameters = [foo: "bar"]
         PropertyResolver propertyResolver = new MapPropertyResolver(parameters)
         DefaultPropertyPlaceholderResolver propertyPlaceholderResolver = new DefaultPropertyPlaceholderResolver(propertyResolver)
+        List<DefaultPropertyPlaceholderResolver.Segment> segments = propertyPlaceholderResolver.buildSegments("Hello \${foo} \${bar:test}!")
 
         expect:
         propertyPlaceholderResolver.resolvePlaceholders(template).get() == "Hello bar!"
-        propertyPlaceholderResolver.resolvePropertyNames(template).size() == 1
-        propertyPlaceholderResolver.resolvePropertyNames(template).first().property == 'foo'
-
-        propertyPlaceholderResolver.resolvePropertyNames("Hello \${foo} \${bar:test}!").first().property == 'foo'
-        propertyPlaceholderResolver.resolvePropertyNames("Hello \${foo} \${bar:test}!")[1].property == 'bar'
-        propertyPlaceholderResolver.resolvePropertyNames("Hello \${foo} \${bar:test}!")[1].defaultValue.get() == 'test'
+        segments.size() == 5
+        segments[0] instanceof DefaultPropertyPlaceholderResolver.RawSegment
+        segments[1] instanceof DefaultPropertyPlaceholderResolver.PlaceholderSegment
+        segments[2] instanceof DefaultPropertyPlaceholderResolver.RawSegment
+        segments[3] instanceof DefaultPropertyPlaceholderResolver.PlaceholderSegment
+        segments[4] instanceof DefaultPropertyPlaceholderResolver.RawSegment
+        segments[0].getValue(String.class) == "Hello "
+        segments[1].getValue(String.class) == "bar"
+        segments[2].getValue(String.class) == " "
+        segments[3].getValue(String.class) == "test"
+        segments[4].getValue(String.class) == "!"
     }
 
     void "test random placeholders for properties"() {
@@ -275,4 +292,109 @@ class PropertySourcePropertyResolverSpec extends Specification {
         resolver.getProperty("single", String).get() == "some default with `something` in backticks"
         resolver.getProperty("start", String).get() == "`startswithtick"
     }
+
+    void "test properties starting with z"() {
+        given:
+        def values = [
+                'z': true
+        ]
+        PropertySourcePropertyResolver resolver = new PropertySourcePropertyResolver(
+                PropertySource.of("zprops", values)
+        )
+
+        expect:
+        resolver.getProperty("z", Boolean).isPresent()
+    }
+
+    void "test retrieving a property as string then boolean"() {
+        given:
+        def applicationContext = ApplicationContext.run(['micronaut.security.enabled': true])
+
+        expect:
+        applicationContext.getProperty('micronaut.security.enabled', String).get() == "true"
+        applicationContext.getProperty('micronaut.security.enabled', Boolean).get() == true
+
+    }
+
+    void "test property lists with 3 entries or more"() {
+        given:
+        def values = new HashMap()
+        values.put('foo[0]', 'bar')
+        values.put('foo[1]', 'baz')
+        values.put('foo[2]', 'foo')
+        values.put('foo[3]', 'baar')
+        values.put('foo[4]', 'baaz')
+        values.put('foo[5]', 'fooo')
+        values.put('foo[15]', 'fooo')
+
+        PropertySourcePropertyResolver resolver = new PropertySourcePropertyResolver(
+                PropertySource.of("test", values)
+        )
+
+        expect:
+        resolver.getProperty("foo", List).get().get(0) == "bar"
+
+    }
+
+    void "test getProperties"() {
+        given:
+        def values = [
+                'foo.bar'          : 'two',
+                'my.property.one'  : 'one',
+                'my.property.two'  : '${foo.bar}',
+                'my.property.three': 'three',
+                'test-key.convention-test': 'key'
+        ]
+        PropertySourcePropertyResolver resolver = new PropertySourcePropertyResolver(
+                PropertySource.of("test", values))
+
+        expect:
+        resolver.getAllProperties(StringConvention.RAW, MapFormat.MapTransformation.NESTED).containsKey('my')
+        resolver.getAllProperties(StringConvention.RAW, MapFormat.MapTransformation.FLAT).containsKey('my.property.one')
+        resolver.getAllProperties(StringConvention.RAW, MapFormat.MapTransformation.FLAT).get('my.property.two') == 'two'
+        resolver.getAllProperties(StringConvention.RAW, MapFormat.MapTransformation.NESTED).get('my').get('property').get('two') == 'two'
+        resolver.getAllProperties(StringConvention.CAMEL_CASE, MapFormat.MapTransformation.FLAT).get('testKey.conventionTest') == 'key'
+        resolver.getAllProperties(StringConvention.CAMEL_CASE, MapFormat.MapTransformation.NESTED).get('testKey').get('conventionTest') == 'key'
+    }
+
+    void "test inner properties"() {
+        given:
+            def values = new HashMap()
+            values.put('foo[0].bar[0]', 'foo0Bar0')
+            values.put('foo[0].bar[1]', 'foo0Bar1')
+            values.put('foo[0].bar[3]', 'foo0Bar2')
+            values.put('foo[1].bar[abx]', 'foo1Bar0')
+            values.put('foo[1].bar[xyz]', 'foo1Bar1')
+            values.put('custom[0][0][key][4]', 'ohh')
+            values.put('custom[0][0][key][5]', 'ehh')
+            values.put('custom[0][0][key2]', 'xyz')
+            values.put('micronaut.security.intercept-url-map[0].access[0]', '/some-path')
+            values.put('micronaut.security.interceptUrlMap[0].access[1]', '/some-path-x')
+
+            PropertySourcePropertyResolver resolver = new PropertySourcePropertyResolver(
+                    PropertySource.of("test", values)
+            )
+        when:
+            def foos = resolver.getProperty("foo", List).get()
+            def custom = resolver.getProperty("custom", List).get()
+            def micronaut = resolver.getProperty("micronaut", Map).get()
+        then:
+            foos.size() == 2
+            foos[0].bar.size() == 4
+            foos[0].bar[0] == 'foo0Bar0'
+            foos[0].bar[2] == null
+            foos[1].bar.size() == 2
+            foos[1].bar['abx'] == 'foo1Bar0'
+            foos[1].bar['xyz'] == 'foo1Bar1'
+            custom.size() == 1
+            custom[0].size() == 1
+            custom[0][0].size() == 2
+            custom[0][0]['key'].size() == 6
+            custom[0][0]['key'][4] == 'ohh'
+            custom[0][0]['key'][5] == 'ehh'
+            custom[0][0]['key2'] == 'xyz'
+            micronaut['security']['intercept-url-map'][0]['access'][0] == '/some-path'
+            micronaut['security']['intercept-url-map'][0]['access'][1] == '/some-path-x'
+    }
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.tracing.instrument.http;
 
-import io.micronaut.core.util.StringUtils;
 import io.micronaut.http.*;
 import io.micronaut.http.filter.HttpFilter;
 import io.opentracing.Span;
@@ -97,7 +95,7 @@ public abstract class AbstractOpenTracingFilter implements HttpFilter  {
      */
     protected String resolveSpanName(HttpRequest<?> request) {
         Optional<String> route = request.getAttribute(HttpAttributes.URI_TEMPLATE, String.class);
-        return route.map(s -> request.getMethod() + " " + s).orElse(request.getMethod() + " " + request.getPath());
+        return route.map(s -> request.getMethodName() + " " + s).orElse(request.getMethodName() + " " + request.getPath());
     }
 
     /**
@@ -113,15 +111,8 @@ public abstract class AbstractOpenTracingFilter implements HttpFilter  {
                 spanName
         ).asChildOf(spanContext);
 
-        spanBuilder.withTag(TAG_METHOD, request.getMethod().name());
+        spanBuilder.withTag(TAG_METHOD, request.getMethodName());
         String path = request.getPath();
-        Optional<Object> serviceIdOptional = request.getAttribute(HttpAttributes.SERVICE_ID);
-        if (serviceIdOptional.isPresent()) {
-            String serviceId = serviceIdOptional.get().toString();
-            if (StringUtils.isNotEmpty(serviceId) && serviceId.startsWith("/")) {
-                path = StringUtils.prependUri(serviceId, path);
-            }
-        }
         spanBuilder.withTag(TAG_PATH, path);
         return spanBuilder;
     }

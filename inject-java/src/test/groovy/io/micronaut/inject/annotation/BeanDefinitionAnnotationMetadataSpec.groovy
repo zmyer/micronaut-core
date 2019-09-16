@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,14 @@ package io.micronaut.inject.annotation
 import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.EachBean
 import io.micronaut.context.annotation.Executable
+import io.micronaut.context.annotation.Factory
 import io.micronaut.context.annotation.Primary
 import io.micronaut.context.annotation.Requirements
 import io.micronaut.context.annotation.Requires
 import io.micronaut.inject.AbstractTypeElementSpec
 import io.micronaut.inject.BeanConfiguration
 import io.micronaut.inject.BeanDefinition
+import spock.lang.Issue
 
 import javax.inject.Scope
 import javax.inject.Singleton
@@ -33,6 +35,25 @@ import javax.inject.Singleton
  * @since 1.0
  */
 class BeanDefinitionAnnotationMetadataSpec extends AbstractTypeElementSpec {
+
+    @Issue('https://github.com/micronaut-projects/micronaut-core/issues/1607')
+    void "test recursive generics"() {
+        given:
+        BeanDefinition definition = buildBeanDefinition('test.Test','''\
+package test;
+
+import io.micronaut.inject.annotation.RecursiveGenerics;
+
+@javax.inject.Singleton
+class Test extends RecursiveGenerics<Test> {
+
+}
+''')
+        expect:
+        definition != null
+        definition.getTypeArguments(RecursiveGenerics).size() == 1
+        definition.getTypeArguments(RecursiveGenerics).get(0).type.name == 'test.Test'
+    }
 
     void "test alias for existing member values within annotation values"() {
         given:
@@ -173,11 +194,81 @@ class Test {
 }
 
 ''')
-        BeanDefinition definition = classLoader.loadClass('test.$Test$ExecutorServiceDefinition').newInstance()
+        BeanDefinition definition = classLoader.loadClass('test.$Test$ExecutorService0Definition').newInstance()
         expect:
         definition != null
+        definition.hasStereotype(Factory) // inherits the factory annotations as stereotypes
+        !definition.hasDeclaredAnnotation(Factory)
         !definition.hasDeclaredAnnotation(Singleton)
         definition.hasDeclaredAnnotation(Bean)
         definition.hasDeclaredAnnotation(EachBean)
+    }
+
+    void "test factory bean definition inherits returned objects metadata"() {
+        given:
+        ClassLoader classLoader = buildClassLoader("test.Test", '''
+package test;
+
+import io.micronaut.context.annotation.*;
+import java.util.concurrent.*;
+import javax.inject.*;
+
+@Factory
+class Test {
+
+    @Bean
+    public Foo foo() {
+        return null;
+    }
+}
+
+@Singleton
+interface Foo {
+
+}
+
+''')
+        BeanDefinition definition = classLoader.loadClass('test.$Test$Foo0Definition').newInstance()
+        expect:
+        definition != null
+        definition.hasStereotype(Singleton)
+        definition.hasDeclaredAnnotation(Bean)
+    }
+
+
+    void "test factory bean definition inherits returned objects metadata with inheritance"() {
+        given:
+        ClassLoader classLoader = buildClassLoader("test.Test", '''
+package test;
+
+import io.micronaut.context.annotation.*;
+import java.util.concurrent.*;
+import javax.inject.*;
+
+@Factory
+class Test {
+
+    @Bean
+    public Foo foo() {
+        return null;
+    }
+}
+
+
+interface Foo extends Bar {
+
+}
+
+@Singleton
+interface Bar {
+}
+
+
+''')
+        BeanDefinition definition = classLoader.loadClass('test.$Test$Foo0Definition').newInstance()
+        expect:
+        definition != null
+        definition.hasStereotype(Singleton)
+        definition.hasDeclaredAnnotation(Bean)
     }
 }

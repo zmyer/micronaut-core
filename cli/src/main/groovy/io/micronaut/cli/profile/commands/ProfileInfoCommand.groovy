@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.cli.profile.commands
 
 import groovy.transform.CompileStatic
@@ -93,7 +92,8 @@ class ProfileInfoCommand extends ArgumentCompletingCommand implements ProfileRep
                 console.log('--------------------')
                 Iterable<Command> commands = findCommands(profile, console).toUnique { Command c -> c.name }.sort { it.name }
                 if (!commands.empty) {
-                    int width = Math.min(20, commands.collect { it.name }.sort { it.length() }.last().length())
+                    int padding = commands.collect { it.name }.max { it.length() }.length()
+                    int width = Math.min(padding, commands.collect { it.name }.sort { it.length() }.last().length())
                     String separator = String.format('%n').padRight(width) // in case of multi-line command description
                     for (cmd in commands) {
                         def spec = cmd.commandSpec
@@ -105,8 +105,8 @@ class ProfileInfoCommand extends ArgumentCompletingCommand implements ProfileRep
                 console.log('--------------------')
                 def features = profile.features.sort { it.name }
                 if (!features.empty) {
-                    int width = Math.min(20, features.collect { it.name }.sort { it.length() }.last().length())
-
+                    int padding = features.collect { it.name }.max { it.length() }.length()
+                    int width = Math.min(padding, features.collect { it.name }.sort { it.length() }.last().length())
                     for (feature in features) {
                         console.log("  ${feature.name.padRight(width)}  ${feature.description}")
                     }

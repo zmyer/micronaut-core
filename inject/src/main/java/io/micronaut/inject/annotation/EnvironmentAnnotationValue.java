@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.inject.annotation;
 
 import io.micronaut.context.env.Environment;
+import io.micronaut.context.env.PropertyPlaceholderResolver;
+import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.AnnotationValue;
 import io.micronaut.core.annotation.Internal;
 
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * Adapts an {@link AnnotationValue} to the environment.
@@ -42,7 +45,29 @@ class EnvironmentAnnotationValue<A extends Annotation> extends AnnotationValue<A
         super(target, AnnotationMetadataSupport.getDefaultValues(target.getAnnotationName()), EnvironmentConvertibleValuesMap.of(
                 environment,
                 target.getValues()
-        ));
+        ), environment != null ? o -> {
+            PropertyPlaceholderResolver resolver = environment.getPlaceholderResolver();
+            if (o instanceof String) {
+                String v = (String) o;
+                if (v.contains("${")) {
+                    return resolver.resolveRequiredPlaceholders(v);
+                }
+            } else if (o instanceof String[]) {
+                String[] values = (String[]) o;
+                return Arrays.stream(values)
+                        .flatMap(value -> {
+                            try {
+                                return Arrays.stream(resolver.resolveRequiredPlaceholder(value, String[].class));
+                            } catch (ConfigurationException e) {
+                                if (value.contains(resolver.getPrefix())) {
+                                    value = resolver.resolveRequiredPlaceholders(value);
+                                }
+                                return Stream.of(value);
+                            }
+                        })
+                        .toArray(String[]::new);
+            }
+            return o;
+        } : null);
     }
-
 }

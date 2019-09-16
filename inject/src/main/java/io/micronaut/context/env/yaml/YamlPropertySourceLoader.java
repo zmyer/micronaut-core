@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.context.env.yaml;
 
 import io.micronaut.context.env.AbstractPropertySourceLoader;
 import io.micronaut.core.util.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,6 +33,8 @@ import java.util.Set;
  * @since 1.0
  */
 public class YamlPropertySourceLoader extends AbstractPropertySourceLoader {
+
+    private static final Logger LOG = LoggerFactory.getLogger(YamlPropertySourceLoader.class);
 
     @Override
     public boolean isEnabled() {
@@ -51,11 +55,22 @@ public class YamlPropertySourceLoader extends AbstractPropertySourceLoader {
 
         Yaml yaml = new Yaml();
         Iterable<Object> objects = yaml.loadAll(input);
-        for (Object object : objects) {
-            if (object instanceof Map) {
-                Map map = (Map) object;
-                String prefix = "";
-                processMap(finalMap, map, prefix);
+        Iterator<Object> i = objects.iterator();
+        if (i.hasNext()) {
+            while (i.hasNext()) {
+                Object object = i.next();
+                if (object instanceof Map) {
+                    Map map = (Map) object;
+                    if (LOG.isTraceEnabled()) {
+                        LOG.trace("Processing YAML: {}", map);
+                    }
+                    String prefix = "";
+                    processMap(finalMap, map, prefix);
+                }
+            }
+        } else {
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("PropertySource [{}] produced no YAML content", name);
             }
         }
     }

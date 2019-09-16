@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.netty.stream;
 
 import io.micronaut.core.annotation.Internal;
+import io.micronaut.http.netty.reactive.HotObservable;
 import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpRequest;
 import org.reactivestreams.Publisher;
@@ -46,5 +46,12 @@ final class DelegateStreamedHttpRequest extends DelegateHttpRequest implements S
     @Override
     public void subscribe(Subscriber<? super HttpContent> subscriber) {
         stream.subscribe(subscriber);
+    }
+
+    @Override
+    public void closeIfNoSubscriber() {
+        if (stream instanceof HotObservable) {
+            ((HotObservable<HttpContent>) stream).closeIfNoSubscriber();
+        }
     }
 }

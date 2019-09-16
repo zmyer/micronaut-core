@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.discovery.aws.parameterstore;
 
 import io.micronaut.configuration.aws.AWSClientConfiguration;
+import io.micronaut.context.annotation.BootstrapContextCompatible;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.env.Environment;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.core.util.Toggleable;
+
+import javax.annotation.Nonnull;
 
 /**
  * This is the configuration class for the AWSParameterStoreConfigClient for AWS Parameter Store based configuration.
@@ -30,23 +32,27 @@ import io.micronaut.core.util.Toggleable;
 @Requires(env = Environment.AMAZON_EC2)
 @Requires(property = AWSParameterStoreConfiguration.ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.FALSE)
 @ConfigurationProperties(AWSParameterStoreConfiguration.CONFIGURATION_PREFIX)
+@BootstrapContextCompatible
 public class AWSParameterStoreConfiguration extends AWSClientConfiguration implements Toggleable  {
 
     /**
      * Constant for whether AWS parameter store is enabled or not.
      */
     public static final String ENABLED = "aws.client.system-manager.parameterstore.enabled";
+
     /**
-     * The perfix for configuration.
+     * The prefix for configuration.
      */
     public static final String CONFIGURATION_PREFIX = "system-manager.parameterstore";
 
     private static final String PREFIX = "config";
     private static final String DEFAULT_PATH = "/" + PREFIX + "/";
+    private static final boolean DEFAULT_SECURE = false;
+    private static final boolean DEFAULT_ENABLED = false;
 
-    private boolean useSecureParameters = false;
-    private String rootHierarchyPath;
-    private Boolean enabled;
+    private boolean useSecureParameters = DEFAULT_SECURE;
+    private String rootHierarchyPath = DEFAULT_PATH;
+    private boolean enabled = DEFAULT_ENABLED;
 
     /**
      * Enable or disable this feature.
@@ -58,7 +64,8 @@ public class AWSParameterStoreConfiguration extends AWSClientConfiguration imple
     }
 
     /**
-     * Enable or disable this feature.
+     * Enable or disable distributed configuration with AWS Parameter Store. Default value ({@value #DEFAULT_ENABLED}).
+     *
      * @param enabled enable this feature
      */
     public void setEnabled(boolean enabled) {
@@ -66,40 +73,38 @@ public class AWSParameterStoreConfiguration extends AWSClientConfiguration imple
     }
 
     /**
-     * This is the default for the root hierarchy on the parameter store. If empty will default to '/config/application'.
+     * This is the default for the root hierarchy on the parameter store.
+     *
      * @return root level of parameter hierarchy
      */
+    @Nonnull
     public String getRootHierarchyPath() {
-        if (this.rootHierarchyPath == null) {
-            return DEFAULT_PATH;
-        }
         return rootHierarchyPath;
     }
 
     /**
-     * This is the default for the root hierarchy on the parameter store. If empty will default to '/config/application'.
+     * The the root hierarchy on the parameter store. Default value ({@value #DEFAULT_PATH}).
+     *
      * @param rootHierarchyPath root prefix used for all calls to get Parameter store values
      */
-    public void setRootHierarchyPath(String rootHierarchyPath) {
+    public void setRootHierarchyPath(@Nonnull String rootHierarchyPath) {
         this.rootHierarchyPath = rootHierarchyPath;
     }
 
     /**
-     * This will turn on or off auto-decryption via MKS for SecureString parameters.
-     * If you set this to off you will not get unencrypted values.
-     * @return use auto encryption on SecureString types
+     * @return Use auto encryption on SecureString types
      */
-    public boolean  getUseSecureParameters() {
+    public boolean getUseSecureParameters() {
         return useSecureParameters;
     }
 
     /**
-     * This will turn on or off auto-decryption via MKS for SecureString parameters.
-     * If you set this to off you will not get unencrypted values.
+     * Use auto-decryption via MKS for SecureString parameters. Default value ({@value DEFAULT_SECURE}).
+     * If set to false, you will not get unencrypted values.
      *
      * @param useSecureParameters True if secure parameters should be used
      */
-    public void setUseSecureParameters(boolean  useSecureParameters) {
+    public void setUseSecureParameters(boolean useSecureParameters) {
         this.useSecureParameters = useSecureParameters;
     }
 }

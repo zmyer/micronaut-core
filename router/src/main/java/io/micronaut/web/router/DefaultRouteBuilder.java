@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.web.router;
 
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.ExecutionHandleLocator;
 import io.micronaut.context.env.Environment;
 import io.micronaut.core.convert.ConversionService;
+import io.micronaut.core.naming.NameResolver;
 import io.micronaut.core.naming.NameUtils;
 import io.micronaut.core.naming.conventions.TypeConvention;
 import io.micronaut.core.type.Argument;
+import io.micronaut.core.util.ArrayUtils;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.http.HttpMethod;
 import io.micronaut.http.HttpRequest;
@@ -48,7 +49,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * A DefaultRouteBuilder implementation for building roots.
@@ -385,23 +385,54 @@ public abstract class DefaultRouteBuilder implements RouteBuilder {
         return buildRoute(httpMethod, uri, executableHandle);
     }
 
-    private UriRoute buildRoute(HttpMethod httpMethod, String uri, MethodExecutionHandle<?, Object> executableHandle) {
-        DefaultUriRoute route;
+    /**
+     * Build a route.
+     *
+     * @param httpMethod The HTTP method
+     * @param uri The URI
+     * @param executableHandle The executable handle
+     *
+     * @return an {@link UriRoute}
+     */
+    protected UriRoute buildRoute(HttpMethod httpMethod, String uri, MethodExecutionHandle<?, Object> executableHandle) {
+        return buildRoute(httpMethod.name(), httpMethod, uri, executableHandle);
+    }
+
+    private UriRoute buildRoute(String httpMethodName, HttpMethod httpMethod, String uri, MethodExecutionHandle<?, Object> executableHandle) {
+        UriRoute route;
         if (currentParentRoute != null) {
-            route = new DefaultUriRoute(httpMethod, currentParentRoute.uriMatchTemplate.nest(uri), executableHandle);
-            currentParentRoute.nestedRoutes.add(route);
+            route = new DefaultUriRoute(httpMethod, currentParentRoute.uriMatchTemplate.nest(uri), executableHandle, httpMethodName);
+            currentParentRoute.nestedRoutes.add((DefaultUriRoute) route);
         } else {
-            route = new DefaultUriRoute(httpMethod, uri, executableHandle);
+            route = new DefaultUriRoute(httpMethod, uri, executableHandle, httpMethodName);
         }
+
         this.uriRoutes.add(route);
         return route;
     }
 
     private UriRoute buildBeanRoute(HttpMethod httpMethod, String uri, BeanDefinition<?> beanDefinition, ExecutableMethod<?, ?> method) {
+        return buildBeanRoute(httpMethod.name(), httpMethod, uri, beanDefinition,  method);
+    }
+
+    /**
+     * A special case that is required for non standard http methods.
+     * @param httpMethodName The name of method. For standard http methods matches {@link HttpMethod#name()}
+     * @param httpMethod The http method. Is {@link HttpMethod#CUSTOM} for non standard http methods.
+     * @param uri The uri.
+     * @param beanDefinition The definition of the bean.
+     * @param method The method description
+     * @return The uri route corresponding to the method.
+     */
+    protected UriRoute buildBeanRoute(String httpMethodName, HttpMethod httpMethod, String uri, BeanDefinition<?> beanDefinition, ExecutableMethod<?, ?> method) {
         io.micronaut.context.Qualifier<?> qualifier = beanDefinition.getAnnotationTypeByStereotype(Qualifier.class).map(aClass -> Qualifiers.byAnnotation(beanDefinition, aClass)).orElse(null);
+        if (qualifier == null && beanDefinition.isIterable() && beanDefinition instanceof NameResolver) {
+            qualifier = ((NameResolver) beanDefinition).resolveName()
+                    .map(Qualifiers::byName).orElse(null);
+        }
         MethodExecutionHandle<?, Object> executionHandle = executionHandleLocator.findExecutionHandle(beanDefinition.getBeanType(), qualifier, method.getMethodName(), method.getArgumentTypes())
                 .orElseThrow(() -> new RoutingException("No such route: " + beanDefinition.getBeanType().getName() + "." + method));
-        return buildRoute(httpMethod, uri, executionHandle);
+        return buildRoute(httpMethodName, httpMethod, uri, executionHandle);
     }
 
     /**
@@ -425,9 +456,11 @@ public abstract class DefaultRouteBuilder implements RouteBuilder {
             this.targetMethod = targetMethod;
             this.conversionService = conversionService;
             this.acceptedMediaTypes = mediaTypes;
-            targetMethod.getValue(Produces.class, MediaType[].class).ifPresent(produces ->
-                    this.producesMediaTypes = Arrays.asList(produces)
-            );
+
+            MediaType[] types = MediaType.of(targetMethod.stringValues(Produces.class));
+            if (ArrayUtils.isNotEmpty(types)) {
+                this.producesMediaTypes = Arrays.asList(types);
+            }
         }
 
         @Override
@@ -490,12 +523,20 @@ public abstract class DefaultRouteBuilder implements RouteBuilder {
         public MethodExecutionHandle getTargetMethod() {
             return this.targetMethod;
         }
+
+        /**
+         * Whether the route permits a request body.
+         * @return True if the route permits a request body
+         */
+        protected boolean permitsRequestBody() {
+            return true;
+        }
     }
 
     /**
      * Default Error Route.
      */
-    class DefaultErrorRoute extends AbstractRoute implements ErrorRoute, Comparable<ErrorRoute> {
+    class DefaultErrorRoute extends AbstractRoute implements ErrorRoute {
 
         private final Class<? extends Throwable> error;
         private final Class originatingClass;
@@ -605,30 +646,12 @@ public abstract class DefaultRouteBuilder implements RouteBuilder {
                 .append(targetMethod)
                 .toString();
         }
-
-        @Override
-        public int compareTo(ErrorRoute o) {
-            if (o == this) {
-                return 0;
-            }
-            Class<? extends Throwable> thatExceptionType = o.exceptionType();
-            Class<? extends Throwable> thisExceptionType = this.error;
-
-            if (thisExceptionType == thatExceptionType) {
-                return 0;
-            } else if (thisExceptionType.isAssignableFrom(thatExceptionType)) {
-                return 1;
-            } else if (thatExceptionType.isAssignableFrom(thisExceptionType)) {
-                return -1;
-            }
-            return -1;
-        }
     }
 
     /**
      * Represents a route for an {@link io.micronaut.http.HttpStatus} code.
      */
-    class DefaultStatusRoute extends AbstractRoute implements StatusRoute, Comparable<StatusRoute> {
+    class DefaultStatusRoute extends AbstractRoute implements StatusRoute {
 
         private final HttpStatus status;
         private final Class originatingClass;
@@ -733,31 +756,16 @@ public abstract class DefaultRouteBuilder implements RouteBuilder {
             result = 31 * result + (originatingClass != null ? originatingClass.hashCode() : 0);
             return result;
         }
-
-        @Override
-        public int compareTo(StatusRoute o) {
-            if (o == this) {
-                return 0;
-            }
-            Class<?> thatType = o.originatingType();
-            Class<?> thisType = this.originatingType();
-
-            if (thisType == thatType && this.status().equals(o.status())) {
-                return 0;
-            } else {
-                return -1;
-            }
-        }
     }
 
     /**
      * The default route impl.
      */
     class DefaultUriRoute extends AbstractRoute implements UriRoute {
-
+        final String httpMethodName;
         final HttpMethod httpMethod;
         final UriMatchTemplate uriMatchTemplate;
-        final List<DefaultUriRoute> nestedRoutes = new ArrayList<>();
+        final List<DefaultUriRoute> nestedRoutes = new ArrayList<>(2);
 
         /**
          * @param httpMethod The HTTP method
@@ -765,7 +773,17 @@ public abstract class DefaultRouteBuilder implements RouteBuilder {
          * @param targetMethod The target method execution handle
          */
         DefaultUriRoute(HttpMethod httpMethod, CharSequence uriTemplate, MethodExecutionHandle targetMethod) {
-            this(httpMethod, uriTemplate, MediaType.APPLICATION_JSON_TYPE, targetMethod);
+            this(httpMethod, uriTemplate, targetMethod, httpMethod.name());
+        }
+
+        /**
+         * @param httpMethod The HTTP method
+         * @param uriTemplate The URI Template as a {@link CharSequence}
+         * @param targetMethod The target method execution handle
+         * @param httpMethodName The actual name of the method - may differ from {@link HttpMethod#name()} for non-standard http methods
+         */
+        DefaultUriRoute(HttpMethod httpMethod, CharSequence uriTemplate, MethodExecutionHandle targetMethod, String httpMethodName) {
+            this(httpMethod, uriTemplate, MediaType.APPLICATION_JSON_TYPE, targetMethod, httpMethodName);
         }
 
         /**
@@ -775,7 +793,18 @@ public abstract class DefaultRouteBuilder implements RouteBuilder {
          * @param targetMethod The target method execution handle
          */
         DefaultUriRoute(HttpMethod httpMethod, CharSequence uriTemplate, MediaType mediaType, MethodExecutionHandle targetMethod) {
-            this(httpMethod, new UriMatchTemplate(uriTemplate), Collections.singletonList(mediaType), targetMethod);
+            this(httpMethod, uriTemplate, mediaType, targetMethod, httpMethod.name());
+        }
+
+        /**
+         * @param httpMethod The HTTP method
+         * @param uriTemplate The URI Template as a {@link CharSequence}
+         * @param mediaType The Media type
+         * @param targetMethod The target method execution handle
+         * @param httpMethodName The actual name of the method - may differ from {@link HttpMethod#name()} for non-standard http methods
+         */
+        DefaultUriRoute(HttpMethod httpMethod, CharSequence uriTemplate, MediaType mediaType, MethodExecutionHandle targetMethod, String httpMethodName) {
+            this(httpMethod, new UriMatchTemplate(uriTemplate), Collections.singletonList(mediaType), targetMethod, httpMethodName);
         }
 
         /**
@@ -784,7 +813,17 @@ public abstract class DefaultRouteBuilder implements RouteBuilder {
          * @param targetMethod The target method execution handle
          */
         DefaultUriRoute(HttpMethod httpMethod, UriMatchTemplate uriTemplate, MethodExecutionHandle targetMethod) {
-            this(httpMethod, uriTemplate, Collections.singletonList(MediaType.APPLICATION_JSON_TYPE), targetMethod);
+            this(httpMethod, uriTemplate, targetMethod, httpMethod.name());
+        }
+
+        /**
+         * @param httpMethod The HTTP method
+         * @param uriTemplate The URI Template as a {@link UriMatchTemplate}
+         * @param targetMethod The target method execution handle
+         * @param httpMethodName The actual name of the method - may differ from {@link HttpMethod#name()} for non-standard http methods
+         */
+        DefaultUriRoute(HttpMethod httpMethod, UriMatchTemplate uriTemplate, MethodExecutionHandle targetMethod, String httpMethodName) {
+            this(httpMethod, uriTemplate, Collections.singletonList(MediaType.APPLICATION_JSON_TYPE), targetMethod, httpMethodName);
         }
 
         /**
@@ -794,14 +833,31 @@ public abstract class DefaultRouteBuilder implements RouteBuilder {
          * @param targetMethod The target method execution handle
          */
         DefaultUriRoute(HttpMethod httpMethod, UriMatchTemplate uriTemplate, List<MediaType> mediaTypes, MethodExecutionHandle targetMethod) {
+            this(httpMethod, uriTemplate, mediaTypes, targetMethod, httpMethod.name());
+        }
+
+        /**
+         * @param httpMethod The HTTP method
+         * @param uriTemplate The URI Template as a {@link UriMatchTemplate}
+         * @param mediaTypes The media types
+         * @param targetMethod The target method execution handle
+         * @param httpMethodName The actual name of the method - may differ from {@link HttpMethod#name()} for non-standard http methods
+         */
+        DefaultUriRoute(HttpMethod httpMethod, UriMatchTemplate uriTemplate, List<MediaType> mediaTypes, MethodExecutionHandle targetMethod, String httpMethodName) {
             super(targetMethod, ConversionService.SHARED, mediaTypes);
             this.httpMethod = httpMethod;
             this.uriMatchTemplate = uriTemplate;
+            this.httpMethodName = httpMethodName;
+        }
+
+        @Override
+        public String getHttpMethodName() {
+            return httpMethodName;
         }
 
         @Override
         public String toString() {
-            StringBuilder builder = new StringBuilder(httpMethod);
+            StringBuilder builder = new StringBuilder(getHttpMethodName());
             return builder.append(' ')
                 .append(uriMatchTemplate)
                 .append(" -> ")
@@ -809,7 +865,7 @@ public abstract class DefaultRouteBuilder implements RouteBuilder {
                 .append('#')
                 .append(targetMethod)
                 .append(" (")
-                .append(acceptedMediaTypes.stream().collect(Collectors.joining(",")))
+                .append(String.join(",", acceptedMediaTypes))
                 .append(" )")
                 .toString();
         }
@@ -871,6 +927,11 @@ public abstract class DefaultRouteBuilder implements RouteBuilder {
         @Override
         public int compareTo(UriRoute o) {
             return uriMatchTemplate.compareTo(o.getUriMatchTemplate());
+        }
+
+        @Override
+        protected boolean permitsRequestBody() {
+            return HttpMethod.permitsRequestBody(httpMethod);
         }
     }
 

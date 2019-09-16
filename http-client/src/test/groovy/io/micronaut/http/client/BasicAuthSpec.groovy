@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,36 @@
  */
 package io.micronaut.http.client
 
+import io.micronaut.context.ApplicationContext
 import io.micronaut.http.HttpRequest
+import io.micronaut.runtime.server.EmbeddedServer
 import spock.lang.Specification
 
 class BasicAuthSpec extends Specification {
 
     def "basicAuth() sets Authorization Header with Basic base64(username:password)"() {
         when:
+        // tag::basicAuth[]
         HttpRequest request = HttpRequest.GET("/home").basicAuth('sherlock', 'password')
+        // end::basicAuth[]
 
         then:
         request.headers.get('Authorization')
         request.headers.get('Authorization') == "Basic ${'sherlock:password'.bytes.encodeBase64().toString()}"
+    }
+
+    void "test user in absolute URL"() {
+        given:
+        EmbeddedServer server = ApplicationContext.run(EmbeddedServer)
+        ApplicationContext ctx = server.getApplicationContext()
+
+        when:
+        String resp = ctx.createBean(RxHttpClient, new URL("http://sherlock:password@localhost:${server.port}")).retrieve("/basic-auth").blockingFirst()
+
+        then:
+        resp == "Basic ${'sherlock:password'.bytes.encodeBase64().toString()}"
+
+        cleanup:
+        ctx.close()
     }
 }

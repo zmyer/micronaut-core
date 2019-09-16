@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.context;
 
 import io.micronaut.context.env.Environment;
@@ -88,6 +87,12 @@ class DefaultMethodInjectionPoint implements MethodInjectionPoint, EnvironmentCo
         this.argTypes = Argument.toClassArray(arguments);
         this.declaringBean = declaringBean;
         this.annotationMetadata = initAnnotationMetadata(annotationMetadata);
+    }
+
+    @Override
+    public String toString() {
+        String text = Argument.toString(getArguments());
+        return declaringType.getSimpleName() + "." + methodName + "(" + text + ")";
     }
 
     @Override
@@ -169,6 +174,8 @@ class DefaultMethodInjectionPoint implements MethodInjectionPoint, EnvironmentCo
     private AnnotationMetadata initAnnotationMetadata(@Nullable AnnotationMetadata annotationMetadata) {
         if (annotationMetadata instanceof DefaultAnnotationMetadata) {
             return new MethodAnnotationMetadata((DefaultAnnotationMetadata) annotationMetadata);
+        } else if (annotationMetadata != null) {
+            return annotationMetadata;
         }
         return AnnotationMetadata.EMPTY_METADATA;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -557,6 +557,43 @@ class Parent {
         bean != null
         bean.setter == "foo"
         bean.@fieldTest == "bar"
+    }
 
+    void "test boolean fields starting with is[A-Z] map to set methods"() {
+        when:
+        BeanDefinition beanDefinition = buildBeanDefinition("micronaut.issuer.FooConfigurationProperties", """
+package micronaut.issuer;
+
+import io.micronaut.context.annotation.ConfigurationProperties;
+
+@ConfigurationProperties("foo")
+public class FooConfigurationProperties {
+
+    private String issuer;
+    private boolean isEnabled;
+    protected Boolean isOther;
+
+
+    public void setIssuer(String issuer) {
+        this.issuer = issuer;
+    }
+    
+    //isEnabled field maps to setEnabled method
+    public void setEnabled(boolean enabled) {
+        this.isEnabled = enabled;
+    }
+    
+    //isOther field does not map to setOther method because its the class and not primitive
+    public void setOther(Boolean other) {
+        this.isOther = other;
+    }
+}
+
+""")
+        then:
+        noExceptionThrown()
+        beanDefinition.injectedMethods[0].name == "setIssuer"
+        beanDefinition.injectedMethods[1].name == "setEnabled"
+        beanDefinition.injectedFields[0].name == "isOther"
     }
 }

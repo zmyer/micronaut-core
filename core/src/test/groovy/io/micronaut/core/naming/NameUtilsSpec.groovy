@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.core.naming
 
 import spock.lang.Specification
@@ -39,6 +38,7 @@ class NameUtilsSpec extends Specification {
         "foo1-bar"  | true
         "1foo1-bar" | false
         "Foo1Bar"   | false
+        "foo"       | true
     }
 
     void "test simple name"() {
@@ -205,5 +205,44 @@ class NameUtilsSpec extends Specification {
         "getFoo" | true
         "getfoo" | false
         "a"      | false
+    }
+
+    @Unroll
+    void "test is valid hypenated property name #name"() {
+        expect:
+        NameUtils.isValidHyphenatedPropertyName(name) == result
+
+        where:
+        name             | result
+        "foo-bar"        | true
+        "foobar"         | true
+        "foo1-bar"       | true
+        "Foo-bar"        | false
+        "foo1-bar"       | true
+        "1foo1-bar"      | true
+        "Foo1Bar"        | false
+        "fooBar"         | false
+        "Foo"            | false
+        "foo.bar"        | true
+        "foo.bar-baz"    | true
+        "foo-bar.baz"    | true
+        "fooBar.baz"     | false
+        "1foo.2bar"      | true
+        "1foo.2bar-3baz" | true
+    }
+
+    @Unroll
+    void "test is valid environment name #value"() {
+        expect:
+        NameUtils.isEnvironmentName(value) == result
+
+        where:
+        value         | result
+        "FOO_BAR"     | true
+        "COM_FOO_BAR" | true
+        "foo_BAR"     | false
+        "FOOBAR"      | true
+        "Foo_BAR"     | false
+        "FOO-BAR"     | false
     }
 }

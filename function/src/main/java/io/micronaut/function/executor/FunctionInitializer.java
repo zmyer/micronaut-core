@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.function.executor;
 
 import io.micronaut.context.ApplicationContext;
@@ -46,6 +45,7 @@ public class FunctionInitializer extends AbstractExecutor implements Closeable, 
         ApplicationContext applicationContext = buildApplicationContext(null);
         startThis(applicationContext);
         injectThis(applicationContext);
+        applicationContext.registerSingleton(this, false);
         this.closeContext = true;
     }
 
@@ -87,7 +87,7 @@ public class FunctionInitializer extends AbstractExecutor implements Closeable, 
      * @param supplier The function that executes this function
      * @throws IOException If an error occurs
      */
-    protected void run(String[] args, Function<ParseContext, ?> supplier) throws IOException {
+    public void run(String[] args, Function<ParseContext, ?> supplier) throws IOException {
         ApplicationContext applicationContext = this.applicationContext;
         this.functionExitHandler = applicationContext.findBean(FunctionExitHandler.class).orElse(this.functionExitHandler);
         ParseContext context = new ParseContext(args);

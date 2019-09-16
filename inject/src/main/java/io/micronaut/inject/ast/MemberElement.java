@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.inject.ast;
 
 /**
@@ -29,4 +28,15 @@ public interface MemberElement extends Element {
      * @return The declaring type of the element.
      */
     ClassElement getDeclaringType();
+
+    /**
+     * The owing type is the type that owns this element. This can differ from {@link #getDeclaringType()}
+     * in the case of inheritance since this method will return the subclass that owners the inherited member,
+     * whilst {@link #getDeclaringType()} will return the super class that declares the type.
+     *
+     * @return The owning type.
+     */
+    default ClassElement getOwningType() {
+        return getDeclaringType();
+    }
 }

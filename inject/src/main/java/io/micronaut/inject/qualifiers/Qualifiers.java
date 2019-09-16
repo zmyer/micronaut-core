@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.inject.qualifiers;
 
 import io.micronaut.context.Qualifier;
@@ -88,7 +87,7 @@ public class Qualifiers {
                 return byType(aClass.get());
             }
         } else if (Named.class == type) {
-            Optional<String> value = metadata.getValue(type, String.class);
+            Optional<String> value = metadata.stringValue(type);
             if (value.isPresent()) {
                 return byName(value.get());
             }
@@ -117,9 +116,9 @@ public class Qualifiers {
                 return byType(aClass.get());
             }
         } else if (Named.class.getName().equals(type)) {
-            Optional<String> value = metadata.getValue(type, String.class);
-            if (value.isPresent()) {
-                return byName(value.get());
+            String n = metadata.stringValue(type).orElse(null);
+            if (n != null) {
+                return byName(n);
             }
         }
         return new AnnotationMetadataQualifier<>(metadata, type);
@@ -145,6 +144,18 @@ public class Qualifiers {
      */
     public static <T> Qualifier<T> byTypeArguments(Class... typeArguments) {
         return new TypeArgumentQualifier<>(typeArguments);
+    }
+
+    /**
+     * Build a qualifier for the given generic type arguments. Only the closest
+     * matches will be returned.
+     *
+     * @param typeArguments The generic type arguments
+     * @param <T>           The component type
+     * @return The qualifier
+     */
+    public static <T> Qualifier<T> byTypeArgumentsClosest(Class... typeArguments) {
+        return new ClosestTypeArgumentQualifier<>(typeArguments);
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,6 @@ class HttpPutSpec extends Specification {
     ApplicationContext context = ApplicationContext.run()
 
     @Shared
-    @AutoCleanup
     EmbeddedServer embeddedServer = context.getBean(EmbeddedServer).start()
 
     @Shared
@@ -66,7 +65,7 @@ class HttpPutSpec extends Specification {
 
         then:
         def e = thrown(HttpClientException)
-        e.message == "Method [PATCH] not allowed. Allowed methods: [PUT]"
+        e.message == "Method [PATCH] not allowed for URI [/put/simple]. Allowed methods: [PUT]"
     }
     void "test simple post request with JSON"() {
         given:

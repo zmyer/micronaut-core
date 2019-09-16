@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,27 +22,32 @@ import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
+import io.micronaut.http.MutableHttpRequest
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.Header
 import io.micronaut.http.annotation.QueryValue
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.runtime.server.EmbeddedServer
+import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.functions.Consumer
+import reactor.core.publisher.Mono
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
 
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 /**
  * @author Graeme Rocher
  * @since 1.0
  */
 class HttpGetSpec extends Specification {
+
     @Shared @AutoCleanup EmbeddedServer embeddedServer =
             ApplicationContext.run(EmbeddedServer)
 
@@ -95,7 +100,7 @@ class HttpGetSpec extends Specification {
 
         when:
         def flowable = Flowable.fromPublisher(client.exchange(
-                HttpRequest.GET("/get/error")
+                HttpRequest.GET("/get/error"), Argument.of(String), Argument.of(String)
         ))
 
         flowable.blockingFirst()
@@ -104,12 +109,12 @@ class HttpGetSpec extends Specification {
         def e = thrown(HttpClientResponseException)
         e.message == "Server error"
         e.status == HttpStatus.INTERNAL_SERVER_ERROR
+        e.response.getBody(String).get() == "Server error"
 
         cleanup:
         client.stop()
         client.close()
     }
-
 
     void "test 500 request with json body"() {
         given:
@@ -117,14 +122,14 @@ class HttpGetSpec extends Specification {
 
         when:
         def flowable = Flowable.fromPublisher(client.exchange(
-                HttpRequest.GET("/get/jsonError")
+                HttpRequest.GET("/get/jsonError"), Argument.of(String), Argument.of(Map)
         ))
 
         flowable.blockingFirst()
 
         then:
         def e = thrown(HttpClientResponseException)
-        e.message == "Internal Server Error"
+        e.message == "{foo=bar}"
         e.status == HttpStatus.INTERNAL_SERVER_ERROR
 
         cleanup:
@@ -225,7 +230,6 @@ class HttpGetSpec extends Specification {
 
         cleanup:
         client.stop()
-
     }
 
     void "test simple retrieve request with POJO"() {
@@ -398,6 +402,123 @@ class HttpGetSpec extends Specification {
         client.formatDateTimeQuery(dt) == dt.toString()
     }
 
+    void "test controller slash concatenation"() {
+        given:
+        BlockingHttpClient client = HttpClient.create(embeddedServer.getURL()).toBlocking()
+
+        expect:
+        client.retrieve("/noslash/slash") == "slash"
+        client.retrieve("/noslash/slash/") == "slash"
+        client.retrieve("/noslash/noslash") == "noslash"
+        client.retrieve("/noslash/noslash/") == "noslash"
+        client.retrieve("/slash/slash") == "slash"
+        client.retrieve("/slash/slash/") == "slash"
+        client.retrieve("/slash/noslash") == "noslash"
+        client.retrieve("/slash/noslash/") == "noslash"
+
+        client.retrieve("/ending-slash/slash") == "slash"
+        client.retrieve("/ending-slash/slash/") == "slash"
+        client.retrieve("/ending-slash/noslash") == "noslash"
+        client.retrieve("/ending-slash/noslash/") == "noslash"
+
+        client.retrieve("/noslash") == "noslash"
+        client.retrieve("/noslash/") == "noslash"
+        client.retrieve("/slash") == "slash"
+        client.retrieve("/slash/") == "slash"
+    }
+
+    void "test a request with a custom host header"() {
+        given:
+        HttpClient client = HttpClient.create(embeddedServer.getURL())
+
+        when:
+        String body = client.toBlocking().retrieve(
+                HttpRequest.GET("/get/host").header("Host", "http://foo.com"), String
+        )
+
+
+        then:
+        body == "http://foo.com"
+
+        cleanup:
+        client.stop()
+        client.close()
+    }
+
+    void "test empty list returns ok"() {
+        given:
+        RxHttpClient client = RxHttpClient.create(embeddedServer.getURL())
+
+        when:
+        HttpResponse response = client.exchange(HttpRequest.GET("/get/emptyList"), Argument.listOf(Book)).blockingFirst()
+
+        then:
+        noExceptionThrown()
+        response.status == HttpStatus.OK
+        response.body().isEmpty()
+    }
+
+    void "test single empty list returns ok"() {
+        given:
+        RxHttpClient client = RxHttpClient.create(embeddedServer.getURL())
+
+        when:
+        HttpResponse response = client.exchange(HttpRequest.GET("/get/emptyList/single"), Argument.listOf(Book)).blockingFirst()
+
+        then:
+        noExceptionThrown()
+        response.status == HttpStatus.OK
+        response.body().isEmpty()
+    }
+
+    void "test mono empty list returns ok"() {
+        given:
+        RxHttpClient client = RxHttpClient.create(embeddedServer.getURL())
+
+        when:
+        HttpResponse response = client.exchange(HttpRequest.GET("/get/emptyList/mono"), Argument.listOf(Book)).blockingFirst()
+
+        then:
+        noExceptionThrown()
+        response.status == HttpStatus.OK
+        response.body().isEmpty()
+    }
+
+    void "test completable returns 200"() {
+        when:
+        MyGetClient client = embeddedServer.applicationContext.getBean(MyGetClient)
+        def ex = client.completableError().blockingGet()
+
+        then:
+        client.completable().blockingGet() == null
+        ex instanceof HttpClientResponseException
+        ex.message.contains("completable error")
+    }
+
+    void "test setting query params on the request"() {
+        given:
+        HttpClient client = HttpClient.create(embeddedServer.getURL())
+
+        when:
+        MutableHttpRequest request = HttpRequest.GET("/get/multipleQueryParam?foo=x")
+        request.parameters.add('bar', 'y')
+        String body = client.toBlocking().retrieve(request)
+
+        then:
+        noExceptionThrown()
+        body == 'x-y'
+    }
+
+    void "test overriding the URL"() {
+        def client = embeddedServer.applicationContext.getBean(OverrideUrlClient)
+
+        when:
+        String val = client.overrideUrl(embeddedServer.getURL().toString())
+
+        then:
+        val == "success"
+    }
+
     @Controller("/get")
     static class GetController {
 
@@ -414,6 +535,21 @@ class HttpGetSpec extends Specification {
         @Get("/pojoList")
         List<Book> pojoList() {
             return [ new Book(title: "The Stand") ]
+        }
+
+        @Get("/emptyList")
+        List<Book> emptyList() {
+            return []
+        }
+
+        @Get("/emptyList/single")
+        Single<List<Book>> emptyListSingle() {
+            return Single.just([])
+        }
+
+        @Get("/emptyList/mono")
+        Mono<List<Book>> emptyListMono() {
+            return Mono.just([])
         }
 
         @Get(value = "/error", produces = MediaType.TEXT_PLAIN)
@@ -465,6 +601,79 @@ class HttpGetSpec extends Specification {
         String formatDateTimeQuery(@QueryValue @Format('yyyy-MM-dd') LocalDate myDate) {
             return myDate.toString()
         }
+
+        @Get("/host")
+        String hostHeader(@Header String host) {
+            return host
+        }
+
+        @Get("/completable")
+        Completable completable(){
+            return Completable.complete()
+        }
+
+        @Get("/completable/error")
+        Completable completableError() {
+            return Completable.error(new RuntimeException("completable error"))
+        }
+    }
+
+
+    @Controller("noslash")
+    static class NoSlashController {
+
+        @Get("/slash")
+        String slash() {
+            "slash"
+        }
+
+        @Get("noslash")
+        String noSlash() {
+            "noslash"
+        }
+    }
+
+
+    @Controller("/slash")
+    static class SlashController {
+
+        @Get("/slash")
+        String slash() {
+            "slash"
+        }
+
+        @Get("noslash")
+        String noSlash() {
+            "noslash"
+        }
+    }
+
+    @Controller("/ending-slash/")
+    static class EndingSlashController {
+
+        @Get("/slash/")
+        String slash() {
+            "slash"
+        }
+
+        @Get("noslash/")
+        String noSlash() {
+            "noslash"
+        }
+    }
+
+    @Controller
+    static class SlashRootController {
+
+        @Get("/slash")
+        String slash() {
+            "slash"
+        }
+
+        @Get("noslash")
+        String noSlash() {
+            "noslash"
+        }
     }
 
     static class Book {
@@ -509,6 +718,19 @@ class HttpGetSpec extends Specification {
 
         @Get("/dateTimeQuery")
         String formatDateTimeQuery(@QueryValue @Format('yyyy-MM-dd') LocalDate myDate)
+
+        @Get("/completable")
+        Completable completable()
+
+        @Get("/completable/error")
+        Completable completableError()
+    }
+
+    @Client("http://not.used")
+    static interface OverrideUrlClient {
+
+        @Get("{+url}/get/simple")
+        String overrideUrl(String url);
 
     }
 

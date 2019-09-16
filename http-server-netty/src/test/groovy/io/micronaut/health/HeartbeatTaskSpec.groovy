@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ class HeartbeatTaskSpec extends Specification {
     void "test that by default a heartbeat is sent"() {
         when:
         EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer, [
+                'micronaut.heartbeat.enabled':true,
                 'micronaut.heartbeat.initialDelay':'1ms',
                 'micronaut.heartbeat.interval':'10ms',
                 'micronaut.application.name':'test'

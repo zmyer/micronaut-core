@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.client;
 
 import io.micronaut.core.convert.format.ReadableBytes;
@@ -24,8 +23,7 @@ import io.micronaut.runtime.ApplicationConfiguration;
 import io.netty.channel.ChannelOption;
 
 import javax.annotation.Nullable;
-import java.net.Proxy;
-import java.net.SocketAddress;
+import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -100,6 +98,8 @@ public abstract class HttpClientConfiguration {
     private String proxyUsername;
 
     private String proxyPassword;
+
+    private ProxySelector proxySelector;
 
     private Charset defaultCharset = StandardCharsets.UTF_8;
 
@@ -400,6 +400,53 @@ public abstract class HttpClientConfiguration {
      */
     public void setProxyPassword(String proxyPassword) {
         this.proxyPassword = proxyPassword;
+    }
+
+    /**
+     * Sets the proxy selector.
+     * ProxySelector decides what proxy to use and take precedence over {@link #setProxyAddress(SocketAddress)} and {@link #setProxyType(Proxy.Type)}.
+     *
+     * @param proxySelector The proxy selector to use
+     */
+    public void setProxySelector(ProxySelector proxySelector) {
+        this.proxySelector = proxySelector;
+    }
+
+    /**
+     * @return The proxy selector provided
+     */
+    public Optional<ProxySelector> getProxySelector() {
+        return Optional.ofNullable(proxySelector);
+    }
+
+    /**
+     * Resolves a proxy to use for connection.
+     *
+     * If ProxySelector is set by {@link #setProxySelector(ProxySelector)} then it constructs URI and pass it to {@link ProxySelector#select(URI)}.
+     * First proxy returned by proxy selector will be used. If no proxy is returned by select, then {@link Proxy#NO_PROXY} will be used.
+     *
+     * If ProxySelector is not set then parameters are ignored and a proxy as defined by {@link #setProxyAddress(SocketAddress)} and {@link #setProxyType(Proxy.Type)} will be returned.
+     * If no proxy is defined then parameters are ignored and {@link Proxy#NO_PROXY} is returned.
+     *
+     * @param isSsl is it http or https connection
+     * @param host connection host
+     * @param port connection port
+     * @return A non null proxy instance
+     */
+    public Proxy resolveProxy(boolean isSsl, String host, int port) {
+        try {
+            if (proxySelector != null) {
+                final URI uri = new URI(isSsl ? "https" : "http", null, host, port, null, null, null);
+                return getProxySelector()
+                        .flatMap(selector -> selector.select(uri).stream().findFirst())
+                        .orElse(Proxy.NO_PROXY);
+            } else if (proxyAddress != null) {
+                return new Proxy(getProxyType(), proxyAddress);
+            }
+            return  Proxy.NO_PROXY;
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

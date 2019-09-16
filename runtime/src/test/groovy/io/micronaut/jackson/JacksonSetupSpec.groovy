@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,8 @@ class JacksonSetupSpec extends Specification {
         ApplicationContext applicationContext = new DefaultApplicationContext("test")
         applicationContext.environment.addPropertySource(MapPropertySource.of(
                 'jackson.dateFormat': 'yyMMdd',
-                'jackson.serialization.indentOutput': true
+                'jackson.serialization.indentOutput': true,
+                'jackson.json-view.enabled': true
         ))
         applicationContext.start()
 
@@ -63,6 +64,26 @@ class JacksonSetupSpec extends Specification {
         applicationContext.containsBean(JacksonConfiguration)
         applicationContext.getBean(JacksonConfiguration).dateFormat == 'yyMMdd'
         applicationContext.getBean(JacksonConfiguration).serializationSettings.get(SerializationFeature.INDENT_OUTPUT)
+
+        cleanup:
+        applicationContext?.close()
+    }
+
+    void "verify that the defaultTyping configuration option is correctly converted and set on the object mapper"() {
+        given:
+        ApplicationContext applicationContext = new DefaultApplicationContext("test")
+        applicationContext.environment.addPropertySource(MapPropertySource.of(
+                'jackson.dateFormat': 'yyMMdd',
+                'jackson.defaultTyping': 'NON_FINAL'
+        ))
+        applicationContext.start()
+
+        expect:
+        applicationContext.containsBean(ObjectMapper.class)
+        ((ObjectMapper.DefaultTypeResolverBuilder) applicationContext.getBean(ObjectMapper.class).deserializationConfig.getDefaultTyper(null))._appliesFor == ObjectMapper.DefaultTyping.NON_FINAL
+
+        applicationContext.containsBean(JacksonConfiguration)
+        applicationContext.getBean(JacksonConfiguration).defaultTyping == ObjectMapper.DefaultTyping.NON_FINAL
 
         cleanup:
         applicationContext?.close()
@@ -92,5 +113,12 @@ class JacksonSetupSpec extends Specification {
         'LOWER_CAMEL_CASE'                     | PropertyNamingStrategy.LOWER_CAMEL_CASE
         'LOWER_CASE'                           | PropertyNamingStrategy.LOWER_CASE
         'KEBAB_CASE'                           | PropertyNamingStrategy.KEBAB_CASE
+    }
+
+    void "test property naming strategy from yml"() {
+        ApplicationContext applicationContext = ApplicationContext.run("jackson")
+
+        expect:
+        applicationContext.getBean(JacksonConfiguration).propertyNamingStrategy == PropertyNamingStrategy.SNAKE_CASE
     }
 }

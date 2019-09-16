@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.discovery.consul.client.v1;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import io.micronaut.core.annotation.Introspected;
+import io.micronaut.core.annotation.ReflectiveAccess;
 import io.micronaut.core.convert.ConversionService;
 
 import java.time.Duration;
@@ -34,6 +35,7 @@ import java.util.Optional;
  * @since 1.0
  */
 @JsonNaming(PropertyNamingStrategy.UpperCamelCaseStrategy.class)
+@Introspected
 public abstract class NewCheck implements Check {
 
     private Duration deregisterCriticalServiceAfter;
@@ -184,6 +186,7 @@ public abstract class NewCheck implements Check {
     /**
      * @param name The name
      */
+    @ReflectiveAccess
     protected void setName(String name) {
         this.name = name;
     }
@@ -199,6 +202,7 @@ public abstract class NewCheck implements Check {
      * @param ID The id
      */
     @JsonProperty("ID")
+    @ReflectiveAccess
     void setID(@SuppressWarnings("ParameterName") String ID) {
         this.ID = ID;
     }
@@ -206,6 +210,7 @@ public abstract class NewCheck implements Check {
     /**
      * @param status The status
      */
+    @ReflectiveAccess
     protected void setStatus(String status) {
         this.status = Status.valueOf(status.toUpperCase());
     }
@@ -213,6 +218,7 @@ public abstract class NewCheck implements Check {
     /**
      * @param notes The notes
      */
+    @ReflectiveAccess
     protected void setNotes(String notes) {
         this.notes = notes;
     }

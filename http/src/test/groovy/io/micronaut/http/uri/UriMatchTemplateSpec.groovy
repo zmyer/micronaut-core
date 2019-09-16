@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,13 +35,13 @@ class UriMatchTemplateSpec extends Specification {
 
         where:
         left           | right          | result
-        "/book"        | "/{name}"      | 1
+        "/book"        | "/{name}"      | -1
         "/"            | "/"            | 0
-        "/"            | "/book"        | -1
-        "/book/foo"    | "/book"        | 1
+        "/"            | "/book"        | 0
+        "/book/foo"    | "/book"        | 0
         "/book/{name}" | "/book"        | 1
         "/book/{name}" | "/book/{test}" | 0
-        "/book/{name}" | "/book/test"   | -1
+        "/book/{name}" | "/book/test"   | 1
 
     }
 

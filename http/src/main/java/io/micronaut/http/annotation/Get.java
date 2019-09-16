@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.http.annotation;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import io.micronaut.context.annotation.AliasFor;
+import io.micronaut.core.async.annotation.SingleResult;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -38,14 +38,14 @@ import java.lang.annotation.Target;
 public @interface Get {
 
     /**
-     * @return The URI of the GET route if not specified inferred from the method name and arguments
+     * @return The URI of the GET route
      */
     @AliasFor(annotation = HttpMethodMapping.class, member = "value")
     @AliasFor(annotation = UriMapping.class, member = "value")
     String value() default UriMapping.DEFAULT_URI;
 
     /**
-     * @return The URI of the TRACE route if not specified inferred from the method name and arguments
+     * @return The URI of the GET route
      */
     @AliasFor(annotation = HttpMethodMapping.class, member = "value")
     @AliasFor(annotation = UriMapping.class, member = "value")
@@ -82,6 +82,11 @@ public @interface Get {
      */
     @AliasFor(annotation = Produces.class, member = "single")
     @AliasFor(annotation = Consumes.class, member = "single")
+    @AliasFor(annotation = SingleResult.class, member = "value")
     boolean single() default false;
 
+    /**
+     * @return True if a HEAD route should also be registered for the same method
+     */
+    boolean headRoute() default true;
 }

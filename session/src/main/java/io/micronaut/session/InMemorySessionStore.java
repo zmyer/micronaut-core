@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 original authors
+ * Copyright 2017-2019 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.session;
 
 import com.github.benmanes.caffeine.cache.Cache;
@@ -32,7 +31,6 @@ import javax.inject.Singleton;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Default implementation that stores sessions in-memory.
@@ -148,8 +146,7 @@ public class InMemorySessionStore implements SessionStore<InMemorySession> {
             private long newExpiry(InMemorySession value) {
                 Instant current = Instant.now();
                 value.setLastAccessedTime(current);
-                long newExpiry = current.plus(value.getMaxInactiveInterval()).toEpochMilli();
-                return TimeUnit.MILLISECONDS.toNanos(newExpiry);
+                return value.getMaxInactiveInterval().toNanos();
             }
         };
     }

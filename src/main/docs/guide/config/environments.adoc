@@ -1,11 +1,6 @@
 The application environment is modelled by the link:{api}/io/micronaut/context/env/Environment.html[Environment] interface, which allows specifying one or many unique environment names when creating an link:{api}/io/micronaut/context/ApplicationContext.html[ApplicationContext].
 
-
-.Initializing the Environment
-[source,java]
-----
-include::{testsjava}/env/EnvironmentTest.java[tags=env, indent=0]
-----
+snippet::io.micronaut.docs.context.env.EnvironmentSpec[tags="env",indent=0,title="Initializing the Environment"]
 
 The active environment names serve the purpose of allowing loading different configuration files depending on the environment and also using the link:{api}/io/micronaut/context/annotation/Requires.html[@Requires] annotation to conditionally load beans or bean link:{api}/io/micronaut/context/annotation/Configuration.html[@Configuration] packages.
 
@@ -22,3 +17,17 @@ $ java -Dmicronaut.environments=foo,bar -jar myapp.jar
 The above activates environments called `foo` and `bar`.
 
 Finally, the Cloud environment names are also detected. See the section on <<cloudConfiguration,Cloud Configuration>> for more information.
+
+== Disabling Environment Detection
+
+The automatic detection of environments can be disabled setting the `micronaut.env.deduction` system property or the `MICRONAUT_ENV_DEDUCTION` environment variable to `false`. This will prevent Micronaut from detecting current environments, while still using any environments that are specifically provided as shown above.
+
+.Disabling environment detection via system property
+[source,bash]
+----
+$  java -Dmicronaut.env.deduction=false -jar myapp.jar
+----
+
+Alternatively, you can disable environment deduction using the api:context.ApplicationContextBuilder[]'s `deduceEnvironment` method when setting up your application.
+
+snippet::io.micronaut.docs.context.env.DefaultEnvironmentSpec[tags="disableEnvDeduction",indent=0,title="Using ApplicationContextBuilder to disable environment deduction"]

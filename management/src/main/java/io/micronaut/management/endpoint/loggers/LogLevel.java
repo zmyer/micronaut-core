@@ -24,7 +24,9 @@ package io.micronaut.management.endpoint.loggers;
  *
  * @author Matthew Moss
  * @since 1.0
+ * @deprecated Use {@link io.micronaut.logging.LogLevel} instead
  */
+@Deprecated
 public enum LogLevel {
     ALL,
     TRACE,

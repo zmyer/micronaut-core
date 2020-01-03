@@ -98,25 +98,48 @@ public class DefaultConversionService implements ConversionService<DefaultConver
             return Optional.of((T) object);
         }
 
-        Optional<String> formattingAnn = context.getAnnotationMetadata().getAnnotationNameByStereotype(Format.class);
-        String formattingAnnotation = formattingAnn.orElse(null);
-        ConvertiblePair pair = new ConvertiblePair(sourceType, targetType, formattingAnnotation);
-        TypeConverter typeConverter = converterCache.get(pair);
-        if (typeConverter == null) {
-            typeConverter = findTypeConverter(sourceType, targetType, formattingAnnotation);
+        final AnnotationMetadata annotationMetadata = context.getAnnotationMetadata();
+        if (annotationMetadata.hasStereotype(Format.class)) {
+            Optional<String> formattingAnn = annotationMetadata.getAnnotationNameByStereotype(Format.class);
+            String formattingAnnotation = formattingAnn.orElse(null);
+            ConvertiblePair pair = new ConvertiblePair(sourceType, targetType, formattingAnnotation);
+            TypeConverter typeConverter = converterCache.get(pair);
             if (typeConverter == null) {
-                return Optional.empty();
-            } else {
-                converterCache.put(pair, typeConverter);
-                if (typeConverter == UNCONVERTIBLE) {
+                typeConverter = findTypeConverter(sourceType, targetType, formattingAnnotation);
+                if (typeConverter == null) {
                     return Optional.empty();
                 } else {
-                    return typeConverter.convert(object, targetType, context);
+                    converterCache.put(pair, typeConverter);
+                    if (typeConverter == UNCONVERTIBLE) {
+                        return Optional.empty();
+                    } else {
+                        return typeConverter.convert(object, targetType, context);
+                    }
                 }
+            } else if (typeConverter != UNCONVERTIBLE) {
+                return typeConverter.convert(object, targetType, context);
             }
-        } else if (typeConverter != UNCONVERTIBLE) {
-            return typeConverter.convert(object, targetType, context);
+        } else {
+            ConvertiblePair pair = new ConvertiblePair(sourceType, targetType, null);
+            TypeConverter typeConverter = converterCache.get(pair);
+            if (typeConverter == null) {
+                typeConverter = findTypeConverter(sourceType, targetType, null);
+                if (typeConverter == null) {
+                    converterCache.put(pair, UNCONVERTIBLE);
+                    return Optional.empty();
+                } else {
+                    converterCache.put(pair, typeConverter);
+                    if (typeConverter == UNCONVERTIBLE) {
+                        return Optional.empty();
+                    } else {
+                        return typeConverter.convert(object, targetType, context);
+                    }
+                }
+            } else if (typeConverter != UNCONVERTIBLE) {
+                return typeConverter.convert(object, targetType, context);
+            }
         }
+
         return Optional.empty();
     }
 
@@ -289,7 +312,12 @@ public class DefaultConversionService implements ConversionService<DefaultConver
         });
 
         // String -> File
-        addConverter(CharSequence.class, File.class, (object, targetType, context) -> Optional.of(new File(object.toString())));
+        addConverter(CharSequence.class, File.class, (object, targetType, context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
+            return Optional.of(new File(object.toString()));
+        });
 
         // String[] -> Enum
         addConverter(String[].class, Enum.class, (object, targetType, context) -> {
@@ -325,6 +353,9 @@ public class DefaultConversionService implements ConversionService<DefaultConver
             CharSequence.class,
             Date.class,
             (object, targetType, context) -> {
+                if (StringUtils.isEmpty(object)) {
+                    return Optional.empty();
+                }
                 try {
                     SimpleDateFormat format = resolveFormat(context);
                     return Optional.of(format.parse(object.toString()));
@@ -362,6 +393,9 @@ public class DefaultConversionService implements ConversionService<DefaultConver
 
         // String -> Integer
         addConverter(CharSequence.class, Integer.class, (CharSequence object, Class<Integer> targetType, ConversionContext context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
             try {
                 Integer converted = Integer.valueOf(object.toString());
                 return Optional.of(converted);
@@ -373,6 +407,9 @@ public class DefaultConversionService implements ConversionService<DefaultConver
 
         // String -> BigInteger
         addConverter(CharSequence.class, BigInteger.class, (CharSequence object, Class<BigInteger> targetType, ConversionContext context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
             try {
                 BigInteger converted = new BigInteger(object.toString());
                 return Optional.of(converted);
@@ -384,6 +421,9 @@ public class DefaultConversionService implements ConversionService<DefaultConver
 
         // String -> Float
         addConverter(CharSequence.class, Float.class, (CharSequence object, Class<Float> targetType, ConversionContext context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
             try {
                 Float converted = Float.valueOf(object.toString());
                 return Optional.of(converted);
@@ -395,6 +435,9 @@ public class DefaultConversionService implements ConversionService<DefaultConver
 
         // String -> Double
         addConverter(CharSequence.class, Double.class, (CharSequence object, Class<Double> targetType, ConversionContext context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
             try {
                 Double converted = Double.valueOf(object.toString());
                 return Optional.of(converted);
@@ -406,6 +449,9 @@ public class DefaultConversionService implements ConversionService<DefaultConver
 
         // String -> Long
         addConverter(CharSequence.class, Long.class, (CharSequence object, Class<Long> targetType, ConversionContext context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
             try {
                 Long converted = Long.valueOf(object.toString());
                 return Optional.of(converted);
@@ -417,6 +463,9 @@ public class DefaultConversionService implements ConversionService<DefaultConver
 
         // String -> Short
         addConverter(CharSequence.class, Short.class, (CharSequence object, Class<Short> targetType, ConversionContext context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
             try {
                 Short converted = Short.valueOf(object.toString());
                 return Optional.of(converted);
@@ -428,6 +477,9 @@ public class DefaultConversionService implements ConversionService<DefaultConver
 
         // String -> Byte
         addConverter(CharSequence.class, Byte.class, (CharSequence object, Class<Byte> targetType, ConversionContext context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
             try {
                 Byte converted = Byte.valueOf(object.toString());
                 return Optional.of(converted);
@@ -439,6 +491,9 @@ public class DefaultConversionService implements ConversionService<DefaultConver
 
         // String -> BigDecimal
         addConverter(CharSequence.class, BigDecimal.class, (CharSequence object, Class<BigDecimal> targetType, ConversionContext context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
             try {
                 BigDecimal converted = new BigDecimal(object.toString());
                 return Optional.of(converted);
@@ -464,6 +519,9 @@ public class DefaultConversionService implements ConversionService<DefaultConver
 
         // String -> URL
         addConverter(CharSequence.class, URL.class, (CharSequence object, Class<URL> targetType, ConversionContext context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
             try {
                 String spec = object.toString();
                 if (!spec.contains("://")) {
@@ -478,6 +536,9 @@ public class DefaultConversionService implements ConversionService<DefaultConver
 
         // String -> URI
         addConverter(CharSequence.class, URI.class, (CharSequence object, Class<URI> targetType, ConversionContext context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
             try {
                 return Optional.of(new URI(object.toString()));
             } catch (URISyntaxException e) {
@@ -488,6 +549,9 @@ public class DefaultConversionService implements ConversionService<DefaultConver
 
         // String -> Locale
         addConverter(CharSequence.class, Locale.class, (CharSequence object, Class<Locale> targetType, ConversionContext context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
             try {
                 return Optional.of(Locale.forLanguageTag(object.toString().replace('_', '-')));
             } catch (IllegalArgumentException e) {
@@ -498,6 +562,9 @@ public class DefaultConversionService implements ConversionService<DefaultConver
 
         // String -> UUID
         addConverter(CharSequence.class, UUID.class, (CharSequence object, Class<UUID> targetType, ConversionContext context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
             try {
                 return Optional.of(UUID.fromString(object.toString()));
             } catch (IllegalArgumentException e) {
@@ -508,6 +575,9 @@ public class DefaultConversionService implements ConversionService<DefaultConver
 
         // String -> Currency
         addConverter(CharSequence.class, Currency.class, (CharSequence object, Class<Currency> targetType, ConversionContext context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
             try {
                 return Optional.of(Currency.getInstance(object.toString()));
             } catch (IllegalArgumentException e) {
@@ -517,10 +587,18 @@ public class DefaultConversionService implements ConversionService<DefaultConver
         });
 
         // String -> TimeZone
-        addConverter(CharSequence.class, TimeZone.class, (CharSequence object, Class<TimeZone> targetType, ConversionContext context) -> Optional.of(TimeZone.getTimeZone(object.toString())));
+        addConverter(CharSequence.class, TimeZone.class, (CharSequence object, Class<TimeZone> targetType, ConversionContext context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
+            return Optional.of(TimeZone.getTimeZone(object.toString()));
+        });
 
         // String -> Charset
         addConverter(CharSequence.class, Charset.class, (CharSequence object, Class<Charset> targetType, ConversionContext context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
             try {
                 return Optional.of(Charset.forName(object.toString()));
             } catch (IllegalCharsetNameException | UnsupportedCharsetException e) {
@@ -590,6 +668,9 @@ public class DefaultConversionService implements ConversionService<DefaultConver
 
         // String -> Enum
         addConverter(CharSequence.class, Enum.class, (CharSequence object, Class<Enum> targetType, ConversionContext context) -> {
+            if (StringUtils.isEmpty(object)) {
+                return Optional.empty();
+            }
             String stringValue = object.toString();
             try {
                 Enum val = Enum.valueOf(targetType, stringValue);

@@ -15,6 +15,7 @@
  */
 package io.micronaut.http.client
 
+import io.micronaut.http.client.annotation.Client
 import io.reactivex.Flowable
 import io.micronaut.context.ApplicationContext
 import io.micronaut.http.HttpRequest
@@ -58,6 +59,13 @@ class HttpDeleteSpec extends Specification {
         res.status == HttpStatus.NO_CONTENT
     }
 
+    void "test http delete with blocking client"() {
+        when:
+        def res = Flowable.fromPublisher(client.exchange(HttpRequest.DELETE('/delete/simple'))).blockingFirst()
+
+        then:
+        res.status == HttpStatus.NO_CONTENT
+    }
 
     void "test http delete with body"() {
         when:
@@ -69,6 +77,22 @@ class HttpDeleteSpec extends Specification {
         res.status == HttpStatus.ACCEPTED
         body.isPresent()
         body.get() == 'test'
+    }
+
+    void "test multiple uris"() {
+        def client = embeddedServer.applicationContext.getBean(MyDeleteClient)
+
+        when:
+        String val = client.multiple()
+
+        then:
+        val == "multiple mappings"
+
+        when:
+        val = client.multipleMappings()
+
+        then:
+        val == "multiple mappings"
     }
 
     @Controller("/delete")
@@ -85,5 +109,20 @@ class HttpDeleteSpec extends Specification {
             HttpResponse.accepted()
                         .body(content)
         }
+
+        @Delete(uris = ["/multiple", "/multiple/mappings"])
+        String multipleMappings() {
+            return "multiple mappings"
+        }
+    }
+
+    @Client("/delete")
+    static interface MyDeleteClient {
+
+        @Delete("/multiple")
+        String multiple()
+
+        @Delete("/multiple/mappings")
+        String multipleMappings()
     }
 }

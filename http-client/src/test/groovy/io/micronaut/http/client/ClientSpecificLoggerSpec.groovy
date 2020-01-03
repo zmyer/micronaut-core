@@ -21,37 +21,40 @@ import io.micronaut.http.client.annotation.Client
 import io.micronaut.runtime.ApplicationConfiguration
 import io.micronaut.runtime.server.EmbeddedServer
 import spock.lang.AutoCleanup
+import spock.lang.Retry
 import spock.lang.Shared
 import spock.lang.Specification
 
 import javax.inject.Inject
 import javax.inject.Singleton
 
+// sometimes fails due to a port bind issue on Travis
+// this is because there is a timing issue between when an available port
+// is found and when the server is run with this port where within this window
+// the port could become available. To workaround this we add @Retry.
+@Retry
 class ClientSpecificLoggerSpec extends Specification {
-
-    @Shared
-    int port = SocketUtils.findAvailableTcpPort()
-
-    @Shared
-    @AutoCleanup
-    ApplicationContext context = ApplicationContext.run(
-            'micronaut.server.port': port,
-            'micronaut.http.services.clientOne.url': "http://localhost:$port",
-            'micronaut.http.services.clientOne.logger-name': "${ClientSpecificLoggerSpec.class}.client.one",
-            'micronaut.http.services.clientOne.read-timeout': '500s'
-
-    )
-
-    @Shared
-    EmbeddedServer embeddedServer = context.getBean(EmbeddedServer).start()
 
     void "test client specific logger"() {
         given:
+        int port = SocketUtils.findAvailableTcpPort()
+        EmbeddedServer server = ApplicationContext.run(EmbeddedServer,
+                ['micronaut.server.port': port,
+                'micronaut.http.services.clientOne.url': "http://localhost:$port",
+                'micronaut.http.services.clientOne.logger-name': "${ClientSpecificLoggerSpec.class}.client.one",
+                'micronaut.http.services.clientOne.read-timeout': '500s']
+        )
+        ApplicationContext context = server.applicationContext
+
+        when:
         MyService myService = context.getBean(MyService)
 
-        expect:
+        then:
         ((DefaultHttpClient) myService.client).log.name == "${ClientSpecificLoggerSpec.class}.client.one".toString()
         ((DefaultHttpClient) myService.rxHttpClient).log.name == "${ClientSpecificLoggerSpec.class}.client.two".toString()
+
+        cleanup:
+        context.close()
     }
 
     @Singleton

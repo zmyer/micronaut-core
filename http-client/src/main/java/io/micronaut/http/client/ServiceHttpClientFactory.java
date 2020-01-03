@@ -16,16 +16,14 @@
 package io.micronaut.http.client;
 
 import io.micronaut.context.BeanContext;
-import io.micronaut.context.annotation.EachBean;
-import io.micronaut.context.annotation.Factory;
-import io.micronaut.context.annotation.Parameter;
-import io.micronaut.context.annotation.Requires;
+import io.micronaut.context.annotation.*;
 import io.micronaut.core.io.buffer.ByteBuffer;
 import io.micronaut.discovery.StaticServiceInstanceList;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
+import io.micronaut.http.client.filter.HttpClientFilterResolver;
 import io.micronaut.http.client.loadbalance.ServiceInstanceListLoadBalancerFactory;
 import io.micronaut.scheduling.TaskScheduler;
 import io.reactivex.Flowable;
@@ -85,6 +83,7 @@ public class ServiceHttpClientFactory {
      */
     @EachBean(ServiceHttpClientConfiguration.class)
     @Requires(condition = ServiceHttpClientCondition.class)
+    @Secondary
     DefaultHttpClient serviceHttpClient(
             @Parameter ServiceHttpClientConfiguration configuration,
             @Parameter StaticServiceInstanceList instanceList) {
@@ -94,15 +93,10 @@ public class ServiceHttpClientFactory {
 
         Optional<String> path = configuration.getPath();
         LoadBalancer loadBalancer = loadBalancerFactory.create(instanceList);
-        DefaultHttpClient httpClient;
-        if (path.isPresent()) {
-            httpClient = beanContext.createBean(DefaultHttpClient.class, loadBalancer, configuration, path.get());
-        } else {
-            httpClient = beanContext.createBean(DefaultHttpClient.class, loadBalancer, configuration);
-        }
+        HttpClientFilterResolver filterResolver = beanContext.createBean(HttpClientFilterResolver.class,
+                                                               Collections.singleton(configuration.getServiceId()), null);
 
-        httpClient.setClientIdentifiers(configuration.getServiceId());
-
+        DefaultHttpClient httpClient = beanContext.createBean(DefaultHttpClient.class, loadBalancer, configuration, path.orElse(null), filterResolver);
         if (isHealthCheck) {
             taskScheduler.scheduleWithFixedDelay(configuration.getHealthCheckInterval(), configuration.getHealthCheckInterval(), () -> Flowable.fromIterable(originalURLs).flatMap(originalURI -> {
                 URI healthCheckURI = originalURI.resolve(configuration.getHealthCheckUri());

@@ -40,6 +40,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
 
+import javax.annotation.Nullable
 import java.time.LocalDate
 
 /**
@@ -519,7 +520,41 @@ class HttpGetSpec extends Specification {
         val == "success"
     }
 
-    @Controller("/get")
+    void "test multiple uris"() {
+        def client = embeddedServer.applicationContext.getBean(MyGetClient)
+
+        when:
+        String val = client.multiple()
+
+        then:
+        val == "multiple mappings"
+
+        when:
+        val = client.multipleMappings()
+
+        then:
+        val == "multiple mappings"
+    }
+
+    void "test exploded query param request URI"() {
+        when:
+        MyGetClient client = embeddedServer.applicationContext.getBean(MyGetClient)
+        String requestUri = client.queryParamExploded(["abc", "xyz"])
+
+        then:
+        requestUri.endsWith("bar=abc&bar=xyz")
+    }
+
+    void "test multiple exploded query param request URI"() {
+        when:
+        MyGetClient client = embeddedServer.applicationContext.getBean(MyGetClient)
+        String requestUri = client.multipleExplodedQueryParams(["abc", "xyz"], "random")
+
+        then:
+        requestUri.endsWith("bar=abc&bar=xyz&tag=random")
+    }
+
+        @Controller("/get")
     static class GetController {
 
         @Get(value = "/simple", produces = MediaType.TEXT_PLAIN)
@@ -565,6 +600,16 @@ class HttpGetSpec extends Specification {
         @Get("/queryParam")
         String queryParam(@QueryValue String foo) {
             return foo
+        }
+
+        @Get("/queryParamExploded{?bar*}")
+        String queryParamExploded(@QueryValue("bar") List<String> foo, HttpRequest<?> request) {
+            return request.getUri().toString()
+        }
+
+        @Get("/multipleExplodedQueryParams{?bar*,tag}")
+        String multipleExplodedQueryParams(@QueryValue("bar") List<String> foo, @Nullable @QueryValue("tag") String label, HttpRequest<?> request) {
+            return request.getUri().toString()
         }
 
         @Get("/multipleQueryParam")
@@ -615,6 +660,11 @@ class HttpGetSpec extends Specification {
         @Get("/completable/error")
         Completable completableError() {
             return Completable.error(new RuntimeException("completable error"))
+        }
+
+        @Get(uris = ["/multiple", "/multiple/mappings"])
+        String multipleMappings() {
+            return "multiple mappings"
         }
     }
 
@@ -704,6 +754,12 @@ class HttpGetSpec extends Specification {
         @Get("/queryParam")
         String queryParam(@QueryValue String foo)
 
+        @Get("/queryParamExploded{?bar*}")
+        String queryParamExploded(@QueryValue("bar") List<String> foo)
+
+        @Get("/multipleExplodedQueryParams{?bar*,tag}")
+        String multipleExplodedQueryParams(@QueryValue("bar") List<String> foo, @QueryValue("tag") String label)
+
         @Get("/multipleQueryParam")
         String queryParam(@QueryValue String foo, @QueryValue String bar)
 
@@ -724,6 +780,12 @@ class HttpGetSpec extends Specification {
 
         @Get("/completable/error")
         Completable completableError()
+
+        @Get("/multiple")
+        String multiple()
+
+        @Get("/multiple/mappings")
+        String multipleMappings()
     }
 
     @Client("http://not.used")

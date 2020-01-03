@@ -20,6 +20,7 @@ import io.micronaut.inject.BeanDefinition;
 import io.micronaut.inject.configuration.ConfigurationMetadataBuilder;
 import org.objectweb.asm.Type;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
@@ -66,6 +67,12 @@ public interface BeanDefinitionVisitor {
                                         Map<String, Object> argumentTypes,
                                         Map<String, AnnotationMetadata> argumentAnnotationMetadata,
                                         Map<String, Map<String, Object>> genericTypes);
+
+    /**
+     * @return The name of the bean definition reference class.
+     */
+    @Nonnull
+    String getBeanDefinitionReferenceClassName();
 
     /**
      * @return Whether the provided type an interface
@@ -155,6 +162,7 @@ public interface BeanDefinitionVisitor {
      * Visits an injection point for a field and setter pairing.
      *
      * @param declaringType      The declaring type
+     * @param returnType         The return type
      * @param annotationMetadata The annotation metadata
      * @param requiresReflection Whether the setter requires reflection
      * @param fieldType          The field type
@@ -164,6 +172,7 @@ public interface BeanDefinitionVisitor {
      * @param isOptional         Whether the setter is optional
      */
     void visitSetterValue(Object declaringType,
+                          Object returnType,
                           AnnotationMetadata annotationMetadata,
                           boolean requiresReflection,
                           Object fieldType,
@@ -177,6 +186,7 @@ public interface BeanDefinitionVisitor {
      * Visits an injection point for a setter.
      *
      * @param declaringType          The declaring type
+     * @param returnType             The return type
      * @param methodMetadata         The annotation metadata
      * @param requiresReflection     Whether the setter requires reflection
      * @param valueType              The field type
@@ -186,6 +196,7 @@ public interface BeanDefinitionVisitor {
      * @param isOptional             Whether the setter is optional
      */
     void visitSetterValue(Object declaringType,
+                          Object returnType,
                           AnnotationMetadata methodMetadata,
                           boolean requiresReflection,
                           Object valueType,

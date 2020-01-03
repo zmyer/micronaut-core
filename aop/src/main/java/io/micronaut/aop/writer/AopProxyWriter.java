@@ -31,6 +31,7 @@ import io.micronaut.core.annotation.AnnotationMetadata;
 import io.micronaut.core.naming.NameUtils;
 import io.micronaut.core.reflect.ReflectionUtils;
 import io.micronaut.core.util.ArrayUtils;
+import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.core.value.OptionalValues;
 import io.micronaut.inject.BeanDefinition;
 import io.micronaut.inject.ExecutableMethod;
@@ -53,6 +54,7 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.GeneratorAdapter;
 import org.objectweb.asm.commons.Method;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
@@ -378,6 +380,12 @@ public class AopProxyWriter extends AbstractClassFileWriter implements ProxyingB
 
     }
 
+    @Nonnull
+    @Override
+    public String getBeanDefinitionReferenceClassName() {
+        return proxyBeanDefinitionWriter.getBeanDefinitionReferenceClassName();
+    }
+
     /**
      * Visit a abstract method that is to be implemented.
      *
@@ -512,31 +520,56 @@ public class AopProxyWriter extends AbstractClassFileWriter implements ProxyingB
             bridgeArguments.add(proxyFullName);
             bridgeArguments.addAll(argumentTypeList);
             String bridgeDesc = getMethodDescriptor(returnType, bridgeArguments);
+            boolean isSuspend = "kotlin.coroutines.Continuation".equals(CollectionUtils.last(argumentTypes.values()));
 
             ExecutableMethodWriter executableMethodWriter = new ExecutableMethodWriter(
-                    proxyFullName, methodExecutorClassName, methodProxyShortName, isInterface, isAbstract, annotationMetadata) {
+                    proxyFullName, methodExecutorClassName, methodProxyShortName, isInterface, isAbstract, isSuspend, annotationMetadata) {
+
                 @Override
                 protected void buildInvokeMethod(Type declaringTypeObject, String methodName, Object returnType, Collection<Object> argumentTypes, GeneratorAdapter invokeMethodVisitor) {
-                    // load this
-                    invokeMethodVisitor.loadThis();
-                    // first argument to static bridge is reference to parent
-                    invokeMethodVisitor.getField(methodType, FIELD_PARENT, proxyType);
-                    // now remaining arguments
-                    for (int i = 0; i < argumentTypeList.size(); i++) {
-                        invokeMethodVisitor.loadArg(1);
-                        invokeMethodVisitor.push(i);
-                        invokeMethodVisitor.visitInsn(AALOAD);
-                        AopProxyWriter.pushCastToType(invokeMethodVisitor, argumentTypeList.get(i));
-                    }
-                    invokeMethodVisitor.visitMethodInsn(INVOKESTATIC, proxyInternalName, bridgeName, bridgeDesc, false);
-                    if (isVoidReturn) {
-                        invokeMethodVisitor.visitInsn(ACONST_NULL);
+                    if (isIntroduction && isAbstract && implementInterface) {
+                        // first argument is instance to invoke
+                        invokeMethodVisitor.loadArg(0);
+                        invokeMethodVisitor.checkCast(declaringTypeObject);
+                        // now remaining arguments
+                        for (int i = 0; i < argumentTypeList.size(); i++) {
+                            invokeMethodVisitor.loadArg(1);
+                            invokeMethodVisitor.push(i);
+                            invokeMethodVisitor.visitInsn(AALOAD);
+                            AopProxyWriter.pushCastToType(invokeMethodVisitor, argumentTypeList.get(i));
+                        }
+                        String desc = getMethodDescriptor(returnType, argumentTypeList);
+                        invokeMethodVisitor.visitMethodInsn(isInterface ? INVOKEINTERFACE : INVOKEVIRTUAL, declaringTypeObject.getInternalName(), methodName, desc, isInterface);
+                        if (isVoidReturn) {
+                            invokeMethodVisitor.visitInsn(ACONST_NULL);
+                        } else {
+                            AopProxyWriter.pushBoxPrimitiveIfNecessary(returnType, invokeMethodVisitor);
+                        }
+                        invokeMethodVisitor.visitInsn(ARETURN);
+                        invokeMethodVisitor.visitMaxs(AbstractClassFileWriter.DEFAULT_MAX_STACK, 1);
+                        invokeMethodVisitor.visitEnd();
                     } else {
-                        AopProxyWriter.pushBoxPrimitiveIfNecessary(returnType, invokeMethodVisitor);
+                        // load this
+                        invokeMethodVisitor.loadThis();
+                        // first argument to static bridge is reference to parent
+                        invokeMethodVisitor.getField(methodType, FIELD_PARENT, proxyType);
+                        // now remaining arguments
+                        for (int i = 0; i < argumentTypeList.size(); i++) {
+                            invokeMethodVisitor.loadArg(1);
+                            invokeMethodVisitor.push(i);
+                            invokeMethodVisitor.visitInsn(AALOAD);
+                            AopProxyWriter.pushCastToType(invokeMethodVisitor, argumentTypeList.get(i));
+                        }
+                        invokeMethodVisitor.visitMethodInsn(INVOKESTATIC, proxyInternalName, bridgeName, bridgeDesc, false);
+                        if (isVoidReturn) {
+                            invokeMethodVisitor.visitInsn(ACONST_NULL);
+                        } else {
+                            AopProxyWriter.pushBoxPrimitiveIfNecessary(returnType, invokeMethodVisitor);
+                        }
+                        invokeMethodVisitor.visitInsn(ARETURN);
+                        invokeMethodVisitor.visitMaxs(AbstractClassFileWriter.DEFAULT_MAX_STACK, 1);
+                        invokeMethodVisitor.visitEnd();
                     }
-                    invokeMethodVisitor.visitInsn(ARETURN);
-                    invokeMethodVisitor.visitMaxs(AbstractClassFileWriter.DEFAULT_MAX_STACK, 1);
-                    invokeMethodVisitor.visitEnd();
                 }
 
             };
@@ -1006,6 +1039,7 @@ public class AopProxyWriter extends AbstractClassFileWriter implements ProxyingB
     @Override
     public void visitSetterValue(
             Object declaringType,
+            Object returnType,
             AnnotationMetadata annotationMetadata,
             boolean requiresReflection,
             Object fieldType,
@@ -1014,13 +1048,14 @@ public class AopProxyWriter extends AbstractClassFileWriter implements ProxyingB
             Map<String, Object> genericTypes,
             boolean isOptional) {
         deferredInjectionPoints.add(() -> proxyBeanDefinitionWriter.visitSetterValue(
-                declaringType, annotationMetadata, requiresReflection, fieldType, fieldName, setterName, genericTypes, isOptional
+                declaringType, returnType, annotationMetadata, requiresReflection, fieldType, fieldName, setterName, genericTypes, isOptional
         ));
     }
 
     @Override
     public void visitSetterValue(
             Object declaringType,
+            Object returnType,
             AnnotationMetadata setterMetadata,
             boolean requiresReflection,
             Object valueType,
@@ -1031,6 +1066,7 @@ public class AopProxyWriter extends AbstractClassFileWriter implements ProxyingB
         deferredInjectionPoints.add(() ->
                 proxyBeanDefinitionWriter.visitSetterValue(
                         declaringType,
+                        returnType,
                         setterMetadata,
                         requiresReflection,
                         valueType,

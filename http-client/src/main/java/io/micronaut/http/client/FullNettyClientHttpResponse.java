@@ -67,19 +67,22 @@ public class FullNettyClientHttpResponse<B> implements HttpResponse<B>, Completa
 
     /**
      * @param fullHttpResponse       The full Http response
+     * @param httpStatus             The Http status
      * @param mediaTypeCodecRegistry The media type codec registry
      * @param byteBufferFactory      The byte buffer factory
      * @param bodyType               The body type
-     * @param errorStatus            The error status
+     * @param convertBody            Whether to auto convert the body to bodyType
      */
     FullNettyClientHttpResponse(
             FullHttpResponse fullHttpResponse,
+            HttpStatus httpStatus,
             MediaTypeCodecRegistry mediaTypeCodecRegistry,
             ByteBufferFactory<ByteBufAllocator,
             ByteBuf> byteBufferFactory,
-            Argument<B> bodyType, boolean errorStatus) {
+            Argument<B> bodyType,
+            boolean convertBody) {
 
-        this.status = HttpStatus.valueOf(fullHttpResponse.status().code());
+        this.status = httpStatus;
         this.headers = new NettyHttpHeaders(fullHttpResponse.headers(), ConversionService.SHARED);
         this.attributes = new MutableConvertibleValuesMap<>();
         this.nettyHttpResponse = fullHttpResponse;
@@ -91,12 +94,12 @@ public class FullNettyClientHttpResponse<B> implements HttpResponse<B>, Completa
                 Optional<Argument<?>> responseBodyType = bodyType.getFirstTypeVariable();
                 if (responseBodyType.isPresent()) {
                     Argument<B> finalResponseBodyType = (Argument<B>) responseBodyType.get();
-                    this.body = !errorStatus || isParseableBodyType(finalResponseBodyType.getType()) ? getBody(finalResponseBodyType).orElse(null) : null;
+                    this.body = convertBody || isParseableBodyType(finalResponseBodyType.getType()) ? getBody(finalResponseBodyType).orElse(null) : null;
                 } else {
                     this.body = null;
                 }
             } else {
-                this.body = !errorStatus || isParseableBodyType(rawBodyType) ? getBody(bodyType).orElse(null) : null;
+                this.body = convertBody || isParseableBodyType(rawBodyType) ? getBody(bodyType).orElse(null) : null;
             }
         } else {
             this.body = null;

@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.time.temporal.ChronoUnit;
 import java.time.Duration;
+import java.time.temporal.TemporalAmount;
 
 /**
  * An interface representing a Cookie. See https://tools.ietf.org/html/rfc6265.
@@ -147,12 +148,25 @@ public interface Cookie extends Comparable<Cookie>, Serializable {
         ArgumentUtils.requireNonNull("configuration", configuration);
         configuration.getCookiePath().ifPresent(this::path);
         configuration.getCookieDomain().ifPresent(this::domain);
-        configuration.getCookieMaxAge().ifPresent(this::maxAge);
+        configuration.getCookieMaxAge().ifPresent(maxAge -> this.maxAge(maxAge.get(ChronoUnit.SECONDS)));
         configuration.isCookieHttpOnly().ifPresent(this::httpOnly);
         if (isSecure) {
             configuration.isCookieSecure().ifPresent(this::secure);
         }
         return this;
+    }
+
+    /**
+     * Sets the max age of the cookie.
+     *
+     * @param maxAge The max age
+     * @return This cookie
+     * @deprecated Use {@link #maxAge(Duration)} instead
+     */
+    @Deprecated
+    default @Nonnull Cookie maxAge(@Nonnull TemporalAmount maxAge) {
+        ArgumentUtils.requireNonNull("maxAge", maxAge);
+        return maxAge(maxAge.get(ChronoUnit.SECONDS));
     }
 
     /**

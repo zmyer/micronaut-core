@@ -50,6 +50,27 @@ public interface AnnotationValueResolver extends ValueResolver<CharSequence> {
     }
 
     /**
+     * Return the enum value of the given member of the given enum type.
+     *
+     * @param member The annotation member
+     * @param enumType The required type
+     * @return An {@link Optional} of the enum value
+     * @param <E> The enum type
+     */
+    <E extends Enum> E[] enumValues(@Nonnull String member, @Nonnull Class<E> enumType);
+
+    /**
+     * Return the enum value of the given member of the given enum type.
+     *
+     * @param enumType The required type
+     * @return An {@link Optional} of the enum value
+     * @param <E> The enum type
+     */
+    default <E extends Enum> E[] enumValues(@Nonnull Class<E> enumType) {
+        return enumValues(AnnotationMetadata.VALUE_MEMBER, enumType);
+    }
+
+    /**
      * The value of the annotation as a Class.
      *
      * @return An {@link Optional} class
@@ -69,7 +90,7 @@ public interface AnnotationValueResolver extends ValueResolver<CharSequence> {
     /**
      * The value of the annotation as a Class.
      *
-     * @return An {@link Optional} class
+     * @return An array of classes
      */
     @Nonnull
     default Class<?>[] classValues() {
@@ -80,9 +101,27 @@ public interface AnnotationValueResolver extends ValueResolver<CharSequence> {
      * The value of the given annotation member as a Class.
      *
      * @param member The annotation member
-     * @return An {@link Optional} class
+     * @return An array of classes
      */
     @Nonnull Class<?>[] classValues(@Nonnull String member);
+
+
+    /**
+     * The {@link AnnotationClassValue} instances for the given member. Unlike {@link #classValues(String)} this may
+     * include classes that are no the classpath.
+     *
+     * @param member The annotation member
+     * @return An array of class values
+     */
+    @Nonnull AnnotationClassValue<?>[] annotationClassValues(@Nonnull String member);
+
+    /**
+     * The {@link AnnotationClassValue} instance for the given member.
+     *
+     * @param member The annotation member
+     * @return An annotation class value
+     */
+    Optional<AnnotationClassValue<?>> annotationClassValue(@Nonnull String member);
 
     /**
      * The integer value of the given member.

@@ -29,6 +29,7 @@ import java.util.concurrent.Callable;
  * @author graemerocher
  * @since 1.0
  */
+@Deprecated
 public class TracingCallable<V> implements Callable<V> {
 
     private final Callable<V> callable;
@@ -49,7 +50,7 @@ public class TracingCallable<V> implements Callable<V> {
 
     @Override
     public V call() throws Exception {
-        if (span == null) {
+        if (span == null || span == tracer.scopeManager().activeSpan()) {
             return callable.call();
         } else {
             try (Scope ignored = tracer.scopeManager().activate(span)) {

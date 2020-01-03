@@ -16,6 +16,7 @@
 package io.micronaut.validation.routes
 
 import io.micronaut.annotation.processing.test.AbstractTypeElementSpec
+import spock.util.environment.RestoreSystemProperties
 
 class MissingParameterRuleSpec extends AbstractTypeElementSpec {
 
@@ -110,6 +111,7 @@ class Foo {
         ex.message.contains("The route declares a uri variable named [abc], but no corresponding method argument is present")
     }
 
+    @RestoreSystemProperties
     void "test validation can be turned off with a system property"() {
         setup:
         System.setProperty("micronaut.route.validation", "false")
@@ -134,9 +136,6 @@ class Foo {
 
         then:
         noExceptionThrown()
-
-        cleanup:
-        System.setProperty("micronaut.route.validation", "")
     }
 
     void "test property name change with bindable"() {
@@ -230,6 +229,72 @@ class Book {
 
 """)
 
+        then:
+        noExceptionThrown()
+    }
+
+    void "test missing parameter with multiple uris"() {
+        when:
+        buildTypeElement("""
+
+package test;
+
+import io.micronaut.http.annotation.*;
+
+@Controller("/foo")
+class Foo {
+
+    @Get(uris = {"/{abc}"})
+    String abc(String abc) {
+        return "";
+    }
+}
+
+""")
+
+        then:
+        noExceptionThrown()
+
+        when:
+        buildTypeElement("""
+
+package test;
+
+import io.micronaut.http.annotation.*;
+
+@Controller("/foo")
+class Foo {
+
+    @Get(uris = {"/{abc}", "/{def}"})
+    String abc(String abc) {
+        return "";
+    }
+}
+
+""")
+
+        then:
+        def ex = thrown(RuntimeException)
+        ex.message.contains("The route declares a uri variable named [def], but no corresponding method argument is present")
+
+        when:
+        buildTypeElement("""
+
+package test;
+
+import io.micronaut.http.annotation.*;
+import javax.annotation.Nullable;
+
+@Controller("/foo")
+class Foo {
+
+    @Get(uris = {"/{abc}", "/{def}"})
+    String abc(@Nullable String abc, @Nullable String def) {
+        return "";
+    }
+}
+
+""")
         then:
         noExceptionThrown()
     }

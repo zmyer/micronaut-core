@@ -19,8 +19,10 @@ import groovy.transform.InheritConstructors
 import groovy.xml.MarkupBuilder
 import io.micronaut.cli.profile.Feature
 import io.micronaut.cli.profile.Profile
+import io.micronaut.cli.profile.ProfileRepository
 import io.micronaut.cli.profile.repository.MavenProfileRepository
 import io.micronaut.cli.util.VersionInfo
+import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.graph.Dependency
 import org.eclipse.aether.graph.Exclusion
 
@@ -47,7 +49,7 @@ class MavenBuildTokens extends BuildTokens {
     }
 
     @Override
-    Map getTokens(Profile profile, List<Feature> features) {
+    Map getTokens(ProfileRepository profileRepository, Profile profile, List<Feature> features) {
         Map tokens = [:]
         tokens.put("testFramework", testFramework)
         tokens.put("sourceLanguage", sourceLanguage)
@@ -88,6 +90,12 @@ class MavenBuildTokens extends BuildTokens {
         List<Dependency> annotationProcessors = dependencies
                 .unique()
                 .findAll( { it.scope == 'annotationProcessor' || it.scope == 'kapt' })
+
+        annotationProcessors.find {
+            if (it.artifact.artifactId == 'micronaut-picocli') {
+                annotationProcessors.swap(annotationProcessors.indexOf(it), annotationProcessors.size() - 1)
+            }
+        }
 
         dependencies = dependencies.unique()
             .findAll { scopeConversions.containsKey(it.scope) }
@@ -137,20 +145,43 @@ class MavenBuildTokens extends BuildTokens {
 
         def annotationProcessorsWriter = new StringWriter()
         MarkupBuilder annotationProcessorPathsXml = new MarkupBuilder(annotationProcessorsWriter)
+        annotationProcessors = annotationProcessors.sort { Dependency dep1, Dependency dep2 ->
+            def g1 = dep1.artifact.groupId
+            if (g1 == 'org.projectlombok') {
+                // lombok always first
+                return -1
+            } else {
+                def g2 = dep2.artifact.groupId
+                if (g1 == g2 ){
+                    return 0
+                } else if (g1 == 'io.micronaut' && g2 != 'io.micronaut') {
+                    return -1
+                } else {
+                    return 1
+                }
+            }
+        }
         annotationProcessors.each { Dependency dep ->
             def artifact = dep.artifact
             String methodToCall = sourceLanguage == 'kotlin' ? 'annotationProcessorPath' : 'path'
             annotationProcessorPathsXml."$methodToCall" {
                 groupId(artifact.groupId)
                 artifactId(artifact.artifactId)
+                def artifactVersion = artifact.version
+                if (!artifactVersion || artifactVersion == 'BOM') {
+                    def resolvedVersion = profileRepository.findVersion(artifact.artifactId)
+                    if (resolvedVersion ) {
+                        artifactVersion = resolvedVersion
+                    }
+                }
                 if (artifact.groupId.startsWith("io.micronaut")) {
-                    if (!artifact.version || artifact.version == 'BOM') {
+                    if (!artifactVersion || artifactVersion == 'BOM') {
                         version("\${micronaut.version}")
                     } else {
-                        version(artifact.version)
+                        version(artifactVersion)
                     }
                 } else {
-                    version(artifact.version)
+                    version(artifactVersion)
                 }
             }
         }

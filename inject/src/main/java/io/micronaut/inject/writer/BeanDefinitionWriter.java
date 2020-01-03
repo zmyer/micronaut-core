@@ -23,6 +23,7 @@ import io.micronaut.context.DefaultBeanContext;
 import io.micronaut.context.annotation.*;
 import io.micronaut.context.exceptions.BeanContextException;
 import io.micronaut.core.annotation.AnnotationMetadata;
+import io.micronaut.inject.annotation.AnnotationMetadataHierarchy;
 import io.micronaut.core.annotation.AnnotationUtil;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.naming.NameUtils;
@@ -36,6 +37,7 @@ import io.micronaut.inject.DisposableBeanDefinition;
 import io.micronaut.inject.ExecutableMethod;
 import io.micronaut.inject.InitializingBeanDefinition;
 import io.micronaut.inject.ValidatedBeanDefinition;
+import io.micronaut.inject.annotation.AnnotationMetadataReference;
 import io.micronaut.inject.annotation.AnnotationMetadataWriter;
 import io.micronaut.inject.annotation.DefaultAnnotationMetadata;
 import io.micronaut.inject.configuration.ConfigurationMetadataBuilder;
@@ -48,6 +50,7 @@ import org.objectweb.asm.commons.GeneratorAdapter;
 import org.objectweb.asm.signature.SignatureVisitor;
 import org.objectweb.asm.signature.SignatureWriter;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Singleton;
 import java.io.IOException;
@@ -275,6 +278,16 @@ public class BeanDefinitionWriter extends AbstractClassFileWriter implements Bea
         this.interfaceTypes = new HashSet<>();
         this.interfaceTypes.add(BeanFactory.class);
         this.isConfigurationProperties = annotationMetadata.hasDeclaredStereotype(ConfigurationProperties.class);
+    }
+
+
+    /**
+     * @return The name of the bean definition reference class.
+     */
+    @Override
+    @Nonnull
+    public String getBeanDefinitionReferenceClassName() {
+        return beanDefinitionName + BeanDefinitionReferenceWriter.REF_SUFFIX;
     }
 
     /**
@@ -549,7 +562,7 @@ public class BeanDefinitionWriter extends AbstractClassFileWriter implements Bea
                     AnnotationMetadata.class.getName()
             );
             annotationMetadataMethod.loadThis();
-            annotationMetadataMethod.getStatic(getTypeReference(beanDefinitionName + BeanDefinitionReferenceWriter.REF_SUFFIX), AbstractAnnotationMetadataWriter.FIELD_ANNOTATION_METADATA, Type.getType(AnnotationMetadata.class));
+            annotationMetadataMethod.getStatic(getTypeReference(getBeanDefinitionReferenceClassName()), AbstractAnnotationMetadataWriter.FIELD_ANNOTATION_METADATA, Type.getType(AnnotationMetadata.class));
             annotationMetadataMethod.returnValue();
             annotationMetadataMethod.visitMaxs(1, 1);
             annotationMetadataMethod.visitEnd();
@@ -587,6 +600,7 @@ public class BeanDefinitionWriter extends AbstractClassFileWriter implements Bea
 
     @Override
     public void visitSetterValue(Object declaringType,
+                                 Object returnType,
                                  AnnotationMetadata annotationMetadata,
                                  boolean requiresReflection,
                                  Object fieldType,
@@ -599,7 +613,7 @@ public class BeanDefinitionWriter extends AbstractClassFileWriter implements Bea
         addInjectionPointForSetterInternal(annotationMetadata, requiresReflection, fieldType, fieldName, setterName, genericTypes, declaringTypeRef);
 
         if (!requiresReflection) {
-            resolveBeanOrValueForSetter(declaringTypeRef, setterName, fieldType, GET_VALUE_FOR_METHOD_ARGUMENT, isOptional);
+            resolveBeanOrValueForSetter(declaringTypeRef, returnType, setterName, fieldType, GET_VALUE_FOR_METHOD_ARGUMENT, isOptional);
         }
         currentMethodIndex++;
     }
@@ -607,6 +621,7 @@ public class BeanDefinitionWriter extends AbstractClassFileWriter implements Bea
     @Override
     public void visitSetterValue(
             Object declaringType,
+            Object returnType,
             AnnotationMetadata annotationMetadata,
             boolean requiresReflection,
             Object valueType,
@@ -658,7 +673,7 @@ public class BeanDefinitionWriter extends AbstractClassFileWriter implements Bea
         pushInvokeMethodOnSuperClass(constructorVisitor, ADD_METHOD_INJECTION_POINT_METHOD);
 
         if (!requiresReflection) {
-            resolveBeanOrValueForSetter(declaringTypeRef, setterName, valueType, GET_VALUE_FOR_METHOD_ARGUMENT, isOptional);
+            resolveBeanOrValueForSetter(declaringTypeRef, returnType, setterName, valueType, GET_VALUE_FOR_METHOD_ARGUMENT, isOptional);
         }
         currentMethodIndex++;
 
@@ -804,13 +819,35 @@ public class BeanDefinitionWriter extends AbstractClassFileWriter implements Bea
                                                         Map<String, Map<String, Object>> genericTypes,
                                                         AnnotationMetadata annotationMetadata) {
 
+        DefaultAnnotationMetadata.contributeDefaults(
+                this.annotationMetadata,
+                annotationMetadata
+        );
+        if (argumentAnnotationMetadata != null) {
+            for (AnnotationMetadata metadata : argumentAnnotationMetadata.values()) {
+                DefaultAnnotationMetadata.contributeDefaults(
+                        this.annotationMetadata,
+                        metadata
+                );
+            }
+        }
         String methodProxyShortName = "$exec" + ++methodExecutorIndex;
         String methodExecutorClassName = beanDefinitionName + "$" + methodProxyShortName;
+        boolean isSuspend = "kotlin.coroutines.Continuation".equals(CollectionUtils.last(argumentTypes.values()));
+      
+        if (annotationMetadata instanceof AnnotationMetadataHierarchy) {
+            annotationMetadata = new AnnotationMetadataHierarchy(
+                    new AnnotationMetadataReference(getBeanDefinitionReferenceClassName(), this.annotationMetadata),
+                    ((AnnotationMetadataHierarchy) annotationMetadata).getDeclaredMetadata()
+            );
+        }
+      
         ExecutableMethodWriter executableMethodWriter = new ExecutableMethodWriter(
                 beanFullClassName,
                 methodExecutorClassName,
                 methodProxyShortName,
                 isInterface,
+                isSuspend,
                 annotationMetadata);
 //        executableMethodWriter.makeStaticInner(beanDefinitionInternalName, (ClassWriter) classWriter);
         executableMethodWriter.visitMethod(
@@ -1536,7 +1573,7 @@ public class BeanDefinitionWriter extends AbstractClassFileWriter implements Bea
                 false);
     }
 
-    private void resolveBeanOrValueForSetter(Type declaringTypeRef, String setterName, Object fieldType, Method resolveMethod, boolean isValueOptional) {
+    private void resolveBeanOrValueForSetter(Type declaringTypeRef, Object returnType, String setterName, Object fieldType, Method resolveMethod, boolean isValueOptional) {
         GeneratorAdapter injectVisitor = this.injectMethodVisitor;
 
         Label falseCondition = null;
@@ -1562,7 +1599,7 @@ public class BeanDefinitionWriter extends AbstractClassFileWriter implements Bea
         }
         // invoke the method on this injected instance
         injectVisitor.visitVarInsn(ALOAD, injectInstanceIndex);
-        String methodDescriptor = getMethodDescriptor("void", Collections.singletonList(fieldType));
+        String methodDescriptor = getMethodDescriptor(returnType, Collections.singletonList(fieldType));
         // first get the value of the field by calling AbstractBeanDefinition.getBeanForField(..)
         // load 'this'
         injectMethodVisitor.visitVarInsn(ALOAD, 0);
@@ -1582,6 +1619,9 @@ public class BeanDefinitionWriter extends AbstractClassFileWriter implements Bea
         injectVisitor.visitMethodInsn(INVOKEVIRTUAL,
                 declaringTypeRef.getInternalName(), setterName,
                 methodDescriptor, false);
+        if (returnType != void.class) {
+            injectVisitor.pop();
+        }
         if (falseCondition != null) {
             injectVisitor.visitLabel(falseCondition);
         }
@@ -2076,19 +2116,29 @@ public class BeanDefinitionWriter extends AbstractClassFileWriter implements Bea
             if (constructorMetadata == null || constructorMetadata == AnnotationMetadata.EMPTY_METADATA) {
                 defaultConstructor.visitInsn(ACONST_NULL);
             } else {
-                AnnotationMetadataWriter.instantiateNewMetadata(
-                        beanDefinitionType,
-                        classWriter,
-                        defaultConstructor,
-                        (DefaultAnnotationMetadata) constructorMetadata,
-                        loadTypeMethods);
+                if (constructorMetadata instanceof AnnotationMetadataHierarchy) {
+                    AnnotationMetadataWriter.instantiateNewMetadataHierarchy(
+                            beanDefinitionType,
+                            classWriter,
+                            defaultConstructor,
+                            (AnnotationMetadataHierarchy) constructorMetadata,
+                            loadTypeMethods);
+                } else {
+
+                    AnnotationMetadataWriter.instantiateNewMetadata(
+                            beanDefinitionType,
+                            classWriter,
+                            defaultConstructor,
+                            (DefaultAnnotationMetadata) constructorMetadata,
+                            loadTypeMethods);
+                }
             }
 
             // 3rd argument: Is reflection required
             defaultConstructor.visitInsn(requiresReflection ? ICONST_1 : ICONST_0);
 
             // 4th argument: The arguments
-            if (argumentTypes == null || argumentTypes.isEmpty()) {
+            if (argumentAnnotationMetadata == null || argumentAnnotationMetadata.isEmpty()) {
                 defaultConstructor.visitInsn(ACONST_NULL);
             } else {
                 pushBuildArgumentsForMethod(

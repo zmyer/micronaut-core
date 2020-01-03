@@ -53,12 +53,12 @@ public interface BeanIntrospection<T> extends AnnotationMetadataDelegate {
     @Nonnull Collection<BeanProperty<T, Object>> getBeanProperties();
 
     /**
-     * Get all the bean properties annotated for the given annotation type. If the annotation is {@link Introspected#indexed()} by the given annotation,
+     * Get all the bean properties annotated for the given annotation type. If the annotation is {@link io.micronaut.core.annotation.Introspected#indexed()} by the given annotation,
      * then it will be included in the resulting list.
      *
      * @param annotationType The annotation type
      * @return A immutable collection of properties.
-     * @see Introspected#indexed()
+     * @see io.micronaut.core.annotation.Introspected#indexed()
      */
     @Nonnull Collection<BeanProperty<T, Object>> getIndexedProperties(@Nonnull Class<? extends Annotation> annotationType);
 
@@ -66,7 +66,7 @@ public interface BeanIntrospection<T> extends AnnotationMetadataDelegate {
      * Instantiates an instance of the bean, throwing an exception is instantiation is not possible.
      *
      * @return An instance
-     * @throws InstantiationException If the bean cannot be insantiated or the arguments are not satisfied.
+     * @throws InstantiationException If the bean cannot be instantiated or the arguments are not satisfied.
      */
     @Nonnull T instantiate() throws InstantiationException;
 
@@ -77,7 +77,19 @@ public interface BeanIntrospection<T> extends AnnotationMetadataDelegate {
      * @return An instance
      * @throws InstantiationException If the bean cannot be instantiated.
      */
-    @Nonnull T instantiate(Object... arguments) throws InstantiationException;
+    default @Nonnull T instantiate(Object... arguments) throws InstantiationException {
+        return instantiate(true, arguments);
+    }
+
+    /**
+     * Instantiates an instance of the bean, throwing an exception is instantiation is not possible.
+     *
+     * @param strictNullable If true, require null parameters to be annotated with a nullable annotation
+     * @param arguments The arguments required to instantiate bean. Should match the types returned by {@link #getConstructorArguments()}
+     * @return An instance
+     * @throws InstantiationException If the bean cannot be instantiated.
+     */
+    @Nonnull T instantiate(boolean strictNullable, Object... arguments) throws InstantiationException;
 
     /**
      * The bean type.
@@ -91,7 +103,7 @@ public interface BeanIntrospection<T> extends AnnotationMetadataDelegate {
      * @param annotationType The annotation type
      * @param annotationValue The annotation value
      * @return A immutable collection of properties.
-     * @see Introspected#indexed()
+     * @see io.micronaut.core.annotation.Introspected#indexed()
      */
     @Nonnull Optional<BeanProperty<T, Object>> getIndexedProperty(
             @Nonnull Class<? extends Annotation> annotationType,
@@ -102,7 +114,7 @@ public interface BeanIntrospection<T> extends AnnotationMetadataDelegate {
      *
      * @param annotationType The annotation type
      * @return A immutable collection of properties.
-     * @see Introspected#indexed()
+     * @see io.micronaut.core.annotation.Introspected#indexed()
      */
     default @Nonnull Optional<BeanProperty<T, Object>> getIndexedProperty(
             @Nonnull Class<? extends Annotation> annotationType) {

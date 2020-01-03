@@ -20,6 +20,7 @@ import io.micronaut.core.type.Argument
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.nio.charset.Charset
 import java.time.DayOfWeek
 
 /**
@@ -66,6 +67,17 @@ class DefaultConversionServiceSpec extends Specification {
         ["OK", "N/A"]           | Status[]    | [Status.OK, Status.N_OR_A]
     }
 
+    void "test empty string conversion"() {
+        given:
+        ConversionService conversionService = new DefaultConversionService()
+
+        expect:
+        !conversionService.convert("", targetType).isPresent()
+
+        where:
+        targetType << [File, Date, Integer, BigInteger, Float, Double, Long, Short, Byte, BigDecimal, URL, URI, Locale, UUID, Currency, TimeZone, Charset, Status]
+    }
+
     void "test convert required"() {
         given:
         ConversionService conversionService = new DefaultConversionService()
@@ -76,7 +88,7 @@ class DefaultConversionServiceSpec extends Specification {
         then:
         def e = thrown(ConversionErrorException)
         e.conversionError.originalValue.get() == 'junk'
-        e.message == 'Failed to convert argument [integer] for value [junk] due to: For input string: "junk"'
+        e.message == 'Failed to convert argument [Integer] for value [junk] due to: For input string: "junk"'
     }
 
     void "test conversion service with type arguments"() {
@@ -93,5 +105,4 @@ class DefaultConversionServiceSpec extends Specification {
         "1"          | Optional   | [T: Argument.of(Long, 'T')]    | Optional.of(1L)
 
     }
-
 }

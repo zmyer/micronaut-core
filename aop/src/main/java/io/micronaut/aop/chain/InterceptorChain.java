@@ -37,7 +37,6 @@ import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -52,7 +51,7 @@ import java.util.stream.Collectors;
  */
 @Internal
 public class InterceptorChain<B, R> implements InvocationContext<B, R> {
-    private static final Logger LOG = LoggerFactory.getLogger(InterceptorChain.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(InterceptorChain.class);
 
     protected final Interceptor<B, R>[] interceptors;
     protected final B target;
@@ -60,10 +59,8 @@ public class InterceptorChain<B, R> implements InvocationContext<B, R> {
     protected final Object[] originalParameters;
     protected MutableConvertibleValues<Object> attributes;
     protected Map<String, MutableArgumentValue<?>> parameters;
-
-    private final int interceptorCount;
-    private int index = 0;
-
+    protected final int interceptorCount;
+    protected int index = 0;
 
     /**
      * Constructor.
@@ -284,20 +281,19 @@ public class InterceptorChain<B, R> implements InvocationContext<B, R> {
     private static Interceptor[] resolveInterceptorsInternal(ExecutableMethod<?, ?> method, Class<? extends Annotation> annotationType, Interceptor[] interceptors) {
         List<Class<? extends Annotation>> annotations = method.getAnnotationTypesByStereotype(annotationType);
 
-        Set<Class> applicableClasses = annotations.stream()
-            .filter(aClass -> {
-                if (annotationType == Around.class && aClass.getAnnotation(Introduction.class) != null) {
-                    return false;
-                } else if (annotationType == Introduction.class && aClass.getAnnotation(Around.class) != null) {
-                    return false;
-                }
-                return true;
-            })
-            .map(type -> type.getAnnotation(Type.class))
-            .filter(Objects::nonNull)
-            .flatMap(type ->
-                Arrays.stream(type.value())
-            ).collect(Collectors.toSet());
+        Set<Class> applicableClasses = new HashSet<>();
+
+        for (Class<? extends Annotation> aClass: annotations) {
+            if (annotationType == Around.class && aClass.getAnnotation(Introduction.class) != null) {
+                continue;
+            } else if (annotationType == Introduction.class && aClass.getAnnotation(Around.class) != null) {
+                continue;
+            }
+            Type typeAnn = aClass.getAnnotation(Type.class);
+            if (typeAnn != null) {
+                applicableClasses.addAll(Arrays.asList(typeAnn.value()));
+            }
+        }
 
         Interceptor[] interceptorArray = Arrays.stream(interceptors)
             .filter(i -> applicableClasses.stream().anyMatch((t) -> t.isInstance(i)))

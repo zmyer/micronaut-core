@@ -94,7 +94,10 @@ public class DefaultHttpContentProcessor extends SingleThreadedBufferingProcesso
     private void fireExceedsLength(long receivedLength, long expected) {
         upstreamState = SingleThreadedBufferingSubscriber.BackPressureState.DONE;
         upstreamSubscription.cancel();
-        currentDownstreamSubscriber().ifPresent(subscriber -> subscriber.onError(new ContentLengthExceededException(expected, receivedLength)));
+        upstreamBuffer.clear();
+        currentDownstreamSubscriber().ifPresent(subscriber ->
+                subscriber.onError(new ContentLengthExceededException(expected, receivedLength))
+        );
     }
 
     private void publishVerifiedContent(ByteBufHolder message) {

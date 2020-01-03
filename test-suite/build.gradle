@@ -1,6 +1,8 @@
 buildscript {
     repositories {
         maven { url "https://plugins.gradle.org/m2/" }
+        maven { // The google mirror is less flaky than mavenCentral()
+            url "http://maven.aliyun.com/nexus/content/groups/public/" }
     }
     dependencies {
         classpath "gradle.plugin.com.energizedwork.webdriver-binaries:webdriver-binaries-gradle-plugin:$webdriverBinariesVersion"

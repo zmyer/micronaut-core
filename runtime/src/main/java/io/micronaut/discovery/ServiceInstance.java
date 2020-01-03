@@ -141,7 +141,8 @@ public interface ServiceInstance {
         // if the URI features credentials strip this out
         if (StringUtils.isNotEmpty(thisUri.getUserInfo())) {
             try {
-                thisUri = new URI(thisUri.getScheme(), null, thisUri.getHost(), thisUri.getPort(), thisUri.getPath(), thisUri.getQuery(), thisUri.getFragment());
+                thisUri = new URI(thisUri.getScheme(), null, thisUri.getHost(), thisUri.getPort(), thisUri.getPath(), thisUri.getQuery(),
+                        thisUri.getFragment());
             } catch (URISyntaxException e) {
                 throw new IllegalStateException("ServiceInstance URI is invalid: " + e.getMessage(), e);
             }
